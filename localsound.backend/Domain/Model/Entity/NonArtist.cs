@@ -2,7 +2,7 @@
 {
     public class NonArtist
     {
-        public string AppUserId { get; set; }
+        public Guid AppUserId { get; set; }
         public AppUser User { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

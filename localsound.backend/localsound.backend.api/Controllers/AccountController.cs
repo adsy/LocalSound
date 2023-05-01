@@ -15,7 +15,7 @@ namespace localsound.backend.api.Controllers
         [HttpPost("customer-login")]
         public async Task<ActionResult<NonArtistDto>> UserLogin(LoginDataDto details)
         {
-            var result = await Mediator.Send(new NonArtistLoginCommand
+            var result = await Mediator.Send(new LoginCommand
             {
                 UserDetails = details
             });

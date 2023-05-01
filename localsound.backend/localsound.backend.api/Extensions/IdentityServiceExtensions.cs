@@ -21,8 +21,8 @@ namespace localsound.backend.api.Extensions
                 options.Tokens.AuthenticatorTokenProvider = "RefreshTokenProviderExtension";
                 options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
             })
-                .AddRoles<IdentityRole>()
-                .AddRoleManager<RoleManager<IdentityRole>>()
+                .AddRoles<IdentityRole<Guid>>()
+                .AddRoleManager<RoleManager<IdentityRole<Guid>>>()
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<LocalSoundDbContext>()
                 .AddSignInManager<SignInManager<AppUser>>();

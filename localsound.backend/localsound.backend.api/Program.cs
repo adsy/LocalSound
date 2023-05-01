@@ -1,6 +1,10 @@
 using localsound.backend.api.Extensions;
 using localsound.backend.api.Middleware;
 using localsound.backend.Domain.ModelAdaptor;
+using localsound.backend.Infrastructure.Interface.Repositories;
+using localsound.backend.Infrastructure.Interface.Services;
+using localsound.backend.Infrastructure.Repositories;
+using localsound.backend.Infrastructure.Services;
 using Serilog;
 using Serilog.Events;
 
@@ -26,6 +30,12 @@ builder.Services.Configure<JwtSettingsAdaptor>(options => builder.Configuration.
 
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
+
+
+builder.Services.AddTransient<IAccountService, AccountService>();
+builder.Services.AddTransient<IAccountRepository, AccountRepository>();
+
+builder.Services.AddTransient<ITokenRepository, TokenRepository>();
 
 builder.Services.AddCors(options =>
 {

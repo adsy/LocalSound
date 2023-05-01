@@ -8,9 +8,9 @@ using System.Net;
 namespace localsound.backend.Persistence.DbContext
 {
     public class LocalSoundDbContext : IdentityDbContext<AppUser,
-        IdentityRole, string, IdentityUserClaim<string>,
-        IdentityUserRole<string>, IdentityUserLogin<string>,
-        IdentityRoleClaim<string>, IdentityUserToken<string>>
+        IdentityRole<Guid>, Guid, IdentityUserClaim<Guid>,
+        IdentityUserRole<Guid>, IdentityUserLogin<Guid>,
+        IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
     {
         public LocalSoundDbContext(DbContextOptions options) : base(options)
         {
@@ -24,6 +24,9 @@ namespace localsound.backend.Persistence.DbContext
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.HasSequence("MemberId", x => x.StartsAt(100000).IncrementsBy(1));
+            builder.Entity<AppUser>().Property(x => x.MemberId).HasDefaultValueSql("NEXT VALUE FOR MemberId");
 
             builder.Entity<NonArtist>().HasKey(x => x.AppUserId);
             builder.Entity<Artist>().HasKey(x => x.AppUserId);
