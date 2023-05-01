@@ -1,5 +1,6 @@
 ﻿using localsound.backend.api.Middleware;
 using localsound.backend.api.Pipeline;
+using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
 using localsound.backend.Infrastructure.Mapping;
@@ -7,7 +8,6 @@ using localsound.backend.Infrastructure.Repositories;
 using localsound.backend.Infrastructure.Services;
 using localsound.backend.Persistence.DbContext;
 using MediatR;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;

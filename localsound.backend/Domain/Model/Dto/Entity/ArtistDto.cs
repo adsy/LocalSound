@@ -1,10 +1,11 @@
 ﻿using localsound.backend.Domain.Enum;
-using localsound.backend.Domain.Model.Interfaces;
+using localsound.backend.Domain.Model.Interfaces.Entity;
 
 namespace localsound.backend.Domain.Model.Dto.Entity
 {
     public class ArtistDto : IAppUserDto
     {
+        public string MemberId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Address { get; set; }

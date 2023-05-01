@@ -7,15 +7,15 @@ namespace localsound.backend.api.Commands.Validators.Account
     {
         public NonArtistLoginCommandValidator()
         {
-            RuleFor(m => m.UserDetails)
+            RuleFor(m => m.LoginDetails)
                 .NotEmpty();
 
-            When(m => m.UserDetails != null, () =>
+            When(m => m.LoginDetails != null, () =>
             {
-                RuleFor(m => m.UserDetails.Email)
+                RuleFor(m => m.LoginDetails.Email)
                     .NotEmpty();
 
-                RuleFor(m => m.UserDetails.Password)
+                RuleFor(m => m.LoginDetails.Password)
                     .NotEmpty();
             });
         }

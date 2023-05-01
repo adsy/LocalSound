@@ -1,6 +1,6 @@
-﻿namespace localsound.backend.Domain.Model.Dto
+﻿namespace localsound.backend.Domain.Model.Dto.Submission
 {
-    public class LoginDataDto
+    public class LoginSubmissionDto
     {
         public string Email { get; set; }
         public string Password { get; set; }

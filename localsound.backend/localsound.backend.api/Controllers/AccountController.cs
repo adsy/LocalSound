@@ -1,6 +1,7 @@
 ﻿using localsound.backend.api.Commands.Account;
-using localsound.backend.Domain.Model.Dto;
 using localsound.backend.Domain.Model.Dto.Entity;
+using localsound.backend.Domain.Model.Dto.Submission;
+using localsound.backend.Domain.Model.Interfaces.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Web;
@@ -12,12 +13,30 @@ namespace localsound.backend.api.Controllers
     public class AccountController : BaseApiController
     {
         [AllowAnonymous]
-        [HttpPost("customer-login")]
-        public async Task<ActionResult<NonArtistDto>> UserLogin(LoginDataDto details)
+        [HttpPost("login")]
+        public async Task<ActionResult<IAppUserDto>> Login(LoginSubmissionDto details)
         {
             var result = await Mediator.Send(new LoginCommand
             {
-                UserDetails = details
+                LoginDetails = details
+            });
+
+            if (result.IsSuccessStatusCode)
+            {
+                AddCookies(result.ReturnData.AccessToken, result.ReturnData.RefreshToken);
+                return Ok(result.ReturnData.UserDetails);
+            }
+
+            return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<ActionResult<IAppUserDto>> Register(RegisterSubmissionDto details)
+        {
+            var result = await Mediator.Send(new RegisterCommand
+            {
+                RegistrationDetails = details
             });
 
             if (result.IsSuccessStatusCode)

@@ -5,8 +5,8 @@ using MediatR;
 
 namespace localsound.backend.api.Commands.Account
 {
-    public class LoginCommand: IRequest<ServiceResponse<LoginResponseDto>>
+    public class RegisterCommand : IRequest<ServiceResponse<LoginResponseDto>>
     {
-        public LoginSubmissionDto LoginDetails { get; set; }
+        public RegisterSubmissionDto RegistrationDetails { get; set; }
     }
 }

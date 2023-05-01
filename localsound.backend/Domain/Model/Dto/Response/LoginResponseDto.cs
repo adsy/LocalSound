@@ -1,6 +1,6 @@
-﻿using localsound.backend.Domain.Model.Interfaces;
+﻿using localsound.backend.Domain.Model.Interfaces.Entity;
 
-namespace localsound.backend.Domain.Model.Dto
+namespace localsound.backend.Domain.Model.Dto.Response
 {
     public class LoginResponseDto
     {

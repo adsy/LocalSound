@@ -30,6 +30,7 @@ builder.Services.Configure<JwtSettingsAdaptor>(options => builder.Configuration.
 
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
+await builder.Services.AddDbSeed(builder.Configuration);
 
 
 builder.Services.AddTransient<IAccountService, AccountService>();
