@@ -1,42 +1,88 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+$navbarColor: #001220;
+$borderColor: #000d16;
+$headingColor: #f1f1f1;
+$textColor: #ccc5b9;
+$blue: #2851eb;
+$purple: #6d69fa;
+
+@import url("https://fonts.googleapis.com/css2?family=Barlow");
+html {
+  height: 100%;
+}
+html,
+body {
+  overflow: auto;
+}
+body {
+  height: 100%;
+  background-image: url("../public/assets/background.svg") !important;
+  background-size: cover !important;
+  background-attachment: inherit !important;
+  background-position: center center;
+  font-family: "Barlow", serif !important;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: $headingColor;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+$start: 0;
+$end: 10;
+
+@for $i from $start through $end {
+  .pl-#{$i} {
+    padding-left: #{0.5 * $i}rem;
   }
-  to {
-    transform: rotate(360deg);
+
+  .pr-#{$i} {
+    padding-right: #{0.5 * $i}rem;
+  }
+
+  .ml-#{$i} {
+    margin-left: #{0.5 * $i}rem;
+  }
+
+  .mr-#{$i} {
+    margin-right: #{0.5 * $i}rem;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+/** NAVBAR **/
+.navbar {
+  background-color: $navbarColor !important;
+  border-bottom: 1px solid $borderColor;
+}
+
+/** BUTTONS **/
+.login-button {
+  background-color: unset;
+  border: 1px solid white;
+}
+
+.login-button:hover {
+  background-color: $blue;
+  border: 1px solid $purple;
+  color: white;
+}
+
+.signup-button {
+  background-color: $blue;
+  border: 1px solid $purple;
+  color: white;
+}
+
+.signup-button:hover {
+  background-color: unset;
+  border: 1px solid white;
+}
+
+@media only screen and (max-width: 768px) {
+  .nav-buttons {
+    display: none;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }

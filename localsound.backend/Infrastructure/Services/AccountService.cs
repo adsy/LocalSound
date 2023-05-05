@@ -71,7 +71,7 @@ namespace localsound.backend.Infrastructure.Services
                 {
                     var artist = await _accountRepository.GetArtistFromDbAsync(user.Id);
 
-                    var returnDto = _mapper.Map<ArtistDto>(artist);
+                    var returnDto = _mapper.Map<ArtistDto>(artist.ReturnData);
                     returnDto.MemberId = user.MemberId;
 
                     return new ServiceResponse<LoginResponseDto>(HttpStatusCode.OK)
@@ -79,7 +79,8 @@ namespace localsound.backend.Infrastructure.Services
                         ReturnData = new LoginResponseDto
                         {
                             UserDetails = returnDto,
-                            AccessToken = accessToken
+                            AccessToken = accessToken,
+                            RefreshToken = "ToBeReplaced"
                         }
                     };
                 }
@@ -87,7 +88,7 @@ namespace localsound.backend.Infrastructure.Services
                 {
                     var nonArtist = await _accountRepository.GetNonArtistFromDbAsync(user.Id);
 
-                    var returnDto = _mapper.Map<NonArtistDto>(nonArtist);
+                    var returnDto = _mapper.Map<NonArtistDto>(nonArtist.ReturnData);
                     returnDto.MemberId = user.MemberId;
 
                     return new ServiceResponse<LoginResponseDto>(HttpStatusCode.OK)
@@ -95,7 +96,8 @@ namespace localsound.backend.Infrastructure.Services
                         ReturnData = new LoginResponseDto
                         {
                             UserDetails = returnDto,
-                            AccessToken = accessToken
+                            AccessToken = accessToken,
+                            RefreshToken = "ToBeReplaced"
                         }
                     };
                 }
@@ -157,7 +159,8 @@ namespace localsound.backend.Infrastructure.Services
                     ReturnData = new LoginResponseDto
                     {
                         UserDetails = userDto,
-                        AccessToken = accessToken
+                        AccessToken = accessToken,
+                        RefreshToken = "ToBeReplaced"
                     }
                 };
             }
