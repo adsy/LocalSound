@@ -63,7 +63,8 @@ $end: 10;
 }
 
 .app-container {
-  height: 100vh;
+  height: 100%;
+  // background-color: gray;
 }
 
 .black-border {
@@ -73,10 +74,11 @@ $end: 10;
 /** CONTAINERS **/
 @mixin container {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
-    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-  border-radius: 5px;
-  min-height: 200px;
+    rgba(0, 0, 0, 0.3) 0px 10px 20px -4px;
+  border-radius: 0px 0px 30px 5px;
+  min-height: 150px;
   margin-bottom: 20px;
+  background-color: white;
 }
 
 /** LOGOS **/
@@ -94,7 +96,7 @@ $end: 10;
 /** LANDING PAGE **/
 #landing-page {
   .banner {
-    height: 15rem;
+    height: 25rem;
     background-image: url("../public/assets/landing-page-banner.jpg") !important;
     background-size: cover !important;
     background-attachment: inherit !important;
@@ -105,6 +107,14 @@ $end: 10;
     .page-title {
       letter-spacing: 3.5px;
       font-size: 50px;
+    }
+  }
+
+  #landing-page-search {
+    .search-text {
+      letter-spacing: 1px;
+      font-weight: 600;
+      font-size: 18px;
     }
   }
 
@@ -143,6 +153,18 @@ $end: 10;
 .blue-button:hover {
   background-color: unset;
   border: 1px solid white;
+}
+
+.clear-black-button {
+  background-color: unset;
+  border: 1px solid black;
+  color: black;
+}
+
+.clear-black-button:hover {
+  background-color: unset;
+  border: 1px solid black;
+  color: black;
 }
 
 .white-button {

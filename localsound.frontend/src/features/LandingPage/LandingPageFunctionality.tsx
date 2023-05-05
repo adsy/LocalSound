@@ -1,9 +1,12 @@
 import { Row } from "react-bootstrap";
+import LandingPageSearch from "./LandingPageSearch";
 
-const LandingPageContainer = () => {
+const LandingPageFunctionality = () => {
   return (
     <Row>
-      <div className="container">Search button goes here</div>
+      <div className="container">
+        <LandingPageSearch />
+      </div>
       <div className="container">Filter artists based on location ability</div>
       <div className="container">Trending artists based on location?</div>
       <div className="container">Feature</div>
@@ -12,4 +15,4 @@ const LandingPageContainer = () => {
   );
 };
 
-export default LandingPageContainer;
+export default LandingPageFunctionality;

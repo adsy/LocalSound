@@ -249,7 +249,7 @@ h6 {
 }
 
 .app-container {
-  height: 100vh;
+  height: 100%;
 }
 
 .black-border {
@@ -270,7 +270,7 @@ h6 {
 
 /** LANDING PAGE **/
 #landing-page .banner {
-  height: 15rem;
+  height: 25rem;
   background-image: url("../public/assets/landing-page-banner.jpg") !important;
   background-size: cover !important;
   background-attachment: inherit !important;
@@ -282,14 +282,20 @@ h6 {
   letter-spacing: 3.5px;
   font-size: 50px;
 }
+#landing-page #landing-page-search .search-text {
+  letter-spacing: 1px;
+  font-weight: 600;
+  font-size: 18px;
+}
 #landing-page .search-box {
   width: 400px;
 }
 #landing-page .container {
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-  border-radius: 5px;
-  min-height: 200px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 10px 20px -4px;
+  border-radius: 0px 0px 30px 5px;
+  min-height: 150px;
   margin-bottom: 20px;
+  background-color: white;
 }
 
 /** NAVBAR **/
@@ -319,6 +325,18 @@ h6 {
 .blue-button:hover {
   background-color: unset;
   border: 1px solid white;
+}
+
+.clear-black-button {
+  background-color: unset;
+  border: 1px solid black;
+  color: black;
+}
+
+.clear-black-button:hover {
+  background-color: unset;
+  border: 1px solid black;
+  color: black;
 }
 
 .white-button {

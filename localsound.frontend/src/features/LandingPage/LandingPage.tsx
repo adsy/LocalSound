@@ -1,11 +1,11 @@
 import LandingPageBanner from "./LandingPageBanner";
-import LandingPageContainer from "./LandingPageContainer";
+import LandingPageFunctionality from "./LandingPageFunctionality";
 
 const LandingPage = () => {
   return (
     <div id="landing-page">
       <LandingPageBanner />
-      <LandingPageContainer />
+      <LandingPageFunctionality />
     </div>
   );
 };
