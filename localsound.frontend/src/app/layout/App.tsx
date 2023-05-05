@@ -1,14 +1,16 @@
 import { Route } from "react-router-dom";
 import "../../App.css";
-import LandingPageContainer from "../../common/components/LandingPage/LandingPageContainer";
 import TopNavBar from "./TopNavBar";
 import { Container } from "semantic-ui-react";
+import LandingPage from "../../features/LandingPage/LandingPage";
+import Login from "../../features/Authentication/Login";
 
 const App = () => {
   return (
     <div>
-      <Container>
-        <Route exact path="/" component={LandingPageContainer} />
+      <Container className="app-container">
+        <Route exact path="/" component={LandingPage} />
+        <Route exact path="/login" component={Login} />
         <Route
           path={"/(.+)"}
           render={() => (
