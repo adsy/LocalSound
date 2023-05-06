@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./app/layout/App.tsx";
 import "./index.css";
+import "semantic-ui-css/semantic.min.css";
 import { Provider } from "react-redux";
 import { persistor, store } from "./app/redux/store/store.ts";
 import { createBrowserHistory } from "history";

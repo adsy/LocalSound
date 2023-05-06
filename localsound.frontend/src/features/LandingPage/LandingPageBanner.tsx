@@ -1,9 +1,28 @@
 import { Button, Row } from "react-bootstrap";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { handleToggleModal } from "../../app/redux/actions/modalSlice";
 
 const LandingPageBanner = () => {
+  const dispatch = useDispatch();
+
+  const handleAuthenticationRequest = () => {
+    dispatch(
+      handleToggleModal({
+        open: true,
+        body: (
+          <div>
+            <div>test</div>
+            <div>test</div>
+            <div>test</div>
+          </div>
+        ),
+        size: "tiny",
+      })
+    );
+  };
+
   return (
-    <Row className="banner mb-3">
+    <Row className="banner mb-3 fade-in">
       <div className="d-flex flex-column justify-content-between">
         <div className="d-flex flex-row justify-content-between h-100">
           <div className="d-flex flex-column justify-content-end">
@@ -14,8 +33,18 @@ const LandingPageBanner = () => {
           </div>
 
           <div className="mt-2">
-            <Button className="login-button mr-2">Login</Button>
-            <Button className="blue-button">Create account</Button>
+            <Button
+              className="login-button mr-2"
+              onClick={() => handleAuthenticationRequest()}
+            >
+              Login
+            </Button>
+            <Button
+              className="blue-button"
+              onClick={() => handleAuthenticationRequest()}
+            >
+              Create account
+            </Button>
           </div>
         </div>
       </div>
@@ -23,31 +52,3 @@ const LandingPageBanner = () => {
   );
 };
 export default LandingPageBanner;
-
-{
-  /* <Formik
-  initialValues={{ name: "", error: null }}
-  onSubmit={async (values, { setStatus }) => {
-    setIsLoading(true);
-    setStatus(null);
-    //TODO: Actually do something here
-  }}
->
-  {({ handleSubmit, isSubmitting, status, values }) => {
-    return (
-      <Form
-        className="ui form error fade-in"
-        onSubmit={handleSubmit}
-        autoComplete="off"
-      >
-        <MyTextInput
-          name="name"
-          placeholder="Search for a local artist"
-          className="mt-2 w-100 br-5 black-border p-2"
-          disabled={isSubmitting}
-        />
-      </Form>
-    );
-  }}
-</Formik>; */
-}

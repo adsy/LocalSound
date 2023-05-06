@@ -16,7 +16,7 @@ body {
 body {
   height: 100%;
   background-color: rgb(255, 255, 255);
-  // background-image: url("../public/assets/background.svg") !important;
+  // background-image: url("./assets/background.svg") !important;
   // background-size: cover !important;
   // background-attachment: inherit !important;
   // background-position: center center;
@@ -57,6 +57,19 @@ $end: 10;
   }
 }
 
+/** ANIMATIONS **/
+.fade-in {
+  -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 0.5s; /* Firefox < 16 */
+  -ms-animation: fadein 0.5s; /* Internet Explorer */
+  -o-animation: fadein 0.5s; /* Opera < 12.1 */
+  animation: fadein 0.5s;
+}
+
+.ui.page.dimmer {
+  animation: fadein 0.5s;
+}
+
 /** TOP LEVEL CLASSES **/
 .font-bold {
   font-weight: bold;
@@ -84,7 +97,7 @@ $end: 10;
 /** LOGOS **/
 
 .navbar-logo {
-  background-image: url("../public/assets/logo.png");
+  background-image: url("./assets/logo.png");
   width: 60px;
   height: 60px;
   background-size: contain !important;
@@ -97,7 +110,7 @@ $end: 10;
 #landing-page {
   .banner {
     height: 25rem;
-    background-image: url("../public/assets/landing-page-banner.jpg") !important;
+    background-image: url("./assets/landing-page-banner.jpg") !important;
     background-size: cover !important;
     background-attachment: inherit !important;
     background-position: center center;
@@ -171,4 +184,53 @@ $end: 10;
   background-color: white;
   border: 1px solid black;
   color: black;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
