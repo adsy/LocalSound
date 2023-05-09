@@ -22,7 +22,7 @@ const LandingPageBanner = () => {
   };
 
   return (
-    <Row className="banner mb-3 fade-in">
+    <Row className="banner mb-3">
       <div className="d-flex flex-column justify-content-between">
         <div className="d-flex flex-row justify-content-between h-100">
           <div className="d-flex flex-column justify-content-end">

@@ -13,12 +13,12 @@ export const modalSlice = createSlice({
   reducers: {
     handleToggleModal: (state = initialState, action) => {
       state.open = action.payload.open;
-      state.body = action.payload.body;
+      if (action.payload.body) {
+        state.body = action.payload.body;
+      }
 
       if (action.payload.size) {
         state.size = action.payload.size;
-      } else {
-        state.size = "mini";
       }
     },
   },
