@@ -90,16 +90,28 @@ $end: 10;
   color: $borderColor;
 }
 
-/** LOGOS **/
-
-.navbar-logo {
+@mixin logo {
   background-image: url("./assets/logo.png");
-  width: 60px;
-  height: 60px;
   background-size: contain !important;
   background-attachment: inherit !important;
   background-position: center center;
   background-repeat: no-repeat !important;
+}
+
+@mixin logo-black {
+  background-image: url("./assets/logo-black.png");
+  background-size: contain !important;
+  background-attachment: inherit !important;
+  background-position: center center;
+  background-repeat: no-repeat !important;
+}
+
+/** LOGOS **/
+
+.navbar-logo {
+  @include logo;
+  width: 60px;
+  height: 60px;
 }
 
 /** MODAL **/
@@ -138,7 +150,7 @@ $end: 10;
     .search-text {
       letter-spacing: 1px;
       font-weight: 600;
-      font-size: 18px;
+      font-size: 20px;
       color: white;
       text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
         0 -1px $borderColor;
@@ -175,8 +187,26 @@ $end: 10;
   border: 1px solid white;
 }
 
-.carousel {
-  height: 25rem;
+/** AUTH MODAL **/
+.header {
+  padding: 10px;
+}
+
+.header-logo {
+  @include logo-black;
+  width: 40px;
+  height: 40px;
+}
+
+.header-title {
+  font-size: 30px !important;
+  // border-radius: 10px;
+  text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
+    0 -1px $borderColor;
+  letter-spacing: 1.5px;
+  border-bottom: 2px solid $borderColor;
+  padding-bottom: 5px;
+  padding-right: 20px;
 }
 
 @keyframes fadein {

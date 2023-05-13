@@ -272,12 +272,12 @@ h6 {
 /** LOGOS **/
 .navbar-logo {
   background-image: url("./assets/logo.png");
-  width: 60px;
-  height: 60px;
   background-size: contain !important;
   background-attachment: inherit !important;
   background-position: center center;
   background-repeat: no-repeat !important;
+  width: 60px;
+  height: 60px;
 }
 
 /** MODAL **/
@@ -311,7 +311,7 @@ h6 {
 #landing-page #landing-page-search .search-text {
   letter-spacing: 1px;
   font-weight: 600;
-  font-size: 18px;
+  font-size: 20px;
   color: white;
   text-shadow: -1px 0 #002233, 0 1px #002233, 1px 0 #002233, 0 -1px #002233;
 }
@@ -349,8 +349,28 @@ h6 {
   border: 1px solid white;
 }
 
-.carousel {
-  height: 25rem;
+/** AUTH MODAL **/
+.header {
+  padding: 10px;
+}
+
+.header-logo {
+  background-image: url("./assets/logo-black.png");
+  background-size: contain !important;
+  background-attachment: inherit !important;
+  background-position: center center;
+  background-repeat: no-repeat !important;
+  width: 40px;
+  height: 40px;
+}
+
+.header-title {
+  font-size: 30px !important;
+  text-shadow: -1px 0 #002233, 0 1px #002233, 1px 0 #002233, 0 -1px #002233;
+  letter-spacing: 1.5px;
+  border-bottom: 2px solid #002233;
+  padding-bottom: 5px;
+  padding-right: 20px;
 }
 
 @keyframes fadein {
