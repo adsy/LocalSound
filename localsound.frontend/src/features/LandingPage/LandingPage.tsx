@@ -5,7 +5,7 @@ const LandingPage = () => {
   return (
     <div id="landing-page">
       <LandingPageBanner />
-      <LandingPageFunctionality />
+      {/* <LandingPageFunctionality /> */}
     </div>
   );
 };

@@ -15,7 +15,7 @@ const ModalContainer = () => {
         onOpen={() =>
           setTimeout(() => document.body.classList.add("modal-fade-in"), 0)
         }
-        transition={{ animation: "zoom", duration: 500 }}
+        transition={{ animation: "fly up", duration: 500 }}
       >
         <Modal
           open={true}
@@ -31,7 +31,11 @@ const ModalContainer = () => {
           }}
           size={modal.size}
         >
-          <Modal.Content>{modal.body}</Modal.Content>
+          {modal.body ? (
+            <Modal.Content>{modal.body}</Modal.Content>
+          ) : (
+            <Modal.Content></Modal.Content>
+          )}
         </Modal>
       </TransitionablePortal>
     </div>

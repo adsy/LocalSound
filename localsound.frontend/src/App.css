@@ -10,7 +10,10 @@ body {
 
 body {
   height: 100%;
-  background-color: rgb(255, 255, 255);
+  background-image: url("./assets/background.svg") !important;
+  background-size: cover !important;
+  background-attachment: inherit !important;
+  background-position: center center;
   font-family: "Barlow", serif !important;
 }
 
@@ -262,7 +265,7 @@ h6 {
 }
 
 .black-border {
-  border: 1px solid black;
+  border: 1px solid #002233;
 }
 
 /** CONTAINERS **/
@@ -290,78 +293,64 @@ h6 {
 /** LANDING PAGE **/
 #landing-page .banner {
   height: 25rem;
-  background-image: url("./assets/landing-page-banner.jpg") !important;
+  background-image: url("./assets/landing-page-banner/banner1.jpg");
   background-size: cover !important;
   background-attachment: inherit !important;
   background-position: center center;
   border-radius: 0px 0px 5px 5px;
   border-top: unset !important;
+  -webkit-transition: background-image 1s ease;
+  transition: background-image 1s ease;
+  border: 1px solid #002233;
 }
 #landing-page .banner .page-title {
   letter-spacing: 3.5px;
   font-size: 50px;
+  text-shadow: -1px 0 #002233, 0 1px #002233, 1px 0 #002233, 0 -1px #002233;
 }
 #landing-page #landing-page-search .search-text {
   letter-spacing: 1px;
   font-weight: 600;
   font-size: 18px;
+  color: white;
+  text-shadow: -1px 0 #002233, 0 1px #002233, 1px 0 #002233, 0 -1px #002233;
 }
 #landing-page .search-box {
   width: 400px;
 }
 #landing-page .container {
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 10px 20px -4px;
-  border-radius: 0px 0px 30px 5px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 13px 27px -5px, rgba(230, 230, 230, 0.3) 0px 10px 20px -4px;
+  border-radius: 1px 1px 30px 5px;
   min-height: 150px;
   margin-bottom: 20px;
   background-color: white;
+  color: #002233;
 }
 
 /** NAVBAR **/
 .navbar {
-  background-color: #001220 !important;
-  border-bottom: 1px solid #000d16;
+  background-color: #002233 !important;
+  border-bottom: 1px solid #002233;
 }
 
 /** BUTTONS **/
-.login-button {
-  background-color: unset;
-  border: 1px solid white;
-}
-
-.login-button:hover {
-  background-color: #2851eb;
-  border: 1px solid #6d69fa;
+.purple-button {
+  background-color: #6d69fa;
+  border: 1px solid #002233;
   color: white;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  transition: background-color 0.5s ease;
+  transition: border-color 0.5s ease;
 }
 
-.blue-button {
-  background-color: #2851eb;
-  border: 1px solid white;
-  color: white;
-}
-
-.blue-button:hover {
-  background-color: unset;
+.purple-button:hover {
+  background-color: #5753cf;
   border: 1px solid white;
 }
 
-.clear-black-button {
-  background-color: unset;
-  border: 1px solid black;
-  color: black;
-}
-
-.clear-black-button:hover {
-  background-color: unset;
-  border: 1px solid black;
-  color: black;
-}
-
-.white-button {
-  background-color: white;
-  border: 1px solid black;
-  color: black;
+.carousel {
+  height: 25rem;
 }
 
 @keyframes fadein {

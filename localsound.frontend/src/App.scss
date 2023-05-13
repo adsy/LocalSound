@@ -1,9 +1,9 @@
-$navbarColor: #001220;
-$borderColor: #000d16;
+$navbarColor: #002233;
+$borderColor: #002233;
 $headingColor: #f1f1f1;
 $textColor: #ccc5b9;
-$blue: #2851eb;
 $purple: #6d69fa;
+$darkPurple: #5753cf;
 
 @import url("https://fonts.googleapis.com/css2?family=Barlow");
 html {
@@ -15,11 +15,11 @@ body {
 }
 body {
   height: 100%;
-  background-color: rgb(255, 255, 255);
-  // background-image: url("./assets/background.svg") !important;
-  // background-size: cover !important;
-  // background-attachment: inherit !important;
-  // background-position: center center;
+  background-image: url("./assets/background.svg") !important ;
+  // margin: 0 auto;
+  background-size: cover !important;
+  background-attachment: inherit !important;
+  background-position: center center;
   font-family: "Barlow", serif !important;
 }
 
@@ -73,21 +73,21 @@ $end: 10;
 
 .app-container {
   height: 100%;
-  // background-color: gray;
 }
 
 .black-border {
-  border: 1px solid black;
+  border: 1px solid $borderColor;
 }
 
 /** CONTAINERS **/
 @mixin container {
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
-    rgba(0, 0, 0, 0.3) 0px 10px 20px -4px;
-  border-radius: 0px 0px 30px 5px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 13px 27px -5px,
+    rgba(230, 230, 230, 0.3) 0px 10px 20px -4px;
+  border-radius: 1px 1px 30px 5px;
   min-height: 150px;
   margin-bottom: 20px;
   background-color: white;
+  color: $borderColor;
 }
 
 /** LOGOS **/
@@ -116,16 +116,21 @@ $end: 10;
 #landing-page {
   .banner {
     height: 25rem;
-    background-image: url("./assets/landing-page-banner.jpg") !important;
+    background-image: url("./assets/landing-page-banner/banner1.jpg");
     background-size: cover !important;
     background-attachment: inherit !important;
     background-position: center center;
     border-radius: 0px 0px 5px 5px;
     border-top: unset !important;
+    -webkit-transition: background-image 1s ease;
+    transition: background-image 1s ease;
+    border: 1px solid $borderColor;
 
     .page-title {
       letter-spacing: 3.5px;
       font-size: 50px;
+      text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
+        0 -1px $borderColor;
     }
   }
 
@@ -134,6 +139,9 @@ $end: 10;
       letter-spacing: 1px;
       font-weight: 600;
       font-size: 18px;
+      color: white;
+      text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
+        0 -1px $borderColor;
     }
   }
 
@@ -152,44 +160,23 @@ $end: 10;
 }
 
 /** BUTTONS **/
-.login-button {
-  background-color: unset;
-  border: 1px solid white;
-}
-
-.login-button:hover {
-  background-color: $blue;
-  border: 1px solid $purple;
+.purple-button {
+  background-color: $purple;
+  border: 1px solid $borderColor;
   color: white;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  transition: background-color 0.5s ease;
+  transition: border-color 0.5s ease;
 }
 
-.blue-button {
-  background-color: $blue;
-  border: 1px solid white;
-  color: white;
-}
-
-.blue-button:hover {
-  background-color: unset;
+.purple-button:hover {
+  background-color: $darkPurple;
   border: 1px solid white;
 }
 
-.clear-black-button {
-  background-color: unset;
-  border: 1px solid black;
-  color: black;
-}
-
-.clear-black-button:hover {
-  background-color: unset;
-  border: 1px solid black;
-  color: black;
-}
-
-.white-button {
-  background-color: white;
-  border: 1px solid black;
-  color: black;
+.carousel {
+  height: 25rem;
 }
 
 @keyframes fadein {

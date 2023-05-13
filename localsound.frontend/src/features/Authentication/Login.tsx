@@ -1,13 +1,21 @@
-import { Button } from "react-bootstrap";
-
 const Login = () => {
   return (
     <div>
-      Login page
-      <div className="mr-3 nav-buttons">
-        <Button className="login-button mr-2">Login</Button>
-        <Button className="signup-button">Create account</Button>
-      </div>
+      <div>Facebook login widget</div>
+      <div>Soundcloud login widget</div>
+      <div>input field</div>
+      <div>Facebook login widget</div>
+      <div>Soundcloud login widget</div>
+      <div>input field</div>
+      <div>Facebook login widget</div>
+      <div>Soundcloud login widget</div>
+      <div>input field</div>
+      <div>Facebook login widget</div>
+      <div>Soundcloud login widget</div>
+      <div>input field</div>
+      <div>Facebook login widget</div>
+      <div>Soundcloud login widget</div>
+      <div>input field</div>
     </div>
   );
 };
