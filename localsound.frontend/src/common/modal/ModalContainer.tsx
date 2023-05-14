@@ -31,11 +31,7 @@ const ModalContainer = () => {
           }}
           size={modal.size}
         >
-          {modal.body ? (
-            <Modal.Content>{modal.body}</Modal.Content>
-          ) : (
-            <Modal.Content></Modal.Content>
-          )}
+          <Modal.Content>{modal.body}</Modal.Content>
         </Modal>
       </TransitionablePortal>
     </div>

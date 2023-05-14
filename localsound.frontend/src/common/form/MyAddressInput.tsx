@@ -18,8 +18,16 @@ interface Props {
 }
 
 const MyAddressInput = (props: Props) => {
-  const { setFieldValue, setFieldTouched, disabled } = props;
-  const { setAddressError } = props;
+  const {
+    setFieldValue,
+    setFieldTouched,
+    disabled,
+    placeholder,
+    name,
+    label,
+    setAddressError,
+  } = props;
+  const customProps = { disabled, placeholder, name, label };
   const [address, setAddress] = useState("");
   const [field, meta] = useField(props);
   const [pickedAddress, setPickedAddress] = useState(false);
@@ -67,11 +75,12 @@ const MyAddressInput = (props: Props) => {
                   placeholder: `${props.placeholder}`,
                   className: "location-search-input",
                 })}
-                {...props}
+                {...customProps}
                 disabled={disabled}
                 onBlur={(e) => {
                   setFieldTouched("address", true);
                 }}
+                className="mb-2"
               />
               {meta.touched && !pickedAddress ? (
                 <Label basic color="red">

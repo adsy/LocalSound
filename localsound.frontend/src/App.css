@@ -340,6 +340,7 @@ h6 {
   color: white;
   font-size: 14px;
   letter-spacing: 1.5px;
+  text-shadow: -1px 0 #002233, 0 1px #002233, 1px 0 #002233, 0 -1px #002233;
   transition: background-color 0.5s ease;
   transition: border-color 0.5s ease;
 }
@@ -347,6 +348,13 @@ h6 {
 .purple-button:hover {
   background-color: #5753cf;
   border: 1px solid white;
+}
+
+.purple-button:disabled {
+  opacity: 0.5;
+  background-color: #6d69fa;
+  border: 1px solid #002233;
+  color: white;
 }
 
 /** AUTH MODAL **/
@@ -368,9 +376,16 @@ h6 {
   font-size: 30px !important;
   text-shadow: -1px 0 #002233, 0 1px #002233, 1px 0 #002233, 0 -1px #002233;
   letter-spacing: 1.5px;
-  border-bottom: 2px solid #002233;
+  border-bottom: 6px solid #6d69fa;
   padding-bottom: 5px;
   padding-right: 20px;
+}
+
+/** FORM **/
+.form-label {
+  letter-spacing: 1.5px;
+  text-shadow: -0.5px 0 #002233, 0 0.5px #002233, 0.5px 0 #002233, 0 -0.5px #002233;
+  font-size: 16px;
 }
 
 @keyframes fadein {

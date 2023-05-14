@@ -2,19 +2,30 @@ import { Button, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { handleToggleModal } from "../../app/redux/actions/modalSlice";
 import { useState } from "react";
-import Login from "../Authentication/Login";
+import Login from "../Authentication/Login/Login";
+import Register from "../Authentication/Register/Register";
 
 const LandingPageBanner = () => {
   const dispatch = useDispatch();
 
-  const handleAuthenticationRequest = () => {
-    dispatch(
-      handleToggleModal({
-        open: true,
-        body: <Login />,
-        size: "tiny",
-      })
-    );
+  const handleAuthenticationRequest = (isLogin: boolean) => {
+    if (isLogin) {
+      dispatch(
+        handleToggleModal({
+          open: true,
+          body: <Login />,
+          size: "tiny",
+        })
+      );
+    } else {
+      dispatch(
+        handleToggleModal({
+          open: true,
+          body: <Register />,
+          size: "tiny",
+        })
+      );
+    }
   };
 
   return (
@@ -29,13 +40,13 @@ const LandingPageBanner = () => {
           <div className="justify-content-end mt-2">
             <Button
               className="purple-button mr-2"
-              onClick={() => handleAuthenticationRequest()}
+              onClick={() => handleAuthenticationRequest(true)}
             >
               Login
             </Button>
             <Button
               className="purple-button"
-              onClick={() => handleAuthenticationRequest()}
+              onClick={() => handleAuthenticationRequest(false)}
             >
               Create account
             </Button>

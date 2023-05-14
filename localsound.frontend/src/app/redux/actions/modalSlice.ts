@@ -11,6 +11,7 @@ export const modalSlice = createSlice({
   name: "modal",
   initialState,
   reducers: {
+    handleResetModal: () => initialState,
     handleToggleModal: (state = initialState, action) => {
       state.open = action.payload.open;
       if (action.payload.body) {
@@ -24,6 +25,6 @@ export const modalSlice = createSlice({
   },
 });
 
-export const { handleToggleModal } = modalSlice.actions;
+export const { handleToggleModal, handleResetModal } = modalSlice.actions;
 
 export default modalSlice.reducer;

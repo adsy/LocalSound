@@ -9,6 +9,7 @@ import { createBrowserHistory } from "history";
 import { Router } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import LoadingComponent from "./common/components/Loading/LoadingComponent.tsx";
+import { Wrapper } from "@googlemaps/react-wrapper";
 
 export const history = createBrowserHistory();
 
@@ -20,7 +21,12 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         persistor={persistor}
       >
         <Router history={history}>
-          <App />
+          <Wrapper
+            apiKey={import.meta.env.VITE_MAPS_KEY}
+            libraries={["places"]}
+          >
+            <App />
+          </Wrapper>
         </Router>
       </PersistGate>
     </Provider>

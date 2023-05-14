@@ -3,11 +3,14 @@ import "../../App.css";
 import TopNavBar from "./TopNavBar";
 import { Container } from "semantic-ui-react";
 import LandingPage from "../../features/LandingPage/LandingPage";
-import Login from "../../features/Authentication/Login";
+import Login from "../../features/Authentication/Login/Login";
 import ModalContainer from "../../common/modal/ModalContainer";
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { handleToggleModal } from "../redux/actions/modalSlice";
+import {
+  handleResetModal,
+  handleToggleModal,
+} from "../redux/actions/modalSlice";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -26,7 +29,8 @@ const App = () => {
 
   useUnload((e: any) => {
     e.preventDefault();
-    dispatch(handleToggleModal({ open: false }));
+    // Reset modal to default for when page is next reloaded with persisted state
+    dispatch(handleResetModal());
   });
 
   return (
