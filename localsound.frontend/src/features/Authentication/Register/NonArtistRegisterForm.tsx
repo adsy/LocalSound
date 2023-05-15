@@ -1,5 +1,8 @@
 import { Col } from "react-bootstrap";
-import { UserRegistrationModel } from "../../../app/model/dto/user-registration.model";
+import {
+  RegistrationModel,
+  UserRegistrationModel,
+} from "../../../app/model/dto/user-registration.model";
 import PasswordStrengthBar from "react-password-strength-bar";
 import { Divider } from "semantic-ui-react";
 import MyAddressInput from "../../../common/form/MyAddressInput";
@@ -15,7 +18,7 @@ interface Props {
     shouldValidate?: boolean
   ) => void;
   setAddressError: (addressError: boolean) => void;
-  values: UserRegistrationModel;
+  values: RegistrationModel;
 }
 
 const NonArtistRegisterForm = (props: Props) => {
@@ -69,14 +72,18 @@ const NonArtistRegisterForm = (props: Props) => {
         lg={6}
         className="d-flex flex-column p-3 register-col"
       >
-        <div className="form-label">FIRST NAME</div>
+        <div className="d-flex">
+          <p className="form-label">FIRST NAME</p>
+        </div>
         <MyTextInput
           name="firstName"
           placeholder=""
           disabled={disabled}
           className="mb-2"
         />
-        <div className="form-label">SURNAME</div>
+        <div className="d-flex">
+          <p className="form-label">SURNAME</p>
+        </div>
         <MyTextInput
           name="lastName"
           placeholder=""
@@ -88,7 +95,9 @@ const NonArtistRegisterForm = (props: Props) => {
           Your mobile number will be used for account verification and other
           methods of contact.
         </div>
-        <div className="form-label">MOBILE NUMBER</div>
+        <div className="d-flex">
+          <p className="form-label">MOBILE NUMBER</p>
+        </div>
         <MyTextInput
           name="phoneNumber"
           placeholder=""
@@ -102,7 +111,9 @@ const NonArtistRegisterForm = (props: Props) => {
           Your address can be used to help locate performers that are closest to
           you.
         </div>
-        <div className="form-label">ADDRESS</div>
+        <div className="d-flex">
+          <p className="form-label">ADDRESS</p>
+        </div>
         <MyAddressInput
           name="address"
           placeholder=""
@@ -121,14 +132,18 @@ const NonArtistRegisterForm = (props: Props) => {
         lg={6}
         className="d-flex flex-column p-3 register-col"
       >
-        <div className="form-label">EMAIL</div>
+        <div className="d-flex">
+          <p className="form-label">EMAIL</p>
+        </div>
         <MyTextInput
           name="email"
           placeholder=""
           className="mb-2"
           disabled={disabled}
         />
-        <div className="form-label">PASSWORD</div>
+        <div className="d-flex">
+          <p className="form-label">PASSWORD</p>
+        </div>
         <MyTextInput
           name="password"
           placeholder=""
@@ -138,7 +153,9 @@ const NonArtistRegisterForm = (props: Props) => {
         />
         <PasswordStrengthBar password={password} />
 
-        <div className="form-label">RE-ENTER PASSWORD</div>
+        <div className="d-flex">
+          <p className="form-label">RE-ENTER PASSWORD</p>
+        </div>
         <MyTextInput
           name="checkPassword"
           placeholder=""

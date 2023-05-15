@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { CustomerTypes } from "../../../app/model/enums/customerTypes";
 import { Formik } from "formik";
-import { Form } from "semantic-ui-react";
+import { Divider, Form } from "semantic-ui-react";
 import MyTextInput from "../../../common/form/MyTextInput";
+import { UserLoginModel } from "../../../app/model/dto/user-login.model";
+import agent from "../../../api/agent";
+import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 
 const Login = () => {
   const [showLoginForm, setShowLoginForm] = useState(false);
@@ -19,6 +22,31 @@ const Login = () => {
   const handleUserTypeSelection = (userType: CustomerTypes) => {
     setCustomerType(userType);
     setShowLoginForm(true);
+  };
+
+  const handleLoginRequest = async (
+    values: UserLoginModel,
+    setStatus: (status?: any) => void
+  ) => {
+    try {
+      var result = await agent.Authentication.login({
+        email: values.email,
+        password: values.password,
+      });
+
+      //TODO: Do something after login based on accountType
+      console.log(result);
+    } catch (error) {
+      if (error) {
+        setStatus({ error: error });
+      } else {
+        setStatus({
+          error:
+            "An error occured while trying to log you in, please try again..",
+        });
+      }
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -50,7 +78,7 @@ const Login = () => {
             onSubmit={async (values, { setStatus }) => {
               setIsLoading(true);
               setStatus(null);
-              // await handleLoginRequest(values, setStatus);
+              await handleLoginRequest(values, setStatus);
             }}
           >
             {({ handleSubmit, isSubmitting, status, values }) => {
@@ -61,14 +89,18 @@ const Login = () => {
                   autoComplete="off"
                 >
                   <div className="form-body">
-                    <div className="form-label">EMAIL</div>
+                    <div className="d-flex">
+                      <p className="form-label">EMAIL</p>
+                    </div>
                     <MyTextInput
                       name="email"
                       placeholder=""
                       fieldClassName="mt-2"
                       disabled={isSubmitting}
                     />
-                    <div className="form-label">PASSWORD</div>
+                    <div className="d-flex">
+                      <p className="form-label">PASSWORD</p>
+                    </div>
                     <MyTextInput
                       name="password"
                       placeholder=""
@@ -78,42 +110,29 @@ const Login = () => {
                     />
                   </div>
                   {status?.error ? (
-                    <h4 className="text-center fade-in mb-0">{status.error}</h4>
+                    <p className="text-center fade-in mb-0 api-error">
+                      {status.error}
+                    </p>
                   ) : null}
-
-                  {
-                    !isSubmitting ? (
-                      <Button
-                        className="purple-button w-100 align-self-center mt-5"
-                        type="submit"
-                        disabled={
-                          isLoading ||
-                          values.email === "" ||
-                          values.password === ""
-                        }
-                      >
-                        <strong>LOGIN</strong>
-                      </Button>
-                    ) : null
-                    // <InPageLoadingComponent />
-                  }
-                  {/* <Divider /> */}
-                  {/* <Button
-                    onClick={() =>
-                      dispatch(
-                        handleToggleModal({
-                          open: true,
-                          body: <Register />,
-                          size: "large",
-                        })
-                      )
-                    }
-                    variant="outline-dark"
-                    className="white-btn w-100 mt-3"
-                    disabled={isSubmitting}
-                  >
-                    <strong>GO TO REGISTER</strong>
-                  </Button> */}
+                  {!isSubmitting ? (
+                    <Button
+                      className={`purple-button w-100 align-self-center ${
+                        status?.error ? "mt-3" : "mt-4"
+                      }`}
+                      type="submit"
+                      disabled={
+                        isLoading ||
+                        values.email === "" ||
+                        values.password === ""
+                      }
+                    >
+                      <strong>LOGIN</strong>
+                    </Button>
+                  ) : (
+                    <div className="mt-3">
+                      <InPageLoadingComponent />
+                    </div>
+                  )}
                 </Form>
               );
             }}

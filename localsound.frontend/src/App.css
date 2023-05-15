@@ -358,11 +358,10 @@ h6 {
 }
 
 /** AUTH MODAL **/
-.header {
+#auth-modal .header {
   padding: 10px;
 }
-
-.header-logo {
+#auth-modal .header-logo {
   background-image: url("./assets/logo-black.png");
   background-size: contain !important;
   background-attachment: inherit !important;
@@ -371,21 +370,43 @@ h6 {
   width: 40px;
   height: 40px;
 }
-
-.header-title {
+#auth-modal .header-title {
   font-size: 30px !important;
   text-shadow: -1px 0 #002233, 0 1px #002233, 1px 0 #002233, 0 -1px #002233;
+  font-weight: 800;
   letter-spacing: 1.5px;
-  border-bottom: 6px solid #6d69fa;
+  border-bottom: 4px solid #6d69fa;
   padding-bottom: 5px;
   padding-right: 20px;
 }
 
+/** MODAL STYLES **/
+.modal .content {
+  border: 2px solid #002233;
+  padding-top: 5px !important;
+}
+
 /** FORM **/
-.form-label {
-  letter-spacing: 1.5px;
-  text-shadow: -0.5px 0 #002233, 0 0.5px #002233, 0.5px 0 #002233, 0 -0.5px #002233;
-  font-size: 16px;
+.form .api-error {
+  letter-spacing: 1px;
+  color: #002233;
+  font-size: 12px;
+  font-weight: 800;
+}
+.form .form-label {
+  color: #002233;
+  font-size: 14px;
+  font-weight: 800;
+  border-bottom: 2px solid #6d69fa;
+  padding-right: 0.5rem;
+}
+.form .form-body {
+  padding-left: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-right: 1rem;
+  border: 1px solid #002233;
+  border-radius: 6px;
 }
 
 @keyframes fadein {

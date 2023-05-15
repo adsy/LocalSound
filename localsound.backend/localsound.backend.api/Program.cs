@@ -40,9 +40,9 @@ builder.Services.AddTransient<ITokenRepository, TokenRepository>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CORSAllowLocalHost3000",
+    options.AddPolicy("CORSAllowLocalHost5173",
       builder =>
-      builder.WithOrigins("http://localhost:3000")
+      builder.WithOrigins("http://localhost:5173")
         .AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials() // <<< this is required for cookies to be set on the client - sets the 'Access-Control-Allow-Credentials' to true
@@ -62,7 +62,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("CORSAllowLocalHost3000");
+app.UseCors("CORSAllowLocalHost5173");
 
 app.UseAuthorization();
 
