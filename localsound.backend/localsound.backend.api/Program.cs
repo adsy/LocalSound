@@ -42,7 +42,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CORSAllowLocalHost5173",
       builder =>
-      builder.WithOrigins("http://localhost:5173")
+      builder.WithOrigins("http://127.0.0.1:5173")
         .AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials() // <<< this is required for cookies to be set on the client - sets the 'Access-Control-Allow-Credentials' to true

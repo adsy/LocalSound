@@ -11,6 +11,7 @@ import {
 } from "../../../app/model/dto/user-registration.model";
 import agent from "../../../api/agent";
 import { CustomerTypes } from "../../../app/model/enums/customerTypes";
+import { handleSetUserDetails } from "../../../app/redux/actions/userSlice";
 
 const NonArtistRegister = () => {
   const dispatch = useDispatch();
@@ -26,8 +27,9 @@ const NonArtistRegister = () => {
         registrationDto: values,
       });
 
-      //TODO: Do something with result
-      console.log(result);
+      dispatch(handleSetUserDetails(result));
+
+      // TODO: redirect once logged in
     } catch (error) {
       if (error) {
         setStatus(error);

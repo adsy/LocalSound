@@ -5,16 +5,10 @@ html {
 
 html,
 body {
-  overflow: auto;
-}
-
-body {
   height: 100%;
-  background-image: url("./assets/background.svg") !important;
-  background-size: cover !important;
-  background-attachment: inherit !important;
-  background-position: center center;
   font-family: "Barlow", serif !important;
+  overflow: auto;
+  background-color: #ececec !important;
 }
 
 h1,
@@ -384,6 +378,7 @@ h6 {
 .modal .content {
   border: 2px solid #002233;
   padding-top: 5px !important;
+  background-color: #ececec !important;
 }
 
 /** FORM **/
@@ -405,8 +400,21 @@ h6 {
   padding-top: 1rem;
   padding-bottom: 1rem;
   padding-right: 1rem;
-  border: 1px solid #002233;
+  border: 1px solid white;
   border-radius: 6px;
+}
+.form .form-body input {
+  border-left: 8px solid #6d69fa !important;
+  transition: border-left 0.2s ease-in-out !important;
+}
+.form .form-body input:focus {
+  border-left: 8px solid #002233 !important;
+}
+.form .form-body .ui.basic.red.label {
+  background: none #db2828 !important;
+  color: #f1f1f1 !important;
+  border-color: #db2828 !important;
+  margin-left: 0;
 }
 
 @keyframes fadein {

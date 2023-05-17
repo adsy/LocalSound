@@ -1,7 +1,6 @@
 import { Button, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { handleToggleModal } from "../../app/redux/actions/modalSlice";
-import { useState } from "react";
 import Login from "../Authentication/Login/Login";
 import Register from "../Authentication/Register/Register";
 

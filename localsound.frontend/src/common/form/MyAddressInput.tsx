@@ -68,7 +68,8 @@ const MyAddressInput = (props: Props) => {
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => {
           return (
-            <div className="position-relative">
+            <Form.Field className="position-relative">
+              <label></label>
               <input
                 {...field}
                 {...getInputProps({
@@ -112,7 +113,7 @@ const MyAddressInput = (props: Props) => {
                   })}
                 </div>
               ) : null}
-            </div>
+            </Form.Field>
           );
         }}
       </PlacesAutocomplete>

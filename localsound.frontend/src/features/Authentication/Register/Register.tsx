@@ -26,7 +26,7 @@ const Register = () => {
 
   return (
     <div id="auth-modal" className="fade-in">
-      <div className="d-flex flex-row mb-2 header">
+      <div className="d-flex flex-row header">
         <h2 className="header-title mt-1 align-self-center">
           Register for an account
         </h2>

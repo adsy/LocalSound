@@ -4,10 +4,6 @@ import { AppState } from "../../model/redux/appState";
 const initialState: AppState = {
   appLoaded: false,
   userType: null,
-  authenticationPage: {
-    customerType: null,
-    addressSelected: false,
-  },
 };
 export const applicationSlice = createSlice({
   name: "app",

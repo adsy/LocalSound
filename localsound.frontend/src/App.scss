@@ -1,7 +1,7 @@
 $navbarColor: #002233;
 $borderColor: #002233;
 $headingColor: #f1f1f1;
-$textColor: #ccc5b9;
+$offWhite: #ececec;
 $purple: #6d69fa;
 $darkPurple: #5753cf;
 
@@ -11,16 +11,10 @@ html {
 }
 html,
 body {
-  overflow: auto;
-}
-body {
   height: 100%;
-  background-image: url("./assets/background.svg") !important ;
-  // margin: 0 auto;
-  background-size: cover !important;
-  background-attachment: inherit !important;
-  background-position: center center;
   font-family: "Barlow", serif !important;
+  overflow: auto;
+  background-color: $offWhite !important;
 }
 
 h1,
@@ -227,6 +221,7 @@ $end: 10;
     border: 2px solid $navbarColor;
     // padding-bottom: 5px !important;
     padding-top: 5px !important;
+    background-color: $offWhite !important;
   }
 }
 
@@ -257,8 +252,24 @@ $end: 10;
     padding-top: 1rem;
     padding-bottom: 1rem;
     padding-right: 1rem;
-    border: 1px solid $navbarColor;
+    border: 1px solid white;
     border-radius: 6px;
+
+    input {
+      border-left: 8px solid $purple !important;
+      transition: border-left 0.2s ease-in-out !important;
+    }
+
+    input:focus {
+      border-left: 8px solid $navbarColor !important;
+    }
+
+    .ui.basic.red.label {
+      background: none #db2828 !important;
+      color: $headingColor !important;
+      border-color: #db2828 !important;
+      margin-left: 0;
+    }
   }
 }
 
