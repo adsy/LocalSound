@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import YupPassword from "yup-password";
 YupPassword(Yup);
 
-const nonArtistValidation = Yup.object({
+const artistRegisterValidation = Yup.object({
   email: Yup.string()
     .required("Your email address is required.")
     .email()
@@ -17,8 +17,7 @@ const nonArtistValidation = Yup.object({
   checkPassword: Yup.string()
     .required("You must re-enter your password.")
     .oneOf([Yup.ref("password")], "Passwords must match."),
-  firstName: Yup.string().required("You must enter your first name."),
-  lastName: Yup.string().required("You must enter your surname."),
+  name: Yup.string().required("You must enter your name as a performer."),
   address: Yup.string()
     .required("You must enter a valid address.")
     .test({
@@ -42,6 +41,25 @@ const nonArtistValidation = Yup.object({
         value === undefined ||
         (value !== undefined && value.trim().length === 0),
     }),
+  youtubeUrl: Yup.string().test({
+    name: "urlFormat",
+    message: "Your youtube url must start with https://www.youtube.com/@",
+    test: (value) =>
+      !value || new RegExp("(https://www.youtube.com/@)").test(value!),
+  }),
+  spotifyUrl: Yup.string().test({
+    name: "urlFormat",
+    message:
+      "Your spotify url must start with https://open.spotify.com/artist/",
+    test: (value) =>
+      !value || new RegExp("(https://open.spotify.com/artist/)").test(value!),
+  }),
+  soundcloudUrl: Yup.string().test({
+    name: "urlFormat",
+    message: "Your soundcloud url must start with https://soundcloud.com/",
+    test: (value) =>
+      !value || new RegExp("(https://soundcloud.com/)").test(value!),
+  }),
 });
 
-export default nonArtistValidation;
+export default artistRegisterValidation;

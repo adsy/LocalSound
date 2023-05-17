@@ -5,6 +5,9 @@ import ArtistRegister from "./ArtistRegister";
 import NonArtistRegister from "./NonArtistRegister";
 import { useDispatch } from "react-redux";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
+import { handleSetUserDetails } from "../../../app/redux/actions/userSlice";
+import agent from "../../../api/agent";
+import { RegistrationModel } from "../../../app/model/dto/user-registration.model";
 
 const Register = () => {
   const [showRegisterForm, setShowRegisterForm] = useState(false);
@@ -23,6 +26,32 @@ const Register = () => {
       setShowRegisterForm(false);
     };
   }, []);
+
+  const handleRegisterRequest = async (
+    values: RegistrationModel,
+    customerType: CustomerTypes,
+    setStatus: (value: any) => void
+  ) => {
+    try {
+      var result = await agent.Authentication.register({
+        customerType: customerType,
+        registrationDto: values,
+      });
+
+      dispatch(handleSetUserDetails(result));
+
+      // TODO: redirect once logged in
+    } catch (error) {
+      if (error) {
+        setStatus(error);
+      } else {
+        setStatus({
+          error:
+            "An error occured while trying to register your account, please try again..",
+        });
+      }
+    }
+  };
 
   return (
     <div id="auth-modal" className="fade-in">
@@ -47,9 +76,9 @@ const Register = () => {
           </Button>
         </div>
       ) : customerType === CustomerTypes.Artist ? (
-        <ArtistRegister />
+        <ArtistRegister handleRegisterRequest={handleRegisterRequest} />
       ) : (
-        <NonArtistRegister />
+        <NonArtistRegister handleRegisterRequest={handleRegisterRequest} />
       )}
     </div>
   );

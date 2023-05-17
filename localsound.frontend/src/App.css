@@ -262,6 +262,10 @@ h6 {
   border: 1px solid #002233;
 }
 
+.w-fit-content {
+  width: fit-content;
+}
+
 /** CONTAINERS **/
 /** LOGOS **/
 .navbar-logo {

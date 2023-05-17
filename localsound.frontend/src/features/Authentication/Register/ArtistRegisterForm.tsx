@@ -1,9 +1,10 @@
-import { Col } from "react-bootstrap";
+import { Button, Col } from "react-bootstrap";
 import { RegistrationModel } from "../../../app/model/dto/user-registration.model";
 import PasswordStrengthBar from "react-password-strength-bar";
 import { Divider } from "semantic-ui-react";
 import MyAddressInput from "../../../common/form/MyAddressInput";
 import MyTextInput from "../../../common/form/MyTextInput";
+import { useState } from "react";
 
 interface Props {
   disabled?: boolean;
@@ -18,7 +19,7 @@ interface Props {
   values: RegistrationModel;
 }
 
-const NonArtistRegisterForm = (props: Props) => {
+const ArtistRegisterForm = (props: Props) => {
   const {
     password,
     disabled,
@@ -27,6 +28,9 @@ const NonArtistRegisterForm = (props: Props) => {
     setAddressError,
     values,
   } = props;
+
+  const [showSoundcloudInput, setShowSoundcloudInput] = useState(false);
+  const [showSpotifyInput, setShowSpotifyInput] = useState(false);
 
   const handleMobileNumberChange = (
     e:
@@ -70,23 +74,9 @@ const NonArtistRegisterForm = (props: Props) => {
         className="d-flex flex-column p-3 register-col"
       >
         <div className="d-flex">
-          <p className="form-label">FIRST NAME</p>
+          <p className="form-label">ARTIST NAME</p>
         </div>
-        <MyTextInput
-          name="firstName"
-          placeholder=""
-          disabled={disabled}
-          className="mb-2"
-        />
-        <div className="d-flex">
-          <p className="form-label">SURNAME</p>
-        </div>
-        <MyTextInput
-          name="lastName"
-          placeholder=""
-          disabled={disabled}
-          className="mb-2"
-        />
+        <MyTextInput name="name" placeholder="" disabled={disabled} />
         <Divider />
         <div className="mb-2">
           Your mobile number will be used for account verification and other
@@ -119,6 +109,46 @@ const NonArtistRegisterForm = (props: Props) => {
           setAddressError={setAddressError}
           disabled={disabled}
         />
+        <Divider />
+        <div className="mb-2">
+          Adding your social media profiles is optional.
+        </div>
+        {showSoundcloudInput ? (
+          <>
+            <div className="d-flex">
+              <p className="form-label">SOUNDCLOUD URL</p>
+            </div>
+            <MyTextInput name="soundcloudUrl" placeholder="" />
+          </>
+        ) : (
+          <>
+            <Button
+              onClick={() => setShowSoundcloudInput(!showSoundcloudInput)}
+              className="purple-button w-fit-content d-flex flex-row mb-3"
+            >
+              <div className="facebook-icon-nav align-self-center mr-2"></div>
+              <h4 className="align-self-center mt-0">Add Soundcloud</h4>
+            </Button>
+          </>
+        )}
+        {showSpotifyInput ? (
+          <>
+            <div className="d-flex">
+              <p className="form-label">SPOTIFY URL</p>
+            </div>
+            <MyTextInput name="spotifyUrl" placeholder="" />
+          </>
+        ) : (
+          <>
+            <Button
+              onClick={() => setShowSpotifyInput(!showSpotifyInput)}
+              className="purple-button w-fit-content d-flex flex-row mb-3 "
+            >
+              <div className="instagram-icon-nav align-self-center mr-2"></div>
+              <h4 className="align-self-center mt-0">Add Spotify</h4>
+            </Button>
+          </>
+        )}
       </Col>
 
       <Col
@@ -135,7 +165,7 @@ const NonArtistRegisterForm = (props: Props) => {
         <MyTextInput
           name="email"
           placeholder=""
-          className="mb-2"
+          className=""
           disabled={disabled}
         />
         <div className="d-flex">
@@ -145,10 +175,9 @@ const NonArtistRegisterForm = (props: Props) => {
           name="password"
           placeholder=""
           type="password"
-          className="mb-2"
           disabled={disabled}
         />
-        <PasswordStrengthBar password={password} />
+        <PasswordStrengthBar minLength={6} password={password} />
 
         <div className="d-flex">
           <p className="form-label">RE-ENTER PASSWORD</p>
@@ -157,7 +186,6 @@ const NonArtistRegisterForm = (props: Props) => {
           name="checkPassword"
           placeholder=""
           type="password"
-          className="mb-2"
           disabled={disabled}
         />
       </Col>
@@ -165,4 +193,4 @@ const NonArtistRegisterForm = (props: Props) => {
   );
 };
 
-export default NonArtistRegisterForm;
+export default ArtistRegisterForm;
