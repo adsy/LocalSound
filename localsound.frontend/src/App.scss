@@ -89,7 +89,7 @@ $end: 10;
 }
 
 @mixin logo {
-  background-image: url("./assets/logo.png");
+  background-image: url("./assets/logo2.png");
   background-size: contain !important;
   background-attachment: inherit !important;
   background-position: center center;
@@ -110,6 +110,30 @@ $end: 10;
   @include logo;
   width: 60px;
   height: 60px;
+}
+
+/** ICONS **/
+@mixin small-icon {
+  width: 25px;
+  height: 25px;
+  background-size: cover !important;
+  background-attachment: inherit !important;
+  background-position: center center;
+}
+
+.spotify-icon {
+  @include small-icon;
+  background-image: url(./assets/icons/spotify.svg);
+}
+
+.soundcloud-icon {
+  @include small-icon;
+  background-image: url("./assets/icons/soundcloud.svg");
+}
+
+.youtube-icon {
+  @include small-icon;
+  background-image: url(./assets/icons/youtube.svg);
 }
 
 /** MODAL **/
@@ -170,19 +194,23 @@ $end: 10;
 }
 
 /** BUTTONS **/
-.purple-button {
-  background-color: $purple;
-  border: 1px solid $borderColor;
+@mixin button-style {
   color: white;
   font-size: 14px;
   letter-spacing: 1.5px;
   text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
     0 -1px $borderColor;
-  transition: background-color 0.5s ease;
   transition: border-color 0.5s ease;
 }
 
-.purple-button:hover {
+.purple-button {
+  @include button-style;
+  transition: background-color 0.5s ease;
+  background-color: $purple;
+  border: 1px solid $borderColor;
+}
+
+.purple-button:hover:active:focus {
   background-color: $darkPurple;
   border: 1px solid white;
 }
@@ -192,6 +220,48 @@ $end: 10;
   background-color: $purple;
   border: 1px solid $borderColor;
   color: white;
+}
+
+.soundcloud-button {
+  @include button-style;
+  transition: background-color 0.5s ease;
+  background-color: #ff6100;
+  border: black 1px solid;
+}
+
+.soundcloud-button:hover,
+.soundcloud-button:active,
+.soundcloud-button:focus {
+  background-color: rgb(246, 124, 48);
+  border: rgb(0, 0, 0) 1px solid;
+}
+
+.spotify-button {
+  @include button-style;
+  transition: background-color 0.5s ease;
+  background-color: #1ed75d;
+  border: black 1px solid;
+}
+
+.spotify-button:hover,
+.spotify-button:active,
+.spotify-button:focus {
+  background-color: #00ff55;
+  border: rgb(0, 0, 0) 1px solid;
+}
+
+.youtube-button {
+  @include button-style;
+  transition: background-color 0.5s ease;
+  background-color: #ff0000;
+  border: black 1px solid;
+}
+
+.youtube-button:hover,
+.youtube-button:active,
+.youtube-button:focus {
+  background-color: #ff4646;
+  border: rgb(0, 0, 0) 1px solid;
 }
 
 /** AUTH MODAL **/
@@ -273,6 +343,48 @@ $end: 10;
       color: $headingColor !important;
       border-color: #db2828 !important;
       margin-left: 0;
+    }
+
+    .autocomplete-dropdown-container {
+      border: 1px $navbarColor solid;
+      // padding: 2px;
+      position: absolute;
+      z-index: 2;
+      // background-color: $headingColor !important;
+      position: absolute;
+      top: 38px;
+      border-radius: 1px 1px;
+    }
+    .autocomplete-dropdown-container > div:not([role="option"]) {
+      display: none;
+    }
+
+    .suggestion-item {
+      letter-spacing: 1px;
+      font-size: 14px;
+      background-color: $headingColor !important;
+      cursor: pointer;
+      align-self: center;
+      padding: 8px;
+    }
+
+    .suggestion-item:not(:last-child) {
+      border-bottom: solid 1px rgb(189, 186, 186);
+    }
+
+    .suggestion-item--active {
+      font-size: 14px;
+      letter-spacing: 1px;
+      background-color: rgb(255, 255, 255);
+      cursor: pointer;
+      align-self: center;
+      padding: 8px;
+      font-weight: 800;
+      border-left: 4px $purple solid;
+    }
+
+    .suggestion-item--active:not(:last-child) {
+      border-bottom: solid 1px rgb(83, 83, 83);
     }
   }
 }

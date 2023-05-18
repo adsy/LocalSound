@@ -269,13 +269,41 @@ h6 {
 /** CONTAINERS **/
 /** LOGOS **/
 .navbar-logo {
-  background-image: url("./assets/logo.png");
+  background-image: url("./assets/logo2.png");
   background-size: contain !important;
   background-attachment: inherit !important;
   background-position: center center;
   background-repeat: no-repeat !important;
   width: 60px;
   height: 60px;
+}
+
+/** ICONS **/
+.spotify-icon {
+  width: 25px;
+  height: 25px;
+  background-size: cover !important;
+  background-attachment: inherit !important;
+  background-position: center center;
+  background-image: url(./assets/icons/spotify.svg);
+}
+
+.soundcloud-icon {
+  width: 25px;
+  height: 25px;
+  background-size: cover !important;
+  background-attachment: inherit !important;
+  background-position: center center;
+  background-image: url("./assets/icons/soundcloud.svg");
+}
+
+.youtube-icon {
+  width: 25px;
+  height: 25px;
+  background-size: cover !important;
+  background-attachment: inherit !important;
+  background-position: center center;
+  background-image: url(./assets/icons/youtube.svg);
 }
 
 /** MODAL **/
@@ -333,17 +361,17 @@ h6 {
 
 /** BUTTONS **/
 .purple-button {
-  background-color: #6d69fa;
-  border: 1px solid #002233;
   color: white;
   font-size: 14px;
   letter-spacing: 1.5px;
   text-shadow: -1px 0 #002233, 0 1px #002233, 1px 0 #002233, 0 -1px #002233;
-  transition: background-color 0.5s ease;
   transition: border-color 0.5s ease;
+  transition: background-color 0.5s ease;
+  background-color: #6d69fa;
+  border: 1px solid #002233;
 }
 
-.purple-button:hover {
+.purple-button:hover:active:focus {
   background-color: #5753cf;
   border: 1px solid white;
 }
@@ -353,6 +381,60 @@ h6 {
   background-color: #6d69fa;
   border: 1px solid #002233;
   color: white;
+}
+
+.soundcloud-button {
+  color: white;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-shadow: -1px 0 #002233, 0 1px #002233, 1px 0 #002233, 0 -1px #002233;
+  transition: border-color 0.5s ease;
+  transition: background-color 0.5s ease;
+  background-color: #ff6100;
+  border: black 1px solid;
+}
+
+.soundcloud-button:hover,
+.soundcloud-button:active,
+.soundcloud-button:focus {
+  background-color: rgb(246, 124, 48);
+  border: rgb(0, 0, 0) 1px solid;
+}
+
+.spotify-button {
+  color: white;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-shadow: -1px 0 #002233, 0 1px #002233, 1px 0 #002233, 0 -1px #002233;
+  transition: border-color 0.5s ease;
+  transition: background-color 0.5s ease;
+  background-color: #1ed75d;
+  border: black 1px solid;
+}
+
+.spotify-button:hover,
+.spotify-button:active,
+.spotify-button:focus {
+  background-color: #00ff55;
+  border: rgb(0, 0, 0) 1px solid;
+}
+
+.youtube-button {
+  color: white;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-shadow: -1px 0 #002233, 0 1px #002233, 1px 0 #002233, 0 -1px #002233;
+  transition: border-color 0.5s ease;
+  transition: background-color 0.5s ease;
+  background-color: #ff0000;
+  border: black 1px solid;
+}
+
+.youtube-button:hover,
+.youtube-button:active,
+.youtube-button:focus {
+  background-color: #ff4646;
+  border: rgb(0, 0, 0) 1px solid;
 }
 
 /** AUTH MODAL **/
@@ -419,6 +501,41 @@ h6 {
   color: #f1f1f1 !important;
   border-color: #db2828 !important;
   margin-left: 0;
+}
+.form .form-body .autocomplete-dropdown-container {
+  border: 1px #002233 solid;
+  position: absolute;
+  z-index: 2;
+  position: absolute;
+  top: 38px;
+  border-radius: 1px 1px;
+}
+.form .form-body .autocomplete-dropdown-container > div:not([role=option]) {
+  display: none;
+}
+.form .form-body .suggestion-item {
+  letter-spacing: 1px;
+  font-size: 14px;
+  background-color: #f1f1f1 !important;
+  cursor: pointer;
+  align-self: center;
+  padding: 8px;
+}
+.form .form-body .suggestion-item:not(:last-child) {
+  border-bottom: solid 1px rgb(189, 186, 186);
+}
+.form .form-body .suggestion-item--active {
+  font-size: 14px;
+  letter-spacing: 1px;
+  background-color: rgb(255, 255, 255);
+  cursor: pointer;
+  align-self: center;
+  padding: 8px;
+  font-weight: 800;
+  border-left: 4px #6d69fa solid;
+}
+.form .form-body .suggestion-item--active:not(:last-child) {
+  border-bottom: solid 1px rgb(83, 83, 83);
 }
 
 @keyframes fadein {

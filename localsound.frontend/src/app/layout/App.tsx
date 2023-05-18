@@ -11,6 +11,7 @@ import {
   handleResetModal,
   handleToggleModal,
 } from "../redux/actions/modalSlice";
+import HomePage from "../../features/Home/HomePage";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -44,6 +45,7 @@ const App = () => {
           render={() => (
             <div className="masthead">
               <TopNavBar />
+              <Route exact path="/home" component={HomePage} />
             </div>
           )}
         />

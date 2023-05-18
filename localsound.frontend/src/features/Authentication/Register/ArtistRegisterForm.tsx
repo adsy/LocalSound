@@ -31,6 +31,7 @@ const ArtistRegisterForm = (props: Props) => {
 
   const [showSoundcloudInput, setShowSoundcloudInput] = useState(false);
   const [showSpotifyInput, setShowSpotifyInput] = useState(false);
+  const [showYoutubeInput, setShowYoutubeInput] = useState(false);
 
   const handleMobileNumberChange = (
     e:
@@ -95,8 +96,8 @@ const ArtistRegisterForm = (props: Props) => {
         />
         <Divider />
         <div className="mb-2">
-          Your address can be used to help locate performers that are closest to
-          you.
+          Your address can be used to help you be found easier by music lovers
+          who are close to you.
         </div>
         <div className="d-flex">
           <p className="form-label">ADDRESS</p>
@@ -110,13 +111,11 @@ const ArtistRegisterForm = (props: Props) => {
           disabled={disabled}
         />
         <Divider />
-        <div className="mb-2">
-          Adding your social media profiles is optional.
-        </div>
+        <div className="mb-2">Adding your profiles is optional.</div>
         {showSoundcloudInput ? (
           <>
             <div className="d-flex">
-              <p className="form-label">SOUNDCLOUD URL</p>
+              <p className="form-label">SOUNDCLOUD PROFILE</p>
             </div>
             <MyTextInput name="soundcloudUrl" placeholder="" />
           </>
@@ -124,17 +123,17 @@ const ArtistRegisterForm = (props: Props) => {
           <>
             <Button
               onClick={() => setShowSoundcloudInput(!showSoundcloudInput)}
-              className="purple-button w-fit-content d-flex flex-row mb-3"
+              className="soundcloud-button w-fit-content d-flex flex-row mb-3"
             >
-              <div className="facebook-icon-nav align-self-center mr-2"></div>
-              <h4 className="align-self-center mt-0">Add Soundcloud</h4>
+              <div className="soundcloud-icon align-self-center mr-2"></div>
+              <h4 className="align-self-center mt-0">Soundcloud</h4>
             </Button>
           </>
         )}
         {showSpotifyInput ? (
           <>
             <div className="d-flex">
-              <p className="form-label">SPOTIFY URL</p>
+              <p className="form-label">SPOTIFY PROFILE</p>
             </div>
             <MyTextInput name="spotifyUrl" placeholder="" />
           </>
@@ -142,10 +141,28 @@ const ArtistRegisterForm = (props: Props) => {
           <>
             <Button
               onClick={() => setShowSpotifyInput(!showSpotifyInput)}
-              className="purple-button w-fit-content d-flex flex-row mb-3 "
+              className="spotify-button w-fit-content d-flex flex-row mb-3 "
             >
-              <div className="instagram-icon-nav align-self-center mr-2"></div>
-              <h4 className="align-self-center mt-0">Add Spotify</h4>
+              <div className="spotify-icon align-self-center mr-2"></div>
+              <h4 className="align-self-center mt-0">Spotify</h4>
+            </Button>
+          </>
+        )}
+        {showYoutubeInput ? (
+          <>
+            <div className="d-flex">
+              <p className="form-label">YOUTUBE PROFILE</p>
+            </div>
+            <MyTextInput name="youtubeUrl" placeholder="" />
+          </>
+        ) : (
+          <>
+            <Button
+              onClick={() => setShowYoutubeInput(!showYoutubeInput)}
+              className="youtube-button w-fit-content d-flex flex-row mb-3 "
+            >
+              <div className="youtube-icon align-self-center mr-2"></div>
+              <h4 className="align-self-center mt-0">Youtube</h4>
             </Button>
           </>
         )}
