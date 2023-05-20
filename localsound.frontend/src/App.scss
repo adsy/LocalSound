@@ -67,8 +67,8 @@ $end: 10;
 
 .app-container {
   height: 100%;
-  transition: width 1s ease, margin-left 1s ease, margin-right 1s ease,
-    padding 1s ease, left 1s ease !important;
+  transition: width 0.3s ease, margin-left 0.3s ease, margin-right 0.3s ease,
+    padding 0.3s ease !important;
   background-color: white;
   min-height: 100vh;
 }
@@ -93,7 +93,7 @@ $end: 10;
 }
 
 @mixin logo {
-  background-image: url("./assets/logo3.png");
+  background-image: url("./assets/logo4.png");
   background-size: contain !important;
   background-attachment: inherit !important;
   background-position: center center;
@@ -161,6 +161,11 @@ $end: 10;
   background-image: url(./assets/icons/home.svg);
 }
 
+.signout-icon {
+  @include small-icon;
+  background-image: url(./assets/icons/arrow.svg);
+}
+
 /** MODAL **/
 .ui.dimmer {
   transition: background-color 5s ease;
@@ -214,14 +219,14 @@ $end: 10;
 /** NAVBAR **/
 #sidebar {
   height: 100vh;
-  max-width: 200px;
+  max-width: 250px;
 
   .sidebar-contents {
     height: 100vh;
     position: absolute;
     top: 0;
-    max-width: 200px;
-    width: 200px;
+    max-width: 250px;
+    width: 250px;
     transition: width ease 1s;
     border-right: 2px solid #232323;
     background-image: url("./assets/sidebar-bottom.svg") !important;
@@ -245,20 +250,23 @@ $end: 10;
       padding-left: 10px;
       padding-top: 13px;
       padding-bottom: 13px;
-      transition: background-color 0.5s ease-in-out;
-    }
-
-    .sidebar-item:hover,
-    .sidebar-item:active,
-    .sidebar-item:focus {
-      background-color: $headingColor;
+      transition: background-color 0.2s ease-in;
     }
 
     .sidebar-text {
       // font-size: 14px;
       text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
         0 -1px $borderColor;
-      color: $headingColor;
+    }
+
+    .sidebar-item.active {
+      background-color: $navbarColor;
+    }
+
+    .sidebar-item:hover,
+    .sidebar-item:active,
+    .sidebar-item:focus {
+      background-color: $borderColor;
     }
 
     .sidebar-top {
@@ -516,6 +524,9 @@ $end: 10;
 }
 
 @media only screen and (max-width: 993px) {
+  #app-layout {
+    flex-direction: column !important;
+  }
   .app-container {
     left: 0px;
   }

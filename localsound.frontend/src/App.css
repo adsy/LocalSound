@@ -256,7 +256,7 @@ h6 {
 
 .app-container {
   height: 100%;
-  transition: width 1s ease, margin-left 1s ease, margin-right 1s ease, padding 1s ease, left 1s ease !important;
+  transition: width 0.3s ease, margin-left 0.3s ease, margin-right 0.3s ease, padding 0.3s ease !important;
   background-color: white;
   min-height: 100vh;
 }
@@ -272,7 +272,7 @@ h6 {
 /** CONTAINERS **/
 /** LOGOS **/
 .landing-page-logo {
-  background-image: url("./assets/logo3.png");
+  background-image: url("./assets/logo4.png");
   background-size: contain !important;
   background-attachment: inherit !important;
   background-position: center center;
@@ -316,6 +316,15 @@ h6 {
   background-attachment: inherit !important;
   background-position: center center;
   background-image: url(./assets/icons/home.svg);
+}
+
+.signout-icon {
+  width: 25px;
+  height: 25px;
+  background-size: cover !important;
+  background-attachment: inherit !important;
+  background-position: center center;
+  background-image: url(./assets/icons/arrow.svg);
 }
 
 /** MODAL **/
@@ -367,14 +376,14 @@ h6 {
 /** NAVBAR **/
 #sidebar {
   height: 100vh;
-  max-width: 200px;
+  max-width: 250px;
 }
 #sidebar .sidebar-contents {
   height: 100vh;
   position: absolute;
   top: 0;
-  max-width: 200px;
-  width: 200px;
+  max-width: 250px;
+  width: 250px;
   transition: width ease 1s;
   border-right: 2px solid #232323;
   background-image: url("./assets/sidebar-bottom.svg") !important;
@@ -396,16 +405,18 @@ h6 {
   padding-left: 10px;
   padding-top: 13px;
   padding-bottom: 13px;
-  transition: background-color 0.5s ease-in-out;
+  transition: background-color 0.2s ease-in;
+}
+#sidebar .sidebar-contents .sidebar-text {
+  text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
+}
+#sidebar .sidebar-contents .sidebar-item.active {
+  background-color: #001514;
 }
 #sidebar .sidebar-contents .sidebar-item:hover,
 #sidebar .sidebar-contents .sidebar-item:active,
 #sidebar .sidebar-contents .sidebar-item:focus {
-  background-color: #f1f1f1;
-}
-#sidebar .sidebar-contents .sidebar-text {
-  text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
-  color: #f1f1f1;
+  background-color: #232323;
 }
 /** BUTTONS **/
 .purple-button {
@@ -643,6 +654,9 @@ h6 {
   }
 }
 @media only screen and (max-width: 993px) {
+  #app-layout {
+    flex-direction: column !important;
+  }
   .app-container {
     left: 0px;
   }
