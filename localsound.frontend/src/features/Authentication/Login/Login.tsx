@@ -9,6 +9,7 @@ import agent from "../../../api/agent";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import { useDispatch } from "react-redux";
 import { handleSetUserDetails } from "../../../app/redux/actions/userSlice";
+import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +26,11 @@ const Login = () => {
       });
 
       dispatch(handleSetUserDetails(result));
+      dispatch(
+        handleToggleModal({
+          open: false,
+        })
+      );
 
       // TODO: redirect once logged in
     } catch (error) {

@@ -14,7 +14,7 @@ const LandingPage = () => {
     if (userDetails) {
       history.push("/home");
     }
-  }, []);
+  }, [userDetails]);
 
   return (
     <div id="landing-page">

@@ -12,6 +12,7 @@ import {
   handleToggleModal,
 } from "../redux/actions/modalSlice";
 import HomePage from "../../features/Home/HomePage";
+import SideNavBar from "./SideNavBar";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -37,19 +38,24 @@ const App = () => {
   return (
     <>
       <ModalContainer />
-      <Container className="app-container">
-        <Route exact path="/" component={LandingPage} />
-        <Route exact path="/login" component={Login} />
-        <Route
-          path={"/(.+)"}
-          render={() => (
-            <div className="masthead">
-              <TopNavBar />
-              <Route exact path="/home" component={HomePage} />
-            </div>
-          )}
-        />
-      </Container>
+      <div
+        id="app-layout"
+        className="d-flex flex-row w-100 justify-content-center"
+      >
+        <SideNavBar />
+        <Container className="app-container">
+          <Route exact path="/" component={LandingPage} />
+          <Route exact path="/login" component={Login} />
+          <Route
+            path={"/(.+)"}
+            render={() => (
+              <div className="masthead">
+                <Route exact path="/home" component={HomePage} />
+              </div>
+            )}
+          />
+        </Container>
+      </div>
     </>
   );
 };

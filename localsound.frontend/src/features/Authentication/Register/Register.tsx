@@ -39,6 +39,11 @@ const Register = () => {
       });
 
       dispatch(handleSetUserDetails(result));
+      dispatch(
+        handleToggleModal({
+          open: false,
+        })
+      );
 
       // TODO: redirect once logged in
     } catch (error) {

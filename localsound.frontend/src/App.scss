@@ -1,9 +1,9 @@
-$navbarColor: #002233;
-$borderColor: #002233;
+$navbarColor: #001514;
+$borderColor: #232323;
 $headingColor: #f1f1f1;
 $offWhite: #ececec;
+$richBlack: #232323;
 $purple: #6d69fa;
-$darkPurple: #5753cf;
 
 @import url("https://fonts.googleapis.com/css2?family=Barlow");
 html {
@@ -67,6 +67,10 @@ $end: 10;
 
 .app-container {
   height: 100%;
+  transition: width 1s ease, margin-left 1s ease, margin-right 1s ease,
+    padding 1s ease, left 1s ease !important;
+  background-color: white;
+  min-height: 100vh;
 }
 
 .black-border {
@@ -89,7 +93,7 @@ $end: 10;
 }
 
 @mixin logo {
-  background-image: url("./assets/logo2.png");
+  background-image: url("./assets/logo3.png");
   background-size: contain !important;
   background-attachment: inherit !important;
   background-position: center center;
@@ -104,15 +108,15 @@ $end: 10;
   background-repeat: no-repeat !important;
 }
 
-/** LOGOS **/
-
-.navbar-logo {
-  @include logo;
-  width: 60px;
-  height: 60px;
+@mixin button-style {
+  color: white;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
+    0 -1px $borderColor;
+  transition: border-color 0.5s ease;
 }
 
-/** ICONS **/
 @mixin small-icon {
   width: 25px;
   height: 25px;
@@ -121,6 +125,22 @@ $end: 10;
   background-position: center center;
 }
 
+@mixin nav-icon {
+  width: 25px;
+  height: 25px;
+  background-size: cover !important;
+  background-attachment: inherit !important;
+  background-position: center center;
+}
+
+/** LOGOS **/
+.landing-page-logo {
+  @include logo;
+  width: 80px;
+  height: 80px;
+}
+
+/** ICONS **/
 .spotify-icon {
   @include small-icon;
   background-image: url(./assets/icons/spotify.svg);
@@ -128,12 +148,17 @@ $end: 10;
 
 .soundcloud-icon {
   @include small-icon;
-  background-image: url("./assets/icons/soundcloud.svg");
+  background-image: url(./assets/icons/soundcloud.svg);
 }
 
 .youtube-icon {
   @include small-icon;
   background-image: url(./assets/icons/youtube.svg);
+}
+
+.home-icon {
+  @include small-icon;
+  background-image: url(./assets/icons/home.svg);
 }
 
 /** MODAL **/
@@ -154,7 +179,6 @@ $end: 10;
     background-size: cover !important;
     background-attachment: inherit !important;
     background-position: center center;
-    border-radius: 0px 0px 5px 5px;
     border-top: unset !important;
     -webkit-transition: background-image 1s ease;
     transition: background-image 1s ease;
@@ -188,36 +212,82 @@ $end: 10;
 }
 
 /** NAVBAR **/
-.navbar {
-  background-color: $navbarColor !important;
-  border-bottom: 1px solid $borderColor;
+#sidebar {
+  height: 100vh;
+  max-width: 200px;
+
+  .sidebar-contents {
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    max-width: 200px;
+    width: 200px;
+    transition: width ease 1s;
+    border-right: 2px solid #232323;
+    background-image: url("./assets/sidebar-bottom.svg") !important;
+    background-size: cover !important;
+    background-attachment: inherit !important;
+    background-position: center center;
+    background-repeat: no-repeat !important;
+
+    .sidebar-title {
+      font-size: 24px !important;
+      text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
+        0 -1px $borderColor;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+    }
+
+    .sidebar-item {
+      cursor: pointer;
+      display: flex;
+      flex-direction: row;
+      padding-left: 10px;
+      padding-top: 13px;
+      padding-bottom: 13px;
+      transition: background-color 0.5s ease-in-out;
+    }
+
+    .sidebar-item:hover,
+    .sidebar-item:active,
+    .sidebar-item:focus {
+      background-color: $headingColor;
+    }
+
+    .sidebar-text {
+      // font-size: 14px;
+      text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
+        0 -1px $borderColor;
+      color: $headingColor;
+    }
+
+    .sidebar-top {
+      // height: 60vh;
+    }
+
+    .sidebar-bottom {
+    }
+  }
 }
 
 /** BUTTONS **/
-@mixin button-style {
-  color: white;
-  font-size: 14px;
-  letter-spacing: 1.5px;
-  text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
-    0 -1px $borderColor;
-  transition: border-color 0.5s ease;
-}
-
 .purple-button {
   @include button-style;
   transition: background-color 0.5s ease;
-  background-color: $purple;
+  background-color: $richBlack;
   border: 1px solid $borderColor;
 }
 
-.purple-button:hover:active:focus {
-  background-color: $darkPurple;
+.purple-button:hover,
+.purple-button:active,
+.purple-button:focus {
+  background-color: $navbarColor;
   border: 1px solid white;
 }
 
 .purple-button:disabled {
   opacity: 0.5;
-  background-color: $purple;
+  background-color: $richBlack;
   border: 1px solid $borderColor;
   color: white;
 }
@@ -283,7 +353,7 @@ $end: 10;
       0 -1px $borderColor;
     font-weight: 800;
     letter-spacing: 1.5px;
-    border-bottom: 4px solid $purple;
+    border-bottom: 4px solid $richBlack;
     padding-bottom: 5px;
     padding-right: 20px;
   }
@@ -317,7 +387,7 @@ $end: 10;
     color: $navbarColor;
     font-size: 14px;
     font-weight: 800;
-    border-bottom: 2px solid #6d69fa;
+    border-bottom: 2px solid $purple;
     padding-right: 0.5rem;
   }
 
@@ -330,7 +400,7 @@ $end: 10;
     border-radius: 6px;
 
     input {
-      border-left: 8px solid $purple !important;
+      border-left: 8px solid $richBlack !important;
       transition: border-left 0.2s ease-in-out !important;
     }
 
@@ -380,12 +450,19 @@ $end: 10;
       align-self: center;
       padding: 8px;
       font-weight: 800;
-      border-left: 4px $purple solid;
+      border-left: 4px $richBlack solid;
     }
 
     .suggestion-item--active:not(:last-child) {
       border-bottom: solid 1px rgb(83, 83, 83);
     }
+  }
+}
+
+/** HOME PAGE **/
+#home-page {
+  .container {
+    @include container;
   }
 }
 
@@ -435,5 +512,19 @@ $end: 10;
   }
   to {
     opacity: 1;
+  }
+}
+
+@media only screen and (max-width: 993px) {
+  .app-container {
+    left: 0px;
+  }
+
+  #sidebar {
+    display: none !important;
+
+    .sidebar-contents {
+      display: none !important;
+    }
   }
 }

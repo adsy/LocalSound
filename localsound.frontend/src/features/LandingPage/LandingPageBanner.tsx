@@ -32,7 +32,7 @@ const LandingPageBanner = () => {
       <div className="d-flex flex-column justify-content-between w-100">
         <div className="d-flex flex-row justify-content-between flex-wrap">
           <div className="d-flex flex-row justify-content-start mb-2">
-            <span className="navbar-logo align-self-center"></span>
+            <span className="landing-page-logo align-self-center"></span>
             <h2 className="page-title font-bold ml-1 mt-1">LocalSound</h2>
           </div>
 
