@@ -1,54 +1,13 @@
 import { Button, Row } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { handleToggleModal } from "../../app/redux/actions/modalSlice";
-import Login from "../Authentication/Login/Login";
-import Register from "../Authentication/Register/Register";
 
 const LandingPageBanner = () => {
-  const dispatch = useDispatch();
-
-  const handleAuthenticationRequest = (isLogin: boolean) => {
-    if (isLogin) {
-      dispatch(
-        handleToggleModal({
-          open: true,
-          body: <Login />,
-          size: "tiny",
-        })
-      );
-    } else {
-      dispatch(
-        handleToggleModal({
-          open: true,
-          body: <Register />,
-          size: "tiny",
-        })
-      );
-    }
-  };
-
   return (
     <Row className="banner mb-4">
       <div className="d-flex flex-column justify-content-between w-100">
-        <div className="d-flex flex-row justify-content-between flex-wrap">
-          <div className="d-flex flex-row justify-content-start mb-2">
+        <div className="d-flex flex-row justify-content-center h-100 align-content-center flex-wrap">
+          <div className="d-flex flex-row justify-content-center align-content-center mb-2">
             <span className="landing-page-logo align-self-center"></span>
-            <h2 className="page-title font-bold ml-1 mt-1">LocalSound</h2>
-          </div>
-
-          <div className="justify-content-end mt-2">
-            <Button
-              className="purple-button mr-2"
-              onClick={() => handleAuthenticationRequest(true)}
-            >
-              Login
-            </Button>
-            <Button
-              className="purple-button"
-              onClick={() => handleAuthenticationRequest(false)}
-            >
-              Create account
-            </Button>
+            {/* <h2 className="page-title font-bold ml-1 mt-1">LocalSound</h2> */}
           </div>
         </div>
         <div

@@ -13,6 +13,7 @@ import {
 } from "../redux/actions/modalSlice";
 import HomePage from "../../features/Home/HomePage";
 import SideNavBar from "./SideNavBar";
+import TopNavbar from "./TopNavBar";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -40,21 +41,24 @@ const App = () => {
       <ModalContainer />
       <div
         id="app-layout"
-        className="d-flex flex-row w-100 justify-content-center"
+        className="d-flex flex-column w-100 justify-content-center"
       >
-        <SideNavBar />
-        <Container className="app-container">
-          <Route exact path="/" component={LandingPage} />
-          <Route exact path="/login" component={Login} />
-          <Route
-            path={"/(.+)"}
-            render={() => (
-              <div className="masthead">
-                <Route exact path="/home" component={HomePage} />
-              </div>
-            )}
-          />
-        </Container>
+        <TopNavbar />
+        <div className="d-flex flex-row w-100 justify-content-center app-holder">
+          {/* <SideNavBar /> */}
+          <Container className="app-container">
+            <Route exact path="/" component={LandingPage} />
+            <Route exact path="/login" component={Login} />
+            <Route
+              path={"/(.+)"}
+              render={() => (
+                <div className="masthead">
+                  <Route exact path="/home" component={HomePage} />
+                </div>
+              )}
+            />
+          </Container>
+        </div>
       </div>
     </>
   );

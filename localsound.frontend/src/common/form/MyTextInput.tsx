@@ -12,6 +12,7 @@ interface Props {
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   ref?: React.LegacyRef<HTMLInputElement>;
+  hideLabel?: boolean;
 }
 
 const MyTextInput = (props: Props) => {
@@ -26,6 +27,7 @@ const MyTextInput = (props: Props) => {
     fieldClassName,
     onBlur,
     onChange,
+    hideLabel,
   } = props;
   const fieldProps = {
     placeholder,
@@ -38,7 +40,7 @@ const MyTextInput = (props: Props) => {
 
   return (
     <Form.Field error={meta.touched && !!meta.error} className={fieldClassName}>
-      <label>{props.label}</label>
+      {hideLabel ? null : <label>{props.label}</label>}
       {onBlur && onChange ? (
         <input
           {...field}

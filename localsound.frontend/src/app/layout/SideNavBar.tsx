@@ -7,11 +7,6 @@ import { Button } from "react-bootstrap";
 
 const SideNavBar = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
-  const history = useHistory();
-
-  const signOut = () => {
-    //do something
-  };
 
   return (
     <>
@@ -27,7 +22,6 @@ const SideNavBar = () => {
                   height="100"
                   className="d-inline-block align-self-center blur"
                 />
-                <h3 className="sidebar-title m-auto mt-2 mb-0">LocalSound</h3>
               </div>
               <Divider />
               <div></div>
