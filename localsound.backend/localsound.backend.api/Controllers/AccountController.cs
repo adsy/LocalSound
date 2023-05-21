@@ -48,6 +48,14 @@ namespace localsound.backend.api.Controllers
             return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
         }
 
+        [AllowAnonymous]
+        [HttpPost("sign-out")]
+        public async Task<ActionResult> SignOut()
+        {
+            AddCookies(string.Empty, string.Empty);
+            return Ok();
+        }
+
         private void AddCookies(string token, string refreshToken)
         {
             // Needs to be changed to Strict when react app is moved into ASP.NET app

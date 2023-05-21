@@ -9,13 +9,13 @@ export const userSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
-    handleResetState: () => initialState,
+    handleResetUserState: () => initialState,
     handleSetUserDetails: (state, { payload }) => {
       state.userDetails = payload;
     },
   },
 });
 
-export const { handleResetState, handleSetUserDetails } = userSlice.actions;
+export const { handleResetUserState, handleSetUserDetails } = userSlice.actions;
 
 export default userSlice.reducer;

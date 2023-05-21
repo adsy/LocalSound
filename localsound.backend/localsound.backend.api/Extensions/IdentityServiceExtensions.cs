@@ -23,6 +23,8 @@ namespace localsound.backend.api.Extensions
             })
                 .AddRoles<IdentityRole<Guid>>()
                 .AddRoleManager<RoleManager<IdentityRole<Guid>>>()
+                .AddTokenProvider<RefreshTokenProviderExtension<AppUser>>("RefreshTokenProviderExtension")
+                .AddDefaultTokenProviders()
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<LocalSoundDbContext>()
                 .AddSignInManager<SignInManager<AppUser>>();
@@ -30,6 +32,7 @@ namespace localsound.backend.api.Extensions
             services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromMinutes(30));
 
             var jwtSettings = services.BuildServiceProvider().GetRequiredService<IOptions<JwtSettingsAdaptor>>();
+            services.Configure<RefreshTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromDays(7));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Value.Secret));
 

@@ -429,50 +429,37 @@ h6 {
 #offcanvasNavbar-expand-false .nav-bar-logout {
   flex: 1;
 }
-
-#sidebar {
-  height: 100vh;
-  max-width: 250px;
-}
-#sidebar .sidebar-contents {
-  height: 100vh;
-  position: absolute;
-  top: 0;
-  max-width: 250px;
-  width: 250px;
-  transition: width ease 1s;
-  background-image: url("./assets/sidebar-bottom.svg") !important;
-  background-size: cover !important;
-  background-attachment: inherit !important;
-  background-position: center center;
-  background-repeat: no-repeat !important;
-}
-#sidebar .sidebar-contents .sidebar-title {
+#offcanvasNavbar-expand-false .sidebar-title {
   font-size: 24px !important;
   text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
   font-weight: 800;
   letter-spacing: 1.5px;
 }
-#sidebar .sidebar-contents .sidebar-item {
+#offcanvasNavbar-expand-false .sidebar-item {
   cursor: pointer;
   display: flex;
   flex-direction: row;
   padding-left: 10px;
   padding-top: 13px;
   padding-bottom: 13px;
-  transition: background-color 0.2s ease-in;
-}
-#sidebar .sidebar-contents .sidebar-text {
-  text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
-}
-#sidebar .sidebar-contents .sidebar-item.active {
-  background-color: #001514;
-}
-#sidebar .sidebar-contents .sidebar-item:hover,
-#sidebar .sidebar-contents .sidebar-item:active,
-#sidebar .sidebar-contents .sidebar-item:focus {
+  transition: background-color 0.2s ease-in, border-radius 0.2s ease-in;
   background-color: #232323;
 }
+#offcanvasNavbar-expand-false .sidebar-text {
+  text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
+}
+#offcanvasNavbar-expand-false .sidebar-item.active {
+  background-color: #6d69fa !important;
+  border-radius: 10px;
+}
+#offcanvasNavbar-expand-false .sidebar-item:hover {
+  background-color: #001514;
+  border-radius: 10px;
+}
+#offcanvasNavbar-expand-false .sidebar-link-container {
+  border-radius: 10px;
+}
+
 /** BUTTONS **/
 .purple-button {
   color: white;
@@ -714,21 +701,13 @@ h6 {
   .app-container {
     left: 0px;
   }
-  #sidebar {
-    width: 0px !important;
-  }
-  #sidebar .sidebar-contents {
-    width: 0px !important;
-  }
 }
 @media only screen and (max-width: 767px) {
   #navbar .navbar-title {
     display: none;
   }
   .ui.container {
-    width: 100%;
-    margin-left: 1em !important;
-    margin-right: 1em !important;
+    width: 100% !important;
   }
 }
 

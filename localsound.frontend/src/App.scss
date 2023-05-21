@@ -281,66 +281,43 @@ $end: 10;
   .nav-bar-logout {
     flex: 1;
   }
-}
+  .sidebar-title {
+    font-size: 24px !important;
+    text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
+      0 -1px $borderColor;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+  }
 
-#sidebar {
-  height: 100vh;
-  max-width: 250px;
+  .sidebar-item {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    padding-left: 10px;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    transition: background-color 0.2s ease-in, border-radius 0.2s ease-in;
+    background-color: $borderColor;
+  }
 
-  .sidebar-contents {
-    height: 100vh;
-    position: absolute;
-    top: 0;
-    max-width: 250px;
-    width: 250px;
-    transition: width ease 1s;
-    // border-right: 2px solid #232323;
-    background-image: url("./assets/sidebar-bottom.svg") !important;
-    background-size: cover !important;
-    background-attachment: inherit !important;
-    background-position: center center;
-    background-repeat: no-repeat !important;
+  .sidebar-text {
+    // font-size: 14px;
+    text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
+      0 -1px $borderColor;
+  }
 
-    .sidebar-title {
-      font-size: 24px !important;
-      text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
-        0 -1px $borderColor;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-    }
+  .sidebar-item.active {
+    background-color: $purple !important;
+    border-radius: 10px;
+  }
 
-    .sidebar-item {
-      cursor: pointer;
-      display: flex;
-      flex-direction: row;
-      padding-left: 10px;
-      padding-top: 13px;
-      padding-bottom: 13px;
-      transition: background-color 0.2s ease-in;
-    }
+  .sidebar-item:hover {
+    background-color: $navbarColor;
+    border-radius: 10px;
+  }
 
-    .sidebar-text {
-      // font-size: 14px;
-      text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
-        0 -1px $borderColor;
-    }
-
-    .sidebar-item.active {
-      background-color: $navbarColor;
-    }
-
-    .sidebar-item:hover,
-    .sidebar-item:active,
-    .sidebar-item:focus {
-      background-color: $borderColor;
-    }
-
-    .sidebar-top {
-      // height: 60vh;
-    }
-
-    .sidebar-bottom {
-    }
+  .sidebar-link-container {
+    border-radius: 10px;
   }
 }
 
@@ -596,16 +573,6 @@ $end: 10;
   .app-container {
     left: 0px;
   }
-
-  #sidebar {
-    // display: none !important;
-    width: 0px !important;
-
-    .sidebar-contents {
-      // display: none !important;
-      width: 0px !important;
-    }
-  }
 }
 
 @media only screen and (max-width: 767px) {
@@ -616,8 +583,6 @@ $end: 10;
   }
 
   .ui.container {
-    width: 100%;
-    margin-left: 1em !important;
-    margin-right: 1em !important;
+    width: 100% !important;
   }
 }

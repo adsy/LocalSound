@@ -10,7 +10,7 @@ namespace localsound.backend.Persistence.DbContext
     public class LocalSoundDbContext : IdentityDbContext<AppUser,
         IdentityRole<Guid>, Guid, IdentityUserClaim<Guid>,
         IdentityUserRole<Guid>, IdentityUserLogin<Guid>,
-        IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
+        IdentityRoleClaim<Guid>, AppUserToken>
     {
         public LocalSoundDbContext(DbContextOptions options) : base(options)
         {
@@ -18,6 +18,7 @@ namespace localsound.backend.Persistence.DbContext
         }
 
         public DbSet<AppUser> AppUser { get; set; }
+        public DbSet<AppUserToken> AppUserToken { get; set; }
         public DbSet<NonArtist> NonArtist { get; set; }
         public DbSet<Artist> Artist { get; set; }
 
@@ -30,6 +31,7 @@ namespace localsound.backend.Persistence.DbContext
 
             builder.Entity<NonArtist>().HasKey(x => x.AppUserId);
             builder.Entity<Artist>().HasKey(x => x.AppUserId);
+            builder.Entity<AppUserToken>().Property(o => o.ExpirationDate).HasDefaultValueSql("DateAdd(week,1,getDate())");
         }
 
         public async Task<ServiceResponse> HandleSavingDB()

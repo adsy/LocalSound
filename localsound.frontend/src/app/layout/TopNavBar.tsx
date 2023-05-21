@@ -4,11 +4,14 @@ import { State } from "../model/redux/state";
 import logo from "../../assets/logo4.png";
 import { useState } from "react";
 import { Button, Nav, Offcanvas } from "react-bootstrap";
-import { Container } from "semantic-ui-react";
-import { useHistory } from "react-router-dom";
+import { Container, Divider } from "semantic-ui-react";
+import { NavLink, useHistory } from "react-router-dom";
 import { handleToggleModal } from "../redux/actions/modalSlice";
 import Login from "../../features/Authentication/Login/Login";
 import Register from "../../features/Authentication/Register/Register";
+import agent from "../../api/agent";
+import { handleResetUserState } from "../redux/actions/userSlice";
+import { handleResetAppState } from "../redux/actions/applicationSlice";
 
 const TopNavbar = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
@@ -33,6 +36,12 @@ const TopNavbar = () => {
         })
       );
     }
+  };
+
+  const handleSignout = async () => {
+    await agent.Authentication.signOut();
+    dispatch(handleResetUserState());
+    dispatch(handleResetAppState());
   };
 
   return (
@@ -89,61 +98,54 @@ const TopNavbar = () => {
               aria-labelledby={`offcanvasNavbarLabel-expand-false`}
               placement="end"
             >
-              <Offcanvas.Header closeButton>
-                <Offcanvas.Title
-                  id={`offcanvasNavbarLabel-expand-false`}
-                  className="p-3 pb-0 d-flex flex-row"
-                >
-                  <img
-                    alt=""
-                    src={logo}
-                    width="50"
-                    height="50"
-                    className="d-inline-block align-top"
-                  />
-                  <h4 className="navbar-title m-0 pl-2 align-self-center">
-                    Settings
-                  </h4>
-                </Offcanvas.Title>
-              </Offcanvas.Header>
+              <Offcanvas.Header closeButton className="pb-0"></Offcanvas.Header>
               <Offcanvas.Body>
-                <Nav className=" flex-grow-1 pe-4 p-3">
-                  {/* <>{createUserRelevantLinkItems()}</>
-                <Nav.Link href="#" onClick={() => handleHomeLinkClick()}>
-                  <div className="d-flex flex-row align-content-center">
-                    <div className="house-icon-nav align-self-center mr-2"></div>
-                    <h4 className="mt-0 align-self-center">Home</h4>
+                <Nav className=" flex-grow-1 h-100">
+                  <div className="d-inline-block w-100 fade-in h-100">
+                    <div className="sidebar-contents h-100">
+                      <div className="d-flex flex-column justify-content-between h-100">
+                        <div className="">
+                          <div className="d-flex flex-column justify-content-center align-content-center pt-3">
+                            <img
+                              alt=""
+                              src={logo}
+                              width="150"
+                              height="150"
+                              className="d-inline-block align-self-center blur"
+                            />
+                          </div>
+                          <Divider />
+                        </div>
+                        <div className="d-flex flex-column justify-content-between h-100 sidebar-link-container p-3">
+                          <div>
+                            <NavLink to="/home" className={`sidebar-item mb-2`}>
+                              <span className="home-icon align-self-center d-inline-block"></span>
+                              <h5 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
+                                Home
+                              </h5>
+                            </NavLink>
+                            <NavLink to="/test" className={`sidebar-item mb-2`}>
+                              <span className="home-icon align-self-center d-inline-block"></span>
+                              <h5 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
+                                Test
+                              </h5>
+                            </NavLink>
+                          </div>
+                          <div
+                            className="w-100 d-flex flex-row justify-content-center align-content-center"
+                            onClick={async () => await handleSignout()}
+                          >
+                            <Button className="purple-button d-flex flex-row justify-content-center mb-2 w-100 mx-5">
+                              <span className="signout-icon align-self-center d-inline-block"></span>
+                              <h4 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
+                                Logout
+                              </h4>
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </Nav.Link>
-                <Nav.Link href="#action1">
-                  <div className="d-flex flex-row align-content-center">
-                    <div className="settings-icon-nav align-self-center mr-2"></div>
-                    <h4 className="mt-0 align-self-center">Settings</h4>
-                  </div>
-                </Nav.Link>
-                <Nav.Link href="#action1">
-                  <div className="d-flex flex-row align-content-center">
-                    <div className="phone-icon-nav align-self-center mr-2"></div>
-                    <h4 className="mt-0 align-self-center">Contact us</h4>
-                  </div>
-                </Nav.Link>
-                <Nav.Link href="#action1">
-                  <div className="d-flex flex-row align-content-center">
-                    <div className="ask-icon-nav align-self-center mr-2"></div>
-                    <h4 className="mt-0 align-self-center">FAQ</h4>
-                  </div>
-                </Nav.Link>
-                <div className="d-flex nav-bar-logout">
-                  <Button
-                    onClick={async () => {
-                      signOut();
-                    }}
-                    variant=""
-                    className="purple-btn fade-in w-100 align-self-end mt-4"
-                  >
-                    Logout
-                  </Button>
-                </div> */}
                 </Nav>
               </Offcanvas.Body>
             </Navbar.Offcanvas>

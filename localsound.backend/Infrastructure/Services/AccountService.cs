@@ -66,6 +66,7 @@ namespace localsound.backend.Infrastructure.Services
                 }
 
                 var accessToken = _tokenRepository.CreateToken(_tokenRepository.GetClaims(user));
+                var refreshToken = await _tokenRepository.CreateRefreshToken(user);
 
                 if (user.CustomerType == CustomerType.Artist)
                 {
@@ -80,7 +81,7 @@ namespace localsound.backend.Infrastructure.Services
                         {
                             UserDetails = returnDto,
                             AccessToken = accessToken,
-                            RefreshToken = "ToBeReplaced"
+                            RefreshToken = refreshToken
                         }
                     };
                 }
@@ -97,7 +98,7 @@ namespace localsound.backend.Infrastructure.Services
                         {
                             UserDetails = returnDto,
                             AccessToken = accessToken,
-                            RefreshToken = "ToBeReplaced"
+                            RefreshToken = refreshToken
                         }
                     };
                 }
@@ -153,6 +154,7 @@ namespace localsound.backend.Infrastructure.Services
                 userDto.MemberId = userResponse.ReturnData.MemberId;
 
                 var accessToken = _tokenRepository.CreateToken(_tokenRepository.GetClaims(userResponse.ReturnData));
+                var refreshToken = await _tokenRepository.CreateRefreshToken(userResponse.ReturnData);
 
                 return new ServiceResponse<LoginResponseDto>(HttpStatusCode.OK)
                 {
@@ -160,7 +162,7 @@ namespace localsound.backend.Infrastructure.Services
                     {
                         UserDetails = userDto,
                         AccessToken = accessToken,
-                        RefreshToken = "ToBeReplaced"
+                        RefreshToken = refreshToken
                     }
                 };
             }

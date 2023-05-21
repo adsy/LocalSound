@@ -12,10 +12,11 @@ export const applicationSlice = createSlice({
     handleAppLoaded: (state = initialState, action) => {
       state.appLoaded = action.payload;
     },
-    handleResetState: () => initialState,
+    handleResetAppState: () => initialState,
   },
 });
 
-export const { handleAppLoaded, handleResetState } = applicationSlice.actions;
+export const { handleAppLoaded, handleResetAppState } =
+  applicationSlice.actions;
 
 export default applicationSlice.reducer;

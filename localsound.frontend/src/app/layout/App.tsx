@@ -14,6 +14,8 @@ import {
 import HomePage from "../../features/Home/HomePage";
 import SideNavBar from "./SideNavBar";
 import TopNavbar from "./TopNavBar";
+import PrivateRoute from "./PrivateRoute";
+import NotLoggedInRoute from "./NotLoggedInRoute";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -47,13 +49,13 @@ const App = () => {
         <div className="d-flex flex-row w-100 justify-content-center app-holder">
           {/* <SideNavBar /> */}
           <Container className="app-container">
-            <Route exact path="/" component={LandingPage} />
-            <Route exact path="/login" component={Login} />
+            <NotLoggedInRoute exact path="/" component={LandingPage} />
+            <NotLoggedInRoute exact path="/login" component={Login} />
             <Route
               path={"/(.+)"}
               render={() => (
                 <div className="masthead">
-                  <Route exact path="/home" component={HomePage} />
+                  <PrivateRoute exact path="/home" component={HomePage} />
                 </div>
               )}
             />
