@@ -102,7 +102,7 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.Artist.FirstOrDefaultAsync(x => x.AppUserId == id);
+                var artist = await _dbContext.Artist.Include(x => x.User).FirstOrDefaultAsync(x => x.AppUserId == id);
 
                 if (artist == null)
                 {
@@ -127,7 +127,7 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var nonArtist = await _dbContext.NonArtist.FirstOrDefaultAsync(x => x.AppUserId == id);
+                var nonArtist = await _dbContext.NonArtist.Include(x => x.User).FirstOrDefaultAsync(x => x.AppUserId == id);
 
                 if (nonArtist == null)
                 {

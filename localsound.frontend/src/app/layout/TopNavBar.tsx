@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { State } from "../model/redux/state";
 import logo from "../../assets/logo4.png";
 import { useState } from "react";
-import { Button, Nav, Offcanvas } from "react-bootstrap";
-import { Container, Divider } from "semantic-ui-react";
+import { Button, Container, Nav, Offcanvas } from "react-bootstrap";
+import { Divider } from "semantic-ui-react";
 import { NavLink, useHistory } from "react-router-dom";
 import { handleToggleModal } from "../redux/actions/modalSlice";
 import Login from "../../features/Authentication/Login/Login";
@@ -17,6 +17,8 @@ const TopNavbar = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const [show, setShow] = useState(false);
 
   const handleAuthenticationRequest = (isLogin: boolean) => {
     if (isLogin) {
@@ -39,15 +41,20 @@ const TopNavbar = () => {
   };
 
   const handleSignout = async () => {
-    await agent.Authentication.signOut();
-    dispatch(handleResetUserState());
-    dispatch(handleResetAppState());
+    try {
+      var result = await agent.Authentication.signOut();
+      dispatch(handleResetUserState());
+      dispatch(handleResetAppState());
+      setShow(false);
+    } catch (error) {
+      //TODO: do something with error
+    }
   };
 
   return (
     <>
-      <div id="navbar" className="w-100">
-        <Container>
+      <div id="navbar" className="w-100 mb-4">
+        <Container className="pl-1">
           <Navbar collapseOnSelect key={null} bg="" expand={false}>
             <div
               className="navbar-logo d-flex flex-row justify-content-center align-content-center pr-2 pt-1 pb-1"
@@ -75,6 +82,7 @@ const TopNavbar = () => {
                 <Navbar.Toggle
                   aria-controls={`offcanvasNavbar-expand-false`}
                   className=" mr-1 align-self-center"
+                  onClick={() => setShow(true)}
                 />
               ) : (
                 <div className="justify-content-end ml-3">
@@ -97,6 +105,8 @@ const TopNavbar = () => {
               id={`offcanvasNavbar-expand-false`}
               aria-labelledby={`offcanvasNavbarLabel-expand-false`}
               placement="end"
+              show={show}
+              onHide={() => setShow(false)}
             >
               <Offcanvas.Header closeButton className="pb-0"></Offcanvas.Header>
               <Offcanvas.Body>
@@ -118,16 +128,24 @@ const TopNavbar = () => {
                         </div>
                         <div className="d-flex flex-column justify-content-between h-100 sidebar-link-container p-3">
                           <div>
-                            <NavLink to="/home" className={`sidebar-item mb-2`}>
+                            <NavLink
+                              to="/home"
+                              className={`sidebar-item mb-2`}
+                              onClick={() => setShow(false)}
+                            >
                               <span className="home-icon align-self-center d-inline-block"></span>
                               <h5 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
                                 Home
                               </h5>
                             </NavLink>
-                            <NavLink to="/test" className={`sidebar-item mb-2`}>
+                            <NavLink
+                              to="/profile"
+                              className={`sidebar-item mb-2`}
+                              onClick={() => setShow(false)}
+                            >
                               <span className="home-icon align-self-center d-inline-block"></span>
                               <h5 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
-                                Test
+                                Profile
                               </h5>
                             </NavLink>
                           </div>

@@ -369,7 +369,7 @@ h6 {
 #landing-page .search-box {
   width: 400px;
 }
-#landing-page .container {
+#landing-page .ui-container {
   box-shadow: rgba(0, 0, 0, 0.25) 0px 13px 27px -5px, rgba(230, 230, 230, 0.3) 0px 10px 20px -4px;
   border-radius: 1px 1px 30px 5px;
   min-height: 150px;
@@ -388,7 +388,7 @@ h6 {
   top: 0;
   z-index: 2;
 }
-#navbar .ui.container {
+#navbar .ui.ui-container {
   padding: 0;
 }
 #navbar .navbar-logo {
@@ -641,7 +641,7 @@ h6 {
 }
 
 /** HOME PAGE **/
-#home-page .container {
+#home-page .ui-container {
   box-shadow: rgba(0, 0, 0, 0.25) 0px 13px 27px -5px, rgba(230, 230, 230, 0.3) 0px 10px 20px -4px;
   border-radius: 1px 1px 30px 5px;
   min-height: 150px;
@@ -650,6 +650,30 @@ h6 {
   color: #232323;
 }
 
+/** USER PROFILE **/
+#user-profile .ui-container {
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 13px 27px -5px, rgba(230, 230, 230, 0.3) 0px 10px 20px -4px;
+  border-radius: 1px 1px 30px 5px;
+  min-height: 150px;
+  margin-bottom: 20px;
+  background-color: white;
+  color: #232323;
+}
+#user-profile .details-container {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+}
+#user-profile .user-name {
+  text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
+  letter-spacing: 3.5px;
+  margin-top: 0px;
+  font-size: 48px;
+}
 @keyframes fadein {
   from {
     opacity: 0;
@@ -707,7 +731,7 @@ h6 {
     display: none;
   }
   .ui.container {
-    width: 100% !important;
+    width: unset !important;
   }
 }
 

@@ -113,12 +113,16 @@ $end: 10;
   background-repeat: no-repeat !important;
 }
 
+@mixin text-shadow {
+  text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
+    0 -1px $borderColor;
+}
+
 @mixin button-style {
   color: white;
   font-size: 14px;
   letter-spacing: 1.5px;
-  text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
-    0 -1px $borderColor;
+  @include text-shadow;
   transition: border-color 0.5s ease;
 }
 
@@ -197,8 +201,7 @@ $end: 10;
     .page-title {
       letter-spacing: 3.5px;
       font-size: 50px;
-      text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
-        0 -1px $borderColor;
+      @include text-shadow;
     }
   }
 
@@ -208,15 +211,14 @@ $end: 10;
       font-weight: 600;
       font-size: 20px;
       color: white;
-      text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
-        0 -1px $borderColor;
+      @include text-shadow;
     }
   }
 
   .search-box {
     width: 400px;
   }
-  .container {
+  .ui-container {
     @include container;
   }
 }
@@ -230,7 +232,7 @@ $end: 10;
   position: fixed;
   top: 0;
   z-index: 2;
-  .ui.container {
+  .ui.ui-container {
     padding: 0;
   }
 
@@ -241,8 +243,7 @@ $end: 10;
 
   .navbar-title {
     font-size: 32px !important;
-    text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
-      0 -1px $borderColor;
+    @include text-shadow;
     // font-weight: 800;
     letter-spacing: 3.5px;
   }
@@ -269,8 +270,7 @@ $end: 10;
   background-color: $borderColor;
   .navbar-title {
     font-size: 32px !important;
-    text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
-      0 -1px $borderColor;
+    @include text-shadow;
     // font-weight: 800;
     letter-spacing: 3.5px;
   }
@@ -283,8 +283,7 @@ $end: 10;
   }
   .sidebar-title {
     font-size: 24px !important;
-    text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
-      0 -1px $borderColor;
+    @include text-shadow;
     font-weight: 800;
     letter-spacing: 1.5px;
   }
@@ -301,9 +300,7 @@ $end: 10;
   }
 
   .sidebar-text {
-    // font-size: 14px;
-    text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
-      0 -1px $borderColor;
+    @include text-shadow;
   }
 
   .sidebar-item.active {
@@ -400,8 +397,7 @@ $end: 10;
   .header-title {
     font-size: 30px !important;
     // border-radius: 10px;
-    text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
-      0 -1px $borderColor;
+    @include text-shadow;
     font-weight: 800;
     letter-spacing: 1.5px;
     border-bottom: 4px solid $richBlack;
@@ -424,17 +420,12 @@ $end: 10;
 .form {
   .api-error {
     letter-spacing: 1px;
-    // text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
-    //   0 -1px $borderColor;
     color: $navbarColor;
     font-size: 12px;
     font-weight: 800;
   }
 
   .form-label {
-    // letter-spacing: 1.5px;
-    // text-shadow: -0.5px 0 $borderColor, 0 0.5px $borderColor,
-    //   0.5px 0 $borderColor, 0 -0.5px $borderColor;
     color: $navbarColor;
     font-size: 14px;
     font-weight: 800;
@@ -512,8 +503,37 @@ $end: 10;
 
 /** HOME PAGE **/
 #home-page {
-  .container {
+  .ui-container {
     @include container;
+  }
+}
+
+/** USER PROFILE **/
+#user-profile {
+  .ui-container {
+    @include container;
+  }
+
+  .details-container {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+  }
+
+  .user-name {
+    @include text-shadow;
+    letter-spacing: 3.5px;
+    margin-top: 0px;
+    font-size: 48px;
+    // border-bottom: 5px solid $borderColor;
+  }
+
+  .profile-2-row {
+    // gap: 2px;
   }
 }
 
@@ -583,6 +603,6 @@ $end: 10;
   }
 
   .ui.container {
-    width: 100% !important;
+    width: unset !important;
   }
 }

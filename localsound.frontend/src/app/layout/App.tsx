@@ -1,21 +1,17 @@
 import { Route } from "react-router-dom";
 import "../../App.css";
-import TopNavBar from "./TopNavBar";
-import { Container } from "semantic-ui-react";
 import LandingPage from "../../features/LandingPage/LandingPage";
 import Login from "../../features/Authentication/Login/Login";
 import ModalContainer from "../../common/modal/ModalContainer";
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import {
-  handleResetModal,
-  handleToggleModal,
-} from "../redux/actions/modalSlice";
+import { handleResetModal } from "../redux/actions/modalSlice";
 import HomePage from "../../features/Home/HomePage";
-import SideNavBar from "./SideNavBar";
 import TopNavbar from "./TopNavBar";
 import PrivateRoute from "./PrivateRoute";
 import NotLoggedInRoute from "./NotLoggedInRoute";
+import UserProfileSummary from "../../features/UserProfile/UserProfile";
+import { Container } from "react-bootstrap";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -56,6 +52,11 @@ const App = () => {
               render={() => (
                 <div className="masthead">
                   <PrivateRoute exact path="/home" component={HomePage} />
+                  <PrivateRoute
+                    exact
+                    path="/profile"
+                    component={UserProfileSummary}
+                  />
                 </div>
               )}
             />
