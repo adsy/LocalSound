@@ -18,7 +18,7 @@ const LandingPageBanner = () => {
             Better Soundtracking than your Cousin's Dubstep mix.
           </p>
           <div className="d-flex justify-content-center">
-            <Button className="purple-button w-50">
+            <Button className="black-button w-50">
               Search for your next performer
             </Button>
           </div>

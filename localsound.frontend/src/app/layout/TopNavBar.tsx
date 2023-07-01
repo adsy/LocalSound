@@ -87,13 +87,13 @@ const TopNavbar = () => {
               ) : (
                 <div className="justify-content-end ml-3">
                   <Button
-                    className="purple-button mr-2"
+                    className="black-button mr-2"
                     onClick={() => handleAuthenticationRequest(true)}
                   >
                     Login
                   </Button>
                   <Button
-                    className="purple-button"
+                    className="black-button"
                     onClick={() => handleAuthenticationRequest(false)}
                   >
                     Create account
@@ -153,7 +153,7 @@ const TopNavbar = () => {
                             className="w-100 d-flex flex-row justify-content-center align-content-center"
                             onClick={async () => await handleSignout()}
                           >
-                            <Button className="purple-button d-flex flex-row justify-content-center mb-2 w-100 mx-5">
+                            <Button className="black-button d-flex flex-row justify-content-center mb-2 w-100 mx-5">
                               <span className="signout-icon align-self-center d-inline-block"></span>
                               <h4 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
                                 Logout

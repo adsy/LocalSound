@@ -258,7 +258,9 @@ h6 {
   height: 100%;
   transition: width 0.3s ease, margin-left 0.3s ease, margin-right 0.3s ease, padding 0.3s ease !important;
   background-color: white;
-  min-height: calc(100vh - 83px);
+  min-height: calc(100vh - 79px);
+  height: 1px;
+  padding: 0px;
 }
 
 .app-holder {
@@ -272,6 +274,10 @@ h6 {
 
 .w-fit-content {
   width: fit-content;
+}
+
+.masthead {
+  height: 100%;
 }
 
 /** CONTAINERS **/
@@ -353,6 +359,8 @@ h6 {
   -webkit-transition: background-image 1s ease;
   transition: background-image 1s ease;
   border: 1px solid #232323;
+  width: 100%;
+  margin: 0;
 }
 #landing-page .banner .page-title {
   letter-spacing: 3.5px;
@@ -467,19 +475,36 @@ h6 {
   letter-spacing: 1.5px;
   text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
   transition: border-color 0.5s ease;
-  transition: background-color 0.5s ease;
-  background-color: #232323;
-  border: 1px solid #232323;
+  background-color: #6d69fa !important;
+  border: 1px solid black;
 }
 
 .purple-button:hover,
 .purple-button:active,
 .purple-button:focus {
+  background-color: #001514 !important;
+  border: 1px solid white;
+}
+
+.black-button {
+  color: white;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
+  transition: border-color 0.5s ease;
+  transition: background-color 0.5s ease;
+  background-color: #232323;
+  border: 1px solid #232323;
+}
+
+.black-button:hover,
+.black-button:active,
+.black-button:focus {
   background-color: #001514;
   border: 1px solid white;
 }
 
-.purple-button:disabled {
+.black-button:disabled {
   opacity: 0.5;
   background-color: #232323;
   border: 1px solid #232323;
@@ -651,6 +676,9 @@ h6 {
 }
 
 /** USER PROFILE **/
+#user-profile {
+  height: 100%;
+}
 #user-profile .ui-container {
   box-shadow: rgba(0, 0, 0, 0.25) 0px 13px 27px -5px, rgba(230, 230, 230, 0.3) 0px 10px 20px -4px;
   border-radius: 1px 1px 30px 5px;
@@ -659,21 +687,52 @@ h6 {
   background-color: white;
   color: #232323;
 }
+#user-profile .about-text {
+  letter-spacing: 1px;
+}
 #user-profile .details-container {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: 0px;
+  right: 0px;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-content: center;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-content: flex-start;
+  height: 52px;
+  width: 100%;
+  height: 100%;
 }
 #user-profile .user-name {
   text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
   letter-spacing: 3.5px;
   margin-top: 0px;
-  font-size: 48px;
+  font-size: 40px;
+  color: white;
+  height: 50px;
+  padding: 10px;
 }
+#user-profile .section-title {
+  text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
+  color: white;
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+#user-profile .followers {
+  color: black !important;
+}
+#user-profile .edit-profile-btn {
+  z-index: 999;
+  position: absolute;
+  right: 5px;
+}
+#user-profile .left-col {
+  box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+  border-right: 1px solid #dedede;
+}
+#user-profile .profile-img {
+  height: 110px;
+}
+
 @keyframes fadein {
   from {
     opacity: 0;

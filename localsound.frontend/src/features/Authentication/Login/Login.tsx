@@ -97,7 +97,7 @@ const Login = () => {
                 ) : null}
                 {!isSubmitting ? (
                   <Button
-                    className={`purple-button w-100 align-self-center ${
+                    className={`black-button w-100 align-self-center ${
                       status?.error ? "mt-3" : "mt-5"
                     }`}
                     type="submit"

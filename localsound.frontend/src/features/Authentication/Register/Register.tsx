@@ -68,13 +68,13 @@ const Register = () => {
       {!showRegisterForm ? (
         <div className="d-flex header justify-content-end mt-2">
           <Button
-            className="purple-button mr-2"
+            className="black-button mr-2"
             onClick={() => handleUserTypeSelection(CustomerTypes.Artist)}
           >
             I play the music
           </Button>
           <Button
-            className="purple-button"
+            className="black-button"
             onClick={() => handleUserTypeSelection(CustomerTypes.NonArtist)}
           >
             I listen to the music

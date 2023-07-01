@@ -70,7 +70,9 @@ $end: 10;
   transition: width 0.3s ease, margin-left 0.3s ease, margin-right 0.3s ease,
     padding 0.3s ease !important;
   background-color: white;
-  min-height: calc(100vh - 83px);
+  min-height: calc(100vh - 79px);
+  height: 1px;
+  padding: 0px;
 }
 
 .app-holder {
@@ -84,6 +86,10 @@ $end: 10;
 
 .w-fit-content {
   width: fit-content;
+}
+
+.masthead {
+  height: 100%;
 }
 
 /** CONTAINERS **/
@@ -197,6 +203,8 @@ $end: 10;
     -webkit-transition: background-image 1s ease;
     transition: background-image 1s ease;
     border: 1px solid $borderColor;
+    width: 100%;
+    margin: 0;
 
     .page-title {
       letter-spacing: 3.5px;
@@ -321,19 +329,32 @@ $end: 10;
 /** BUTTONS **/
 .purple-button {
   @include button-style;
-  transition: background-color 0.5s ease;
-  background-color: $richBlack;
-  border: 1px solid $borderColor;
+  background-color: $purple !important;
+  border: 1px solid black;
 }
 
 .purple-button:hover,
 .purple-button:active,
 .purple-button:focus {
+  background-color: $navbarColor !important;
+  border: 1px solid white;
+}
+
+.black-button {
+  @include button-style;
+  transition: background-color 0.5s ease;
+  background-color: $richBlack;
+  border: 1px solid $borderColor;
+}
+
+.black-button:hover,
+.black-button:active,
+.black-button:focus {
   background-color: $navbarColor;
   border: 1px solid white;
 }
 
-.purple-button:disabled {
+.black-button:disabled {
   opacity: 0.5;
   background-color: $richBlack;
   border: 1px solid $borderColor;
@@ -510,30 +531,67 @@ $end: 10;
 
 /** USER PROFILE **/
 #user-profile {
+  height: 100%;
   .ui-container {
     @include container;
   }
 
+  .about-text {
+    letter-spacing: 1px;
+  }
+
   .details-container {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    bottom: 0px;
+    right: 0px;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-content: center;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-content: flex-start;
+    // background-color: rgba(0, 0, 0, 0.505);
+    height: 52px;
+    width: 100%;
+    height: 100%;
   }
 
   .user-name {
     @include text-shadow;
     letter-spacing: 3.5px;
     margin-top: 0px;
-    font-size: 48px;
+    font-size: 40px;
+    color: white;
+    height: 50px;
+    padding: 10px;
     // border-bottom: 5px solid $borderColor;
   }
+  .section-title {
+    @include text-shadow;
+    color: white;
+    font-size: 28px;
+    margin-bottom: 5px;
+  }
 
-  .profile-2-row {
-    // gap: 2px;
+  .followers {
+    color: black !important;
+  }
+
+  .edit-profile-btn {
+    z-index: 999;
+    position: absolute;
+    right: 5px;
+  }
+
+  .left-col {
+    box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
+      rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+    border-right: 1px solid #dedede;
+  }
+
+  .right-col {
+  }
+
+  .profile-img {
+    height: 110px;
   }
 }
 
