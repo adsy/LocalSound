@@ -25,6 +25,7 @@ var rootReducer = combineReducers({
 const persistConfig = {
   key: "localSound",
   storage,
+  blacklist: ["modal"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -6,11 +6,11 @@ namespace localsound.backend.api.Controllers
     [ApiController]
     public class ArtistController : BaseApiController
     {
-        [HttpPut]
-        [Route("/artist/{memberId}")]
-        public async Task<ActionResult> UpdateArtistDetails()
-        {
-            var result = await Mediator.Send(new UpdateArtistDetailsCommand());
-        }
+        //[HttpPut]
+        //[Route("/artist/{memberId}")]
+        //public async Task<ActionResult> UpdateArtistDetails([FromBody] )
+        //{
+        //    var result = await Mediator.Send(new UpdateArtistDetailsCommand());
+        //}
     }
 }

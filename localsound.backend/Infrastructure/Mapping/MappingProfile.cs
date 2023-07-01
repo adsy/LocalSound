@@ -20,6 +20,7 @@ namespace localsound.backend.Infrastructure.Mapping
             CreateMap<Artist, ArtistDto>()
                 .ForMember(dest => dest.Address, source => source.MapFrom(x => x.Address))
                 .ForMember(dest => dest.Name, source => source.MapFrom(x => x.Name))
+                .ForMember(dest => dest.ProfileUrl, source => source.MapFrom(x => x.ProfileUrl))
                 .ForMember(dest => dest.PhoneNumber, source => source.MapFrom(x => x.PhoneNumber))
                 .ForMember(dest => dest.SoundcloudUrl, source => source.MapFrom(x => x.SoundcloudUrl))
                 .ForMember(dest => dest.YoutubeUrl, source => source.MapFrom(x => x.YoutubeUrl))

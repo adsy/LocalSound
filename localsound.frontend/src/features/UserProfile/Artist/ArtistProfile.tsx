@@ -1,14 +1,15 @@
-import { useSelector } from "react-redux";
-import { State } from "../../app/model/redux/state";
-import bg from "../../assets/landing-page-banner/banner3.jpg";
-import img from "../../assets/icons/user.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { State } from "../../../app/model/redux/state";
+import bg from "../../../assets/landing-page-banner/banner3.jpg";
+import img from "../../../assets/icons/user.svg";
 import { Button, Col, Row } from "react-bootstrap";
 import { Image } from "semantic-ui-react";
-import { useState } from "react";
+import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
+import EditArtistProfile from "./EditArtistProfile";
 
 const ArtistProfile = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
-  const [editingArtist, setEditingArtist] = useState(false);
+  const dispatch = useDispatch();
 
   const bannerStyle = {
     backgroundImage: `url(${bg})`,
@@ -22,13 +23,23 @@ const ArtistProfile = () => {
     boxShadow: "rgba(0, 0, 0, 1) 0px -1px 4px 0px inset",
   };
 
+  const editArtistProfile = () => {
+    dispatch(
+      handleToggleModal({
+        open: true,
+        body: <EditArtistProfile />,
+        size: "large",
+      })
+    );
+  };
+
   return (
     <>
       <div className="d-flex flex-col flex-wrap h-100 p-0">
         <Col md={12} lg={6} className="p-0 left-col">
           <div style={bannerStyle} className="profile-banner position-relative">
             <Button
-              onClick={() => setEditingArtist(!editingArtist)}
+              onClick={() => editArtistProfile()}
               className="black-button m-1 edit-profile-btn"
             >
               Edit profile

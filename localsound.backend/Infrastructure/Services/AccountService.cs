@@ -208,6 +208,7 @@ namespace localsound.backend.Infrastructure.Services
             {
                 Address = registrationDto.Address,
                 Name = registrationDto.Name,
+                ProfileUrl = registrationDto.ProfileUrl,
                 PhoneNumber = registrationDto.PhoneNumber,
                 User = user,
                 AppUserId = user.Id,

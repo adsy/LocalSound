@@ -9,6 +9,7 @@
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Name { get; set; }
+        public string ProfileUrl { get; set; }
         public string? SoundcloudUrl { get; set; }
         public string? SpotifyUrl { get; set; }
         public string? YoutubeUrl { get; set; }

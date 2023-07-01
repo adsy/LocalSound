@@ -11,21 +11,21 @@ interface Props extends RouteProps {
   component:
     | React.ComponentType<RouteComponentProps<any>>
     | React.ComponentType<any>;
-  allowedCustomerType?: CustomerTypes;
+  isAuthPage?: boolean;
 }
 
-const NotLoggedInRoute = ({
+const AuthenticationRoute = ({
   component: Component,
-  allowedCustomerType,
+  isAuthPage = false,
   ...rest
 }: Props) => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
 
-  if (userDetails) {
-    return <Redirect to={"/home"} />;
-  }
+  // if (userDetails) {
+  //   return <Redirect to={"/home"} />;
+  // }
 
   return <Route {...rest} render={(props) => <Component {...props} />} />;
 };
 
-export default NotLoggedInRoute;
+export default AuthenticationRoute;
