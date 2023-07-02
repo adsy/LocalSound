@@ -3,6 +3,22 @@ import YupPassword from "yup-password";
 YupPassword(Yup);
 
 const artistRegisterValidation = Yup.object({
+  profileUrl: Yup.string()
+    .required("You must set a profile url.")
+    .test({
+      name: "profileUrlFormat",
+      message:
+        "Your url must have alphanumeric characters and cannot end in a hypen.",
+      test: (value) =>
+        new RegExp("(^[A-Za-zd]+(-[A-Za-zd]+)*$)").test(value!) ||
+        value === undefined ||
+        (value !== undefined && value.trim().length === 0),
+    })
+    .test({
+      name: "profileUrlFormat",
+      message: "Your url cannot be more than 30 characters",
+      test: (value) => value.length < 30,
+    }),
   email: Yup.string()
     .required("Your email address is required.")
     .email()

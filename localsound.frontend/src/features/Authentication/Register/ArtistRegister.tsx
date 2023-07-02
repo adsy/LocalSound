@@ -23,6 +23,7 @@ const ArtistRegister = ({ handleRegisterRequest }: Props) => {
   return (
     <Formik
       initialValues={{
+        profileUrl: "",
         email: "",
         password: "",
         checkPassword: "",

@@ -112,50 +112,25 @@ const ArtistRegisterForm = (props: Props) => {
         />
         <Divider />
         <div className="mb-2">Adding your profiles is optional.</div>
-        {showSoundcloudInput ? (
-          <>
-            <div className="d-flex">
-              <p className="form-label">SOUNDCLOUD PROFILE</p>
-            </div>
-            <MyTextInput name="soundcloudUrl" placeholder="" />
-          </>
-        ) : (
+        <div className="d-flex flex-row flex-wrap">
           <>
             <Button
               onClick={() => setShowSoundcloudInput(!showSoundcloudInput)}
-              className="soundcloud-button w-fit-content d-flex flex-row mb-3"
+              className="soundcloud-button w-fit-content d-flex flex-row mb-3 mr-2"
             >
               <div className="soundcloud-icon align-self-center mr-2"></div>
               <h4 className="align-self-center mt-0">Soundcloud</h4>
             </Button>
           </>
-        )}
-        {showSpotifyInput ? (
-          <>
-            <div className="d-flex">
-              <p className="form-label">SPOTIFY PROFILE</p>
-            </div>
-            <MyTextInput name="spotifyUrl" placeholder="" />
-          </>
-        ) : (
           <>
             <Button
               onClick={() => setShowSpotifyInput(!showSpotifyInput)}
-              className="spotify-button w-fit-content d-flex flex-row mb-3 "
+              className="spotify-button w-fit-content d-flex flex-row mb-3 mr-2"
             >
               <div className="spotify-icon align-self-center mr-2"></div>
               <h4 className="align-self-center mt-0">Spotify</h4>
             </Button>
           </>
-        )}
-        {showYoutubeInput ? (
-          <>
-            <div className="d-flex">
-              <p className="form-label">YOUTUBE PROFILE</p>
-            </div>
-            <MyTextInput name="youtubeUrl" placeholder="" />
-          </>
-        ) : (
           <>
             <Button
               onClick={() => setShowYoutubeInput(!showYoutubeInput)}
@@ -165,7 +140,31 @@ const ArtistRegisterForm = (props: Props) => {
               <h4 className="align-self-center mt-0">Youtube</h4>
             </Button>
           </>
-        )}
+        </div>
+        {showSoundcloudInput ? (
+          <>
+            <div className="d-flex">
+              <p className="form-label">SOUNDCLOUD PROFILE</p>
+            </div>
+            <MyTextInput name="soundcloudUrl" placeholder="" />
+          </>
+        ) : null}
+        {showSpotifyInput ? (
+          <>
+            <div className="d-flex">
+              <p className="form-label">SPOTIFY PROFILE</p>
+            </div>
+            <MyTextInput name="spotifyUrl" placeholder="" />
+          </>
+        ) : null}
+        {showYoutubeInput ? (
+          <>
+            <div className="d-flex">
+              <p className="form-label">YOUTUBE PROFILE</p>
+            </div>
+            <MyTextInput name="youtubeUrl" placeholder="" />
+          </>
+        ) : null}
       </Col>
 
       <Col
@@ -176,6 +175,20 @@ const ArtistRegisterForm = (props: Props) => {
         lg={6}
         className="d-flex flex-column p-3 register-col"
       >
+        <div className="mb-2">
+          You can set your own profile url so you can share it with others and
+          be found easier.
+        </div>
+        <div className="d-flex">
+          <p className="form-label">PROFILE URL</p>
+        </div>
+        <MyTextInput
+          name="profileUrl"
+          placeholder=""
+          className=""
+          disabled={disabled}
+        />
+        <Divider />
         <div className="d-flex">
           <p className="form-label">EMAIL</p>
         </div>

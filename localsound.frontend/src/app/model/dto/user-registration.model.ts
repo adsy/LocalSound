@@ -6,6 +6,7 @@ export interface UserRegistrationModel {
 }
 
 export interface RegistrationModel {
+  profileUrl: string;
   email: string;
   password: string;
   checkPassword: string;
