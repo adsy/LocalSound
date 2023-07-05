@@ -3,7 +3,7 @@ import "../../App.css";
 import LandingPage from "../../features/LandingPage/LandingPage";
 import ModalContainer from "../../common/modal/ModalContainer";
 import TopNavbar from "./TopNavBar";
-import UserProfileSummary from "../../features/UserProfile/UserProfile";
+import UserProfile from "../../features/UserProfile/UserProfile";
 import { Container } from "react-bootstrap";
 import PrivateRoute from "./PrivateRoute";
 import HomePage from "../../features/Home/HomePage";
@@ -26,7 +26,7 @@ const App = () => {
                 <div className="masthead">
                   <Switch>
                     <PrivateRoute exact path="/home" component={HomePage} />
-                    <Route exact path="/(.+)" component={UserProfileSummary} />
+                    <Route exact path="/(.+)" component={UserProfile} />
                   </Switch>
                 </div>
               )}

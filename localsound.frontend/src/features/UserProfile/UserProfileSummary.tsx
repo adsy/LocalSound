@@ -1,6 +1,6 @@
 import { Button } from "react-bootstrap";
 
-const ProfileSummary = () => {
+const UserProfileSummary = () => {
   return (
     <div className="ui-container">
       <div>Profile Summary</div>
@@ -9,4 +9,4 @@ const ProfileSummary = () => {
   );
 };
 
-export default ProfileSummary;
+export default UserProfileSummary;

@@ -1,4 +1,5 @@
 ﻿using localsound.backend.api.Commands.Account;
+using localsound.backend.api.Queries.Account;
 using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Domain.Model.Dto.Submission;
 using localsound.backend.Domain.Model.Interfaces.Entity;
@@ -54,6 +55,23 @@ namespace localsound.backend.api.Controllers
         {
             AddCookies(string.Empty, string.Empty);
             return Ok();
+        }
+
+        [AllowAnonymous]
+        [HttpGet("get-profile-details/{profileUrl}")]
+        public async Task<ActionResult<IAppUserDto>> GetUserProfileDetails(string profileUrl, CancellationToken cancellationToken)
+        {
+            var result = await Mediator.Send(new GetProfileDataQuery
+            {
+                ProfileUrl = profileUrl
+            }, cancellationToken);
+
+            if (result.IsSuccessStatusCode)
+            {
+                return Ok(result.ReturnData);
+            }
+
+            return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
         }
 
         private void AddCookies(string token, string refreshToken)

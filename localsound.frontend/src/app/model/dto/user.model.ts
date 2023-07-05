@@ -4,6 +4,7 @@ export interface UserModel {
   customerType: CustomerTypes;
   memberId: string;
   email: string;
+  profileUrl: string;
   address: string;
   phoneNumber: string;
   firstName?: string;

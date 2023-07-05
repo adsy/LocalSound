@@ -123,11 +123,61 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
+        public async Task<ServiceResponse<Artist>> GetArtistFromDbAsync(string profileUrl)
+        {
+            try
+            {
+                var artist = await _dbContext.Artist.Include(x => x.User).FirstOrDefaultAsync(x => x.ProfileUrl == profileUrl);
+
+                if (artist == null)
+                {
+                    return new ServiceResponse<Artist>(HttpStatusCode.NotFound);
+                }
+
+                return new ServiceResponse<Artist>(HttpStatusCode.OK)
+                {
+                    ReturnData = artist
+                };
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(AccountService)} - {nameof(GetArtistFromDbAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<Artist>(HttpStatusCode.InternalServerError);
+            }
+        }
+
         public async Task<ServiceResponse<NonArtist>> GetNonArtistFromDbAsync(Guid id)
         {
             try
             {
                 var nonArtist = await _dbContext.NonArtist.Include(x => x.User).FirstOrDefaultAsync(x => x.AppUserId == id);
+
+                if (nonArtist == null)
+                {
+                    return new ServiceResponse<NonArtist>(HttpStatusCode.NotFound);
+                }
+
+                return new ServiceResponse<NonArtist>(HttpStatusCode.OK)
+                {
+                    ReturnData = nonArtist
+                };
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(AccountService)} - {nameof(GetNonArtistFromDbAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<NonArtist>(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<ServiceResponse<NonArtist>> GetNonArtistFromDbAsync(string profileUrl)
+        {
+            try
+            {
+                var nonArtist = await _dbContext.NonArtist.Include(x => x.User).FirstOrDefaultAsync(x => x.ProfileUrl == profileUrl);
 
                 if (nonArtist == null)
                 {

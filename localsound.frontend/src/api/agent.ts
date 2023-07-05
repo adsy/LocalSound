@@ -1,10 +1,7 @@
-import axios, {
-  AxiosError,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from "axios";
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { UserRegistrationModel } from "../app/model/dto/user-registration.model";
 import { UserLoginModel } from "../app/model/dto/user-login.model";
+import { UserModel } from "../app/model/dto/user.model";
 
 // let localStore: StoreType;
 
@@ -70,20 +67,15 @@ axiosApiInstance.interceptors.response.use(
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const requests = {
-  get: <T>(url: string, config?: InternalAxiosRequestConfig) =>
+  get: <T>(url: string, config?: AxiosRequestConfig) =>
     axiosApiInstance.get<T>(url, config).then(responseBody),
-  post: <T>(
-    url: string,
-    body: {} | null,
-    config?: InternalAxiosRequestConfig
-  ) => axiosApiInstance.post<T>(url, body, config).then(responseBody),
-  put: <T>(url: string, body: {}, config?: InternalAxiosRequestConfig) =>
+  post: <T>(url: string, body: {} | null, config?: AxiosRequestConfig) =>
+    axiosApiInstance.post<T>(url, body, config).then(responseBody),
+  put: <T>(url: string, body: {}, config?: AxiosRequestConfig) =>
     axiosApiInstance.put<T>(url, body, config).then(responseBody),
-  delete: <T>(
-    url: string,
-    config?: AxiosRequeInternalAxiosRequestConfigstConfig
-  ) => axiosApiInstance.delete<T>(url, config).then(responseBody),
-  retry: (config: InternalAxiosRequestConfig) => axiosApiInstance(config),
+  delete: <T>(url: string, config?: AxiosRequestConfig) =>
+    axiosApiInstance.delete<T>(url, config).then(responseBody),
+  retry: (config: AxiosRequestConfig) => axiosApiInstance(config),
 };
 
 const Authentication = {
@@ -101,8 +93,14 @@ const Authentication = {
   signOut: () => requests.post<null>("account/sign-out", null),
 };
 
+const Profile = {
+  getProfile: (profileUrl: string) =>
+    requests.get<UserModel>(`account/get-profile-details/${profileUrl}`),
+};
+
 const agent = {
   Authentication,
+  Profile,
 };
 
 export default agent;

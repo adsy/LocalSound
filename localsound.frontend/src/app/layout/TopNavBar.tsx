@@ -46,6 +46,7 @@ const TopNavbar = () => {
       dispatch(handleResetUserState());
       dispatch(handleResetAppState());
       setShow(false);
+      history.push("/");
     } catch (error) {
       //TODO: do something with error
     }
@@ -139,7 +140,7 @@ const TopNavbar = () => {
                               </h5>
                             </NavLink>
                             <NavLink
-                              to="/profile"
+                              to={`/${userDetails?.profileUrl}`}
                               className={`sidebar-item mb-2`}
                               onClick={() => setShow(false)}
                             >

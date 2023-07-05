@@ -1,14 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
-import { State } from "../../../app/model/redux/state";
 import bg from "../../../assets/landing-page-banner/banner3.jpg";
 import img from "../../../assets/icons/user.svg";
 import { Button, Col, Row } from "react-bootstrap";
 import { Image } from "semantic-ui-react";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import EditArtistProfile from "./EditArtistProfile";
+import { UserModel } from "../../../app/model/dto/user.model";
 
-const ArtistProfile = () => {
-  const userDetails = useSelector((state: State) => state.user.userDetails);
+interface Props {
+  userDetails: UserModel;
+}
+
+const ArtistProfile = ({ userDetails }: Props) => {
   const dispatch = useDispatch();
 
   const bannerStyle = {

@@ -278,5 +278,44 @@ namespace localsound.backend.Infrastructure.Services
                 ReturnData = user
             };
         }
+
+        public async Task<ServiceResponse<IAppUserDto>> GetProfileDataAsync(string profileUrl, CancellationToken cancellationToken)
+        {
+            try
+            {
+                //Check if its an artist first
+                var artistResponse = await _accountRepository.GetArtistFromDbAsync(profileUrl);
+                if (artistResponse != null && artistResponse.IsSuccessStatusCode)
+                {
+                    return new ServiceResponse<IAppUserDto>(HttpStatusCode.OK)
+                    {
+                        ReturnData = _mapper.Map<ArtistDto>(artistResponse.ReturnData)
+                    };
+                }
+
+                // Check if it matches non artist if no artist matched
+                var nonArtistResponse = await _accountRepository.GetNonArtistFromDbAsync(profileUrl);
+                if (nonArtistResponse != null && nonArtistResponse.IsSuccessStatusCode)
+                {
+                    return new ServiceResponse<IAppUserDto>(HttpStatusCode.OK)
+                    {
+                        ReturnData = _mapper.Map<NonArtistDto>(nonArtistResponse.ReturnData)
+                    };
+                }
+
+                // Return 404 if non artist didnt match as well
+                return new ServiceResponse<IAppUserDto>(HttpStatusCode.NotFound);
+            }
+            catch(Exception e)
+            {
+                var message = $"{nameof(AccountService)} - {nameof(GetProfileDataAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<IAppUserDto>(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured while getting the user profile, please try again..."
+                }; ;
+            }
+        }
     }
 }
