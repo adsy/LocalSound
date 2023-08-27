@@ -2,21 +2,6 @@
 {
     public class RegistrationDto
     {
-        public RegistrationDto(string password, string email, string address, string phoneNumber, string? firstName, string? lastName, string? name, string profileUrl, string? soundcloudUrl, string? spotifyUrl, string? youtubeUrl)
-        {
-            Password = password;
-            Email = email;
-            Address = address;
-            PhoneNumber = phoneNumber;
-            FirstName = firstName;
-            LastName = lastName;
-            Name = name;
-            ProfileUrl = profileUrl;
-            SoundcloudUrl = soundcloudUrl;
-            SpotifyUrl = spotifyUrl;
-            YoutubeUrl = youtubeUrl;
-        }
-
         public string Password { get; set; }
         public string Email { get; set; }
         public string Address { get; set; }

@@ -6,10 +6,6 @@ namespace localsound.backend.api.Commands.Artist
 {
     public class UpdateArtistDetailsCommand : IRequest<ServiceResponse>
     {
-        public UpdateArtistDetailsCommand(UpdateArtistDto updateArtistDto)
-        {
-            UpdateArtistDto = updateArtistDto;
-        }
         public UpdateArtistDto UpdateArtistDto { get; set; }
 
     }

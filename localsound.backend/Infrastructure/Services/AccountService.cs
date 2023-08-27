@@ -90,7 +90,12 @@ namespace localsound.backend.Infrastructure.Services
 
                     return new ServiceResponse<LoginResponseDto>(HttpStatusCode.OK)
                     {
-                        ReturnData = new LoginResponseDto(returnDto, accessToken, refreshToken)
+                        ReturnData = new LoginResponseDto
+                        {
+                            AccessToken = accessToken,
+                            RefreshToken = refreshToken,
+                            UserDetails = returnDto
+                        }
                     };
                 }
 
@@ -155,7 +160,12 @@ namespace localsound.backend.Infrastructure.Services
 
                     return new ServiceResponse<LoginResponseDto>(HttpStatusCode.OK)
                     {
-                        ReturnData = new LoginResponseDto(userDto, accessToken, refreshToken)
+                        ReturnData = new LoginResponseDto
+                        {
+                            AccessToken = accessToken,
+                            RefreshToken = refreshToken,
+                            UserDetails = userDto
+                        }
                     };
                 }
 
@@ -178,7 +188,15 @@ namespace localsound.backend.Infrastructure.Services
 
         private async Task<IAppUserDto> CreateNonArtistAsync(RegistrationDto registrationDto, AppUser user)
         {
-            var newNonArtist = new NonArtist(user.Id, user, registrationDto.FirstName, registrationDto.LastName, registrationDto.PhoneNumber, registrationDto.Address, registrationDto.ProfileUrl);
+            var newNonArtist = new NonArtist
+            {
+                Address = registrationDto.Address,
+                FirstName = registrationDto.FirstName,
+                LastName = registrationDto.LastName,
+                PhoneNumber = registrationDto.PhoneNumber,
+                User = user,
+                AppUserId = user.Id,
+            };
 
             var customerDbResult = await _accountRepository.AddNonArtistToDbAsync(newNonArtist);
 
@@ -194,7 +212,18 @@ namespace localsound.backend.Infrastructure.Services
 
         private async Task<IAppUserDto> CreateArtistAsync(RegistrationDto registrationDto, AppUser user)
         {
-            var newArtist = new Artist(user.Id, user, registrationDto.Name, registrationDto.ProfileUrl, registrationDto.Address, registrationDto.PhoneNumber, registrationDto.SoundcloudUrl, registrationDto.SpotifyUrl, registrationDto.YoutubeUrl, null);
+            var newArtist = new Artist
+            {
+                Address = registrationDto.Address,
+                Name = registrationDto.Name,
+                ProfileUrl = registrationDto.ProfileUrl,
+                PhoneNumber = registrationDto.PhoneNumber,
+                User = user,
+                AppUserId = user.Id,
+                YoutubeUrl = registrationDto.YoutubeUrl,
+                SpotifyUrl = registrationDto.SpotifyUrl,
+                SoundcloudUrl = registrationDto.SoundcloudUrl
+            };
 
             var customerDbResult = await _accountRepository.AddArtistToDbAsync(newArtist);
 
@@ -219,7 +248,12 @@ namespace localsound.backend.Infrastructure.Services
                 };
             }
 
-            var newUser = new AppUser(customerType, registrationDto.Email, registrationDto.Email);
+            var newUser = new AppUser
+            {
+                Email = registrationDto.Email,
+                CustomerType = customerType,
+                UserName = registrationDto.Email
+            };
 
             var result = await _userManager.CreateAsync(newUser, registrationDto.Password);
             await _userManager.AddToRoleAsync(newUser, customerType.ToString());

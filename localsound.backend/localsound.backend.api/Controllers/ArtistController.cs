@@ -12,7 +12,10 @@ namespace localsound.backend.api.Controllers
         [Route("/artist/{memberId}")]
         public async Task<ActionResult> UpdateArtistDetails([FromBody] UpdateArtistDto updateArtistDto)
         {
-            var result = await Mediator.Send(new UpdateArtistDetailsCommand(updateArtistDto));
+            var result = await Mediator.Send(new UpdateArtistDetailsCommand
+            {
+                UpdateArtistDto = updateArtistDto
+            });
 
             if (result.IsSuccessStatusCode)
             {

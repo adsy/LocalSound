@@ -5,20 +5,6 @@ namespace localsound.backend.Domain.Model.Entity
 {
     public class Artist
     {
-        public Artist(Guid appUserId, AppUser user, string name, string profileUrl, string address, string phoneNumber, string? soundcloudUrl, string? spotifyUrl, string? youtubeUrl, string? aboutSection)
-        {
-            AppUserId = appUserId;
-            User = user;
-            Name = name;
-            ProfileUrl = profileUrl;
-            Address = address;
-            PhoneNumber = phoneNumber;
-            SoundcloudUrl = soundcloudUrl;
-            SpotifyUrl = spotifyUrl;
-            YoutubeUrl = youtubeUrl;
-            AboutSection = aboutSection;
-        }
-
         [Key]
         [ForeignKey("User")]
         public Guid AppUserId { get; set; }
