@@ -68,40 +68,36 @@ namespace localsound.backend.Infrastructure.Services
                 var accessToken = _tokenRepository.CreateToken(_tokenRepository.GetClaims(user));
                 var refreshToken = await _tokenRepository.CreateRefreshToken(user);
 
-                if (user.CustomerType == CustomerType.Artist)
+                var returnDto = (IAppUserDto)null;
+
+                if (user.CustomerType == CustomerType.Artist && user.MemberId != null)
                 {
                     var artist = await _accountRepository.GetArtistFromDbAsync(user.Id);
 
-                    var returnDto = _mapper.Map<ArtistDto>(artist.ReturnData);
-                    returnDto.MemberId = user.MemberId;
-
-                    return new ServiceResponse<LoginResponseDto>(HttpStatusCode.OK)
-                    {
-                        ReturnData = new LoginResponseDto
-                        {
-                            UserDetails = returnDto,
-                            AccessToken = accessToken,
-                            RefreshToken = refreshToken
-                        }
-                    };
+                    returnDto = _mapper.Map<ArtistDto>(artist.ReturnData);
+                    
                 }
                 else
                 {
                     var nonArtist = await _accountRepository.GetNonArtistFromDbAsync(user.Id);
 
-                    var returnDto = _mapper.Map<NonArtistDto>(nonArtist.ReturnData);
+                    returnDto = _mapper.Map<NonArtistDto>(nonArtist.ReturnData);
+                }
+
+                if (user.MemberId != null)
+                {
                     returnDto.MemberId = user.MemberId;
 
                     return new ServiceResponse<LoginResponseDto>(HttpStatusCode.OK)
                     {
-                        ReturnData = new LoginResponseDto
-                        {
-                            UserDetails = returnDto,
-                            AccessToken = accessToken,
-                            RefreshToken = refreshToken
-                        }
+                        ReturnData = new LoginResponseDto(returnDto, accessToken, refreshToken)
                     };
                 }
+
+                return new ServiceResponse<LoginResponseDto>(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured while logging in, please try again..."
+                };
             }
             catch(Exception e)
             {
@@ -111,7 +107,7 @@ namespace localsound.backend.Infrastructure.Services
                 return new ServiceResponse<LoginResponseDto>(HttpStatusCode.InternalServerError)
                 {
                     ServiceResponseMessage = "An error occured while logging in, please try again..."
-                }; ;
+                };
             }
         }
 
@@ -151,19 +147,21 @@ namespace localsound.backend.Infrastructure.Services
                     return new ServiceResponse<LoginResponseDto>(HttpStatusCode.InternalServerError, "Something went wrong while creating your account, please try again.");
                 }
 
-                userDto.MemberId = userResponse.ReturnData.MemberId;
+                if (userResponse.ReturnData?.MemberId != null) {
+                    userDto.MemberId = userResponse.ReturnData.MemberId;
 
-                var accessToken = _tokenRepository.CreateToken(_tokenRepository.GetClaims(userResponse.ReturnData));
-                var refreshToken = await _tokenRepository.CreateRefreshToken(userResponse.ReturnData);
+                    var accessToken = _tokenRepository.CreateToken(_tokenRepository.GetClaims(userResponse.ReturnData));
+                    var refreshToken = await _tokenRepository.CreateRefreshToken(userResponse.ReturnData);
 
-                return new ServiceResponse<LoginResponseDto>(HttpStatusCode.OK)
-                {
-                    ReturnData = new LoginResponseDto
+                    return new ServiceResponse<LoginResponseDto>(HttpStatusCode.OK)
                     {
-                        UserDetails = userDto,
-                        AccessToken = accessToken,
-                        RefreshToken = refreshToken
-                    }
+                        ReturnData = new LoginResponseDto(userDto, accessToken, refreshToken)
+                    };
+                }
+
+                return new ServiceResponse<LoginResponseDto>(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured while logging in, please try again..."
                 };
             }
             catch(Exception e)
@@ -180,15 +178,7 @@ namespace localsound.backend.Infrastructure.Services
 
         private async Task<IAppUserDto> CreateNonArtistAsync(RegistrationDto registrationDto, AppUser user)
         {
-            var newNonArtist = new NonArtist
-            {
-                Address = registrationDto.Address,
-                FirstName = registrationDto.FirstName,
-                LastName = registrationDto.LastName,
-                PhoneNumber = registrationDto.PhoneNumber,
-                User = user,
-                AppUserId = user.Id,
-            };
+            var newNonArtist = new NonArtist(user.Id, user, registrationDto.FirstName, registrationDto.LastName, registrationDto.PhoneNumber, registrationDto.Address, registrationDto.ProfileUrl);
 
             var customerDbResult = await _accountRepository.AddNonArtistToDbAsync(newNonArtist);
 
@@ -204,18 +194,7 @@ namespace localsound.backend.Infrastructure.Services
 
         private async Task<IAppUserDto> CreateArtistAsync(RegistrationDto registrationDto, AppUser user)
         {
-            var newArtist = new Artist
-            {
-                Address = registrationDto.Address,
-                Name = registrationDto.Name,
-                ProfileUrl = registrationDto.ProfileUrl,
-                PhoneNumber = registrationDto.PhoneNumber,
-                User = user,
-                AppUserId = user.Id,
-                YoutubeUrl = registrationDto.YoutubeUrl,
-                SpotifyUrl = registrationDto.SpotifyUrl,
-                SoundcloudUrl = registrationDto.SoundcloudUrl
-            };
+            var newArtist = new Artist(user.Id, user, registrationDto.Name, registrationDto.ProfileUrl, registrationDto.Address, registrationDto.PhoneNumber, registrationDto.SoundcloudUrl, registrationDto.SpotifyUrl, registrationDto.YoutubeUrl, null);
 
             var customerDbResult = await _accountRepository.AddArtistToDbAsync(newArtist);
 
@@ -240,12 +219,7 @@ namespace localsound.backend.Infrastructure.Services
                 };
             }
 
-            var newUser = new AppUser
-            {
-                Email = registrationDto.Email,
-                CustomerType = customerType,
-                UserName = registrationDto.Email
-            };
+            var newUser = new AppUser(customerType, registrationDto.Email, registrationDto.Email);
 
             var result = await _userManager.CreateAsync(newUser, registrationDto.Password);
             await _userManager.AddToRoleAsync(newUser, customerType.ToString());

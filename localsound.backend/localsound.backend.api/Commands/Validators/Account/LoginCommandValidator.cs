@@ -3,9 +3,9 @@ using localsound.backend.api.Commands.Account;
 
 namespace localsound.backend.api.Commands.Validators.Account
 {
-    public class NonArtistLoginCommandValidator : AbstractValidator<LoginCommand>
+    public class LoginCommandValidator : AbstractValidator<LoginCommand>
     {
-        public NonArtistLoginCommandValidator()
+        public LoginCommandValidator()
         {
             RuleFor(m => m.LoginDetails)
                 .NotEmpty();

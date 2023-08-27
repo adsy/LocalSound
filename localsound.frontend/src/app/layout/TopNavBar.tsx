@@ -4,7 +4,7 @@ import { State } from "../model/redux/state";
 import logo from "../../assets/logo4.png";
 import { useState } from "react";
 import { Button, Container, Nav, Offcanvas } from "react-bootstrap";
-import { Divider } from "semantic-ui-react";
+import { Divider, Icon } from "semantic-ui-react";
 import { NavLink, useHistory } from "react-router-dom";
 import { handleToggleModal } from "../redux/actions/modalSlice";
 import Login from "../../features/Authentication/Login/Login";
@@ -91,13 +91,13 @@ const TopNavbar = () => {
                     className="black-button mr-2"
                     onClick={() => handleAuthenticationRequest(true)}
                   >
-                    Login
+                    <h4>Login</h4>
                   </Button>
                   <Button
                     className="black-button"
                     onClick={() => handleAuthenticationRequest(false)}
                   >
-                    Create account
+                    <h4>Create account</h4>
                   </Button>
                 </div>
               )}
@@ -134,7 +134,7 @@ const TopNavbar = () => {
                               className={`sidebar-item mb-2`}
                               onClick={() => setShow(false)}
                             >
-                              <span className="home-icon align-self-center d-inline-block"></span>
+                              <Icon name="home" size="large" />
                               <h5 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
                                 Home
                               </h5>
@@ -144,9 +144,19 @@ const TopNavbar = () => {
                               className={`sidebar-item mb-2`}
                               onClick={() => setShow(false)}
                             >
-                              <span className="home-icon align-self-center d-inline-block"></span>
+                              <Icon name="user" size="large" />
                               <h5 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
                                 Profile
+                              </h5>
+                            </NavLink>
+                            <NavLink
+                              to={`/account-settings`}
+                              className={`sidebar-item mb-2`}
+                              onClick={() => setShow(false)}
+                            >
+                              <Icon name="settings" size="large" />
+                              <h5 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
+                                Account settings
                               </h5>
                             </NavLink>
                           </div>

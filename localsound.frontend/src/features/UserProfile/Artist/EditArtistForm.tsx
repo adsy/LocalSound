@@ -1,4 +1,4 @@
-import { Button, Col } from "react-bootstrap";
+import { Col } from "react-bootstrap";
 import { Divider } from "semantic-ui-react";
 import MyAddressInput from "../../../common/form/MyAddressInput";
 import MyTextInput from "../../../common/form/MyTextInput";
@@ -88,6 +88,7 @@ const EditArtistForm = (props: Props) => {
           setFieldTouched={setFieldTouched}
           setAddressError={setAddressError}
           disabled={disabled}
+          preselectedAddress={values.address}
         />
         <Divider />
 

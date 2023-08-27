@@ -2,7 +2,7 @@
 using localsound.backend.api.Commands.Account;
 using localsound.backend.Domain.Enum;
 
-namespace localsound.backend.api.Commands.Validators
+namespace localsound.backend.api.Commands.Validators.Account
 {
     public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
     {

@@ -22,7 +22,7 @@ namespace localsound.backend.api.Controllers
                 LoginDetails = details
             });
 
-            if (result.IsSuccessStatusCode)
+            if (result.IsSuccessStatusCode && result.ReturnData != null)
             {
                 AddCookies(result.ReturnData.AccessToken, result.ReturnData.RefreshToken);
                 return Ok(result.ReturnData.UserDetails);
@@ -40,7 +40,7 @@ namespace localsound.backend.api.Controllers
                 RegistrationDetails = details
             });
 
-            if (result.IsSuccessStatusCode)
+            if (result.IsSuccessStatusCode && result.ReturnData != null)
             {
                 AddCookies(result.ReturnData.AccessToken, result.ReturnData.RefreshToken);
                 return Ok(result.ReturnData.UserDetails);
@@ -51,7 +51,7 @@ namespace localsound.backend.api.Controllers
 
         [AllowAnonymous]
         [HttpPost("sign-out")]
-        public async Task<ActionResult> SignOut()
+        public new ActionResult SignOut()
         {
             AddCookies(string.Empty, string.Empty);
             return Ok();

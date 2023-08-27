@@ -42,20 +42,12 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
       <div className="d-flex flex-col flex-wrap h-100 p-0">
         <Col md={12} lg={6} className="p-0 left-col">
           <div style={bannerStyle} className="profile-banner position-relative">
-            {viewingOwnProfile ? (
-              <Button
-                onClick={() => editArtistProfile()}
-                className="black-button m-1 edit-profile-btn"
-              >
-                Edit profile
-              </Button>
-            ) : null}
             <div className="details-container flex-wrap">
               <Image
                 src={img}
                 size="small"
                 circular
-                className="mt-2 profile-img"
+                className="mb-2 profile-img"
               />
               <span className="user-name align-self-end mb-0 ml-1">
                 {userDetails?.name}
@@ -97,6 +89,14 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                       <h4 className="align-self-center mt-0">Youtube</h4>
                     </a>
                   </>
+                ) : null}
+                {viewingOwnProfile ? (
+                  <Button
+                    onClick={() => editArtistProfile()}
+                    className="black-button m-1 edit-profile-btn"
+                  >
+                    <h4>Edit profile</h4>
+                  </Button>
                 ) : null}
               </div>
             </div>

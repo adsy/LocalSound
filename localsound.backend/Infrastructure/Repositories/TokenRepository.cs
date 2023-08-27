@@ -133,12 +133,7 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 return new ServiceResponse<TokenDto>(HttpStatusCode.OK)
                 {
-                    ReturnData = new TokenDto
-                    {
-                        AccessToken = newAccessToken,
-                        RefreshToken = newRefreshToken,
-                        UserId = id.ToString()
-                    }
+                    ReturnData = new TokenDto(newRefreshToken, newAccessToken, id.ToString())
                 };
             }
             catch(Exception e)

@@ -1,5 +1,5 @@
 import { useField } from "formik";
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import PlacesAutocomplete from "react-places-autocomplete";
 import { Form, Label } from "semantic-ui-react";
 
@@ -15,6 +15,7 @@ interface Props {
     shouldValidate?: boolean
   ) => void;
   setAddressError: (addressError: boolean) => void;
+  preselectedAddress?: string;
 }
 
 const MyAddressInput = (props: Props) => {
@@ -26,12 +27,24 @@ const MyAddressInput = (props: Props) => {
     name,
     label,
     setAddressError,
+    preselectedAddress,
   } = props;
   const customProps = { disabled, placeholder, name, label };
   const [address, setAddress] = useState("");
   const [field, meta] = useField(props);
   const [pickedAddress, setPickedAddress] = useState(false);
   const [addressSelected, setAddressSelected] = useState("");
+
+  useLayoutEffect(() => {
+    if (preselectedAddress) {
+      setAddress(preselectedAddress);
+      setAddressSelected(preselectedAddress);
+      setFieldValue("address", preselectedAddress);
+      setFieldTouched("address", true);
+      setPickedAddress(true);
+      setAddressError(false);
+    }
+  }, []);
 
   const handleChange = (address: string) => {
     setFieldTouched("address", true);
