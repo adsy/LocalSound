@@ -20,7 +20,7 @@ namespace localsound.backend.api.Middleware
             {
                 await next(context);
             }
-            catch (AntiforgeryValidationException e)
+            catch (AntiforgeryValidationException)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;
             }
@@ -52,12 +52,12 @@ namespace localsound.backend.api.Middleware
 
         private IReadOnlyDictionary<string,string[]> GetErrors(Exception e)
         {
-            IReadOnlyDictionary<string, string[]> errors = null;
             if (e is ValidatorException validationException)
             {
-                errors = validationException.Errors;
+                IReadOnlyDictionary<string, string[]> errors = validationException.Errors;
+                return errors;
             }
-            return errors;
+            return new Dictionary<string, string[]>();
         }
 
         private string GetTitle(Exception e) =>

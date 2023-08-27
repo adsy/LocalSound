@@ -10,7 +10,7 @@ const artistRegisterValidation = Yup.object({
       message:
         "Your url must have alphanumeric characters and cannot end in a hypen.",
       test: (value) =>
-        new RegExp("(^[A-Za-zd]+(-[A-Za-zd]+)*$)").test(value!) ||
+        new RegExp("(^[A-Za-z0-9]+(-[A-Za-z0-9]+)*$)").test(value!) ||
         value === undefined ||
         (value !== undefined && value.trim().length === 0),
     })

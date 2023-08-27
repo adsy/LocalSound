@@ -1,12 +1,13 @@
 import { Form, Formik } from "formik";
 import editArtistRegisterValidation from "./../../../validation/EditArtistValidation";
-import { Button, Header } from "semantic-ui-react";
+import { Header } from "semantic-ui-react";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import { useState } from "react";
 import EditArtistForm from "./EditArtistForm";
 import { useSelector } from "react-redux";
 import { State } from "../../../app/model/redux/state";
 import { EditArtistModel } from "../../../app/model/dto/edit-artist.model";
+import { Button } from "react-bootstrap";
 
 const EditArtistProfile = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
@@ -19,7 +20,7 @@ const EditArtistProfile = () => {
           Edit your artist profile
         </h2>
       </div>
-      <div className="w-100 header mt-2 fade-in">
+      <div className="w-100 header fade-in">
         <Formik
           initialValues={{
             name: userDetails?.name,
@@ -48,8 +49,9 @@ const EditArtistProfile = () => {
             status,
             setFieldValue,
             setFieldTouched,
+            errors,
           }) => {
-            const disabled = !isValid || !dirty || isSubmitting;
+            const disabled = !isValid || isSubmitting;
             return (
               <Form
                 className="ui form error fade-in"
@@ -81,7 +83,7 @@ const EditArtistProfile = () => {
                     disabled={disabled || addressError}
                     type="submit"
                   >
-                    <strong>UPDATE PROFILE</strong>
+                    <h4>Update profile</h4>
                   </Button>
                 ) : (
                   <InPageLoadingComponent />
