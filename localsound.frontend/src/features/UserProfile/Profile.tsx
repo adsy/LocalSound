@@ -6,10 +6,15 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { UserModel } from "../../app/model/dto/user.model";
 import { useHistory } from "react-router-dom";
 import agent from "../../api/agent";
+import ProfileNotFound from "./ProfileNotFound";
+import InPageLoadingComponent from "../../app/layout/InPageLoadingComponent";
 
 const UserProfileSummary = () => {
   const userDetail = useSelector((state: State) => state.user.userDetails);
   const [profile, setProfile] = useState<UserModel | null>(null);
+  const [noMatch, setNoMatch] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [viewingOwnProfile, setViewingOwnProfile] = useState(false);
   const history = useHistory();
   const abortControllerRef = useRef<AbortController>(new AbortController());
   const controller = abortControllerRef.current;
@@ -23,32 +28,44 @@ const UserProfileSummary = () => {
   useLayoutEffect(() => {
     const getProfile = async () => {
       var profileUrl = history.location.pathname.slice(1);
-      if (!userDetail) {
-        var result = await agent.Profile.getProfile(profileUrl);
 
-        if (result) {
-          setProfile(result);
-        } else {
-          // TODO: Do something with error here
-        }
+      if (!userDetail || userDetail?.profileUrl !== profileUrl) {
+        var result = await agent.Profile.getProfile(profileUrl);
+        setProfile(result);
+        setViewingOwnProfile(false);
       } else {
         setProfile(userDetail);
+        setViewingOwnProfile(true);
       }
     };
 
-    getProfile().catch((err) => {
-      console.log(err);
-      //TODO: Do something with the error here
-    });
-
-    //TODO: If it fails, redirect to a cannot find user component
+    getProfile()
+      .catch((err) => {
+        setNoMatch(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [userDetail]);
 
   return (
     <div id="user-profile">
-      {profile?.customerType === CustomerTypes.Artist ? (
-        <ArtistProfile userDetails={profile} />
+      {loading ? (
+        <div className="h-100 d-flex justify-content-center align-content-center">
+          <InPageLoadingComponent
+            height={150}
+            width={150}
+            content="Loading profile..."
+          />
+        </div>
       ) : null}
+      {profile?.customerType === CustomerTypes.Artist ? (
+        <ArtistProfile
+          userDetails={profile}
+          viewingOwnProfile={viewingOwnProfile}
+        />
+      ) : null}
+      {noMatch ? <ProfileNotFound /> : null}
     </div>
   );
 };

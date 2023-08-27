@@ -3,7 +3,7 @@ import "../../App.css";
 import LandingPage from "../../features/LandingPage/LandingPage";
 import ModalContainer from "../../common/modal/ModalContainer";
 import TopNavbar from "./TopNavBar";
-import UserProfile from "../../features/UserProfile/UserProfile";
+import UserProfile from "../../features/UserProfile/Profile";
 import { Container } from "react-bootstrap";
 import PrivateRoute from "./PrivateRoute";
 import HomePage from "../../features/Home/HomePage";

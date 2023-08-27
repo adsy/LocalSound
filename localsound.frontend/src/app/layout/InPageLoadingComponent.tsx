@@ -15,7 +15,7 @@ const InPageLoadingComponent = ({
   width = 50,
 }: Props) => {
   return (
-    <span className="fade-in d-flex flex-column">
+    <span className="fade-in d-flex flex-column justify-content-center">
       <img
         src={spinner}
         style={{ height: height, width: width }}

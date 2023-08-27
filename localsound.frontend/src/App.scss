@@ -5,6 +5,66 @@ $offWhite: #ececec;
 $richBlack: #232323;
 $purple: #6d69fa;
 
+/** MIX-INS **/
+@mixin container {
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 13px 27px -5px,
+    rgba(230, 230, 230, 0.3) 0px 10px 20px -4px;
+  border-radius: 1px 1px 30px 5px;
+  min-height: 150px;
+  margin-bottom: 20px;
+  background-color: white;
+  color: $borderColor;
+}
+
+@mixin logo {
+  background-image: url("./assets/logo4.png");
+  background-size: contain !important;
+  background-attachment: inherit !important;
+  background-position: center center;
+  background-repeat: no-repeat !important;
+}
+
+@mixin logo-black {
+  background-image: url("./assets/logo-black.png");
+  background-size: contain !important;
+  background-attachment: inherit !important;
+  background-position: center center;
+  background-repeat: no-repeat !important;
+}
+
+@mixin text-shadow {
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+
+@mixin inverse-text-shadow {
+  text-shadow: -1px 0 $richBlack, 0 1px $richBlack, 1px 0 $richBlack,
+    0 -1px $richBlack;
+}
+
+@mixin button-style {
+  color: $richBlack;
+  font-size: 16px;
+  letter-spacing: 1.5px;
+  @include text-shadow;
+  transition: border-color 0.5s ease;
+}
+
+@mixin small-icon {
+  width: 25px;
+  height: 25px;
+  background-size: cover !important;
+  background-attachment: inherit !important;
+  background-position: center center;
+}
+
+@mixin nav-icon {
+  width: 25px;
+  height: 25px;
+  background-size: cover !important;
+  background-attachment: inherit !important;
+  background-position: center center;
+}
+
 @import url("https://fonts.googleapis.com/css2?family=Barlow");
 html {
   height: 100%;
@@ -23,7 +83,19 @@ h3,
 h4,
 h5,
 h6 {
-  color: $headingColor;
+  color: black;
+  @include text-shadow;
+}
+
+h1.inverse,
+h2.inverse,
+h3.inverse,
+h4.inverse,
+h5.inverse,
+h6.inverse {
+  color: white;
+  @include inverse-text-shadow;
+  letter-spacing: 3.5px;
 }
 
 $start: 0;
@@ -73,6 +145,8 @@ $end: 10;
   min-height: calc(100vh - 79px);
   height: 1px;
   padding: 0px;
+  box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
+    rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
 }
 
 .app-holder {
@@ -90,62 +164,6 @@ $end: 10;
 
 .masthead {
   height: 100%;
-}
-
-/** CONTAINERS **/
-@mixin container {
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 13px 27px -5px,
-    rgba(230, 230, 230, 0.3) 0px 10px 20px -4px;
-  border-radius: 1px 1px 30px 5px;
-  min-height: 150px;
-  margin-bottom: 20px;
-  background-color: white;
-  color: $borderColor;
-}
-
-@mixin logo {
-  background-image: url("./assets/logo4.png");
-  background-size: contain !important;
-  background-attachment: inherit !important;
-  background-position: center center;
-  background-repeat: no-repeat !important;
-}
-
-@mixin logo-black {
-  background-image: url("./assets/logo-black.png");
-  background-size: contain !important;
-  background-attachment: inherit !important;
-  background-position: center center;
-  background-repeat: no-repeat !important;
-}
-
-@mixin text-shadow {
-  text-shadow: -1px 0 $borderColor, 0 1px $borderColor, 1px 0 $borderColor,
-    0 -1px $borderColor;
-}
-
-@mixin button-style {
-  color: white;
-  font-size: 14px;
-  letter-spacing: 1.5px;
-  @include text-shadow;
-  transition: border-color 0.5s ease;
-}
-
-@mixin small-icon {
-  width: 25px;
-  height: 25px;
-  background-size: cover !important;
-  background-attachment: inherit !important;
-  background-position: center center;
-}
-
-@mixin nav-icon {
-  width: 25px;
-  height: 25px;
-  background-size: cover !important;
-  background-attachment: inherit !important;
-  background-position: center center;
 }
 
 /** LOGOS **/
@@ -218,7 +236,7 @@ $end: 10;
       letter-spacing: 1px;
       font-weight: 600;
       font-size: 20px;
-      color: white;
+      color: black;
       @include text-shadow;
     }
   }
@@ -352,6 +370,7 @@ $end: 10;
 .black-button:focus {
   background-color: $navbarColor;
   border: 1px solid white;
+  color: $richBlack;
 }
 
 .black-button:disabled {
@@ -532,12 +551,16 @@ $end: 10;
 /** USER PROFILE **/
 #user-profile {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+
   .ui-container {
     @include container;
   }
 
   .about-text {
     letter-spacing: 1px;
+    text-align: justify;
   }
 
   .details-container {
@@ -559,14 +582,12 @@ $end: 10;
     letter-spacing: 3.5px;
     margin-top: 0px;
     font-size: 40px;
-    color: white;
+    color: $richBlack;
     height: 50px;
     padding: 10px;
     // border-bottom: 5px solid $borderColor;
   }
   .section-title {
-    @include text-shadow;
-    color: white;
     font-size: 28px;
     margin-bottom: 5px;
   }
@@ -582,9 +603,6 @@ $end: 10;
   }
 
   .left-col {
-    box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
-      rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
-    border-left: 1px solid #dedede;
     border-right: 1px solid #dedede;
   }
 
