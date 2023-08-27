@@ -44,7 +44,7 @@ $purple: #6d69fa;
 @mixin button-style {
   color: $richBlack;
   font-size: 16px;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   @include text-shadow;
   transition: border-color 0.5s ease;
 }
@@ -249,11 +249,6 @@ $end: 10;
   }
 }
 
-i.large.icon {
-  color: white !important;
-  // @include text-shadow;
-}
-
 /** NAVBAR **/
 #navbar {
   background-color: $borderColor;
@@ -263,7 +258,6 @@ i.large.icon {
   position: fixed;
   top: 0;
   z-index: 2;
-
   .ui.ui-container {
     padding: 0;
   }
@@ -369,7 +363,6 @@ i.large.icon {
   transition: background-color 0.5s ease;
   background-color: $richBlack;
   border: 1px solid $borderColor;
-  padding: 8px;
 }
 
 .black-button:hover,
@@ -481,6 +474,10 @@ i.large.icon {
   }
 
   .form-body {
+    padding-left: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-right: 1rem;
     // border: 1px solid white;
     border-radius: 6px;
 

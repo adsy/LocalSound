@@ -4,9 +4,7 @@ const UserProfileSummary = () => {
   return (
     <div className="ui-container">
       <div>Profile Summary</div>
-      <Button className="black-button">
-        <h4>View profile</h4>
-      </Button>
+      <Button className="black-button">View profile</Button>
     </div>
   );
 };

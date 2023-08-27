@@ -19,7 +19,7 @@ const LandingPageBanner = () => {
           </p>
           <div className="d-flex justify-content-center">
             <Button className="black-button w-50">
-              <h4>Search for your next performer</h4>
+              Search for your next performer
             </Button>
           </div>
         </div>

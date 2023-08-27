@@ -20,18 +20,13 @@ namespace localsound.backend.api.Controllers
             var refreshToken = HttpUtility.UrlDecode(HttpContext.Request.Cookies["X-Refresh-Token"]);
             var accessToken = HttpUtility.UrlDecode(HttpContext.Request.Cookies["X-Access-Token"]);
 
-            if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(refreshToken))
-            {
-                return BadRequest();
-            }
-
             var result = await Mediator.Send(new ValidateRefreshTokenCommand()
             {
                 RefreshToken = refreshToken,
                 AccessToken = accessToken
             });
 
-            if (result.IsSuccessStatusCode && result.ReturnData != null)
+            if (result.IsSuccessStatusCode)
             {
                 AddCookies(result.ReturnData.AccessToken, result.ReturnData.RefreshToken);
                 return Ok();

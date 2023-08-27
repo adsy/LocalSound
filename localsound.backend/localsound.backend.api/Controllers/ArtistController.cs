@@ -1,6 +1,4 @@
-﻿using localsound.backend.api.Commands.Artist;
-using localsound.backend.Domain.Model.Dto.Submission;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace localsound.backend.api.Controllers
 {
@@ -8,18 +6,11 @@ namespace localsound.backend.api.Controllers
     [ApiController]
     public class ArtistController : BaseApiController
     {
-        [HttpPut]
-        [Route("/artist/{memberId}")]
-        public async Task<ActionResult> UpdateArtistDetails([FromBody] UpdateArtistDto updateArtistDto)
-        {
-            var result = await Mediator.Send(new UpdateArtistDetailsCommand(updateArtistDto));
-
-            if (result.IsSuccessStatusCode)
-            {
-                return Ok();
-            }
-
-            return StatusCode((int)result.StatusCode);
-        }
+        //[HttpPut]
+        //[Route("/artist/{memberId}")]
+        //public async Task<ActionResult> UpdateArtistDetails([FromBody] )
+        //{
+        //    var result = await Mediator.Send(new UpdateArtistDetailsCommand());
+        //}
     }
 }

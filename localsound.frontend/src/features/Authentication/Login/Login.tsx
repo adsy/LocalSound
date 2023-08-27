@@ -105,7 +105,7 @@ const Login = () => {
                       isLoading || values.email === "" || values.password === ""
                     }
                   >
-                    <h4>Sign in</h4>
+                    <strong>LOGIN</strong>
                   </Button>
                 ) : (
                   <div className="mt-3">

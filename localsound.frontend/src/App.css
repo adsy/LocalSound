@@ -399,10 +399,6 @@ h6.inverse {
   color: #232323;
 }
 
-i.large.icon {
-  color: white !important;
-}
-
 /** NAVBAR **/
 #navbar {
   background-color: #232323;
@@ -489,7 +485,7 @@ i.large.icon {
 .purple-button {
   color: #232323;
   font-size: 16px;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: border-color 0.5s ease;
   background-color: #6d69fa !important;
@@ -506,13 +502,12 @@ i.large.icon {
 .black-button {
   color: #232323;
   font-size: 16px;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: border-color 0.5s ease;
   transition: background-color 0.5s ease;
   background-color: #232323;
   border: 1px solid #232323;
-  padding: 8px;
 }
 
 .black-button:hover,
@@ -533,7 +528,7 @@ i.large.icon {
 .soundcloud-button {
   color: #232323;
   font-size: 16px;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: border-color 0.5s ease;
   transition: background-color 0.5s ease;
@@ -551,7 +546,7 @@ i.large.icon {
 .spotify-button {
   color: #232323;
   font-size: 16px;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: border-color 0.5s ease;
   transition: background-color 0.5s ease;
@@ -569,7 +564,7 @@ i.large.icon {
 .youtube-button {
   color: #232323;
   font-size: 16px;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: border-color 0.5s ease;
   transition: background-color 0.5s ease;
@@ -629,6 +624,10 @@ i.large.icon {
   padding-right: 0.5rem;
 }
 .form .form-body {
+  padding-left: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-right: 1rem;
   border-radius: 6px;
 }
 .form .form-body input {
