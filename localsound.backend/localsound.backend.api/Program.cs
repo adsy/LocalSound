@@ -36,9 +36,11 @@ await builder.Services.AddDbSeed(builder.Configuration);
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<IArtistService, ArtistService>();
-builder.Services.AddTransient<IArtistRepository, ArtistRepository>();  
-
+builder.Services.AddTransient<IArtistRepository, ArtistRepository>();
+builder.Services.AddTransient<ICurrentUserService, CurrentUserService>();
 builder.Services.AddTransient<ITokenRepository, TokenRepository>();
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCors(options =>
 {

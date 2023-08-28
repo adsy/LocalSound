@@ -114,7 +114,7 @@ const EditArtistForm = (props: Props) => {
         <div className="d-flex">
           <p className="form-label">ABOUT</p>
         </div>
-        <MyTextArea name="about" placeholder="" rows={4} />
+        <MyTextArea name="aboutSection" placeholder="" rows={4} />
       </Col>
 
       <Col

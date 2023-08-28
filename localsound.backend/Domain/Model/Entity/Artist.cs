@@ -50,7 +50,7 @@ namespace localsound.backend.Domain.Model.Entity
             return this;
         }
 
-        public Artist UpdateAboutSection(string aboutSection)
+        public Artist UpdateAboutSection(string? aboutSection)
         {
             AboutSection = aboutSection;
             return this;

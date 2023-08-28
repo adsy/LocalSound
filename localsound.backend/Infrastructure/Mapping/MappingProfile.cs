@@ -23,7 +23,8 @@ namespace localsound.backend.Infrastructure.Mapping
                 .ForMember(dest => dest.SoundcloudUrl, source => source.MapFrom(x => x.SoundcloudUrl))
                 .ForMember(dest => dest.YoutubeUrl, source => source.MapFrom(x => x.YoutubeUrl))
                 .ForMember(dest => dest.SpotifyUrl, source => source.MapFrom(x => x.SpotifyUrl))
-                .ForMember(dest => dest.CustomerType, source => source.MapFrom(x => x.User.CustomerType));
+                .ForMember(dest => dest.CustomerType, source => source.MapFrom(x => x.User.CustomerType))
+                .ForMember(dest => dest.AboutSection, source => source.MapFrom(x => x.AboutSection));
         }
     }
 }

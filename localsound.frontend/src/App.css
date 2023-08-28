@@ -709,6 +709,7 @@ i.large.icon {
 #user-profile .about-text {
   letter-spacing: 1px;
   text-align: justify;
+  white-space: break-spaces;
 }
 #user-profile .details-container {
   position: absolute;

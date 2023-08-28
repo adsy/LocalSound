@@ -13,5 +13,5 @@ export interface UserModel {
   soundcloudUrl?: string;
   spotifyUrl?: string;
   youtubeUrl?: string;
-  about?: string;
+  aboutSection?: string;
 }

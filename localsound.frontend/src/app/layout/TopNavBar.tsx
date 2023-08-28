@@ -43,10 +43,10 @@ const TopNavbar = () => {
   const handleSignout = async () => {
     try {
       var result = await agent.Authentication.signOut();
+      history.push("/");
       dispatch(handleResetUserState());
       dispatch(handleResetAppState());
       setShow(false);
-      history.push("/");
     } catch (error) {
       //TODO: do something with error
     }

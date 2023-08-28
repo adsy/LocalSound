@@ -37,7 +37,8 @@ namespace localsound.backend.Infrastructure.Repositories
                     .UpdateAddress(updateArtistDto.Address)
                     .UpdatePhoneNumber(updateArtistDto.PhoneNumber)
                     .UpdateProfileUrl(updateArtistDto.ProfileUrl)
-                    .UpdateSocialLinks(updateArtistDto.SoundcloudUrl, updateArtistDto.SpotifyUrl, updateArtistDto.YoutubeUrl);
+                    .UpdateSocialLinks(updateArtistDto.SoundcloudUrl, updateArtistDto.SpotifyUrl, updateArtistDto.YoutubeUrl)
+                    .UpdateAboutSection(updateArtistDto.AboutSection);
 
                 await _dbContext.SaveChangesAsync();
 

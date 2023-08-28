@@ -15,7 +15,7 @@ namespace localsound.backend.api.Controllers
         {
             var result = await Mediator.Send(new UpdateArtistDetailsCommand
             {
-                UserId = AppUserId,
+                UserId = CurrentUser.AppUserId,
                 MemberId = memberId, 
                 UpdateArtistDto = updateArtistDto
             });
