@@ -11,9 +11,14 @@ import { Button } from "react-bootstrap";
 import agent from "../../../api/agent";
 import { handleSetUserDetails } from "../../../app/redux/actions/userSlice";
 import { handleResetModal } from "../../../app/redux/actions/modalSlice";
+import { UserModel } from "../../../app/model/dto/user.model";
 
-const EditArtistProfile = () => {
-  const userDetails = useSelector((state: State) => state.user.userDetails);
+interface Props {
+  userDetails: UserModel;
+  setEditing: (editing: boolean) => void;
+}
+
+const EditArtistProfile = ({ userDetails, setEditing }: Props) => {
   const [addressError, setAddressError] = useState(false);
   const dispatch = useDispatch();
 
@@ -21,7 +26,7 @@ const EditArtistProfile = () => {
     <div id="auth-modal" className="fade-in">
       <div className="d-flex flex-row header">
         <h2 className="header-title mt-1 align-self-center">
-          Edit your artist profile
+          Edit your profile
         </h2>
       </div>
       <div className="w-100 fade-in">

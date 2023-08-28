@@ -53,78 +53,80 @@ const EditArtistForm = (props: Props) => {
   };
 
   return (
-    <div className="d-flex flex-row flex-wrap p-2 register-form">
-      <Col
-        xxs={12}
-        xs={12}
-        sm={6}
-        md={6}
-        lg={6}
-        className="d-flex flex-column p-3 register-col"
-      >
-        <div className="d-flex">
-          <p className="form-label">ARTIST NAME</p>
+    <div id="edit-form" className="d-flex flex-column px-4">
+      <h3 className="mt-3">Artist details</h3>
+      <div className="d-flex flex-row justify-content-between artist-details-row">
+        <div className="d-flex flex-column w-50">
+          <div className="d-flex">
+            <p className="form-label">ARTIST NAME</p>
+          </div>
+          <MyTextInput name="name" placeholder="" disabled={disabled} />
+          <div className="d-flex">
+            <p className="form-label">PROFILE URL</p>
+          </div>
+          <MyTextInput name="profileUrl" placeholder="" disabled={disabled} />
         </div>
-        <MyTextInput name="name" placeholder="" disabled={disabled} />
-        <div className="d-flex">
-          <p className="form-label">PROFILE URL</p>
+        <div className=" w-50">
+          <div className="d-flex">
+            <p className="form-label">ABOUT</p>
+          </div>
+          <MyTextArea name="aboutSection" placeholder="" rows={5} />
         </div>
-        <MyTextInput name="profileUrl" placeholder="" disabled={disabled} />
-        <Divider />
-        <div className="d-flex">
-          <p className="form-label">MOBILE NUMBER</p>
+      </div>
+      <Divider />
+      <h3 className="mt-2">Contact details</h3>
+      <div className="d-flex flex-row justify-content-between artist-details-row">
+        <div className="d-flex flex-column w-50">
+          <div className="d-flex">
+            <p className="form-label">MOBILE NUMBER</p>
+          </div>
+          <MyTextInput
+            name="phoneNumber"
+            placeholder=""
+            className="mb-2"
+            disabled={disabled}
+            onChange={(e) => handleMobileNumberChange(e)}
+            onBlur={(e) => handleMobileNumberChange(e)}
+          />
         </div>
-        <MyTextInput
-          name="phoneNumber"
-          placeholder=""
-          className="mb-2"
-          disabled={disabled}
-          onChange={(e) => handleMobileNumberChange(e)}
-          onBlur={(e) => handleMobileNumberChange(e)}
-        />
-        <Divider />
-        <div className="d-flex">
-          <p className="form-label">ADDRESS</p>
+        <div className=" w-50">
+          <div className="d-flex">
+            <p className="form-label">ADDRESS</p>
+          </div>
+          <MyAddressInput
+            name="address"
+            placeholder=""
+            setFieldValue={setFieldValue}
+            setFieldTouched={setFieldTouched}
+            setAddressError={setAddressError}
+            disabled={disabled}
+            preselectedAddress={values.address}
+          />
         </div>
-        <MyAddressInput
-          name="address"
-          placeholder=""
-          setFieldValue={setFieldValue}
-          setFieldTouched={setFieldTouched}
-          setAddressError={setAddressError}
-          disabled={disabled}
-          preselectedAddress={values.address}
-        />
-        <Divider />
+      </div>
 
-        <div className="d-flex">
-          <p className="form-label">SOUNDCLOUD PROFILE</p>
-        </div>
-        <MyTextInput name="soundcloudUrl" placeholder="" />
+      <Divider />
 
-        <div className="d-flex">
-          <p className="form-label">SPOTIFY PROFILE</p>
-        </div>
-        <MyTextInput name="spotifyUrl" placeholder="" />
-        <div className="d-flex">
-          <p className="form-label">YOUTUBE PROFILE</p>
-        </div>
-        <MyTextInput name="youtubeUrl" placeholder="" />
-        <Divider />
-        <div className="d-flex">
-          <p className="form-label">ABOUT</p>
-        </div>
-        <MyTextArea name="aboutSection" placeholder="" rows={4} />
-      </Col>
+      <h3 className="mt-2">Social profiles</h3>
+      <div className="d-flex">
+        <p className="form-label">SOUNDCLOUD PROFILE</p>
+      </div>
+      <MyTextInput name="soundcloudUrl" placeholder="" />
 
-      <Col
-        xxs={12}
-        xs={12}
-        sm={6}
-        md={6}
-        lg={6}
-        className="d-flex flex-column p-3 register-col"
-      ></Col>
+      <div className="d-flex">
+        <p className="form-label">SPOTIFY PROFILE</p>
+      </div>
+      <MyTextInput name="spotifyUrl" placeholder="" />
+      <div className="d-flex">
+        <p className="form-label">YOUTUBE PROFILE</p>
+      </div>
+      <MyTextInput name="youtubeUrl" placeholder="" />
+      <Divider />
+      <h3 className="mt-2">Genres</h3>
+      <Divider />
+      <h3 className="mt-2">Profile image</h3>
+      <Divider />
+      <h3 className="mt-2">Cover photo</h3>
     </div>
   );
 };

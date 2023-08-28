@@ -430,7 +430,7 @@ i.large.icon {
   width: 2em;
   height: 2em;
   vertical-align: middle;
-  background: url(./assets/icons/drop-down-menu-inverted.svg) 50% 50% no-repeat;
+  background: url(./assets/icons/drop-down-menu.svg) 50% 50% no-repeat;
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;
@@ -749,6 +749,10 @@ i.large.icon {
 }
 #user-profile .profile-img {
   height: 110px;
+}
+
+#edit-form .artist-details-row {
+  gap: 50px 50px;
 }
 
 @keyframes fadein {
