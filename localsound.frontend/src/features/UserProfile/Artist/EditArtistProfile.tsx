@@ -6,8 +6,9 @@ import { useState } from "react";
 import EditArtistForm from "./EditArtistForm";
 import { useSelector } from "react-redux";
 import { State } from "../../../app/model/redux/state";
-import { EditArtistModel } from "../../../app/model/dto/edit-artist.model";
+import { UpdateArtistModel } from "../../../app/model/dto/update-artist";
 import { Button } from "react-bootstrap";
+import agent from "../../../api/agent";
 
 const EditArtistProfile = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
@@ -20,23 +21,31 @@ const EditArtistProfile = () => {
           Edit your artist profile
         </h2>
       </div>
-      <div className="w-100 header fade-in">
+      <div className="w-100 fade-in">
         <Formik
           initialValues={{
             name: userDetails?.name,
-            address: userDetails?.address,
-            phoneNumber: userDetails?.phoneNumber,
+            address: userDetails?.address!,
+            phoneNumber: userDetails?.phoneNumber!,
             soundcloudUrl: userDetails?.soundcloudUrl,
             spotifyUrl: userDetails?.spotifyUrl,
             youtubeUrl: userDetails?.youtubeUrl,
+            aboutSection: userDetails?.about,
+            profileUrl: userDetails?.profileUrl,
           }}
           onSubmit={async (values, { setStatus }) => {
             setStatus(null);
-            // await handleRegisterRequest(
-            //   values,
-            //   CustomerTypes.Artist,
-            //   setStatus
-            // );
+            try {
+              var result = await agent.Artist.updateArtistDetails(
+                userDetails?.memberId!,
+                values
+              );
+
+              console.log(result);
+              // Update details in state
+            } catch (err) {
+              //TODO: Do something with error here
+            }
           }}
           validationSchema={editArtistRegisterValidation}
         >
@@ -64,7 +73,7 @@ const EditArtistProfile = () => {
                     setFieldTouched={setFieldTouched}
                     setAddressError={setAddressError}
                     disabled={isSubmitting}
-                    values={values as EditArtistModel}
+                    values={values as UpdateArtistModel}
                   />
                 </div>
                 {status?.error ? (

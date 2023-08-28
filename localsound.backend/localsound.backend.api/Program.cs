@@ -35,6 +35,8 @@ await builder.Services.AddDbSeed(builder.Configuration);
 
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
+builder.Services.AddTransient<IArtistService, ArtistService>();
+builder.Services.AddTransient<IArtistRepository, ArtistRepository>();  
 
 builder.Services.AddTransient<ITokenRepository, TokenRepository>();
 

@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { UserRegistrationModel } from "../app/model/dto/user-registration.model";
 import { UserLoginModel } from "../app/model/dto/user-login.model";
 import { UserModel } from "../app/model/dto/user.model";
+import { UpdateArtistModel } from "../app/model/dto/update-artist";
 
 // let localStore: StoreType;
 
@@ -98,9 +99,15 @@ const Profile = {
     requests.get<UserModel>(`account/get-profile-details/${profileUrl}`),
 };
 
+const Artist = {
+  updateArtistDetails: (memberId: string, editArtist: UpdateArtistModel) =>
+    requests.put<null>(`artist/${memberId}`, editArtist),
+};
+
 const agent = {
   Authentication,
   Profile,
+  Artist,
 };
 
 export default agent;

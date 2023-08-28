@@ -2,7 +2,8 @@ import { Col } from "react-bootstrap";
 import { Divider } from "semantic-ui-react";
 import MyAddressInput from "../../../common/form/MyAddressInput";
 import MyTextInput from "../../../common/form/MyTextInput";
-import { EditArtistModel } from "../../../app/model/dto/edit-artist.model";
+import { UpdateArtistModel } from "../../../app/model/dto/update-artist";
+import MyTextArea from "../../../common/form/MyTextArea";
 
 interface Props {
   disabled?: boolean;
@@ -13,7 +14,7 @@ interface Props {
     shouldValidate?: boolean
   ) => void;
   setAddressError: (addressError: boolean) => void;
-  values: EditArtistModel;
+  values: UpdateArtistModel;
 }
 
 const EditArtistForm = (props: Props) => {
@@ -65,6 +66,10 @@ const EditArtistForm = (props: Props) => {
           <p className="form-label">ARTIST NAME</p>
         </div>
         <MyTextInput name="name" placeholder="" disabled={disabled} />
+        <div className="d-flex">
+          <p className="form-label">PROFILE URL</p>
+        </div>
+        <MyTextInput name="profileUrl" placeholder="" disabled={disabled} />
         <Divider />
         <div className="d-flex">
           <p className="form-label">MOBILE NUMBER</p>
@@ -105,6 +110,11 @@ const EditArtistForm = (props: Props) => {
           <p className="form-label">YOUTUBE PROFILE</p>
         </div>
         <MyTextInput name="youtubeUrl" placeholder="" />
+        <Divider />
+        <div className="d-flex">
+          <p className="form-label">ABOUT</p>
+        </div>
+        <MyTextArea name="about" placeholder="" rows={4} />
       </Col>
 
       <Col

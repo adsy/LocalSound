@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using localsound.backend.Infrastructure.Interface.Services;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace localsound.backend.api.Controllers

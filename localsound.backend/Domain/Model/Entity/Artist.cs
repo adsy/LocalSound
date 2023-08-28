@@ -17,5 +17,43 @@ namespace localsound.backend.Domain.Model.Entity
         public string? SpotifyUrl { get; set; }
         public string? YoutubeUrl { get; set; }
         public string? AboutSection { get; set; }
+
+        public Artist UpdateName(string name)
+        {
+            Name = name;
+            return this;
+        }
+
+        public Artist UpdateProfileUrl(string profileUrl)
+        {
+            ProfileUrl = profileUrl; 
+            return this;
+        }
+
+        public Artist UpdateAddress(string address)
+        {
+            Address = address; 
+            return this;
+        }
+
+        public Artist UpdatePhoneNumber(string phoneNumber)
+        {
+            PhoneNumber = phoneNumber;
+            return this;
+        }
+
+        public Artist UpdateSocialLinks(string? soundcloud, string? spotify, string? youtube)
+        {
+            SoundcloudUrl = soundcloud;
+            SpotifyUrl = spotify;
+            YoutubeUrl = youtube;
+            return this;
+        }
+
+        public Artist UpdateAboutSection(string aboutSection)
+        {
+            AboutSection = aboutSection;
+            return this;
+        }
     }
 }
