@@ -4,15 +4,18 @@ import { Header } from "semantic-ui-react";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import { useState } from "react";
 import EditArtistForm from "./EditArtistForm";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../app/model/redux/state";
 import { UpdateArtistModel } from "../../../app/model/dto/update-artist";
 import { Button } from "react-bootstrap";
 import agent from "../../../api/agent";
+import { handleSetUserDetails } from "../../../app/redux/actions/userSlice";
+import { handleResetModal } from "../../../app/redux/actions/modalSlice";
 
 const EditArtistProfile = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const [addressError, setAddressError] = useState(false);
+  const dispatch = useDispatch();
 
   return (
     <div id="auth-modal" className="fade-in">
@@ -30,21 +33,27 @@ const EditArtistProfile = () => {
             soundcloudUrl: userDetails?.soundcloudUrl,
             spotifyUrl: userDetails?.spotifyUrl,
             youtubeUrl: userDetails?.youtubeUrl,
-            aboutSection: userDetails?.about,
+            aboutSection: userDetails?.aboutSection,
             profileUrl: userDetails?.profileUrl,
           }}
           onSubmit={async (values, { setStatus }) => {
             setStatus(null);
             try {
-              var result = await agent.Artist.updateArtistDetails(
+              await agent.Artist.updateArtistDetails(
                 userDetails?.memberId!,
                 values
               );
 
-              console.log(result);
-              // Update details in state
+              dispatch(
+                handleSetUserDetails({
+                  ...userDetails,
+                  ...values,
+                })
+              );
+              dispatch(handleResetModal());
             } catch (err) {
-              //TODO: Do something with error here
+              //TODO: Do something with the errors
+              console.log(err);
             }
           }}
           validationSchema={editArtistRegisterValidation}
