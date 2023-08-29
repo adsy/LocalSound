@@ -585,10 +585,12 @@ i.large.icon {
 }
 
 /** AUTH MODAL **/
-#auth-modal .header {
+#auth-modal .header,
+#edit-artist .header {
   padding: 10px;
 }
-#auth-modal .header-logo {
+#auth-modal .header-logo,
+#edit-artist .header-logo {
   background-image: url("./assets/logo-black.png");
   background-size: contain !important;
   background-attachment: inherit !important;
@@ -597,14 +599,47 @@ i.large.icon {
   width: 40px;
   height: 40px;
 }
-#auth-modal .header-title {
+#auth-modal .header-title,
+#edit-artist .header-title {
   font-size: 30px !important;
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   font-weight: 800;
   letter-spacing: 1.5px;
-  border-bottom: 4px solid #232323;
+  border-bottom: 4px solid #6d69fa;
   padding-bottom: 5px;
   padding-right: 20px;
+}
+#auth-modal .nav-tabs,
+#edit-artist .nav-tabs {
+  border-bottom: unset;
+}
+#auth-modal .nav-link,
+#edit-artist .nav-link {
+  color: #001514 !important;
+  font-size: 18px !important;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding-bottom: 5px;
+  padding-right: 20px;
+  font-family: "Barlow", serif !important;
+  background: unset;
+  border-bottom: 4px solid rgb(199, 199, 199);
+  border-left: unset;
+  border-right: unset;
+  border-top: unset;
+  transition: border-bottom 0.2s ease-in-out !important;
+  margin-right: 20px;
+  padding-left: 0;
+  padding-right: 0;
+}
+#auth-modal .nav-link:hover,
+#edit-artist .nav-link:hover {
+  border-bottom: 4px solid #232323;
+}
+#auth-modal .nav-link.active,
+#edit-artist .nav-link.active {
+  border-bottom: 4px solid #6d69fa;
 }
 
 /** MODAL STYLES **/
@@ -694,9 +729,10 @@ i.large.icon {
 
 /** USER PROFILE **/
 #user-profile {
-  height: 100%;
+  height: fit-content;
   display: flex;
   flex-direction: column;
+  background: white;
 }
 #user-profile .ui-container {
   box-shadow: rgba(0, 0, 0, 0.25) 0px 13px 27px -5px, rgba(230, 230, 230, 0.3) 0px 10px 20px -4px;
@@ -749,10 +785,6 @@ i.large.icon {
 }
 #user-profile .profile-img {
   height: 110px;
-}
-
-#edit-form .artist-details-row {
-  gap: 50px 50px;
 }
 
 @keyframes fadein {

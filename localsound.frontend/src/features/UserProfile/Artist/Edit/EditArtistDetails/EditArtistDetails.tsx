@@ -1,34 +1,27 @@
 import { Form, Formik } from "formik";
-import editArtistRegisterValidation from "./../../../validation/EditArtistValidation";
+import editArtistRegisterValidation from "../../../../../validation/EditArtistValidation";
 import { Header } from "semantic-ui-react";
-import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
+import InPageLoadingComponent from "../../../../../app/layout/InPageLoadingComponent";
 import { useState } from "react";
-import EditArtistForm from "./EditArtistForm";
-import { useDispatch, useSelector } from "react-redux";
-import { State } from "../../../app/model/redux/state";
-import { UpdateArtistModel } from "../../../app/model/dto/update-artist";
+import EditArtistDetailsForm from "./EditArtistDetailsForm";
+import { useDispatch } from "react-redux";
+import { UpdateArtistModel } from "../../../../../app/model/dto/update-artist";
 import { Button } from "react-bootstrap";
-import agent from "../../../api/agent";
-import { handleSetUserDetails } from "../../../app/redux/actions/userSlice";
-import { handleResetModal } from "../../../app/redux/actions/modalSlice";
-import { UserModel } from "../../../app/model/dto/user.model";
+import agent from "../../../../../api/agent";
+import { handleSetUserDetails } from "../../../../../app/redux/actions/userSlice";
+import { handleResetModal } from "../../../../../app/redux/actions/modalSlice";
+import { UserModel } from "../../../../../app/model/dto/user.model";
 
 interface Props {
   userDetails: UserModel;
-  setEditing: (editing: boolean) => void;
 }
 
-const EditArtistProfile = ({ userDetails, setEditing }: Props) => {
+const EditArtistDetails = ({ userDetails }: Props) => {
   const [addressError, setAddressError] = useState(false);
   const dispatch = useDispatch();
 
   return (
-    <div id="auth-modal" className="fade-in">
-      <div className="d-flex flex-row header">
-        <h2 className="header-title mt-1 align-self-center">
-          Edit your profile
-        </h2>
-      </div>
+    <div className="fade-in pb-4 mt-5">
       <div className="w-100 fade-in">
         <Formik
           initialValues={{
@@ -82,7 +75,7 @@ const EditArtistProfile = ({ userDetails, setEditing }: Props) => {
                 autoComplete="off"
               >
                 <div className="form-body">
-                  <EditArtistForm
+                  <EditArtistDetailsForm
                     setFieldValue={setFieldValue}
                     setFieldTouched={setFieldTouched}
                     setAddressError={setAddressError}
@@ -98,19 +91,21 @@ const EditArtistProfile = ({ userDetails, setEditing }: Props) => {
                     className="text-center fade-in mb-3"
                   />
                 ) : null}
-                {!isSubmitting ? (
-                  <Button
-                    className={`black-button w-100 align-self-center ${
-                      status?.error ? "mt-3" : "mt-4"
-                    }`}
-                    disabled={disabled || addressError}
-                    type="submit"
-                  >
-                    <h4>Update profile</h4>
-                  </Button>
-                ) : (
-                  <InPageLoadingComponent />
-                )}
+                <div className="px-3 mt-4">
+                  {!isSubmitting ? (
+                    <Button
+                      className={`black-button w-100 px-5 align-self-center ${
+                        status?.error ? "mt-3" : "mt-4"
+                      }`}
+                      disabled={disabled || addressError}
+                      type="submit"
+                    >
+                      <h4>Update details</h4>
+                    </Button>
+                  ) : (
+                    <InPageLoadingComponent />
+                  )}
+                </div>
               </Form>
             );
           }}
@@ -120,4 +115,4 @@ const EditArtistProfile = ({ userDetails, setEditing }: Props) => {
   );
 };
 
-export default EditArtistProfile;
+export default EditArtistDetails;

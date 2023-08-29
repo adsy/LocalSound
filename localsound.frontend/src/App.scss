@@ -429,7 +429,8 @@ i.large.icon {
 }
 
 /** AUTH MODAL **/
-#auth-modal {
+#auth-modal,
+#edit-artist {
   .header {
     padding: 10px;
   }
@@ -446,9 +447,42 @@ i.large.icon {
     @include text-shadow;
     font-weight: 800;
     letter-spacing: 1.5px;
-    border-bottom: 4px solid $richBlack;
+    border-bottom: 4px solid $purple;
     padding-bottom: 5px;
     padding-right: 20px;
+  }
+
+  .nav-tabs {
+    border-bottom: unset;
+  }
+
+  .nav-link {
+    color: #001514 !important;
+    font-size: 18px !important;
+    @include text-shadow;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    padding-bottom: 5px;
+    padding-right: 20px;
+    font-family: "Barlow", serif !important;
+    background: unset;
+    border-bottom: 4px solid rgb(199, 199, 199);
+    border-left: unset;
+    border-right: unset;
+    border-top: unset;
+    transition: border-bottom 0.2s ease-in-out !important;
+    margin-right: 20px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .nav-link:hover {
+    border-bottom: 4px solid $richBlack;
+  }
+
+  .nav-link.active {
+    border-bottom: 4px solid $purple;
+
+    // border: unset;
   }
 }
 
@@ -554,9 +588,10 @@ i.large.icon {
 
 /** USER PROFILE **/
 #user-profile {
-  height: 100%;
+  height: fit-content;
   display: flex;
   flex-direction: column;
+  background: white;
 
   .ui-container {
     @include container;
@@ -616,12 +651,6 @@ i.large.icon {
 
   .profile-img {
     height: 110px;
-  }
-}
-
-#edit-form {
-  .artist-details-row {
-    gap: 50px 50px;
   }
 }
 

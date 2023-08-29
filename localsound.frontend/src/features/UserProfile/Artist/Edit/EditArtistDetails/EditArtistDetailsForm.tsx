@@ -1,9 +1,8 @@
-import { Col } from "react-bootstrap";
 import { Divider } from "semantic-ui-react";
-import MyAddressInput from "../../../common/form/MyAddressInput";
-import MyTextInput from "../../../common/form/MyTextInput";
-import { UpdateArtistModel } from "../../../app/model/dto/update-artist";
-import MyTextArea from "../../../common/form/MyTextArea";
+import MyTextInput from "../../../../../common/form/MyTextInput";
+import MyAddressInput from "../../../../../common/form/MyAddressInput";
+import { UpdateArtistModel } from "../../../../../app/model/dto/update-artist";
+import MyTextArea from "../../../../../common/form/MyTextArea";
 
 interface Props {
   disabled?: boolean;
@@ -17,7 +16,7 @@ interface Props {
   values: UpdateArtistModel;
 }
 
-const EditArtistForm = (props: Props) => {
+const EditArtistDetailsForm = (props: Props) => {
   const { disabled, setFieldValue, setFieldTouched, setAddressError, values } =
     props;
 
@@ -53,30 +52,32 @@ const EditArtistForm = (props: Props) => {
   };
 
   return (
-    <div id="edit-form" className="d-flex flex-column px-4">
-      <h3 className="mt-3">Artist details</h3>
-      <div className="d-flex flex-row justify-content-between artist-details-row">
-        <div className="d-flex flex-column w-50">
-          <div className="d-flex">
-            <p className="form-label">ARTIST NAME</p>
+    <div id="edit-form" className="d-flex flex-column">
+      <div className="d-flex flex-row flex-wrap justify-content-between">
+        <div className="d-flex flex-column col-12 col-md-6 px-3">
+          <div className="mb-3">
+            <div className="d-flex">
+              <p className="form-label">ARTIST NAME</p>
+            </div>
+            <MyTextInput name="name" placeholder="" disabled={disabled} />
           </div>
-          <MyTextInput name="name" placeholder="" disabled={disabled} />
-          <div className="d-flex">
-            <p className="form-label">PROFILE URL</p>
+          <div className="mb-3">
+            <div className="d-flex">
+              <p className="form-label">PROFILE URL</p>
+            </div>
+            <MyTextInput name="profileUrl" placeholder="" disabled={disabled} />
           </div>
-          <MyTextInput name="profileUrl" placeholder="" disabled={disabled} />
         </div>
-        <div className=" w-50">
+        <div className="col-12 col-md-6 px-3 mb-3">
           <div className="d-flex">
             <p className="form-label">ABOUT</p>
           </div>
           <MyTextArea name="aboutSection" placeholder="" rows={5} />
         </div>
       </div>
-      <Divider />
-      <h3 className="mt-2">Contact details</h3>
-      <div className="d-flex flex-row justify-content-between artist-details-row">
-        <div className="d-flex flex-column w-50">
+      <Divider className="my-4" />
+      <div className="d-flex flex-row flex-wrap justify-content-between">
+        <div className="d-flex flex-column col-12 col-md-6 px-3">
           <div className="d-flex">
             <p className="form-label">MOBILE NUMBER</p>
           </div>
@@ -89,7 +90,7 @@ const EditArtistForm = (props: Props) => {
             onBlur={(e) => handleMobileNumberChange(e)}
           />
         </div>
-        <div className=" w-50">
+        <div className="col-12 col-md-6 px-3">
           <div className="d-flex">
             <p className="form-label">ADDRESS</p>
           </div>
@@ -104,31 +105,29 @@ const EditArtistForm = (props: Props) => {
           />
         </div>
       </div>
-
-      <Divider />
-
-      <h3 className="mt-2">Social profiles</h3>
-      <div className="d-flex">
-        <p className="form-label">SOUNDCLOUD PROFILE</p>
+      <Divider className="my-4 px-3" />
+      <div className="px-3 mb-3">
+        <div className="d-flex">
+          <p className="form-label">SOUNDCLOUD PROFILE</p>
+        </div>
+        <MyTextInput name="soundcloudUrl" placeholder="" />
       </div>
-      <MyTextInput name="soundcloudUrl" placeholder="" />
 
-      <div className="d-flex">
-        <p className="form-label">SPOTIFY PROFILE</p>
+      <div className="px-3 mb-3">
+        <div className="d-flex">
+          <p className="form-label">SPOTIFY PROFILE</p>
+        </div>
+        <MyTextInput name="spotifyUrl" placeholder="" />
       </div>
-      <MyTextInput name="spotifyUrl" placeholder="" />
-      <div className="d-flex">
-        <p className="form-label">YOUTUBE PROFILE</p>
+
+      <div className="px-3 mb-3">
+        <div className="d-flex">
+          <p className="form-label">YOUTUBE PROFILE</p>
+        </div>
+        <MyTextInput name="youtubeUrl" placeholder="" />
       </div>
-      <MyTextInput name="youtubeUrl" placeholder="" />
-      <Divider />
-      <h3 className="mt-2">Genres</h3>
-      <Divider />
-      <h3 className="mt-2">Profile image</h3>
-      <Divider />
-      <h3 className="mt-2">Cover photo</h3>
     </div>
   );
 };
 
-export default EditArtistForm;
+export default EditArtistDetailsForm;
