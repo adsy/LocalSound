@@ -111,6 +111,14 @@ const EditArtistDetailsForm = (props: Props) => {
       <div className="d-flex flex-row flex-wrap justify-content-between">
         <div className="d-flex flex-column col-12 col-md-6 px-3">
           <div className="mb-3">
+            <div className="d-flex mb-1">
+              <p className="form-label">GENRES</p>
+            </div>
+            <SearchGenreTypes />
+          </div>
+        </div>
+        <div className="d-flex flex-column col-12 col-md-6 px-3">
+          <div className="mb-3">
             <div className="d-flex">
               <p className="form-label">SOUNDCLOUD PROFILE</p>
             </div>
@@ -129,15 +137,6 @@ const EditArtistDetailsForm = (props: Props) => {
               <p className="form-label">YOUTUBE PROFILE</p>
             </div>
             <MyTextInput name="youtubeUrl" placeholder="" />
-          </div>
-        </div>
-
-        <div className="d-flex flex-column col-12 col-md-6 px-3">
-          <div className="mb-3">
-            <div className="d-flex">
-              <p className="form-label">GENRES</p>
-            </div>
-            <SearchGenreTypes />
           </div>
         </div>
       </div>

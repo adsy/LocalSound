@@ -150,7 +150,7 @@ $end: 10;
 }
 
 .app-holder {
-  top: 79px;
+  top: 78px;
   position: absolute;
 }
 
@@ -485,44 +485,87 @@ i.large.icon {
     // border: unset;
   }
 
-  .genre-box {
-    margin: 0.28571429rem 0 1rem 0;
-    background-color: white;
-    min-height: 62px;
-    border-left: 5px solid #232323 !important;
-    transition: border-left 0.2s ease-in-out !important;
+  #search-genre {
+    .genre-box {
+      margin: 0.28571429rem 0 0 0;
+      background-color: white;
+      min-height: 92px;
+      // border-left: 5px solid #232323 !important;
+      transition: border-left 0.2s ease-in-out !important;
 
-    padding: 0.67857143em 0.5em;
-    font-size: 1em;
-    background: #fff;
-    border: 1px solid rgba(34, 36, 38, 0.15);
-    color: rgba(0, 0, 0, 0.87);
-    border-radius: 0.28571429rem;
-    box-shadow: 0 0 0 0 transparent inset;
+      font-size: 1em;
+      background: #fff;
+      border: 1px solid rgba(34, 36, 38, 0.15);
+      color: rgba(0, 0, 0, 0.87);
+      border-radius: 0.28571429rem;
+      box-shadow: 0 0 0 0 transparent inset;
+
+      .genre-container {
+        padding: 0.67857143em 0.5em;
+      }
+
+      .genre-input {
+        border-radius: 0;
+        border-right: unset;
+        border-bottom: unset;
+        border-top: 1px solid $offWhite;
+        border-radius: 0px 0px 0.28571429rem 0.28571429rem;
+      }
+    }
+
+    .genre-dropdown {
+      border-radius: 2px;
+      border-left: 1px solid $richBlack;
+      border-right: 1px solid $richBlack;
+      position: absolute;
+      min-width: 200px;
+      max-width: 300px;
+      background: white;
+
+      .genre-dropdown-option:first-of-type {
+        // border-radius: 5px 5px 0px 0px;
+        border-top: 1px solid $richBlack;
+      }
+      .genre-dropdown-option {
+        border-bottom: 1px solid $richBlack;
+        letter-spacing: 1px;
+        font-size: 14px;
+        background-color: white !important;
+        cursor: pointer;
+        align-self: center;
+        padding: 8px;
+      }
+      .genre-dropdown-option:hover {
+        font-size: 14px;
+        letter-spacing: 1px;
+        background-color: rgb(255, 255, 255);
+        cursor: pointer;
+        align-self: center;
+        padding: 8px;
+        font-weight: 800;
+        border-left: 4px $richBlack solid;
+      }
+    }
   }
 
   .purple-badge {
-    background-color: $purple !important;
+    background-color: $richBlack !important;
     margin-bottom: 5px;
-  }
-
-  .genre-dropdown {
-    border-radius: 2px;
-    border-left: 1px solid $richBlack;
-    border-right: 1px solid $richBlack;
-    position: absolute;
-    width: 474px;
-    z-index: 9999;
-    top: 435px;
-
-    .genre-dropdown-option:first-of-type {
-      border-top: 1px solid $richBlack;
+    padding: 0;
+    .badge-genre-name {
+      padding-bottom: 4.675px;
+      padding-left: 6.825px;
+      padding-top: 3.675px;
     }
-    .genre-dropdown-option {
-      border-bottom: 1px solid $richBlack;
-      padding: 4px;
-      background-color: white;
+    .badge-delete-btn {
+      padding-right: 6.825px;
+      padding-top: 3.675px;
+      padding-left: 5.825px;
+      color: white;
+      font-weight: 800;
       cursor: pointer;
+      border-radius: 0px 0.375rem 0.375rem 0px;
+      background-color: $purple;
     }
   }
 }

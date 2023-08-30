@@ -3,6 +3,7 @@ import { GenreModel } from "../../../../../app/model/dto/genre.model";
 import lodash from "lodash";
 import agent from "../../../../../api/agent";
 import { Badge } from "react-bootstrap";
+import GenreTypeLabel from "./GenreTypeLabel";
 
 const SearchGenreTypes = () => {
   const [genre, setGenre] = useState("");
@@ -25,6 +26,12 @@ const SearchGenreTypes = () => {
     }
   };
 
+  const deleteSelectedGenre = (genre: GenreModel) => {
+    var genres = [...selectedGenres];
+
+    setSelectedGenres(genres.filter((x) => x.genreId != genre.genreId));
+  };
+
   const addGenre = (genre: GenreModel) => {
     setGenre("");
     setGenreList([]);
@@ -41,38 +48,46 @@ const SearchGenreTypes = () => {
   }, []);
 
   return (
-    <>
-      <div className="genre-box">
-        {selectedGenres.map((selectedGenre, index) => (
-          <Badge key={index} className="purple-badge mr-1">
-            {selectedGenre.genreName}
-          </Badge>
-        ))}
-      </div>
-      <span>Search for genres to add to your profile</span>
-      <input
-        value={genre}
-        onChange={(e) => {
-          doCallbackWithDebounce();
-          setGenre(e.target.value);
-        }}
-      />
-      {genreList.length > 0 ? (
-        <div className="genre-dropdown">
-          {genreList.map((genre, index) => {
-            return (
-              <div
-                key={index}
-                onClick={() => addGenre(genre)}
-                className="genre-dropdown-option"
-              >
-                {genre.genreName}
-              </div>
-            );
-          })}
+    <div id="search-genre">
+      <div className="genre-box d-flex flex-column justify-content-between">
+        <div className="genre-container">
+          {selectedGenres.map((selectedGenre, index) => (
+            <GenreTypeLabel
+              genre={selectedGenre}
+              index={index}
+              deleteSelectedGenre={deleteSelectedGenre}
+            />
+          ))}
         </div>
-      ) : null}
-    </>
+
+        <input
+          className="genre-input"
+          placeholder="Search for a genre to add to your profile"
+          value={genre}
+          onChange={(e) => {
+            doCallbackWithDebounce();
+            setGenre(e.target.value);
+          }}
+        />
+      </div>
+      <div className="positive-relative">
+        {genreList.length > 0 ? (
+          <div className="genre-dropdown">
+            {genreList.map((genre, index) => {
+              return (
+                <div
+                  key={index}
+                  onClick={() => addGenre(genre)}
+                  className="genre-dropdown-option"
+                >
+                  {genre.genreName}
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
+      </div>
+    </div>
   );
 };
 
