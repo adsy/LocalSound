@@ -18,6 +18,8 @@ namespace localsound.backend.Domain.Model.Entity
         public string? YoutubeUrl { get; set; }
         public string? AboutSection { get; set; }
 
+        public virtual ICollection<ArtistGenre> Genres { get; set; }
+
         public Artist UpdateName(string name)
         {
             Name = name;

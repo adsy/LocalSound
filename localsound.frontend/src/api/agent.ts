@@ -2,7 +2,8 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { UserRegistrationModel } from "../app/model/dto/user-registration.model";
 import { UserLoginModel } from "../app/model/dto/user-login.model";
 import { UserModel } from "../app/model/dto/user.model";
-import { UpdateArtistModel } from "../app/model/dto/update-artist";
+import { UpdateArtistModel } from "../app/model/dto/update-artist.model";
+import { GenreModel } from "../app/model/dto/genre.model";
 
 // let localStore: StoreType;
 
@@ -104,10 +105,16 @@ const Artist = {
     requests.put<null>(`artist/${memberId}`, editArtist),
 };
 
+const Genre = {
+  searchGenre: (type: string) =>
+    requests.get<GenreModel[]>(`genre/search-genre/${type}`),
+};
+
 const agent = {
   Authentication,
   Profile,
   Artist,
+  Genre,
 };
 
 export default agent;

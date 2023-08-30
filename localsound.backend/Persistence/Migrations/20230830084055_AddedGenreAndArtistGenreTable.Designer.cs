@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using localsound.backend.Persistence.DbContext;
 
@@ -11,9 +12,11 @@ using localsound.backend.Persistence.DbContext;
 namespace localsound.backend.Persistence.Migrations
 {
     [DbContext(typeof(LocalSoundDbContext))]
-    partial class LocalSoundDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230830084055_AddedGenreAndArtistGenreTable")]
+    partial class AddedGenreAndArtistGenreTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -281,7 +284,12 @@ namespace localsound.backend.Persistence.Migrations
                     b.Property<Guid>("GenreId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ArtistAppUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("AppUserId", "GenreId");
+
+                    b.HasIndex("ArtistAppUserId");
 
                     b.HasIndex("GenreId");
 
@@ -405,7 +413,7 @@ namespace localsound.backend.Persistence.Migrations
                 {
                     b.HasOne("localsound.backend.Domain.Model.Entity.Artist", "Artist")
                         .WithMany("Genres")
-                        .HasForeignKey("AppUserId")
+                        .HasForeignKey("ArtistAppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

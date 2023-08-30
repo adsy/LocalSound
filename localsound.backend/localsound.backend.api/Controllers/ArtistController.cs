@@ -27,5 +27,11 @@ namespace localsound.backend.api.Controllers
 
             return StatusCode((int)result.StatusCode);
         }
+
+        // Search artists by genre
+
+        // Search artists by name
+
+        // Search artists by location
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using localsound.backend.Domain.Model.Dto;
 using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Domain.Model.Entity;
 
@@ -25,6 +26,10 @@ namespace localsound.backend.Infrastructure.Mapping
                 .ForMember(dest => dest.SpotifyUrl, source => source.MapFrom(x => x.SpotifyUrl))
                 .ForMember(dest => dest.CustomerType, source => source.MapFrom(x => x.User.CustomerType))
                 .ForMember(dest => dest.AboutSection, source => source.MapFrom(x => x.AboutSection));
+
+            CreateMap<Genre, GenreDto>()
+                .ForMember(dest => dest.GenreId, source => source.MapFrom(x => x.GenreId))
+                .ForMember(dest => dest.GenreName, source => source.MapFrom(x => x.GenreName));
         }
     }
 }

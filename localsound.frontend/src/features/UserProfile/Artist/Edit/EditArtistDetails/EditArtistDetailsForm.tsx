@@ -1,8 +1,9 @@
 import { Divider } from "semantic-ui-react";
 import MyTextInput from "../../../../../common/form/MyTextInput";
 import MyAddressInput from "../../../../../common/form/MyAddressInput";
-import { UpdateArtistModel } from "../../../../../app/model/dto/update-artist";
+import { UpdateArtistModel } from "../../../../../app/model/dto/update-artist.model";
 import MyTextArea from "../../../../../common/form/MyTextArea";
+import SearchGenreTypes from "./SearchGenreTypes";
 
 interface Props {
   disabled?: boolean;
@@ -106,25 +107,39 @@ const EditArtistDetailsForm = (props: Props) => {
         </div>
       </div>
       <Divider className="my-4 px-3" />
-      <div className="px-3 mb-3">
-        <div className="d-flex">
-          <p className="form-label">SOUNDCLOUD PROFILE</p>
-        </div>
-        <MyTextInput name="soundcloudUrl" placeholder="" />
-      </div>
 
-      <div className="px-3 mb-3">
-        <div className="d-flex">
-          <p className="form-label">SPOTIFY PROFILE</p>
-        </div>
-        <MyTextInput name="spotifyUrl" placeholder="" />
-      </div>
+      <div className="d-flex flex-row flex-wrap justify-content-between">
+        <div className="d-flex flex-column col-12 col-md-6 px-3">
+          <div className="mb-3">
+            <div className="d-flex">
+              <p className="form-label">SOUNDCLOUD PROFILE</p>
+            </div>
+            <MyTextInput name="soundcloudUrl" placeholder="" />
+          </div>
 
-      <div className="px-3 mb-3">
-        <div className="d-flex">
-          <p className="form-label">YOUTUBE PROFILE</p>
+          <div className="mb-3">
+            <div className="d-flex">
+              <p className="form-label">SPOTIFY PROFILE</p>
+            </div>
+            <MyTextInput name="spotifyUrl" placeholder="" />
+          </div>
+
+          <div className="mb-3">
+            <div className="d-flex">
+              <p className="form-label">YOUTUBE PROFILE</p>
+            </div>
+            <MyTextInput name="youtubeUrl" placeholder="" />
+          </div>
         </div>
-        <MyTextInput name="youtubeUrl" placeholder="" />
+
+        <div className="d-flex flex-column col-12 col-md-6 px-3">
+          <div className="mb-3">
+            <div className="d-flex">
+              <p className="form-label">GENRES</p>
+            </div>
+            <SearchGenreTypes />
+          </div>
+        </div>
       </div>
     </div>
   );

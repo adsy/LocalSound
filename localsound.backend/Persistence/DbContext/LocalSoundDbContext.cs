@@ -21,6 +21,7 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<AppUserToken> AppUserToken { get; set; }
         public DbSet<NonArtist> NonArtist { get; set; }
         public DbSet<Artist> Artist { get; set; }
+        public DbSet<Genre> Genres { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -30,8 +31,18 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<AppUser>().Property(x => x.MemberId).HasDefaultValueSql("NEXT VALUE FOR MemberId");
 
             builder.Entity<NonArtist>().HasKey(x => x.AppUserId);
+            
             builder.Entity<Artist>().HasKey(x => x.AppUserId);
+            builder.Entity<Artist>().HasMany(x => x.Genres);
+
             builder.Entity<AppUserToken>().Property(o => o.ExpirationDate).HasDefaultValueSql("DateAdd(week,1,getDate())");
+
+            builder.Entity<Genre>().HasKey(x => x.GenreId);
+
+
+            builder.Entity<ArtistGenre>().HasKey(x => new {x.AppUserId, x.GenreId});
+            builder.Entity<ArtistGenre>().HasOne(x => x.Genre);
+            builder.Entity<ArtistGenre>().HasOne(x => x.Artist);
         }
 
         public async Task<ServiceResponse> HandleSavingDB()

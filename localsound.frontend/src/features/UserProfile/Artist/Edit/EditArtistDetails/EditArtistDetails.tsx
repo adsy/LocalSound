@@ -5,7 +5,7 @@ import InPageLoadingComponent from "../../../../../app/layout/InPageLoadingCompo
 import { useState } from "react";
 import EditArtistDetailsForm from "./EditArtistDetailsForm";
 import { useDispatch } from "react-redux";
-import { UpdateArtistModel } from "../../../../../app/model/dto/update-artist";
+import { UpdateArtistModel } from "../../../../../app/model/dto/update-artist.model";
 import { Button } from "react-bootstrap";
 import agent from "../../../../../api/agent";
 import { handleSetUserDetails } from "../../../../../app/redux/actions/userSlice";
@@ -98,7 +98,6 @@ const EditArtistDetails = ({ userDetails }: Props) => {
                         status?.error ? "mt-3" : "mt-4"
                       }`}
                       disabled={disabled || addressError}
-                      type="submit"
                     >
                       <h4>Update details</h4>
                     </Button>
