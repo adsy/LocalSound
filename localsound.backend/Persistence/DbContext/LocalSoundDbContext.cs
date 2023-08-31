@@ -31,9 +31,11 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<AppUser>().Property(x => x.MemberId).HasDefaultValueSql("NEXT VALUE FOR MemberId");
 
             builder.Entity<NonArtist>().HasKey(x => x.AppUserId);
-            
+            builder.Entity<NonArtist>().HasIndex(x => x.ProfileUrl).IsUnique();
+
             builder.Entity<Artist>().HasKey(x => x.AppUserId);
             builder.Entity<Artist>().HasMany(x => x.Genres);
+            builder.Entity<Artist>().HasIndex(x => x.ProfileUrl).IsUnique();
 
             builder.Entity<AppUserToken>().Property(o => o.ExpirationDate).HasDefaultValueSql("DateAdd(week,1,getDate())");
 

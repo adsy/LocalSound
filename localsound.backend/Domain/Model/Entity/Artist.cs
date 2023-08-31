@@ -57,5 +57,11 @@ namespace localsound.backend.Domain.Model.Entity
             AboutSection = aboutSection;
             return this;
         }
+
+        public Artist UpdateGenres(ICollection<ArtistGenre> genres)
+        {
+            Genres = genres;
+            return this;
+        }
     }
 }

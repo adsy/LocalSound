@@ -41,6 +41,13 @@ namespace localsound.backend.Infrastructure.Repositories
                     return fnResult;
                 }
 
+                var existingProfileWithUrl = await _dbContext.Artist.FirstOrDefaultAsync(o => o.ProfileUrl == artist.ProfileUrl);
+
+                if (existingProfileWithUrl != null)
+                {
+                    fnResult.ServiceResponseMessage = "That profile URL is already in use, please try another one.";
+                }
+
                 var artistResult = await _dbContext.Artist.AddAsync(artist);
 
                 await _dbContext.SaveChangesAsync();
@@ -80,6 +87,14 @@ namespace localsound.backend.Infrastructure.Repositories
                     return fnResult;
                 }
 
+                var existingProfileWithUrl = await _dbContext.NonArtist.FirstOrDefaultAsync(o => o.ProfileUrl == nonArtist.ProfileUrl);
+
+                if (existingProfileWithUrl != null)
+                {
+                    fnResult.ServiceResponseMessage = "That profile URL is already in use, please try another one.";
+                }
+
+
                 var artistResult = await _dbContext.NonArtist.AddAsync(nonArtist);
 
                 await _dbContext.SaveChangesAsync();
@@ -102,7 +117,11 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.Artist.Include(x => x.User).FirstOrDefaultAsync(x => x.AppUserId == id);
+                var artist = await _dbContext.Artist
+                    .Include(x => x.User)
+                    .Include(x => x.Genres)
+                    .ThenInclude(x => x.Genre)
+                    .FirstOrDefaultAsync(x => x.AppUserId == id);
 
                 if (artist == null)
                 {

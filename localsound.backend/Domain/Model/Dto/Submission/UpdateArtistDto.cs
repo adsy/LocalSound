@@ -12,7 +12,6 @@ namespace localsound.backend.Domain.Model.Dto.Submission
         public string? YoutubeUrl { get; set; }
         public string? AboutSection { get; set; }
         public string ProfileUrl { get; set; }
-        public IFormFile? ProfileImage { get; set; }
-        public IFormFile? CoverImage { get; set; }
+        public List<GenreDto> Genres { get; set; }
     }
 }

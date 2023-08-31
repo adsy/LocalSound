@@ -8,6 +8,7 @@ import EditArtistDetails from "./Edit/EditArtistDetails/EditArtistDetails";
 import { UserModel } from "../../../app/model/dto/user.model";
 import { useState } from "react";
 import EditArtist from "./Edit/EditArtist";
+import GenreTypeLabel from "./Edit/EditArtistDetails/GenreTypeLabel";
 
 interface Props {
   userDetails: UserModel;
@@ -16,7 +17,6 @@ interface Props {
 
 const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
   const dispatch = useDispatch();
-  const [editing, setEditing] = useState(false);
 
   const bannerStyle = {
     backgroundImage: `url(${bg})`,
@@ -31,7 +31,6 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
   };
 
   const editArtistProfile = () => {
-    // setEditing(true);
     dispatch(
       handleToggleModal({
         open: true,
@@ -106,6 +105,14 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
             </div>
           </div>
           <div className="d-flex flex-column p-2">
+            <div className="d-flex flex-column pb-4">
+              <h4 className="section-title">Genres</h4>
+              <span className="about-text">
+                {userDetails.genres.map((genre) => (
+                  <GenreTypeLabel genre={genre} />
+                ))}
+              </span>
+            </div>
             <div className="d-flex flex-column pb-4">
               <h4 className="section-title">Followers</h4>
               <div className="d-flex flex-row">

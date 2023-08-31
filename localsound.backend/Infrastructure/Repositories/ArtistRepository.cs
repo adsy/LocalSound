@@ -1,7 +1,7 @@
 ﻿using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Submission;
+using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Infrastructure.Interface.Repositories;
-using localsound.backend.Infrastructure.Services;
 using localsound.backend.Persistence.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -24,7 +24,7 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.Artist.FirstOrDefaultAsync(x => x.AppUserId == userId);
+                var artist = await _dbContext.Artist.Include(x => x.Genres).FirstOrDefaultAsync(x => x.AppUserId == userId);
 
                 // Artist should not be null here, otherwise its an issue with the artist creation/DB
                 if (artist == null)
@@ -33,12 +33,19 @@ namespace localsound.backend.Infrastructure.Repositories
                     return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your details, please try again.");
                 }
 
+                var artistGenres = updateArtistDto.Genres.Select(x => new ArtistGenre
+                {
+                    AppUserId = artist.AppUserId,
+                    GenreId = x.GenreId
+                }).ToList();
+
                 artist.UpdateName(updateArtistDto.Name)
                     .UpdateAddress(updateArtistDto.Address)
                     .UpdatePhoneNumber(updateArtistDto.PhoneNumber)
                     .UpdateProfileUrl(updateArtistDto.ProfileUrl)
                     .UpdateSocialLinks(updateArtistDto.SoundcloudUrl, updateArtistDto.SpotifyUrl, updateArtistDto.YoutubeUrl)
-                    .UpdateAboutSection(updateArtistDto.AboutSection);
+                    .UpdateAboutSection(updateArtistDto.AboutSection)
+                    .UpdateGenres(artistGenres);
 
                 await _dbContext.SaveChangesAsync();
 

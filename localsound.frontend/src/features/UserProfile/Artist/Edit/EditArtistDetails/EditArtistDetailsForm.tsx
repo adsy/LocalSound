@@ -4,9 +4,11 @@ import MyAddressInput from "../../../../../common/form/MyAddressInput";
 import { UpdateArtistModel } from "../../../../../app/model/dto/update-artist.model";
 import MyTextArea from "../../../../../common/form/MyTextArea";
 import SearchGenreTypes from "./SearchGenreTypes";
+import { GenreModel } from "../../../../../app/model/dto/genre.model";
 
 interface Props {
   disabled?: boolean;
+  values: UpdateArtistModel;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
   setFieldTouched: (
     field: string,
@@ -14,13 +16,19 @@ interface Props {
     shouldValidate?: boolean
   ) => void;
   setAddressError: (addressError: boolean) => void;
-  values: UpdateArtistModel;
+  selectedGenres: GenreModel[];
+  setSelectedGenres: (genres: GenreModel[]) => void;
 }
 
-const EditArtistDetailsForm = (props: Props) => {
-  const { disabled, setFieldValue, setFieldTouched, setAddressError, values } =
-    props;
-
+const EditArtistDetailsForm = ({
+  disabled,
+  setFieldValue,
+  setFieldTouched,
+  setAddressError,
+  values,
+  selectedGenres,
+  setSelectedGenres,
+}: Props) => {
   const handleMobileNumberChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -114,7 +122,10 @@ const EditArtistDetailsForm = (props: Props) => {
             <div className="d-flex mb-1">
               <p className="form-label">GENRES</p>
             </div>
-            <SearchGenreTypes />
+            <SearchGenreTypes
+              selectedGenres={selectedGenres}
+              setSelectedGenres={setSelectedGenres}
+            />
           </div>
         </div>
         <div className="d-flex flex-column col-12 col-md-6 px-3">

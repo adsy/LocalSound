@@ -30,6 +30,10 @@ namespace localsound.backend.Infrastructure.Mapping
             CreateMap<Genre, GenreDto>()
                 .ForMember(dest => dest.GenreId, source => source.MapFrom(x => x.GenreId))
                 .ForMember(dest => dest.GenreName, source => source.MapFrom(x => x.GenreName));
+
+            CreateMap<ArtistGenre, GenreDto>()
+                .ForMember(dest => dest.GenreId, source => source.MapFrom(x => x.Genre.GenreId))
+                .ForMember(dest => dest.GenreName, source => source.MapFrom(x => x.Genre.GenreName));
         }
     }
 }

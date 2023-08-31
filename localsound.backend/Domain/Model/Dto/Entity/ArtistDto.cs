@@ -16,5 +16,7 @@ namespace localsound.backend.Domain.Model.Dto.Entity
         public string? YoutubeUrl { get; set; }
         public CustomerType CustomerType { get; set; }
         public string? AboutSection { get; set; }
+
+        public List<GenreDto> Genres { get; set; }
     }
 }

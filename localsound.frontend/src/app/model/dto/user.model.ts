@@ -1,4 +1,5 @@
 import { CustomerTypes } from "../enums/customerTypes";
+import { GenreModel } from "./genre.model";
 
 export interface UserModel {
   customerType: CustomerTypes;
@@ -14,4 +15,5 @@ export interface UserModel {
   spotifyUrl?: string;
   youtubeUrl?: string;
   aboutSection?: string;
+  genres: GenreModel[];
 }

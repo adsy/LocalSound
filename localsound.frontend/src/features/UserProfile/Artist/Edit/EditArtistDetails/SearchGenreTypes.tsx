@@ -2,13 +2,16 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { GenreModel } from "../../../../../app/model/dto/genre.model";
 import lodash from "lodash";
 import agent from "../../../../../api/agent";
-import { Badge } from "react-bootstrap";
 import GenreTypeLabel from "./GenreTypeLabel";
 
-const SearchGenreTypes = () => {
+interface Props {
+  selectedGenres: GenreModel[];
+  setSelectedGenres: (genres: GenreModel[]) => void;
+}
+
+const SearchGenreTypes = ({ selectedGenres, setSelectedGenres }: Props) => {
   const [genre, setGenre] = useState("");
   const [genreList, setGenreList] = useState<GenreModel[]>([]);
-  const [selectedGenres, setSelectedGenres] = useState<GenreModel[]>([]);
   const ref = useRef<() => void>();
 
   const onChange = async () => {
@@ -52,11 +55,13 @@ const SearchGenreTypes = () => {
       <div className="genre-box d-flex flex-column justify-content-between">
         <div className="genre-container">
           {selectedGenres.map((selectedGenre, index) => (
-            <GenreTypeLabel
-              genre={selectedGenre}
-              index={index}
-              deleteSelectedGenre={deleteSelectedGenre}
-            />
+            <span key={index}>
+              <GenreTypeLabel
+                genre={selectedGenre}
+                deleteSelectedGenre={deleteSelectedGenre}
+                showDeleteButton={true}
+              />
+            </span>
           ))}
         </div>
 

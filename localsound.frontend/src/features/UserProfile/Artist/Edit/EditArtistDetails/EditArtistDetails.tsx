@@ -2,7 +2,7 @@ import { Form, Formik } from "formik";
 import editArtistRegisterValidation from "../../../../../validation/EditArtistValidation";
 import { Header } from "semantic-ui-react";
 import InPageLoadingComponent from "../../../../../app/layout/InPageLoadingComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditArtistDetailsForm from "./EditArtistDetailsForm";
 import { useDispatch } from "react-redux";
 import { UpdateArtistModel } from "../../../../../app/model/dto/update-artist.model";
@@ -18,7 +18,12 @@ interface Props {
 
 const EditArtistDetails = ({ userDetails }: Props) => {
   const [addressError, setAddressError] = useState(false);
+  const [selectedGenres, setSelectedGenres] = useState<GenreModel[]>([]);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setSelectedGenres([...userDetails.genres]);
+  }, [userDetails]);
 
   return (
     <div className="fade-in pb-4 mt-5">
@@ -37,15 +42,19 @@ const EditArtistDetails = ({ userDetails }: Props) => {
           onSubmit={async (values, { setStatus }) => {
             setStatus(null);
             try {
+              var submissionData = { ...values, genres: selectedGenres };
+
               await agent.Artist.updateArtistDetails(
                 userDetails?.memberId!,
-                values
+                submissionData
               );
+
+              console.log(submissionData);
 
               dispatch(
                 handleSetUserDetails({
                   ...userDetails,
-                  ...values,
+                  ...submissionData,
                 })
               );
               dispatch(handleResetModal());
@@ -66,6 +75,7 @@ const EditArtistDetails = ({ userDetails }: Props) => {
             setFieldValue,
             setFieldTouched,
             errors,
+            submitForm,
           }) => {
             const disabled = !isValid || isSubmitting;
             return (
@@ -81,6 +91,8 @@ const EditArtistDetails = ({ userDetails }: Props) => {
                     setAddressError={setAddressError}
                     disabled={isSubmitting}
                     values={values as UpdateArtistModel}
+                    selectedGenres={selectedGenres}
+                    setSelectedGenres={setSelectedGenres}
                   />
                 </div>
                 {status?.error ? (
@@ -98,6 +110,7 @@ const EditArtistDetails = ({ userDetails }: Props) => {
                         status?.error ? "mt-3" : "mt-4"
                       }`}
                       disabled={disabled || addressError}
+                      onClick={() => submitForm()}
                     >
                       <h4>Update details</h4>
                     </Button>

@@ -428,6 +428,35 @@ i.large.icon {
   border: rgb(0, 0, 0) 1px solid;
 }
 
+/** BADGES **/
+.purple-badge {
+  background-color: $richBlack !important;
+  margin-bottom: 5px;
+  padding: 0;
+  font-size: 11px;
+
+  .badge-genre-name {
+    padding-bottom: 4.675px;
+    padding-left: 6.825px;
+    padding-top: 3.675px;
+  }
+
+  .badge-genre-name.long {
+    padding-right: 6.825px;
+  }
+
+  .badge-delete-btn {
+    padding-right: 6.825px;
+    padding-top: 3.675px;
+    padding-left: 5.825px;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+    border-radius: 0px 0.375rem 0.375rem 0px;
+    background-color: $purple;
+  }
+}
+
 /** AUTH MODAL **/
 #auth-modal,
 #edit-artist {
@@ -545,27 +574,6 @@ i.large.icon {
         font-weight: 800;
         border-left: 4px $richBlack solid;
       }
-    }
-  }
-
-  .purple-badge {
-    background-color: $richBlack !important;
-    margin-bottom: 5px;
-    padding: 0;
-    .badge-genre-name {
-      padding-bottom: 4.675px;
-      padding-left: 6.825px;
-      padding-top: 3.675px;
-    }
-    .badge-delete-btn {
-      padding-right: 6.825px;
-      padding-top: 3.675px;
-      padding-left: 5.825px;
-      color: white;
-      font-weight: 800;
-      cursor: pointer;
-      border-radius: 0px 0.375rem 0.375rem 0px;
-      background-color: $purple;
     }
   }
 }
