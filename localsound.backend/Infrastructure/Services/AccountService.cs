@@ -70,7 +70,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 var returnDto = (IAppUserDto)null;
 
-                if (user.CustomerType == CustomerType.Artist && user.MemberId != null)
+                if (user.CustomerType == CustomerTypeEnum.Artist && user.MemberId != null)
                 {
                     var artist = await _accountRepository.GetArtistFromDbAsync(user.Id);
 
@@ -132,7 +132,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 IAppUserDto userDto = null;
 
-                if (registrationDetails.CustomerType == CustomerType.Artist)
+                if (registrationDetails.CustomerType == CustomerTypeEnum.Artist)
                 {
                     userDto = await CreateArtistAsync(registrationDetails.RegistrationDto, userResponse.ReturnData);
                 }
@@ -237,7 +237,7 @@ namespace localsound.backend.Infrastructure.Services
             return null;
         }
 
-        private async Task<ServiceResponse<AppUser>> CreateUserAsync(CustomerType customerType, RegistrationDto registrationDto)
+        private async Task<ServiceResponse<AppUser>> CreateUserAsync(CustomerTypeEnum customerType, RegistrationDto registrationDto)
         {
 
             if (await _userManager.Users.AnyAsync(o => o.Email == registrationDto.Email))

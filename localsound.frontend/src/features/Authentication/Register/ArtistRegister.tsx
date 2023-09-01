@@ -83,7 +83,7 @@ const ArtistRegister = ({ handleRegisterRequest }: Props) => {
                 disabled={disabled || addressError}
                 type="submit"
               >
-                <strong>REGISTER</strong>
+                <h4>REGISTER</h4>
               </Button>
             ) : (
               <InPageLoadingComponent />

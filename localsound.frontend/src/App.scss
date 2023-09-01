@@ -65,6 +65,27 @@ $purple: #6d69fa;
   background-position: center center;
 }
 
+@mixin header-style {
+  border-bottom: 4px solid $purple;
+  color: #001514 !important;
+  font-size: 18px !important;
+  @include text-shadow;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding-bottom: 5px;
+  padding-right: 20px;
+  font-family: "Barlow", serif !important;
+  background: unset;
+  border-bottom: 4px solid $purple;
+  border-left: unset;
+  border-right: unset;
+  border-top: unset;
+  transition: border-bottom 0.2s ease-in-out !important;
+  margin-right: 20px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 @import url("https://fonts.googleapis.com/css2?family=Barlow");
 html {
   height: 100%;
@@ -83,8 +104,8 @@ h3,
 h4,
 h5,
 h6 {
-  color: black;
-  @include text-shadow;
+  color: white;
+  @include inverse-text-shadow;
 }
 
 h1.inverse,
@@ -93,9 +114,8 @@ h3.inverse,
 h4.inverse,
 h5.inverse,
 h6.inverse {
-  color: white;
-  @include inverse-text-shadow;
-  letter-spacing: 3.5px;
+  color: black;
+  @include text-shadow;
 }
 
 $start: 0;
@@ -236,7 +256,7 @@ $end: 10;
       letter-spacing: 1px;
       font-weight: 600;
       font-size: 20px;
-      color: black;
+      color: $richBlack;
       @include text-shadow;
     }
   }
@@ -331,7 +351,7 @@ i.large.icon {
   }
 
   .sidebar-text {
-    @include text-shadow;
+    @include inverse-text-shadow;
   }
 
   .sidebar-item.active {
@@ -471,14 +491,7 @@ i.large.icon {
   }
 
   .header-title {
-    font-size: 30px !important;
-    // border-radius: 10px;
-    @include text-shadow;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    border-bottom: 4px solid $purple;
-    padding-bottom: 5px;
-    padding-right: 20px;
+    @include header-style;
   }
 
   .nav-tabs {
@@ -486,23 +499,8 @@ i.large.icon {
   }
 
   .nav-link {
-    color: #001514 !important;
-    font-size: 18px !important;
-    @include text-shadow;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    padding-bottom: 5px;
-    padding-right: 20px;
-    font-family: "Barlow", serif !important;
-    background: unset;
+    @include header-style;
     border-bottom: 4px solid rgb(199, 199, 199);
-    border-left: unset;
-    border-right: unset;
-    border-top: unset;
-    transition: border-bottom 0.2s ease-in-out !important;
-    margin-right: 20px;
-    padding-left: 0;
-    padding-right: 0;
   }
   .nav-link:hover {
     border-bottom: 4px solid $richBlack;
@@ -510,8 +508,6 @@ i.large.icon {
 
   .nav-link.active {
     border-bottom: 4px solid $purple;
-
-    // border: unset;
   }
 
   #search-genre {
@@ -710,11 +706,11 @@ i.large.icon {
   }
 
   .user-name {
-    @include text-shadow;
+    @include inverse-text-shadow;
     letter-spacing: 3.5px;
     margin-top: 0px;
     font-size: 40px;
-    color: $richBlack;
+    color: white;
     height: 50px;
     padding: 10px;
     // border-bottom: 5px solid $borderColor;

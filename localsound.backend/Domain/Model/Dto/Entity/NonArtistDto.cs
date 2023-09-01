@@ -11,6 +11,6 @@ namespace localsound.backend.Domain.Model.Dto.Entity
         public string PhoneNumber { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public CustomerType CustomerType { get; set; }
+        public CustomerTypeEnum CustomerType { get; set; }
     }
 }

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { GenreModel } from "../../../../../app/model/dto/genre.model";
 import lodash from "lodash";
 import agent from "../../../../../api/agent";
-import GenreTypeLabel from "./GenreTypeLabel";
+import GenreTypeLabel from "../../../../../common/components/Label/GenreTypeLabel";
 
 interface Props {
   selectedGenres: GenreModel[];

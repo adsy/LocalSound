@@ -16,7 +16,7 @@ namespace localsound.backend.api.Commands.Validators.Account
                 RuleFor(m => m.RegistrationDetails.CustomerType)
                     .NotEmpty();
 
-                When(m => m.RegistrationDetails.CustomerType == CustomerType.Artist, () =>
+                When(m => m.RegistrationDetails.CustomerType == CustomerTypeEnum.Artist, () =>
                 {
                     RuleFor(m => m.RegistrationDetails.RegistrationDto)
                         .NotEmpty();
@@ -42,7 +42,7 @@ namespace localsound.backend.api.Commands.Validators.Account
                     });
                 });
 
-                When(m => m.RegistrationDetails.CustomerType == CustomerType.NonArtist, () =>
+                When(m => m.RegistrationDetails.CustomerType == CustomerTypeEnum.NonArtist, () =>
                 {
                     RuleFor(m => m.RegistrationDetails.RegistrationDto)
                         .NotEmpty();

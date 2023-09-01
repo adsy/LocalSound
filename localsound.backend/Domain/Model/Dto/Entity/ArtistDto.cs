@@ -14,7 +14,7 @@ namespace localsound.backend.Domain.Model.Dto.Entity
         public string? SoundcloudUrl { get; set; }
         public string? SpotifyUrl { get; set; }
         public string? YoutubeUrl { get; set; }
-        public CustomerType CustomerType { get; set; }
+        public CustomerTypeEnum CustomerType { get; set; }
         public string? AboutSection { get; set; }
 
         public List<GenreDto> Genres { get; set; }

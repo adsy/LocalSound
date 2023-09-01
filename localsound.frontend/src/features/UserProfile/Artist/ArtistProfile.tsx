@@ -1,14 +1,12 @@
 import { useDispatch } from "react-redux";
 import bg from "../../../assets/landing-page-banner/banner1.jpg";
 import img from "../../../assets/icons/user.svg";
-import { Button, Col, Row } from "react-bootstrap";
+import { Button, Col } from "react-bootstrap";
 import { Image } from "semantic-ui-react";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
-import EditArtistDetails from "./Edit/EditArtistDetails/EditArtistDetails";
 import { UserModel } from "../../../app/model/dto/user.model";
-import { useState } from "react";
 import EditArtist from "./Edit/EditArtist";
-import GenreTypeLabel from "./Edit/EditArtistDetails/GenreTypeLabel";
+import GenreTypeLabel from "../../../common/components/Label/GenreTypeLabel";
 
 interface Props {
   userDetails: UserModel;
@@ -42,7 +40,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
 
   return (
     <>
-      <div className="d-flex flex-col flex-wrap p-0">
+      <div className="d-flex flex-col flex-wrap p-0 fade-in">
         <Col md={12} lg={6} className="p-0 left-col">
           <div style={bannerStyle} className="profile-banner position-relative">
             <div className="details-container flex-wrap">

@@ -11,6 +11,7 @@ import agent from "../../../../../api/agent";
 import { handleSetUserDetails } from "../../../../../app/redux/actions/userSlice";
 import { handleResetModal } from "../../../../../app/redux/actions/modalSlice";
 import { UserModel } from "../../../../../app/model/dto/user.model";
+import { GenreModel } from "../../../../../app/model/dto/genre.model";
 
 interface Props {
   userDetails: UserModel;
@@ -25,8 +26,42 @@ const EditArtistDetails = ({ userDetails }: Props) => {
     setSelectedGenres([...userDetails.genres]);
   }, [userDetails]);
 
+  const formValuesUntouched = (values: UpdateArtistModel) => {
+    if (values.name !== userDetails.name) {
+      return false;
+    }
+    if (values.profileUrl !== userDetails.profileUrl) {
+      return false;
+    }
+    if (values.aboutSection !== userDetails.aboutSection) {
+      return false;
+    }
+    if (values.address !== userDetails.address) {
+      return false;
+    }
+    if (values.phoneNumber !== userDetails.phoneNumber) {
+      return false;
+    }
+    if (values.spotifyUrl !== userDetails.spotifyUrl) {
+      return false;
+    }
+    if (values.youtubeUrl !== userDetails.youtubeUrl) {
+      return false;
+    }
+    if (values.soundcloudUrl !== userDetails.soundcloudUrl) {
+      return false;
+    }
+    if (
+      JSON.stringify([...userDetails.genres]) !==
+      JSON.stringify([...selectedGenres])
+    ) {
+      return false;
+    }
+    return true;
+  };
+
   return (
-    <div className="fade-in pb-4 mt-5">
+    <div className="fade-in pb-4 mt-4">
       <div className="w-100 fade-in">
         <Formik
           initialValues={{
@@ -49,14 +84,13 @@ const EditArtistDetails = ({ userDetails }: Props) => {
                 submissionData
               );
 
-              console.log(submissionData);
-
               dispatch(
                 handleSetUserDetails({
                   ...userDetails,
                   ...submissionData,
                 })
               );
+
               dispatch(handleResetModal());
             } catch (err) {
               //TODO: Do something with the errors
@@ -76,8 +110,10 @@ const EditArtistDetails = ({ userDetails }: Props) => {
             setFieldTouched,
             errors,
             submitForm,
+            touched,
           }) => {
-            const disabled = !isValid || isSubmitting;
+            const disabled =
+              !isValid || isSubmitting || formValuesUntouched(values);
             return (
               <Form
                 className="ui form error fade-in"

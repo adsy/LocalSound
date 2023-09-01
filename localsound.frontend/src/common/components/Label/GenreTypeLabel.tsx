@@ -1,5 +1,5 @@
 import { Badge } from "react-bootstrap";
-import { GenreModel } from "../../../../../app/model/dto/genre.model";
+import { GenreModel } from "../../../app/model/dto/genre.model";
 
 interface Props {
   genre: GenreModel;

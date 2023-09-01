@@ -18,8 +18,8 @@ h3,
 h4,
 h5,
 h6 {
-  color: black;
-  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  color: white;
+  text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
 }
 
 h1.inverse,
@@ -28,9 +28,8 @@ h3.inverse,
 h4.inverse,
 h5.inverse,
 h6.inverse {
-  color: white;
-  text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
-  letter-spacing: 3.5px;
+  color: black;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
 .pl-0 {
@@ -384,7 +383,7 @@ h6.inverse {
   letter-spacing: 1px;
   font-weight: 600;
   font-size: 20px;
-  color: black;
+  color: #232323;
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 #landing-page .search-box {
@@ -471,7 +470,7 @@ i.large.icon {
   background-color: #232323;
 }
 #offcanvasNavbar-expand-false .sidebar-text {
-  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
 }
 #offcanvasNavbar-expand-false .sidebar-item.active {
   background-color: #6d69fa !important;
@@ -627,20 +626,7 @@ i.large.icon {
 }
 #auth-modal .header-title,
 #edit-artist .header-title {
-  font-size: 30px !important;
-  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-  font-weight: 800;
-  letter-spacing: 1.5px;
   border-bottom: 4px solid #6d69fa;
-  padding-bottom: 5px;
-  padding-right: 20px;
-}
-#auth-modal .nav-tabs,
-#edit-artist .nav-tabs {
-  border-bottom: unset;
-}
-#auth-modal .nav-link,
-#edit-artist .nav-link {
   color: #001514 !important;
   font-size: 18px !important;
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
@@ -650,7 +636,7 @@ i.large.icon {
   padding-right: 20px;
   font-family: "Barlow", serif !important;
   background: unset;
-  border-bottom: 4px solid rgb(199, 199, 199);
+  border-bottom: 4px solid #6d69fa;
   border-left: unset;
   border-right: unset;
   border-top: unset;
@@ -658,6 +644,32 @@ i.large.icon {
   margin-right: 20px;
   padding-left: 0;
   padding-right: 0;
+}
+#auth-modal .nav-tabs,
+#edit-artist .nav-tabs {
+  border-bottom: unset;
+}
+#auth-modal .nav-link,
+#edit-artist .nav-link {
+  border-bottom: 4px solid #6d69fa;
+  color: #001514 !important;
+  font-size: 18px !important;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding-bottom: 5px;
+  padding-right: 20px;
+  font-family: "Barlow", serif !important;
+  background: unset;
+  border-bottom: 4px solid #6d69fa;
+  border-left: unset;
+  border-right: unset;
+  border-top: unset;
+  transition: border-bottom 0.2s ease-in-out !important;
+  margin-right: 20px;
+  padding-left: 0;
+  padding-right: 0;
+  border-bottom: 4px solid rgb(199, 199, 199);
 }
 #auth-modal .nav-link:hover,
 #edit-artist .nav-link:hover {
@@ -846,11 +858,11 @@ i.large.icon {
   height: 100%;
 }
 #user-profile .user-name {
-  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
   letter-spacing: 3.5px;
   margin-top: 0px;
   font-size: 40px;
-  color: #232323;
+  color: white;
   height: 50px;
   padding: 10px;
 }

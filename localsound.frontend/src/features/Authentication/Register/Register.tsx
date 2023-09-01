@@ -71,13 +71,13 @@ const Register = () => {
             className="black-button mr-2"
             onClick={() => handleUserTypeSelection(CustomerTypes.Artist)}
           >
-            I play the music
+            <h4>I play the music</h4>
           </Button>
           <Button
             className="black-button"
             onClick={() => handleUserTypeSelection(CustomerTypes.NonArtist)}
           >
-            I listen to the music
+            <h4>I listen to the music</h4>
           </Button>
         </div>
       ) : customerType === CustomerTypes.Artist ? (

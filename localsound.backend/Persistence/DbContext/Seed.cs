@@ -11,8 +11,8 @@ namespace localsound.backend.Persistence.DbContext
         {
             if (!roleManager.Roles.Any())
             {
-                await roleManager.CreateAsync(new IdentityRole<Guid>(CustomerType.NonArtist.ToString()));
-                await roleManager.CreateAsync(new IdentityRole<Guid>(CustomerType.Artist.ToString()));
+                await roleManager.CreateAsync(new IdentityRole<Guid>(CustomerTypeEnum.NonArtist.ToString()));
+                await roleManager.CreateAsync(new IdentityRole<Guid>(CustomerTypeEnum.Artist.ToString()));
             }
         }
     }

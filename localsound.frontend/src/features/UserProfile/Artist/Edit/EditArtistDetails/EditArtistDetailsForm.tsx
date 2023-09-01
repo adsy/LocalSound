@@ -62,6 +62,7 @@ const EditArtistDetailsForm = ({
 
   return (
     <div id="edit-form" className="d-flex flex-column">
+      <h3 className="mt-0">Personal details</h3>
       <div className="d-flex flex-row flex-wrap justify-content-between">
         <div className="d-flex flex-column col-12 col-md-6 px-3">
           <div className="mb-3">
@@ -84,7 +85,6 @@ const EditArtistDetailsForm = ({
           <MyTextArea name="aboutSection" placeholder="" rows={5} />
         </div>
       </div>
-      <Divider className="my-4" />
       <div className="d-flex flex-row flex-wrap justify-content-between">
         <div className="d-flex flex-column col-12 col-md-6 px-3">
           <div className="d-flex">
@@ -115,6 +115,7 @@ const EditArtistDetailsForm = ({
         </div>
       </div>
       <Divider className="my-4 px-3" />
+      <h3 className="mt-0">Profile details</h3>
 
       <div className="d-flex flex-row flex-wrap justify-content-between">
         <div className="d-flex flex-column col-12 col-md-6 px-3">

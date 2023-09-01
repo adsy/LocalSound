@@ -76,13 +76,13 @@ namespace localsound.backend.Infrastructure.Repositories
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
 
-            if (user.CustomerType == CustomerType.Artist)
+            if (user.CustomerType == CustomerTypeEnum.Artist)
             {
-                claims.Add(new Claim(ClaimTypes.Role, CustomerType.Artist.ToString()));
+                claims.Add(new Claim(ClaimTypes.Role, CustomerTypeEnum.Artist.ToString()));
             }
             else
             {
-                claims.Add(new Claim(ClaimTypes.Role, CustomerType.Artist.ToString()));
+                claims.Add(new Claim(ClaimTypes.Role, CustomerTypeEnum.Artist.ToString()));
             }
 
             return claims;

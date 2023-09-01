@@ -129,6 +129,20 @@ const NonArtistRegisterForm = (props: Props) => {
         lg={6}
         className="d-flex flex-column p-3 register-col"
       >
+        <div className="mb-2">
+          You can set your own profile url so you can share it with others and
+          be found easier.
+        </div>
+        <div className="d-flex">
+          <p className="form-label">PROFILE URL</p>
+        </div>
+        <MyTextInput
+          name="profileUrl"
+          placeholder=""
+          className=""
+          disabled={disabled}
+        />
+        <Divider />
         <div className="d-flex">
           <p className="form-label">EMAIL</p>
         </div>

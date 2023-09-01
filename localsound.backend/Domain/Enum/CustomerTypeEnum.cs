@@ -1,6 +1,6 @@
 ﻿namespace localsound.backend.Domain.Enum
 {
-    public enum CustomerType
+    public enum CustomerTypeEnum
     {
         NonArtist,
         Artist

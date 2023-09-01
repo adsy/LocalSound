@@ -45,6 +45,16 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<ArtistGenre>().HasKey(x => new {x.AppUserId, x.GenreId});
             builder.Entity<ArtistGenre>().HasOne(x => x.Genre);
             builder.Entity<ArtistGenre>().HasOne(x => x.Artist);
+
+            builder.Entity<AccountImageType>().HasKey(x => x.AccountImageTypeId);
+
+            builder.Entity<AccountImage>(x =>
+            {
+                x.HasKey(x => x.AccountImageId);
+            });
+
+            builder.Entity<FileContent>().HasKey(x => x.FileContentId);
+            builder.Entity<ArtistTrackUpload>().HasKey(x => x.ArtistTrackUploadId);
         }
 
         public async Task<ServiceResponse> HandleSavingDB()
