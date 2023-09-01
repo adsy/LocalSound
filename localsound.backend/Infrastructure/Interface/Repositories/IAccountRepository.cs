@@ -11,5 +11,6 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
         Task<ServiceResponse<Artist>> GetArtistFromDbAsync(string profileUrl);
         Task<ServiceResponse<NonArtist>> GetNonArtistFromDbAsync(Guid id);
         Task<ServiceResponse<NonArtist>> GetNonArtistFromDbAsync(string profileUrl);
+        Task<ServiceResponse<AppUser>> GetAppUserFromDbAsync(Guid id, string memberId);
     }
 }

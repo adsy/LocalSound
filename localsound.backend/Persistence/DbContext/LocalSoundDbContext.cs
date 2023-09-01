@@ -3,6 +3,8 @@ using localsound.backend.Domain.Model.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Data;
 using System.Net;
 
 namespace localsound.backend.Persistence.DbContext
@@ -12,16 +14,72 @@ namespace localsound.backend.Persistence.DbContext
         IdentityUserRole<Guid>, IdentityUserLogin<Guid>,
         IdentityRoleClaim<Guid>, AppUserToken>
     {
+
+        private IDbContextTransaction _currentTransaction;
+
         public LocalSoundDbContext(DbContextOptions options) : base(options)
         {
             
         }
 
+        public DbSet<AccountImage> AccountImage { get; set; }
+        public DbSet<AccountImageType> AccountImageType { get; set; }
         public DbSet<AppUser> AppUser { get; set; }
         public DbSet<AppUserToken> AppUserToken { get; set; }
-        public DbSet<NonArtist> NonArtist { get; set; }
         public DbSet<Artist> Artist { get; set; }
+        public DbSet<ArtistTrackUpload> ArtistTrackUpload { get; set; }
         public DbSet<Genre> Genres { get; set; }
+        public DbSet<FileContent> FileContent { get; set; }
+        public DbSet<NonArtist> NonArtist { get; set; }
+        
+
+        public async Task BeginTransactionAsync()
+        {
+            if (_currentTransaction != null)
+            {
+                return;
+            }
+
+            _currentTransaction = await base.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted).ConfigureAwait(false);
+        }
+
+        public async Task CommitTransactionAsync()
+        {
+            try
+            {
+                await SaveChangesAsync().ConfigureAwait(false);
+
+                _currentTransaction?.Commit();
+            }
+            catch
+            {
+                RollbackTransaction();
+                throw;
+            }
+            finally
+            {
+                if (_currentTransaction != null)
+                {
+                    _currentTransaction.Dispose();
+                    _currentTransaction = null;
+                }
+            }
+        }
+        public void RollbackTransaction()
+        {
+            try
+            {
+                _currentTransaction?.Rollback();
+            }
+            finally
+            {
+                if (_currentTransaction != null)
+                {
+                    _currentTransaction.Dispose();
+                    _currentTransaction = null;
+                }
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

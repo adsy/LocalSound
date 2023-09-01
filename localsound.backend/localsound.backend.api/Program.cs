@@ -40,7 +40,11 @@ builder.Services.AddTransient<IArtistRepository, ArtistRepository>();
 builder.Services.AddTransient<ICurrentUserService, CurrentUserService>();
 builder.Services.AddTransient<ITokenRepository, TokenRepository>();
 builder.Services.AddTransient<IGenreService, GenreService>();
-builder.Services.AddTransient<IGenreRepository, GenreRepository>(); 
+builder.Services.AddTransient<IGenreRepository, GenreRepository>();
+builder.Services.AddTransient<IDbTransactionRepository, DbTransactionRepository>();
+builder.Services.AddTransient<IAccountImageRepository, AccountImageRepository>();
+builder.Services.AddTransient<IAccountImageService, AccountImageService>();
+builder.Services.AddTransient<IBlobRepository, BlobRepository>();
 
 builder.Services.AddHttpContextAccessor();
 

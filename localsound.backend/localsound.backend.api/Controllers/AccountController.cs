@@ -74,6 +74,25 @@ namespace localsound.backend.api.Controllers
             return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
         }
 
+        [HttpPut]
+        [Route("/update-profile-image/{memberId}")]
+        public async Task<ActionResult> UpdateAccountProfileImage([FromBody] IFormFile photo, string memberId)
+        {
+            var result = await Mediator.Send(new UpdateProfileImageCommand
+            {
+                UserId = CurrentUser.AppUserId,
+                MemberId = memberId,
+                Photo = photo
+            });
+
+            if (result.IsSuccessStatusCode)
+            {
+                return Ok(result.ReturnData);
+            }
+
+            return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
+        }
+
         private void AddCookies(string token, string refreshToken)
         {
             // Needs to be changed to Strict when react app is moved into ASP.NET app

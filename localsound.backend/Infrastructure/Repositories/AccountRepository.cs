@@ -1,7 +1,6 @@
 ﻿using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Infrastructure.Interface.Repositories;
-using localsound.backend.Infrastructure.Services;
 using localsound.backend.Persistence.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -59,7 +58,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
             catch (Exception e)
             {
-                var message = $"{nameof(AccountService)} - {nameof(AddArtistToDbAsync)} - {e.Message}";
+                var message = $"{nameof(AccountRepository)} - {nameof(AddArtistToDbAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<Artist>(HttpStatusCode.InternalServerError);
@@ -106,10 +105,32 @@ namespace localsound.backend.Infrastructure.Repositories
             }
             catch (Exception e)
             {
-                var message = $"{nameof(AccountService)} - {nameof(AddNonArtistToDbAsync)} - {e.Message}";
+                var message = $"{nameof(AccountRepository)} - {nameof(AddNonArtistToDbAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<NonArtist>(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<ServiceResponse<AppUser>> GetAppUserFromDbAsync(Guid id, string memberId)
+        {
+            try
+            {
+                var user = await _dbContext.AppUser.FirstOrDefaultAsync(x => x.Id == id && x.MemberId == memberId);
+
+                if (user == null)
+                {
+                    return new ServiceResponse<AppUser>(HttpStatusCode.Unauthorized);
+                }
+
+                return new ServiceResponse<AppUser>(HttpStatusCode.OK);
+            }
+            catch(Exception e)
+            {
+                var message = $"{nameof(AccountRepository)} - {nameof(GetAppUserFromDbAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<AppUser>(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -135,7 +156,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
             catch(Exception e)
             {
-                var message = $"{nameof(AccountService)} - {nameof(GetArtistFromDbAsync)} - {e.Message}";
+                var message = $"{nameof(AccountRepository)} - {nameof(GetArtistFromDbAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<Artist>(HttpStatusCode.InternalServerError);
@@ -160,7 +181,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
             catch (Exception e)
             {
-                var message = $"{nameof(AccountService)} - {nameof(GetArtistFromDbAsync)} - {e.Message}";
+                var message = $"{nameof(AccountRepository)} - {nameof(GetArtistFromDbAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<Artist>(HttpStatusCode.InternalServerError);
@@ -185,7 +206,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
             catch (Exception e)
             {
-                var message = $"{nameof(AccountService)} - {nameof(GetNonArtistFromDbAsync)} - {e.Message}";
+                var message = $"{nameof(AccountRepository)} - {nameof(GetNonArtistFromDbAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<NonArtist>(HttpStatusCode.InternalServerError);
@@ -210,7 +231,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
             catch (Exception e)
             {
-                var message = $"{nameof(AccountService)} - {nameof(GetNonArtistFromDbAsync)} - {e.Message}";
+                var message = $"{nameof(AccountRepository)} - {nameof(GetNonArtistFromDbAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<NonArtist>(HttpStatusCode.InternalServerError);

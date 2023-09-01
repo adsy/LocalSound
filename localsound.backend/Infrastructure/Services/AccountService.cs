@@ -8,6 +8,7 @@ using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Domain.Model.Interfaces.Entity;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -23,15 +24,16 @@ namespace localsound.backend.Infrastructure.Services
         private readonly ILogger<AccountService> _logger;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManger;
+        private readonly IAccountImageService _accountImageService;
 
         public AccountService(
-            IAccountRepository accountRepository, 
+            IAccountRepository accountRepository,
             ITokenRepository tokenRepository,
             IMapper mapper,
             ILogger<AccountService> logger,
             UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManger
-            )
+            SignInManager<AppUser> signInManger,
+            IAccountImageService accountImageService)
         {
             _accountRepository = accountRepository;
             _tokenRepository = tokenRepository;
@@ -39,6 +41,7 @@ namespace localsound.backend.Infrastructure.Services
             _logger = logger;
             _userManager = userManager;
             _signInManger = signInManger;
+            _accountImageService = accountImageService;
         }
 
         public async Task<ServiceResponse<LoginResponseDto>> LoginAsync(LoginSubmissionDto loginData)
@@ -182,7 +185,7 @@ namespace localsound.backend.Infrastructure.Services
                 return new ServiceResponse<LoginResponseDto>(HttpStatusCode.InternalServerError)
                 {
                     ServiceResponseMessage = "An error occured while logging in, please try again..."
-                }; ;
+                };
             }
         }
 
@@ -322,7 +325,39 @@ namespace localsound.backend.Infrastructure.Services
                 return new ServiceResponse<IAppUserDto>(HttpStatusCode.InternalServerError)
                 {
                     ServiceResponseMessage = "An error occured while getting the user profile, please try again..."
-                }; ;
+                };
+            }
+        }
+
+        public async Task<ServiceResponse<string>> UpdateProfileImage(Guid userId, string memberId, IFormFile photo)
+        {
+            try
+            {
+                var accountResult = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
+
+                if (!accountResult.IsSuccessStatusCode)
+                {
+                    return new ServiceResponse<string>(accountResult.StatusCode);
+                }
+
+                var result = await _accountImageService.UploadAccountImage(AccountImageTypeEnum.ProfileImage, userId, photo);
+
+                if (!result.IsSuccessStatusCode)
+                {
+                    return new ServiceResponse<string>(result.StatusCode);
+                }
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(AccountService)} - {nameof(GetProfileDataAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<string>(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured while saving your profile image, please try again..."
+                };
             }
         }
     }
