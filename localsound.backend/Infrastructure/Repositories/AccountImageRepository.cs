@@ -39,7 +39,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     {
                         FileContentId = fileContentId,
                         FileExtensionType = ".jpg",
-                        FileLocation = fileLocation
+                        FileLocation = fileLocation+$"/{fileContentId}"
                     };
                     accountImage = new AccountImage
                     {

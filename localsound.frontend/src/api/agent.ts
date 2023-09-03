@@ -98,6 +98,8 @@ const Authentication = {
 const Profile = {
   getProfile: (profileUrl: string) =>
     requests.get<UserModel>(`account/get-profile-details/${profileUrl}`),
+  uploadProfileImage: (memberId: string, formData: FormData) =>
+    requests.put(`account/update-profile-image/${memberId}`, formData),
 };
 
 const Artist = {

@@ -9,7 +9,7 @@ namespace localsound.backend.api.Commands.Validators.Account
         {
             RuleFor(m => m.MemberId)
                 .NotEmpty()
-                .WithMessage("")
+                .WithMessage("");
         }
     }
 }

@@ -7,6 +7,7 @@ namespace localsound.backend.api.Commands.Account
     {
         public Guid UserId { get; set; }
         public string MemberId { get; set; }
+        public IFormCollection formData { get; set; }
         public IFormFile Photo { get; set; }
     }
 }

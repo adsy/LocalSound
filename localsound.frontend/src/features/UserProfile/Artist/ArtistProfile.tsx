@@ -105,11 +105,13 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
           <div className="d-flex flex-column p-2">
             <div className="d-flex flex-column pb-4">
               <h4 className="section-title">Genres</h4>
-              <span className="about-text">
-                {userDetails.genres.map((genre) => (
-                  <GenreTypeLabel genre={genre} />
+              <div className="about-text">
+                {userDetails.genres.map((genre, index) => (
+                  <span key={index}>
+                    <GenreTypeLabel genre={genre} />
+                  </span>
                 ))}
-              </span>
+              </div>
             </div>
             <div className="d-flex flex-column pb-4">
               <h4 className="section-title">Followers</h4>

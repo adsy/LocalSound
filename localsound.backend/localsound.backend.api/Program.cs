@@ -27,6 +27,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<JwtSettingsAdaptor>(options => builder.Configuration.GetSection(JwtSettingsAdaptor.JwtSettings).Bind(options));
 
+builder.Services.Configure<BlobStorageSettingsAdaptor>(options => builder.Configuration.GetSection(BlobStorageSettingsAdaptor.BlobSettings).Bind(options));
+
+builder.Services.AddSingleton(new JwtSettingsAdaptor());
+builder.Services.AddSingleton(new BlobStorageSettingsAdaptor());
 
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);

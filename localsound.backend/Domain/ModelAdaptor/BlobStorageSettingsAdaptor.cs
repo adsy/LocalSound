@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace localsound.backend.Domain.ModelAdaptor
+﻿namespace localsound.backend.Domain.ModelAdaptor
 {
-    internal class BlobStorageSettingsAdaptor
+    public class BlobStorageSettingsAdaptor
     {
+        public const string BlobSettings = "AzureBlobStorage";
+
+        public string ConnectionString { get; set; }
     }
 }

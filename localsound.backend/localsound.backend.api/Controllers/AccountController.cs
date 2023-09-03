@@ -75,14 +75,14 @@ namespace localsound.backend.api.Controllers
         }
 
         [HttpPut]
-        [Route("/update-profile-image/{memberId}")]
-        public async Task<ActionResult> UpdateAccountProfileImage([FromBody] IFormFile photo, string memberId)
+        [Route("update-profile-image/{memberId}")]
+        public async Task<ActionResult> UpdateAccountProfileImage([FromForm] FileUploadDto formData, string memberId)
         {
             var result = await Mediator.Send(new UpdateProfileImageCommand
             {
                 UserId = CurrentUser.AppUserId,
                 MemberId = memberId,
-                Photo = photo
+                Photo = formData.FormFile
             });
 
             if (result.IsSuccessStatusCode)

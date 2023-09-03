@@ -1,6 +1,7 @@
 ﻿using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model.Entity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace localsound.backend.Persistence.DbContext
@@ -13,6 +14,21 @@ namespace localsound.backend.Persistence.DbContext
             {
                 await roleManager.CreateAsync(new IdentityRole<Guid>(CustomerTypeEnum.NonArtist.ToString()));
                 await roleManager.CreateAsync(new IdentityRole<Guid>(CustomerTypeEnum.Artist.ToString()));
+            }
+
+            if (!(await context.AccountImageType.AnyAsync())){
+                await context.AccountImageType.AddAsync(new AccountImageType
+                {
+                    AccountImageTypeId = AccountImageTypeEnum.ProfileImage,
+                    AccountImageTypeName = "ProfileImage"
+                });
+                await context.AccountImageType.AddAsync(new AccountImageType
+                {
+                    AccountImageTypeId = AccountImageTypeEnum.CoverImage,
+                    AccountImageTypeName = "CoverImage"
+                });
+
+                await context.SaveChangesAsync();
             }
         }
     }
