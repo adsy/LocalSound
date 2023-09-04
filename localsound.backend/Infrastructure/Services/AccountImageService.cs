@@ -39,8 +39,10 @@ namespace localsound.backend.Infrastructure.Services
                     return new ServiceResponse<string>(accountImageResult.StatusCode, accountImageResult.ServiceResponseMessage);
                 }
 
+                var fileExt = photo.FileName.Split(".")[^1];
+
                 // upload to azure
-                var blobUploadResult = await _blobRepository.UploadBlobAsync("profileImage", accountImageResult.ReturnData.FileContent.FileLocation, photo);
+                var blobUploadResult = await _blobRepository.UploadBlobAsync(accountImageResult.ReturnData.FileContent.FileLocation+$".{fileExt}", photo);
 
                 if (!blobUploadResult.IsSuccessStatusCode || blobUploadResult.ReturnData == null)
                 {

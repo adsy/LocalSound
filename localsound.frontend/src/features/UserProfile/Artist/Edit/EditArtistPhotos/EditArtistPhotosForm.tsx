@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Divider } from "semantic-ui-react";
+import { Divider, Image } from "semantic-ui-react";
 import agent from "../../../../../api/agent";
 import { useSelector } from "react-redux";
 import { State } from "../../../../../app/model/redux/state";
+import img from "../../../../../assets/icons/user.svg";
 
 const EditArtistPhotosForm = () => {
   const userDetail = useSelector((state: State) => state.user.userDetails);
@@ -16,7 +17,7 @@ const EditArtistPhotosForm = () => {
       // Update the formData object
       formData.append("formFile", file);
       formData.append("fileName", file.name);
-      console.log(formData);
+
       try {
         await agent.Profile.uploadProfileImage(userDetail?.memberId!, formData);
       } catch (err) {
@@ -28,6 +29,7 @@ const EditArtistPhotosForm = () => {
   return (
     <div>
       <h3 className="mt-5">Profile image</h3>
+      <Image src={img} size="small" circular className="mb-2 profile-img" />
       <input
         type="file"
         onChange={(event) => {

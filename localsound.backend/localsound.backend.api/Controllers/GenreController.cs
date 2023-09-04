@@ -1,5 +1,5 @@
 ﻿using localsound.backend.api.Queries.Genre;
-using localsound.backend.Domain.Model.Dto;
+using localsound.backend.Domain.Model.Dto.Entity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace localsound.backend.api.Controllers

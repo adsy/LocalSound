@@ -27,7 +27,7 @@ namespace localsound.backend.Infrastructure.Repositories
             _blobServiceClient = new BlobServiceClient(_blobSettings.ConnectionString);
         }
 
-        public async Task<ServiceResponse<string>> UploadBlobAsync(string fileName, string fileLocation, IFormFile file)
+        public async Task<ServiceResponse<string>> UploadBlobAsync(string fileLocation, IFormFile file)
         {
             try
             {
@@ -39,6 +39,9 @@ namespace localsound.backend.Infrastructure.Repositories
                 await blobContainerClient.CreateIfNotExistsAsync();
 
                 var blobClient = blobContainerClient.GetBlobClient(fileLocation);
+
+                // Delete the file if it already exists
+                await blobClient.DeleteIfExistsAsync();
 
                 using Stream stream = file.OpenReadStream();
 

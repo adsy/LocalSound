@@ -77,14 +77,35 @@ namespace localsound.backend.Infrastructure.Services
                 {
                     var artist = await _accountRepository.GetArtistFromDbAsync(user.Id);
 
-                    returnDto = _mapper.Map<ArtistDto>(artist.ReturnData);
-                    
+                    if (artist.IsSuccessStatusCode && artist.ReturnData != null)
+                    {
+                        returnDto = _mapper.Map<ArtistDto>(artist.ReturnData);
+                        returnDto.Images = _mapper.Map<List<AccountImageDto>>(artist.ReturnData.User.Images);
+                    }
+                    else
+                    {
+                        return new ServiceResponse<LoginResponseDto>(HttpStatusCode.InternalServerError)
+                        {
+                            ServiceResponseMessage = "An error occured while logging in, please try again..."
+                        };
+                    }
                 }
                 else
                 {
                     var nonArtist = await _accountRepository.GetNonArtistFromDbAsync(user.Id);
 
-                    returnDto = _mapper.Map<NonArtistDto>(nonArtist.ReturnData);
+                    if (nonArtist.IsSuccessStatusCode && nonArtist.ReturnData != null)
+                    {
+                        returnDto = _mapper.Map<NonArtistDto>(nonArtist.ReturnData);
+                        returnDto.Images = _mapper.Map<List<AccountImageDto>>(nonArtist.ReturnData.User.Images);
+                    }
+                    else
+                    {
+                        return new ServiceResponse<LoginResponseDto>(HttpStatusCode.InternalServerError)
+                        {
+                            ServiceResponseMessage = "An error occured while logging in, please try again..."
+                        };
+                    }
                 }
 
                 if (user.MemberId != null)

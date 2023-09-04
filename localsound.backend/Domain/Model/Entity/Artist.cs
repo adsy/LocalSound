@@ -8,7 +8,6 @@ namespace localsound.backend.Domain.Model.Entity
         [Key]
         [ForeignKey("User")]
         public Guid AppUserId { get; set; }
-        public AppUser User { get; set; }
         public string Name { get; set; }
         public string ProfileUrl { get; set; }
         public string Address { get; set; }
@@ -19,6 +18,7 @@ namespace localsound.backend.Domain.Model.Entity
         public string? AboutSection { get; set; }
 
         public virtual ICollection<ArtistGenre> Genres { get; set; }
+        public virtual AppUser User { get; set; }
 
         public Artist UpdateName(string name)
         {

@@ -7,6 +7,7 @@ import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import { UserModel } from "../../../app/model/dto/user.model";
 import EditArtist from "./Edit/EditArtist";
 import GenreTypeLabel from "../../../common/components/Label/GenreTypeLabel";
+import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
 
 interface Props {
   userDetails: UserModel;
@@ -15,6 +16,9 @@ interface Props {
 
 const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
   const dispatch = useDispatch();
+  const profileImage = userDetails.images.find(
+    (x) => x.accountImageTypeId == AccountImageTypes.ProfileImage
+  );
 
   const bannerStyle = {
     backgroundImage: `url(${bg})`,
@@ -45,7 +49,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
           <div style={bannerStyle} className="profile-banner position-relative">
             <div className="details-container flex-wrap">
               <Image
-                src={img}
+                src={!profileImage ? img : profileImage.accountImageUrl}
                 size="small"
                 circular
                 className="mb-2 profile-img"

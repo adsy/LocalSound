@@ -1,4 +1,5 @@
 ﻿using localsound.backend.Domain.Enum;
+using localsound.backend.Domain.Model.Dto.Entity;
 
 namespace localsound.backend.Domain.Model.Interfaces.Entity
 {
@@ -10,5 +11,7 @@ namespace localsound.backend.Domain.Model.Interfaces.Entity
         public string PhoneNumber { get; set; }
         public CustomerTypeEnum CustomerType { get; set; }
         //public bool EmailConfirmed { get; set; }
+
+        public List<AccountImageDto> Images { get; set; }
     }
 }

@@ -5,6 +5,6 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
 {
     public interface IBlobRepository
     {
-        Task<ServiceResponse<string>> UploadBlobAsync(string fileName, string fileLocation, IFormFile file);
+        Task<ServiceResponse<string>> UploadBlobAsync(string fileLocation, IFormFile file);
     }
 }

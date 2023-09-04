@@ -1,4 +1,5 @@
 import { CustomerTypes } from "../enums/customerTypes";
+import { AccountImageModel } from "./account-image.model";
 import { GenreModel } from "./genre.model";
 
 export interface UserModel {
@@ -16,4 +17,5 @@ export interface UserModel {
   youtubeUrl?: string;
   aboutSection?: string;
   genres: GenreModel[];
+  images: AccountImageModel[];
 }

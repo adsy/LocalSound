@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using localsound.backend.Domain.Model.Dto;
 using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Domain.Model.Entity;
 
@@ -34,6 +33,11 @@ namespace localsound.backend.Infrastructure.Mapping
             CreateMap<ArtistGenre, GenreDto>()
                 .ForMember(dest => dest.GenreId, source => source.MapFrom(x => x.Genre.GenreId))
                 .ForMember(dest => dest.GenreName, source => source.MapFrom(x => x.Genre.GenreName));
+
+            CreateMap<AccountImage, AccountImageDto>()
+                .ForMember(dest => dest.AccountImageTypeId, source => source.MapFrom(x => x.AccountImageTypeId))
+                .ForMember(dest => dest.AccountImageUrl, source => source.MapFrom(x => x.AccountImageUrl));
+
         }
     }
 }

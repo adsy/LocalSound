@@ -1,6 +1,6 @@
 ﻿using localsound.backend.api.Queries.Genre;
 using localsound.backend.Domain.Model;
-using localsound.backend.Domain.Model.Dto;
+using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Infrastructure.Interface.Services;
 using MediatR;
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using localsound.backend.Domain.Model.Dto.Entity;
+using Microsoft.AspNetCore.Http;
 
 namespace localsound.backend.Domain.Model.Dto.Submission
 {

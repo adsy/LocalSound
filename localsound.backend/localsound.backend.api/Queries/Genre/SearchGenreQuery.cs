@@ -1,5 +1,5 @@
 ﻿using localsound.backend.Domain.Model;
-using localsound.backend.Domain.Model.Dto;
+using localsound.backend.Domain.Model.Dto.Entity;
 using MediatR;
 
 namespace localsound.backend.api.Queries.Genre

@@ -18,5 +18,6 @@ namespace localsound.backend.Domain.Model.Dto.Entity
         public string? AboutSection { get; set; }
 
         public List<GenreDto> Genres { get; set; }
+        public List<AccountImageDto> Images { get; set; }
     }
 }
