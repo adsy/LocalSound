@@ -6,6 +6,7 @@ import { State } from "../../../../../app/model/redux/state";
 import img from "../../../../../assets/icons/user.svg";
 import { AccountImageTypes } from "../../../../../app/model/enums/accountImageTypes";
 import { handleUpdateUserCoverPhoto } from "../../../../../app/redux/actions/userSlice";
+import { handleResetModal } from "../../../../../app/redux/actions/modalSlice";
 
 const EditArtistPhotosForm = () => {
   const userDetail = useSelector((state: State) => state.user.userDetails);
@@ -28,6 +29,7 @@ const EditArtistPhotosForm = () => {
           AccountImageTypes.CoverImage
         );
 
+        dispatch(handleResetModal());
         dispatch(handleUpdateUserCoverPhoto(result));
       } catch (err) {
         console.log(err);

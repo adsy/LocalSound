@@ -52,7 +52,7 @@ const UserProfileSummary = () => {
   }, [userDetail]);
 
   return (
-    <div id="user-profile">
+    <div id="user-profile" className={loading ? "h-100" : "h-fit"}>
       {loading ? (
         <div className="h-100 d-flex justify-content-center align-content-center">
           <InPageLoadingComponent
