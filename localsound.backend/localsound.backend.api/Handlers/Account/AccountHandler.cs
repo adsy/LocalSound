@@ -1,6 +1,7 @@
 ﻿using localsound.backend.api.Commands.Account;
 using localsound.backend.api.Queries.Account;
 using localsound.backend.Domain.Model;
+using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Domain.Model.Dto.Response;
 using localsound.backend.Domain.Model.Interfaces.Entity;
 using localsound.backend.Infrastructure.Interface.Services;
@@ -11,7 +12,8 @@ namespace localsound.backend.api.Handlers.Account
     public class AccountHandler : IRequestHandler<LoginCommand, ServiceResponse<LoginResponseDto>>,
         IRequestHandler<RegisterCommand, ServiceResponse<LoginResponseDto>>,
         IRequestHandler<GetProfileDataQuery, ServiceResponse<IAppUserDto>>,
-        IRequestHandler<UpdateProfileImageCommand, ServiceResponse<string>>
+        IRequestHandler<UpdateAccountImageCommand, ServiceResponse>,
+        IRequestHandler<GetAccountImageQuery, ServiceResponse<AccountImageDto>>
     {
         private readonly IAccountService _accountService;
 
@@ -35,9 +37,14 @@ namespace localsound.backend.api.Handlers.Account
             return await _accountService.GetProfileDataAsync(request.ProfileUrl, cancellationToken);
         }
 
-        public async Task<ServiceResponse<string>> Handle(UpdateProfileImageCommand request, CancellationToken cancellationToken)
+        public async Task<ServiceResponse> Handle(UpdateAccountImageCommand request, CancellationToken cancellationToken)
         {
-            return await _accountService.UpdateProfileImage(request.UserId, request.MemberId, request.Photo);
+            return await _accountService.UpdateAccountImage(request.UserId, request.MemberId, request.Photo, request.ImageType);
+        }
+
+        public async Task<ServiceResponse<AccountImageDto>> Handle(GetAccountImageQuery request, CancellationToken cancellationToken)
+        {
+            return await _accountService.GetAccountImage(request.UserId, request.MemberId, request.ImageType);
         }
     }
 }

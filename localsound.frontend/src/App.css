@@ -851,7 +851,7 @@ i.large.icon {
   right: 0px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-content: flex-start;
   height: 52px;
   width: 100%;
@@ -865,6 +865,7 @@ i.large.icon {
   color: white;
   height: 50px;
   padding: 10px;
+  padding-left: 0px;
 }
 #user-profile .section-title {
   font-size: 28px;
@@ -875,8 +876,6 @@ i.large.icon {
 }
 #user-profile .edit-profile-btn {
   z-index: 999;
-  position: absolute;
-  right: 5px;
 }
 #user-profile .left-col {
   border-right: 1px solid #dedede;
@@ -887,6 +886,18 @@ i.large.icon {
   height: 150px !important;
   font-size: 0.92857143rem;
   margin-left: 1rem;
+  object-fit: cover;
+}
+#user-profile .genre-mobile {
+  display: none !important;
+}
+@media only screen and (max-width: 767px) {
+  #user-profile .genre-desktop {
+    display: none !important;
+  }
+  #user-profile .genre-mobile {
+    display: flex !important;
+  }
 }
 
 @keyframes fadein {

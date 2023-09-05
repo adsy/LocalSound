@@ -23,6 +23,43 @@ namespace localsound.backend.Infrastructure.Services
             _blobRepository = blobRepository;
         }
 
+        public async Task<ServiceResponse> DeleteAccountImageIfExists(AccountImageTypeEnum imageType, Guid appUserId)
+        {
+            try
+            {
+                await _dbTransactionRepository.BeginTransactionAsync();
+
+                var fileLocation = $"[images]/account/{appUserId}/imageType/{(int)imageType}";
+
+                // create database entries
+                var deleteImageResult = await _accountImageRepository.DeleteAccountImageAsync(imageType, appUserId);
+
+                if (!deleteImageResult.IsSuccessStatusCode || deleteImageResult.ReturnData == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.NotFound);
+                }
+                // upload to azure
+                var blobDeleteResult = await _blobRepository.DeleteBlobAsync(fileLocation + $"/{deleteImageResult.ReturnData}");
+
+                if (!blobDeleteResult.IsSuccessStatusCode)
+                {
+                    // If it fails here theres something wrong with Azure
+                    return new ServiceResponse(HttpStatusCode.InternalServerError);
+                }
+
+                await _dbTransactionRepository.CommitTransactionAsync();
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(AccountImageService)} - {nameof(DeleteAccountImageIfExists)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError);
+            }
+        }
+
         public async Task<ServiceResponse<string>> UploadAccountImage(AccountImageTypeEnum imageType, Guid appUserId, IFormFile photo)
         {
             try

@@ -3,7 +3,7 @@ using localsound.backend.api.Commands.Account;
 
 namespace localsound.backend.api.Commands.Validators.Account
 {
-    public class UpdateProfileImageCommandValidator : AbstractValidator<UpdateProfileImageCommand>
+    public class UpdateProfileImageCommandValidator : AbstractValidator<UpdateAccountImageCommand>
     {
         public UpdateProfileImageCommandValidator()
         {

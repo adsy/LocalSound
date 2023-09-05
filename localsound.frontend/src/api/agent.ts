@@ -4,6 +4,8 @@ import { UserLoginModel } from "../app/model/dto/user-login.model";
 import { UserModel } from "../app/model/dto/user.model";
 import { UpdateArtistModel } from "../app/model/dto/update-artist.model";
 import { GenreModel } from "../app/model/dto/genre.model";
+import { AccountImageTypes } from "../app/model/enums/accountImageTypes";
+import { AccountImageModel } from "../app/model/dto/account-image.model";
 
 // let localStore: StoreType;
 
@@ -98,8 +100,15 @@ const Authentication = {
 const Profile = {
   getProfile: (profileUrl: string) =>
     requests.get<UserModel>(`account/get-profile-details/${profileUrl}`),
-  uploadProfileImage: (memberId: string, formData: FormData) =>
-    requests.put(`account/update-profile-image/${memberId}`, formData),
+  uploadProfileImage: (
+    memberId: string,
+    formData: FormData,
+    accountImageType: AccountImageTypes
+  ) =>
+    requests.put<AccountImageModel>(
+      `account/update-account-image/${memberId}/image-type/${accountImageType}`,
+      formData
+    ),
 };
 
 const Artist = {

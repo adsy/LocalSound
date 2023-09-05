@@ -29,11 +29,14 @@ const UserProfileSummary = () => {
     const getProfile = async () => {
       var profileUrl = history.location.pathname.slice(1);
 
-      if (!userDetail || userDetail?.profileUrl !== profileUrl) {
+      if (
+        !userDetail ||
+        (userDetail?.profileUrl !== profileUrl && profileUrl !== "")
+      ) {
         var result = await agent.Profile.getProfile(profileUrl);
         setProfile(result);
         setViewingOwnProfile(false);
-      } else {
+      } else if (userDetail) {
         setProfile(userDetail);
         setViewingOwnProfile(true);
       }

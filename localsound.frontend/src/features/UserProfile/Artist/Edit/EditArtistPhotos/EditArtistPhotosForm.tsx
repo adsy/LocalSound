@@ -1,13 +1,16 @@
 import { useState } from "react";
-import { Divider, Image } from "semantic-ui-react";
+import { Image } from "semantic-ui-react";
 import agent from "../../../../../api/agent";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../../../app/model/redux/state";
 import img from "../../../../../assets/icons/user.svg";
+import { AccountImageTypes } from "../../../../../app/model/enums/accountImageTypes";
+import { handleUpdateUserCoverPhoto } from "../../../../../app/redux/actions/userSlice";
 
 const EditArtistPhotosForm = () => {
   const userDetail = useSelector((state: State) => state.user.userDetails);
   const [file, setFile] = useState<File | null>(null);
+  const dispatch = useDispatch();
 
   const onFileUpload = async () => {
     // Create an object of formData
@@ -19,7 +22,13 @@ const EditArtistPhotosForm = () => {
       formData.append("fileName", file.name);
 
       try {
-        await agent.Profile.uploadProfileImage(userDetail?.memberId!, formData);
+        var result = await agent.Profile.uploadProfileImage(
+          userDetail?.memberId!,
+          formData,
+          AccountImageTypes.CoverImage
+        );
+
+        dispatch(handleUpdateUserCoverPhoto(result));
       } catch (err) {
         console.log(err);
       }
@@ -28,7 +37,7 @@ const EditArtistPhotosForm = () => {
 
   return (
     <div>
-      <h3 className="mt-5">Profile image</h3>
+      <h3 className="mt-5">Cover photo</h3>
       <Image src={img} size="small" circular className="mb-2 profile-img" />
       <input
         type="file"
@@ -39,8 +48,6 @@ const EditArtistPhotosForm = () => {
         }}
       />
       <button onClick={async () => await onFileUpload()}>Upload!</button>
-      <Divider />
-      <h3 className="mt-2">Cover photo</h3>
     </div>
   );
 };

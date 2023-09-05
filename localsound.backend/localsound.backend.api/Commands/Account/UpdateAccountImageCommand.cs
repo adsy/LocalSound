@@ -1,13 +1,14 @@
-﻿using localsound.backend.Domain.Model;
+﻿using localsound.backend.Domain.Enum;
+using localsound.backend.Domain.Model;
 using MediatR;
 
 namespace localsound.backend.api.Commands.Account
 {
-    public class UpdateProfileImageCommand : IRequest<ServiceResponse<string>>
+    public class UpdateAccountImageCommand : IRequest<ServiceResponse>
     {
         public Guid UserId { get; set; }
         public string MemberId { get; set; }
-        public IFormCollection formData { get; set; }
         public IFormFile Photo { get; set; }
+        public AccountImageTypeEnum ImageType { get; set; }
     }
 }

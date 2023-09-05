@@ -1,5 +1,6 @@
 ﻿using localsound.backend.api.Commands.Account;
 using localsound.backend.api.Queries.Account;
+using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Domain.Model.Dto.Submission;
 using localsound.backend.Domain.Model.Interfaces.Entity;
@@ -75,22 +76,34 @@ namespace localsound.backend.api.Controllers
         }
 
         [HttpPut]
-        [Route("update-profile-image/{memberId}")]
-        public async Task<ActionResult> UpdateAccountProfileImage([FromForm] FileUploadDto formData, string memberId)
+        [Route("update-account-image/{memberId}/image-type/{imageType}")]
+        public async Task<ActionResult> UpdateAccountProfileImage([FromForm] FileUploadDto formData, string memberId, AccountImageTypeEnum imageType)
         {
-            var result = await Mediator.Send(new UpdateProfileImageCommand
+            var updateResult = await Mediator.Send(new UpdateAccountImageCommand
             {
                 UserId = CurrentUser.AppUserId,
                 MemberId = memberId,
-                Photo = formData.FormFile
+                Photo = formData.FormFile,
+                ImageType = imageType,
             });
 
-            if (result.IsSuccessStatusCode)
+            if (updateResult.IsSuccessStatusCode)
             {
-                return Ok(result.ReturnData);
+                var queryResult = await Mediator.Send(new GetAccountImageQuery
+                {
+                    UserId = CurrentUser.AppUserId,
+                    MemberId = memberId,
+                    ImageType = imageType,
+                });
+
+                if (queryResult.IsSuccessStatusCode) { 
+                    return Ok(queryResult.ReturnData);
+                }
+
+                return StatusCode((int)queryResult.StatusCode, "There was an error while updating your photo, please refresh your page and try again..");
             }
 
-            return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
+            return StatusCode((int)updateResult.StatusCode, updateResult.ServiceResponseMessage);
         }
 
         private void AddCookies(string token, string refreshToken)

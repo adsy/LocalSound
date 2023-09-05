@@ -350,7 +350,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<string>> UpdateProfileImage(Guid userId, string memberId, IFormFile photo)
+        public async Task<ServiceResponse> UpdateAccountImage(Guid userId, string memberId, IFormFile photo, AccountImageTypeEnum imageType)
         {
             try
             {
@@ -358,14 +358,21 @@ namespace localsound.backend.Infrastructure.Services
 
                 if (!accountResult.IsSuccessStatusCode)
                 {
-                    return new ServiceResponse<string>(accountResult.StatusCode);
+                    return new ServiceResponse(accountResult.StatusCode);
                 }
 
-                var result = await _accountImageService.UploadAccountImage(AccountImageTypeEnum.ProfileImage, userId, photo);
+                var deleteResult = await _accountImageService.DeleteAccountImageIfExists(imageType, userId);
+
+                if (!deleteResult.IsSuccessStatusCode)
+                {
+                    return new ServiceResponse(deleteResult.StatusCode);
+                }
+
+                var result = await _accountImageService.UploadAccountImage(imageType, userId, photo);
 
                 if (!result.IsSuccessStatusCode)
                 {
-                    return new ServiceResponse<string>(result.StatusCode);
+                    return new ServiceResponse(result.StatusCode);
                 }
 
                 return result;
@@ -375,10 +382,35 @@ namespace localsound.backend.Infrastructure.Services
                 var message = $"{nameof(AccountService)} - {nameof(GetProfileDataAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<string>(HttpStatusCode.InternalServerError)
+                return new ServiceResponse(HttpStatusCode.InternalServerError)
                 {
-                    ServiceResponseMessage = "An error occured while saving your profile image, please try again..."
+                    ServiceResponseMessage = "An error occured while saving your image, please try again..."
                 };
+            }
+        }
+
+        public async Task<ServiceResponse<AccountImageDto>> GetAccountImage(Guid userId, string memberId, AccountImageTypeEnum imageType)
+        {
+            try
+            {
+                var result = await _accountRepository.GetAccountImageFromDbAsync(userId, imageType);
+
+                if (!result.IsSuccessStatusCode || result.ReturnData == null)
+                {
+                    return new ServiceResponse<AccountImageDto>(HttpStatusCode.InternalServerError);
+                }
+
+                return new ServiceResponse<AccountImageDto>(HttpStatusCode.OK)
+                {
+                    ReturnData = _mapper.Map<AccountImageDto>(result.ReturnData)
+                };
+            }
+            catch(Exception e)
+            {
+                var message = $"{nameof(AccountService)} - {nameof(GetAccountImage)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<AccountImageDto>(HttpStatusCode.InternalServerError);
             }
         }
     }

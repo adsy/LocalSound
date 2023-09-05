@@ -1,4 +1,5 @@
-﻿using localsound.backend.Domain.Model;
+﻿using localsound.backend.Domain.Enum;
+using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Persistence.DbContext;
@@ -109,6 +110,31 @@ namespace localsound.backend.Infrastructure.Repositories
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<NonArtist>(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<ServiceResponse<AccountImage>> GetAccountImageFromDbAsync(Guid id, AccountImageTypeEnum imageType)
+        {
+            try
+            {
+                var accountImage = await _dbContext.AccountImage.FirstOrDefaultAsync(x => x.AppUserId == id && x.AccountImageTypeId == imageType);
+
+                if (accountImage == null)
+                {
+                    return new ServiceResponse<AccountImage>(HttpStatusCode.InternalServerError);
+                }
+
+                return new ServiceResponse<AccountImage>(HttpStatusCode.OK)
+                {
+                    ReturnData = accountImage
+                };
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(AccountRepository)} - {nameof(GetAccountImageFromDbAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<AccountImage>(HttpStatusCode.InternalServerError);
             }
         }
 

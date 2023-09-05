@@ -1,16 +1,11 @@
-﻿using Azure;
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
+﻿using Azure.Storage.Blobs;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.ModelAdaptor;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.ComponentModel;
 using System.Net;
-using System.Reflection;
-using System.Xml.Linq;
 
 namespace localsound.backend.Infrastructure.Repositories
 {
@@ -64,7 +59,36 @@ namespace localsound.backend.Infrastructure.Repositories
             }
             catch(Exception ex)
             {
-                return new ServiceResponse<string>(System.Net.HttpStatusCode.OK);
+                return new ServiceResponse<string>(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<ServiceResponse> DeleteBlobAsync(string fileLocation)
+        {
+            try
+            {
+                var containerName = fileLocation.Substring(0, fileLocation.IndexOf(']') + 1);
+                var blobPath = fileLocation.Substring(containerName.Length);
+
+                var blobContainerClient = _blobServiceClient.GetBlobContainerClient(containerName.Replace("[", string.Empty).Replace("]", string.Empty));
+
+                await blobContainerClient.CreateIfNotExistsAsync();
+
+                var blobClient = blobContainerClient.GetBlobClient(fileLocation);
+
+                // Delete the file if it already exists
+                var result = await blobClient.DeleteIfExistsAsync();
+
+                if (result.Value)
+                {
+                    return new ServiceResponse(HttpStatusCode.OK);
+                }
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError);
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse(HttpStatusCode.InternalServerError);
             }
         }
     }

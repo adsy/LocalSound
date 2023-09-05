@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserState } from "../../model/redux/userState";
+import { AccountImageTypes } from "../../model/enums/accountImageTypes";
 
 const initialState: UserState = {
   userDetails: null,
@@ -13,9 +14,25 @@ export const userSlice = createSlice({
     handleSetUserDetails: (state, { payload }) => {
       state.userDetails = payload;
     },
+    handleUpdateUserCoverPhoto: (state, { payload }) => {
+      var images = [
+        state.userDetails?.images.filter(
+          (x) => x.accountImageTypeId == AccountImageTypes.ProfileImage
+        ),
+      ];
+      var user = {
+        ...state.userDetails!,
+        images: [...images, payload],
+      };
+      state.userDetails = user;
+    },
   },
 });
 
-export const { handleResetUserState, handleSetUserDetails } = userSlice.actions;
+export const {
+  handleResetUserState,
+  handleSetUserDetails,
+  handleUpdateUserCoverPhoto,
+} = userSlice.actions;
 
 export default userSlice.reducer;

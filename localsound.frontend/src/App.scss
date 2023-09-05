@@ -697,7 +697,7 @@ i.large.icon {
     right: 0px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-content: flex-start;
     // background-color: rgba(0, 0, 0, 0.505);
     height: 52px;
@@ -713,6 +713,7 @@ i.large.icon {
     color: white;
     height: 50px;
     padding: 10px;
+    padding-left: 0px;
     // border-bottom: 5px solid $borderColor;
   }
   .section-title {
@@ -726,8 +727,6 @@ i.large.icon {
 
   .edit-profile-btn {
     z-index: 999;
-    position: absolute;
-    right: 5px;
   }
 
   .left-col {
@@ -743,6 +742,20 @@ i.large.icon {
     height: 150px !important;
     font-size: 0.92857143rem;
     margin-left: 1rem;
+    object-fit: cover;
+  }
+
+  .genre-mobile {
+    display: none !important;
+  }
+
+  @media only screen and (max-width: 767px) {
+    .genre-desktop {
+      display: none !important;
+    }
+    .genre-mobile {
+      display: flex !important;
+    }
   }
 }
 
