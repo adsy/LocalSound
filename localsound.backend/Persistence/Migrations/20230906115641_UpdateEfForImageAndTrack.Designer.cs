@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using localsound.backend.Persistence.DbContext;
 
@@ -11,9 +12,11 @@ using localsound.backend.Persistence.DbContext;
 namespace localsound.backend.Persistence.Migrations
 {
     [DbContext(typeof(LocalSoundDbContext))]
-    partial class LocalSoundDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230906115641_UpdateEfForImageAndTrack")]
+    partial class UpdateEfForImageAndTrack
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,6 +166,9 @@ namespace localsound.backend.Persistence.Migrations
                     b.HasIndex("AccountImageTypeId");
 
                     b.HasIndex("AppUserId");
+
+                    b.HasIndex("FileContentId")
+                        .IsUnique();
 
                     b.ToTable("AccountImage");
                 });
@@ -377,13 +383,7 @@ namespace localsound.backend.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ImageAccountImageId")
-                        .HasColumnType("int");
-
                     b.HasKey("FileContentId");
-
-                    b.HasIndex("ImageAccountImageId")
-                        .IsUnique();
 
                     b.ToTable("FileContent");
                 });
@@ -498,9 +498,17 @@ namespace localsound.backend.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("localsound.backend.Domain.Model.Entity.FileContent", "FileContent")
+                        .WithOne("Image")
+                        .HasForeignKey("localsound.backend.Domain.Model.Entity.AccountImage", "FileContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("AccountImageType");
 
                     b.Navigation("AppUser");
+
+                    b.Navigation("FileContent");
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AppUserToken", b =>
@@ -561,17 +569,6 @@ namespace localsound.backend.Persistence.Migrations
                     b.Navigation("FileContent");
                 });
 
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.FileContent", b =>
-                {
-                    b.HasOne("localsound.backend.Domain.Model.Entity.AccountImage", "Image")
-                        .WithOne("FileContent")
-                        .HasForeignKey("localsound.backend.Domain.Model.Entity.FileContent", "ImageAccountImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image");
-                });
-
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.NonArtist", b =>
                 {
                     b.HasOne("localsound.backend.Domain.Model.Entity.AppUser", "User")
@@ -581,12 +578,6 @@ namespace localsound.backend.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AccountImage", b =>
-                {
-                    b.Navigation("FileContent")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AppUser", b =>
@@ -601,6 +592,9 @@ namespace localsound.backend.Persistence.Migrations
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.FileContent", b =>
                 {
+                    b.Navigation("Image")
+                        .IsRequired();
+
                     b.Navigation("Track")
                         .IsRequired();
                 });

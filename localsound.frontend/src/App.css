@@ -827,9 +827,12 @@ i.large.icon {
 
 /** USER PROFILE **/
 #user-profile {
-  display: flex;
-  flex-direction: column;
+  min-height: 100%;
   background: white;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
 }
 #user-profile .ui-container {
   box-shadow: rgba(0, 0, 0, 0.25) 0px 13px 27px -5px, rgba(230, 230, 230, 0.3) 0px 10px 20px -4px;

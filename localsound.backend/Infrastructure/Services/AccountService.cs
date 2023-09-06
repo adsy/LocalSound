@@ -319,9 +319,13 @@ namespace localsound.backend.Infrastructure.Services
                 var artistResponse = await _accountRepository.GetArtistFromDbAsync(profileUrl);
                 if (artistResponse != null && artistResponse.IsSuccessStatusCode)
                 {
+
+                    var returnDto = _mapper.Map<ArtistDto>(artistResponse.ReturnData);
+                    returnDto.Images = _mapper.Map<List<AccountImageDto>>(artistResponse.ReturnData?.User.Images);
+                    
                     return new ServiceResponse<IAppUserDto>(HttpStatusCode.OK)
                     {
-                        ReturnData = _mapper.Map<ArtistDto>(artistResponse.ReturnData)
+                        ReturnData = returnDto
                     };
                 }
 
@@ -329,6 +333,10 @@ namespace localsound.backend.Infrastructure.Services
                 var nonArtistResponse = await _accountRepository.GetNonArtistFromDbAsync(profileUrl);
                 if (nonArtistResponse != null && nonArtistResponse.IsSuccessStatusCode)
                 {
+
+                    var returnDto = _mapper.Map<NonArtistDto>(artistResponse.ReturnData);
+                    returnDto.Images = _mapper.Map<List<AccountImageDto>>(nonArtistResponse.ReturnData?.User.Images);
+
                     return new ServiceResponse<IAppUserDto>(HttpStatusCode.OK)
                     {
                         ReturnData = _mapper.Map<NonArtistDto>(nonArtistResponse.ReturnData)

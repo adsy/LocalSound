@@ -29,13 +29,12 @@ const UserProfileSummary = () => {
     const getProfile = async () => {
       var profileUrl = history.location.pathname.slice(1);
 
-      if (
-        !userDetail ||
-        (userDetail?.profileUrl !== profileUrl && profileUrl !== "")
-      ) {
-        var result = await agent.Profile.getProfile(profileUrl);
-        setProfile(result);
-        setViewingOwnProfile(false);
+      if (!userDetail || userDetail?.profileUrl !== profileUrl) {
+        if (profileUrl?.length > 0) {
+          var result = await agent.Profile.getProfile(profileUrl);
+          setProfile(result);
+          setViewingOwnProfile(false);
+        }
       } else if (userDetail) {
         setProfile(userDetail);
         setViewingOwnProfile(true);
@@ -52,7 +51,7 @@ const UserProfileSummary = () => {
   }, [userDetail]);
 
   return (
-    <div id="user-profile" className={loading ? "h-100" : "h-fit"}>
+    <div id="user-profile">
       {loading ? (
         <div className="h-100 d-flex justify-content-center align-content-center">
           <InPageLoadingComponent
@@ -62,7 +61,7 @@ const UserProfileSummary = () => {
           />
         </div>
       ) : null}
-      {profile?.customerType === CustomerTypes.Artist ? (
+      {!loading && profile?.customerType === CustomerTypes.Artist ? (
         <ArtistProfile
           userDetails={profile}
           viewingOwnProfile={viewingOwnProfile}

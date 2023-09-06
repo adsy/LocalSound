@@ -112,7 +112,10 @@ namespace localsound.backend.Persistence.DbContext
             });
 
             builder.Entity<FileContent>().HasKey(x => x.FileContentId);
-            builder.Entity<ArtistTrackUpload>().HasKey(x => x.ArtistTrackUploadId);
+            builder.Entity<ArtistTrackUpload>(x =>
+            {
+                x.HasKey(x => x.ArtistTrackUploadId);
+            });
         }
 
         public async Task<ServiceResponse> HandleSavingDB()

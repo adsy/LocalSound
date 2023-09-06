@@ -194,7 +194,12 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.Artist.Include(x => x.User).FirstOrDefaultAsync(x => x.ProfileUrl == profileUrl);
+                var artist = await _dbContext.Artist
+                    .Include(x => x.User)
+                    .ThenInclude(x => x.Images)
+                    .Include(x => x.Genres)
+                    .ThenInclude(x => x.Genre)
+                    .FirstOrDefaultAsync(x => x.ProfileUrl == profileUrl);
 
                 if (artist == null)
                 {
