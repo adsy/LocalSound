@@ -8,6 +8,7 @@ import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
 import { useEffect, useState } from "react";
 import { AccountImageModel } from "../../../app/model/dto/account-image.model";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
+import ImageCropper from "../../../common/components/Cropper/ImageCropper";
 
 interface Props {
   userDetails: UserModel;
@@ -15,6 +16,8 @@ interface Props {
 }
 
 const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
+  const [updatingCoverPhoto, setUpdatingCoverPhoto] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
   const [imgsLoaded, setImgsLoaded] = useState(true);
   const [coverImage, setCoverImage] = useState<AccountImageModel | null>(null);
   const dispatch = useDispatch();
@@ -72,47 +75,74 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
       {imgsLoaded ? (
         <div className="d-flex flex-col flex-wrap p-0 fade-in">
           <Col md={12} lg={6} className="p-0 left-col">
-            <div
-              style={{
-                ...bannerStyle,
-                backgroundImage: `url(${coverImage?.accountImageUrl!})`,
-              }}
-              className="profile-banner position-relative"
-            >
-              <div className="details-container flex-wrap">
-                <div className="d-flex justify-content-end pt-1 pr-1 w-100">
-                  {viewingOwnProfile ? (
-                    <>
-                      <a
-                        onClick={() => editArtistProfile()}
-                        target="_blank"
-                        className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3"
-                      >
-                        <h4>Edit profile</h4>
-                      </a>
-                    </>
-                  ) : null}
-                </div>
-                <div className="d-flex flex-column">
-                  <div className="d-flex flex-row ml-2">
-                    <div className="d-flex flex-column">
-                      <span className="user-name mb-0">
-                        {userDetails?.name}
-                      </span>
-                      <div className="d-flex flex-column pb-2 genre-desktop">
-                        <div className="about-text">
-                          {userDetails.genres.map((genre, index) => (
-                            <span key={index}>
-                              <GenreTypeLabel genre={genre} />
-                            </span>
-                          ))}
+            {!updatingCoverPhoto && !file ? (
+              <div
+                style={{
+                  ...bannerStyle,
+                  backgroundImage: `url(${coverImage?.accountImageUrl!})`,
+                }}
+                className="profile-banner position-relative"
+              >
+                <div className="details-container flex-wrap">
+                  <div className="d-flex flex-row justify-content-between pt-1 pr-1 w-100">
+                    {viewingOwnProfile ? (
+                      <>
+                        <div className="pt-1 pl-1">
+                          <label
+                            htmlFor="exampleInput"
+                            className="btn black-button edit-cover-button fade-in"
+                          >
+                            <h4>Update cover photo</h4>
+                          </label>
+                          <input
+                            type="file"
+                            id="exampleInput"
+                            style={{ display: "none" }}
+                            onChange={(event) => {
+                              if (event && event.target && event.target.files) {
+                                setFile(event.target.files[0]);
+                                setUpdatingCoverPhoto(true);
+                              }
+                            }}
+                          />
+                        </div>
+                        <a
+                          onClick={() => editArtistProfile()}
+                          target="_blank"
+                          className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3"
+                        >
+                          <h4>Edit profile</h4>
+                        </a>
+                      </>
+                    ) : null}
+                  </div>
+                  <div className="d-flex flex-column">
+                    <div className="d-flex flex-row ml-2">
+                      <div className="d-flex flex-column">
+                        <span className="user-name mb-0">
+                          {userDetails?.name}
+                        </span>
+                        <div className="d-flex flex-column pb-2 genre-desktop">
+                          <div className="about-text">
+                            {userDetails.genres.map((genre, index) => (
+                              <span key={index}>
+                                <GenreTypeLabel genre={genre} />
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <ImageCropper
+                file={file!}
+                setFile={setFile}
+                setUpdatingCoverPhoto={setUpdatingCoverPhoto}
+              />
+            )}
             <div className="d-flex flex-column p-2">
               <div className=" d-flex flex-row flex-wrap">
                 {userDetails?.soundcloudUrl ? (
@@ -192,8 +222,12 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
           </Col>
         </div>
       ) : (
-        <div className="h-100 d-flex justify-content-center align-content-center">
-          <InPageLoadingComponent height={150} width={150} content="..." />
+        <div className="h-100 d-flex justify-content-center align-self-center">
+          <InPageLoadingComponent
+            height={150}
+            width={150}
+            content="Loading data..."
+          />
         </div>
       )}
     </>

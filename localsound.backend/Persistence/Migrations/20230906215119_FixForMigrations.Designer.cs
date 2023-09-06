@@ -12,8 +12,8 @@ using localsound.backend.Persistence.DbContext;
 namespace localsound.backend.Persistence.Migrations
 {
     [DbContext(typeof(LocalSoundDbContext))]
-    [Migration("20230906120946_TryingToGetImageDeleteCascade")]
-    partial class TryingToGetImageDeleteCascade
+    [Migration("20230906215119_FixForMigrations")]
+    partial class FixForMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -166,6 +166,9 @@ namespace localsound.backend.Persistence.Migrations
                     b.HasIndex("AccountImageTypeId");
 
                     b.HasIndex("AppUserId");
+
+                    b.HasIndex("FileContentId")
+                        .IsUnique();
 
                     b.ToTable("AccountImage");
                 });
@@ -360,8 +363,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("FileContentId")
-                        .IsUnique();
+                    b.HasIndex("FileContentId");
 
                     b.ToTable("ArtistTrackUpload");
                 });
@@ -380,13 +382,7 @@ namespace localsound.backend.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ImageAccountImageId")
-                        .HasColumnType("int");
-
                     b.HasKey("FileContentId");
-
-                    b.HasIndex("ImageAccountImageId")
-                        .IsUnique();
 
                     b.ToTable("FileContent");
                 });
@@ -501,9 +497,17 @@ namespace localsound.backend.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("localsound.backend.Domain.Model.Entity.FileContent", "FileContent")
+                        .WithOne("Image")
+                        .HasForeignKey("localsound.backend.Domain.Model.Entity.AccountImage", "FileContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("AccountImageType");
 
                     b.Navigation("AppUser");
+
+                    b.Navigation("FileContent");
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AppUserToken", b =>
@@ -554,25 +558,14 @@ namespace localsound.backend.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("localsound.backend.Domain.Model.Entity.FileContent", "FileContent")
-                        .WithOne("Track")
-                        .HasForeignKey("localsound.backend.Domain.Model.Entity.ArtistTrackUpload", "FileContentId")
+                        .WithMany()
+                        .HasForeignKey("FileContentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Artist");
 
                     b.Navigation("FileContent");
-                });
-
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.FileContent", b =>
-                {
-                    b.HasOne("localsound.backend.Domain.Model.Entity.AccountImage", "Image")
-                        .WithOne("FileContent")
-                        .HasForeignKey("localsound.backend.Domain.Model.Entity.FileContent", "ImageAccountImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.NonArtist", b =>
@@ -584,12 +577,6 @@ namespace localsound.backend.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AccountImage", b =>
-                {
-                    b.Navigation("FileContent")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AppUser", b =>
@@ -604,7 +591,7 @@ namespace localsound.backend.Persistence.Migrations
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.FileContent", b =>
                 {
-                    b.Navigation("Track")
+                    b.Navigation("Image")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

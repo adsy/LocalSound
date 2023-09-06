@@ -35,7 +35,7 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 var returnString = accountImage.FileContent.FileContentId.ToString() + accountImage.FileContent.FileExtensionType;
 
-                _dbContext.AccountImage.Remove(accountImage);
+                _dbContext.FileContent.Remove(accountImage.FileContent);
 
                 await _dbContext.SaveChangesAsync();
 

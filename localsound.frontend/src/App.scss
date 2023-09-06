@@ -33,7 +33,7 @@ $purple: #6d69fa;
 }
 
 @mixin text-shadow {
-  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 white, 0 1px $purple, 1px 0 white, 0 -1px white;
 }
 
 @mixin inverse-text-shadow {
@@ -680,8 +680,14 @@ i.large.icon {
   background: white;
   display: flex;
   justify-content: center;
-  align-content: center;
+  align-content: stretch;
   flex-wrap: wrap;
+
+  .profile-banner:hover {
+    .edit-cover-button {
+      visibility: unset;
+    }
+  }
 
   .ui-container {
     @include container;
@@ -731,6 +737,11 @@ i.large.icon {
     z-index: 999;
   }
 
+  .edit-cover-button {
+    z-index: 999;
+    visibility: hidden;
+  }
+
   .left-col {
     border-right: 1px solid #dedede;
   }
@@ -759,6 +770,15 @@ i.large.icon {
       display: flex !important;
     }
   }
+}
+
+.box {
+  display: inline-block;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.img-preview {
+  overflow: hidden;
 }
 
 @keyframes fadein {

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import EditArtistDetails from "./EditArtistDetails/EditArtistDetails";
-import EditArtistPhotos from "./EditArtistPhotos/EditArtistPhotos";
 import { UserModel } from "../../../../app/model/dto/user.model";
 
 interface Props {
@@ -21,9 +20,6 @@ const EditArtist = ({ userDetails }: Props) => {
       >
         <Tab eventKey="details" title="Account details" className="px-3">
           <EditArtistDetails userDetails={userDetails} />
-        </Tab>
-        <Tab eventKey="photos" title="Profile photos">
-          <EditArtistPhotos userDetails={userDetails} />
         </Tab>
       </Tabs>
     </div>

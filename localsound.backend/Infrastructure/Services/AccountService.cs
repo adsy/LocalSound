@@ -371,7 +371,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 var deleteResult = await _accountImageService.DeleteAccountImageIfExists(imageType, userId);
 
-                if (!deleteResult.IsSuccessStatusCode)
+                if (deleteResult.StatusCode == HttpStatusCode.InternalServerError)
                 {
                     return new ServiceResponse(deleteResult.StatusCode);
                 }
