@@ -15,9 +15,10 @@ import { GenreModel } from "../../../../../app/model/dto/genre.model";
 
 interface Props {
   userDetails: UserModel;
+  setSubmittingRequest: (submittingRequest: boolean) => void;
 }
 
-const EditArtistDetails = ({ userDetails }: Props) => {
+const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
   const [addressError, setAddressError] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<GenreModel[]>([]);
   const dispatch = useDispatch();
@@ -77,21 +78,21 @@ const EditArtistDetails = ({ userDetails }: Props) => {
           onSubmit={async (values, { setStatus }) => {
             setStatus(null);
             try {
+              setSubmittingRequest(true);
+              dispatch(handleResetModal());
               var submissionData = { ...values, genres: selectedGenres };
 
               await agent.Artist.updateArtistDetails(
                 userDetails?.memberId!,
                 submissionData
               );
-
               dispatch(
                 handleSetUserDetails({
                   ...userDetails,
                   ...submissionData,
                 })
               );
-
-              dispatch(handleResetModal());
+              setSubmittingRequest(false);
             } catch (err) {
               //TODO: Do something with the errors
               console.log(err);

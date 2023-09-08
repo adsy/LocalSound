@@ -145,7 +145,7 @@ $end: 10;
 
 /** ANIMATIONS **/
 .fade-in {
-  -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+  -webkit-animation: fade-in 0.5s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s; /* Firefox < 16 */
   -ms-animation: fadein 0.5s; /* Internet Explorer */
   -o-animation: fadein 0.5s; /* Opera < 12.1 */
@@ -374,6 +374,7 @@ i.large.icon {
   @include button-style;
   background-color: $purple !important;
   border: 1px solid black;
+  padding: 8px;
 }
 
 .purple-button:hover,
@@ -683,9 +684,16 @@ i.large.icon {
   align-content: stretch;
   flex-wrap: wrap;
 
+  .cropping {
+    height: 24rem;
+    .details-container .action-row {
+      visibility: hidden !important;
+    }
+  }
+
   .profile-banner:hover {
     .edit-cover-button {
-      visibility: unset;
+      display: inline;
     }
   }
 
@@ -707,10 +715,10 @@ i.large.icon {
     flex-direction: column;
     justify-content: space-between;
     align-content: flex-start;
-    // background-color: rgba(0, 0, 0, 0.505);
     height: 52px;
     width: 100%;
     height: 100%;
+    z-index: 1;
   }
 
   .user-name {
@@ -739,7 +747,7 @@ i.large.icon {
 
   .edit-cover-button {
     z-index: 999;
-    visibility: hidden;
+    display: none;
   }
 
   .left-col {
@@ -772,13 +780,29 @@ i.large.icon {
   }
 }
 
-.box {
-  display: inline-block;
-  padding: 10px;
-  box-sizing: border-box;
-}
-.img-preview {
-  overflow: hidden;
+/** CROPPER **/
+#cropper {
+  z-index: 2;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  .cropper-crop-box {
+    z-index: 9;
+  }
+  .cropper-line,
+  .cropper-point {
+    background-color: $purple !important;
+  }
+  .crop-action-row {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 10;
+  }
+  .cropper-container {
+    width: unset !important;
+    height: 24rem !important;
+  }
 }
 
 @keyframes fadein {

@@ -1,23 +1,15 @@
 import React, { useState, createRef } from "react";
 import Cropper, { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
-import { Button } from "react-bootstrap";
-import agent from "../../../api/agent";
-import { handleUpdateUserCoverPhoto } from "../../../app/redux/actions/userSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { State } from "../../../app/model/redux/state";
-import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
 
 interface Props {
   file: File;
-  setUpdatingCoverPhoto: (updating: boolean) => void;
-  setFile: (file: File | null) => void;
+  onFileUpload: (file: Blob) => void;
+  cancelCrop: () => void;
 }
 
-const ImageCropper = ({ file, setUpdatingCoverPhoto, setFile }: Props) => {
-  const userDetail = useSelector((state: State) => state.user.userDetails);
+const ImageCropper = ({ file, onFileUpload, cancelCrop }: Props) => {
   const cropperRef = createRef<ReactCropperElement>();
-  const dispatch = useDispatch();
 
   const getCropData = async () => {
     if (typeof cropperRef.current?.cropper !== "undefined") {
@@ -34,37 +26,12 @@ const ImageCropper = ({ file, setUpdatingCoverPhoto, setFile }: Props) => {
     }
   };
 
-  const onFileUpload = async (file: File) => {
-    // Create an object of formData
-    const formData = new FormData();
-
-    if (file) {
-      formData.append("fileName", "coverPhoto.jpg");
-      formData.append("formFile", file, "coverPhoto.jpg");
-
-      try {
-        var result = await agent.Profile.uploadProfileImage(
-          userDetail?.memberId!,
-          formData,
-          AccountImageTypes.CoverImage
-        );
-        console.log(result);
-        console.log("here");
-        setFile(null);
-        setUpdatingCoverPhoto(false);
-        dispatch(handleUpdateUserCoverPhoto(result));
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
-
   return (
-    <div>
-      <div style={{ width: "100%" }}>
+    <div id="cropper">
+      <div style={{ width: "100%", position: "relative" }}>
         <Cropper
           ref={cropperRef}
-          style={{ height: 339, width: "100%" }}
+          style={{ height: "24rem", width: "100%", opacity: ".7" }}
           zoomTo={0.5}
           initialAspectRatio={659 / 336}
           preview=".img-preview"
@@ -78,14 +45,24 @@ const ImageCropper = ({ file, setUpdatingCoverPhoto, setFile }: Props) => {
           checkOrientation={false}
           guides={true}
         />
+        <div className="crop-action-row d-flex flex-row">
+          <a
+            onClick={async () => await getCropData()}
+            target="_blank"
+            className="btn black-button save-crop-btn"
+          >
+            <h4>Save</h4>
+          </a>
+          <a
+            onClick={() => cancelCrop()}
+            target="_blank"
+            className="ml-1 btn purple-button save-crop-btn"
+          >
+            <h4>Cancel</h4>
+          </a>
+        </div>
       </div>
-      <Button
-        onClick={async () => {
-          await getCropData();
-        }}
-      >
-        Accept
-      </Button>
+      {/* <Button>Cancel</Button> */}
     </div>
   );
 };

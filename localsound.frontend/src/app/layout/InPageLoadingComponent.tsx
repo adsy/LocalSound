@@ -1,5 +1,6 @@
 import React from "react";
-import spinner from "../../assets/spin.gif";
+import spinner from "../../assets/Equalizer.svg";
+import logo from "../../assets/logo4.png";
 
 interface Props {
   inverted?: boolean;

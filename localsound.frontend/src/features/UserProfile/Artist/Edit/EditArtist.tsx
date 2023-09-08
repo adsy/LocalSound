@@ -5,9 +5,10 @@ import { UserModel } from "../../../../app/model/dto/user.model";
 
 interface Props {
   userDetails: UserModel;
+  setSubmittingRequest: (submittingRequest: boolean) => void;
 }
 
-const EditArtist = ({ userDetails }: Props) => {
+const EditArtist = ({ userDetails, setSubmittingRequest }: Props) => {
   const [key, setKey] = useState<string | null>("details");
 
   return (
@@ -19,7 +20,10 @@ const EditArtist = ({ userDetails }: Props) => {
         className="mt-2"
       >
         <Tab eventKey="details" title="Account details" className="px-3">
-          <EditArtistDetails userDetails={userDetails} />
+          <EditArtistDetails
+            userDetails={userDetails}
+            setSubmittingRequest={setSubmittingRequest}
+          />
         </Tab>
       </Tabs>
     </div>
