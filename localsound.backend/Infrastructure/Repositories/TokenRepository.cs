@@ -55,7 +55,7 @@ namespace localsound.backend.Infrastructure.Repositories
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddMinutes(60),
+                Expires = DateTime.Now.AddMinutes(1),
                 SigningCredentials = credentials
             };
 
@@ -168,7 +168,7 @@ namespace localsound.backend.Infrastructure.Repositories
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateAudience = false,
-                ValidateIssuer = true,
+                ValidateIssuer = false,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Secret)),
                 ValidateLifetime = false

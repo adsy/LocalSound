@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using System.Security.Claims;
 
 namespace localsound.backend.Infrastructure.Services
 {
@@ -71,7 +72,7 @@ namespace localsound.backend.Infrastructure.Services
                 var accessToken = _tokenRepository.CreateToken(_tokenRepository.GetClaims(user));
                 var refreshToken = await _tokenRepository.CreateRefreshToken(user);
 
-                var returnDto = (IAppUserDto)null;
+                var returnDto = null as IAppUserDto;
 
                 if (user.CustomerType == CustomerTypeEnum.Artist && user.MemberId != null)
                 {
@@ -154,7 +155,7 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                IAppUserDto userDto = null;
+                var userDto = null as IAppUserDto;
 
                 if (registrationDetails.CustomerType == CustomerTypeEnum.Artist)
                 {
@@ -419,6 +420,82 @@ namespace localsound.backend.Infrastructure.Services
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<AccountImageDto>(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<ServiceResponse<IAppUserDto>> CheckCurrentUserToken(ClaimsPrincipal claimsPrincipal)
+        {
+            try
+            {
+                var email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+                var user = await _userManager.Users.FirstOrDefaultAsync(o => o.Email == email);
+
+                if (user != null)
+                {
+                    if (user.EmailConfirmed)
+                    {
+                        var returnDto = null as IAppUserDto;
+
+                        if (user.CustomerType == CustomerTypeEnum.Artist && user.MemberId != null)
+                        {
+                            var artist = await _accountRepository.GetArtistFromDbAsync(user.Id);
+
+                            if (artist.IsSuccessStatusCode && artist.ReturnData != null)
+                            {
+                                returnDto = _mapper.Map<ArtistDto>(artist.ReturnData);
+                                returnDto.Images = _mapper.Map<List<AccountImageDto>>(artist.ReturnData.User.Images);
+                            }
+                            else
+                            {
+                                return new ServiceResponse<IAppUserDto>(HttpStatusCode.InternalServerError)
+                                {
+                                    ServiceResponseMessage = "An error occured while logging in, please try again..."
+                                };
+                            }
+                        }
+                        else
+                        {
+                            var nonArtist = await _accountRepository.GetNonArtistFromDbAsync(user.Id);
+
+                            if (nonArtist.IsSuccessStatusCode && nonArtist.ReturnData != null)
+                            {
+                                returnDto = _mapper.Map<NonArtistDto>(nonArtist.ReturnData);
+                                returnDto.Images = _mapper.Map<List<AccountImageDto>>(nonArtist.ReturnData.User.Images);
+                            }
+                            else
+                            {
+                                return new ServiceResponse<IAppUserDto>(HttpStatusCode.InternalServerError)
+                                {
+                                    ServiceResponseMessage = "An error occured while logging in, please try again..."
+                                };
+                            }
+                        }
+
+                        if (returnDto != null)
+                        {
+                            returnDto.MemberId = user.MemberId;
+                            return new ServiceResponse<IAppUserDto>(HttpStatusCode.OK)
+                            {
+                                ReturnData = returnDto
+                            };
+                        }
+                    }
+
+                    return new ServiceResponse<IAppUserDto>(HttpStatusCode.Unauthorized);
+                }
+                var message = $"{nameof(AccountService)} - {nameof(CheckCurrentUserToken)} - Login was attempted with user token which didnt match any registered email using: {email}";
+                _logger.LogError(message);
+
+
+                return new ServiceResponse<IAppUserDto>(HttpStatusCode.NotFound);
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(AccountService)} - {nameof(CheckCurrentUserToken)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<IAppUserDto>(HttpStatusCode.InternalServerError);
             }
         }
     }

@@ -105,6 +105,22 @@ namespace localsound.backend.api.Controllers
 
             return StatusCode((int)updateResult.StatusCode, updateResult.ServiceResponseMessage);
         }
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<IAppUserDto>> CheckCurrentUserToken()
+        {
+            var result = await Mediator.Send(new CheckCurrentUserTokenQuery
+            {
+                ClaimsPrincipal = User
+            });
+
+            if (result.IsSuccessStatusCode)
+            {
+                return Ok(result.ReturnData);
+            }
+
+            return StatusCode((int)result.StatusCode, result);
+        }
 
         private void AddCookies(string token, string refreshToken)
         {

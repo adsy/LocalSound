@@ -43,8 +43,8 @@ namespace localsound.backend.api.Extensions
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = key,
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
+                        ValidateIssuer = false, // set to true when deployed
+                        ValidateAudience = false, // set to true when deployed
                         RequireExpirationTime = true,
                         ClockSkew = TimeSpan.Zero,
                         ValidateLifetime = true

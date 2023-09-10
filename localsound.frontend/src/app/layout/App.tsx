@@ -1,4 +1,4 @@
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import "../../App.css";
 import LandingPage from "../../features/LandingPage/LandingPage";
 import ModalContainer from "../../common/modal/ModalContainer";
@@ -7,8 +7,48 @@ import UserProfile from "../../features/UserProfile/Profile";
 import { Container } from "react-bootstrap";
 import PrivateRoute from "./PrivateRoute";
 import HomePage from "../../features/Home/HomePage";
+import { useEffect } from "react";
+import agent from "../../api/agent";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  handleResetUserState,
+  handleSetUserDetails,
+} from "../redux/actions/userSlice";
+import { handleResetAppState } from "../redux/actions/applicationSlice";
+import { UserModel } from "../model/dto/user.model";
+import { State } from "../model/redux/state";
 
 const App = () => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const userDetails = useSelector((state: State) => state.user?.userDetails);
+
+  useEffect(() => {
+    if (userDetails) {
+      const checkCurrentUser = async () => {
+        return await agent.Authentication.checkCurrentUser();
+      };
+
+      const signout = async () => {
+        await agent.Authentication.signOut();
+      };
+
+      (async () => {
+        try {
+          await checkCurrentUser().then((userDetails: UserModel) => {
+            dispatch(handleSetUserDetails(userDetails));
+          });
+        } catch (err) {
+          await signout().finally(() => {
+            history.push("/");
+            dispatch(handleResetUserState());
+            dispatch(handleResetAppState());
+          });
+        }
+      })();
+    }
+  }, []);
+
   return (
     <>
       <ModalContainer />

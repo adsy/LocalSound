@@ -1,9 +1,11 @@
 ﻿using localsound.backend.Infrastructure.Interface.Services;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace localsound.backend.api.Controllers
 {
+    [Authorize]
     public class BaseApiController: ControllerBase
     {
         private IMediator _mediator;

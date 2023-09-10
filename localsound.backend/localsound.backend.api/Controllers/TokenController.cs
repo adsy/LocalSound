@@ -5,6 +5,8 @@ using System.Web;
 
 namespace localsound.backend.api.Controllers
 {
+    [Route("api/token")]
+    [ApiController]
     public class TokenController : BaseApiController
     {
         public TokenController()

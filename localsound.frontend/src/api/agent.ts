@@ -1,4 +1,10 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, {
+  AxiosError,
+  AxiosRequestConfig,
+  AxiosRequestHeaders,
+  AxiosResponse,
+} from "axios";
+import { Store as StoreType } from "redux";
 import { UserRegistrationModel } from "../app/model/dto/user-registration.model";
 import { UserLoginModel } from "../app/model/dto/user-login.model";
 import { UserModel } from "../app/model/dto/user.model";
@@ -6,12 +12,15 @@ import { UpdateArtistModel } from "../app/model/dto/update-artist.model";
 import { GenreModel } from "../app/model/dto/genre.model";
 import { AccountImageTypes } from "../app/model/enums/accountImageTypes";
 import { AccountImageModel } from "../app/model/dto/account-image.model";
+import { handleResetAppState } from "../app/redux/actions/applicationSlice";
+import { handleResetUserState } from "../app/redux/actions/userSlice";
+import { history } from "../main";
 
-// let localStore: StoreType;
+let localStore: StoreType;
 
-// export const injectStore = (_store: StoreType) => {
-//   localStore = _store;
-// };
+export const injectStore = (_store: StoreType) => {
+  localStore = _store;
+};
 
 const axiosApiInstance = axios.create();
 
@@ -21,14 +30,16 @@ const sleep = (delay: number) => {
   });
 };
 
+interface AdaptAxiosRequestConfig extends AxiosRequestConfig {
+  headers: AxiosRequestHeaders;
+}
+
 axiosApiInstance.defaults.baseURL = import.meta.env.VITE_API_URL;
 
-axiosApiInstance.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    config.withCredentials = true;
-    return config;
-  }
-);
+axiosApiInstance.interceptors.request.use((config: AdaptAxiosRequestConfig) => {
+  config.withCredentials = true;
+  return config;
+});
 
 axiosApiInstance.interceptors.response.use(
   async (response: AxiosResponse) => {
@@ -41,25 +52,24 @@ axiosApiInstance.interceptors.response.use(
     if (import.meta.env.NODE_ENV === "development") {
     }
     if (error && error.response) {
-      //TODO: Refresh token functionality
-      // const { status, config, headers } = error.response;
+      const { status, config, headers } = error.response;
 
       // Handle refresh token functionality
-      // if (
-      //   status === 401 &&
-      //   headers["www-authenticate"]?.includes("invalid_token")
-      // ) {
-      //   try {
-      //     await Authentication.refreshToken();
-      //     return await requests.retry(config);
-      //   } catch (err) {
-      //     localStore.dispatch(handleUserLogout());
-      //     localStore.dispatch(handleResetState());
-      //     history.push("/");
-      //   }
-      // } else {
-      return Promise.reject(error.response.data);
-      // }
+      if (
+        status === 401 &&
+        headers["www-authenticate"]?.includes("invalid_token")
+      ) {
+        try {
+          await Authentication.refreshToken();
+          return await requests.retry(config);
+        } catch (err) {
+          localStore.dispatch(handleResetUserState());
+          localStore.dispatch(handleResetAppState());
+          history.push("/");
+        }
+      } else {
+        return Promise.reject(error.response.data);
+      }
     } else {
       return Promise.reject(
         "An unexpected error has occured, please try again.."
@@ -86,9 +96,8 @@ const Authentication = {
   login: (details: UserLoginModel) => requests.post(`account/login`, details),
   register: (details: UserRegistrationModel) =>
     requests.post(`account/register`, details),
-  // checkCurrentUser: () =>
-  //   requests.get<StoreLoginState | UserLoginState>("account"),
-  // refreshToken: () => requests.post<null>("token/refresh-token", {}),
+  checkCurrentUser: () => requests.get<UserModel>("account"),
+  refreshToken: () => requests.post<null>("token/refresh-token", {}),
   // confirmEmail: (token: string) =>
   //   requests.post<UserLoginState | StoreLoginState>("token/confirm-email", {
   //     token,

@@ -5,6 +5,7 @@ using localsound.backend.Domain.Model.Dto.Response;
 using localsound.backend.Domain.Model.Dto.Submission;
 using localsound.backend.Domain.Model.Interfaces.Entity;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace localsound.backend.Infrastructure.Interface.Services
 {
@@ -15,5 +16,6 @@ namespace localsound.backend.Infrastructure.Interface.Services
         Task<ServiceResponse<LoginResponseDto>> RegisterAsync(RegisterSubmissionDto registrationDetails);
         Task<ServiceResponse> UpdateAccountImage(Guid userId, string memberId, IFormFile photo, AccountImageTypeEnum imageType);
         Task<ServiceResponse<AccountImageDto>> GetAccountImage(Guid userId, string memberId, AccountImageTypeEnum imageType);
+        Task<ServiceResponse<IAppUserDto>> CheckCurrentUserToken(ClaimsPrincipal claimsPrincipal);
     }
 }

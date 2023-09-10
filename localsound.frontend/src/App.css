@@ -29,7 +29,7 @@ h4.inverse,
 h5.inverse,
 h6.inverse {
   color: black;
-  text-shadow: -1px 0 white, 0 1px #6d69fa, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
 .pl-0 {
@@ -377,14 +377,14 @@ h6.inverse {
 #landing-page .banner .page-title {
   letter-spacing: 3.5px;
   font-size: 50px;
-  text-shadow: -1px 0 white, 0 1px #6d69fa, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 #landing-page #landing-page-search .search-text {
   letter-spacing: 1px;
   font-weight: 600;
   font-size: 20px;
   color: #232323;
-  text-shadow: -1px 0 white, 0 1px #6d69fa, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 #landing-page .search-box {
   width: 400px;
@@ -421,7 +421,7 @@ i.large.icon {
 }
 #navbar .navbar-title {
   font-size: 32px !important;
-  text-shadow: -1px 0 white, 0 1px #6d69fa, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   letter-spacing: 3.5px;
 }
 #navbar .navbar-toggler-icon {
@@ -444,7 +444,7 @@ i.large.icon {
 }
 #offcanvasNavbar-expand-false .navbar-title {
   font-size: 32px !important;
-  text-shadow: -1px 0 white, 0 1px #6d69fa, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   letter-spacing: 3.5px;
 }
 #offcanvasNavbar-expand-false .hide-options {
@@ -455,7 +455,7 @@ i.large.icon {
 }
 #offcanvasNavbar-expand-false .sidebar-title {
   font-size: 24px !important;
-  text-shadow: -1px 0 white, 0 1px #6d69fa, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   font-weight: 800;
   letter-spacing: 1.5px;
 }
@@ -489,7 +489,7 @@ i.large.icon {
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  text-shadow: -1px 0 white, 0 1px #6d69fa, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: border-color 0.5s ease;
   background-color: #6d69fa !important;
   border: 1px solid black;
@@ -507,7 +507,7 @@ i.large.icon {
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  text-shadow: -1px 0 white, 0 1px #6d69fa, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: border-color 0.5s ease;
   transition: background-color 0.5s ease;
   background-color: #232323;
@@ -534,7 +534,7 @@ i.large.icon {
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  text-shadow: -1px 0 white, 0 1px #6d69fa, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: border-color 0.5s ease;
   transition: background-color 0.5s ease;
   background-color: #ff6100;
@@ -552,7 +552,7 @@ i.large.icon {
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  text-shadow: -1px 0 white, 0 1px #6d69fa, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: border-color 0.5s ease;
   transition: background-color 0.5s ease;
   background-color: #1ed75d;
@@ -570,7 +570,7 @@ i.large.icon {
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  text-shadow: -1px 0 white, 0 1px #6d69fa, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: border-color 0.5s ease;
   transition: background-color 0.5s ease;
   background-color: #ff0000;
@@ -630,7 +630,7 @@ i.large.icon {
   border-bottom: 4px solid #6d69fa;
   color: #001514 !important;
   font-size: 18px !important;
-  text-shadow: -1px 0 white, 0 1px #6d69fa, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   font-weight: 800;
   letter-spacing: 1.5px;
   padding-bottom: 5px;
@@ -655,7 +655,7 @@ i.large.icon {
   border-bottom: 4px solid #6d69fa;
   color: #001514 !important;
   font-size: 18px !important;
-  text-shadow: -1px 0 white, 0 1px #6d69fa, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   font-weight: 800;
   letter-spacing: 1.5px;
   padding-bottom: 5px;

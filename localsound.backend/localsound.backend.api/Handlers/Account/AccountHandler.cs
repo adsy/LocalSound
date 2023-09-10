@@ -13,7 +13,8 @@ namespace localsound.backend.api.Handlers.Account
         IRequestHandler<RegisterCommand, ServiceResponse<LoginResponseDto>>,
         IRequestHandler<GetProfileDataQuery, ServiceResponse<IAppUserDto>>,
         IRequestHandler<UpdateAccountImageCommand, ServiceResponse>,
-        IRequestHandler<GetAccountImageQuery, ServiceResponse<AccountImageDto>>
+        IRequestHandler<GetAccountImageQuery, ServiceResponse<AccountImageDto>>,
+        IRequestHandler<CheckCurrentUserTokenQuery, ServiceResponse<IAppUserDto>>
     {
         private readonly IAccountService _accountService;
 
@@ -45,6 +46,11 @@ namespace localsound.backend.api.Handlers.Account
         public async Task<ServiceResponse<AccountImageDto>> Handle(GetAccountImageQuery request, CancellationToken cancellationToken)
         {
             return await _accountService.GetAccountImage(request.UserId, request.MemberId, request.ImageType);
+        }
+
+        public async Task<ServiceResponse<IAppUserDto>> Handle(CheckCurrentUserTokenQuery request, CancellationToken cancellationToken)
+        {
+            return await _accountService.CheckCurrentUserToken(request.ClaimsPrincipal);
         }
     }
 }
