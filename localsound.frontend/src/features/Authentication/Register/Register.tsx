@@ -48,7 +48,9 @@ const Register = () => {
       // TODO: redirect once logged in
     } catch (error) {
       if (error) {
-        setStatus(error);
+        setStatus({
+          error,
+        });
       } else {
         setStatus({
           error:

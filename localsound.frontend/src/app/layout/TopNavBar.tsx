@@ -1,7 +1,7 @@
 import Navbar from "react-bootstrap/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../model/redux/state";
-import logo from "../../assets/logo4.png";
+import logo from "../../assets/logo3.png";
 import { useState } from "react";
 import { Button, Container, Nav, Offcanvas } from "react-bootstrap";
 import { Divider, Icon } from "semantic-ui-react";

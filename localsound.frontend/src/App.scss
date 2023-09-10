@@ -157,6 +157,10 @@ $end: 10;
   font-weight: bold;
 }
 
+.white-text {
+  color: white !important;
+}
+
 .app-container {
   height: 100%;
   transition: width 0.3s ease, margin-left 0.3s ease, margin-right 0.3s ease,

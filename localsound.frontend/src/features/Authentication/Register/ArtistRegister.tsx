@@ -50,6 +50,7 @@ const ArtistRegister = ({ handleRegisterRequest }: Props) => {
         setFieldValue,
         setFieldTouched,
       }) => {
+        console.log(status);
         const disabled = !isValid || !dirty || isSubmitting;
         return (
           <Form
@@ -70,9 +71,9 @@ const ArtistRegister = ({ handleRegisterRequest }: Props) => {
             {status?.error ? (
               <Header
                 color="black"
-                as="h4"
+                as="h3"
                 content={status.error}
-                className="text-center fade-in mb-3"
+                className="text-center white-text fade-in mb-3 mt-0"
               />
             ) : null}
             {!isSubmitting ? (

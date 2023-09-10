@@ -26,10 +26,11 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.Configure<JwtSettingsAdaptor>(options => builder.Configuration.GetSection(JwtSettingsAdaptor.JwtSettings).Bind(options));
-
+builder.Services.Configure<EmailSettingsAdaptor>(options => builder.Configuration.GetSection(EmailSettingsAdaptor.EmailSettingsKey).Bind(options));
 builder.Services.Configure<BlobStorageSettingsAdaptor>(options => builder.Configuration.GetSection(BlobStorageSettingsAdaptor.BlobSettings).Bind(options));
 
 builder.Services.AddSingleton(new JwtSettingsAdaptor());
+builder.Services.AddSingleton(new EmailSettingsAdaptor());
 builder.Services.AddSingleton(new BlobStorageSettingsAdaptor());
 
 builder.Services.AddApplicationServices(builder.Configuration);
@@ -49,6 +50,7 @@ builder.Services.AddTransient<IDbTransactionRepository, DbTransactionRepository>
 builder.Services.AddTransient<IAccountImageRepository, AccountImageRepository>();
 builder.Services.AddTransient<IAccountImageService, AccountImageService>();
 builder.Services.AddTransient<IBlobRepository, BlobRepository>();
+builder.Services.AddTransient<IEmailRepository, EmailRepository>();
 
 builder.Services.AddHttpContextAccessor();
 

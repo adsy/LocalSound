@@ -26,6 +26,7 @@ namespace localsound.backend.Infrastructure.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManger;
         private readonly IAccountImageService _accountImageService;
+        private readonly IEmailRepository _emailRepository;
 
         public AccountService(
             IAccountRepository accountRepository,
@@ -34,7 +35,8 @@ namespace localsound.backend.Infrastructure.Services
             ILogger<AccountService> logger,
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManger,
-            IAccountImageService accountImageService)
+            IAccountImageService accountImageService,
+            IEmailRepository emailRepository)
         {
             _accountRepository = accountRepository;
             _tokenRepository = tokenRepository;
@@ -43,6 +45,7 @@ namespace localsound.backend.Infrastructure.Services
             _userManager = userManager;
             _signInManger = signInManger;
             _accountImageService = accountImageService;
+            _emailRepository = emailRepository;
         }
 
         public async Task<ServiceResponse<LoginResponseDto>> LoginAsync(LoginSubmissionDto loginData)
@@ -178,6 +181,10 @@ namespace localsound.backend.Infrastructure.Services
                 }
 
                 if (userResponse.ReturnData?.MemberId != null) {
+
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(userResponse.ReturnData);
+                    await _emailRepository.SendConfirmEmailTokenMessageAsync(token, userResponse.ReturnData.Email);
+
                     userDto.MemberId = userResponse.ReturnData.MemberId;
 
                     var accessToken = _tokenRepository.CreateToken(_tokenRepository.GetClaims(userResponse.ReturnData));
