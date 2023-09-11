@@ -6,9 +6,6 @@ import { useState } from "react";
 import { Button, Container, Nav, Offcanvas } from "react-bootstrap";
 import { Divider, Icon } from "semantic-ui-react";
 import { NavLink, useHistory } from "react-router-dom";
-import { handleToggleModal } from "../redux/actions/modalSlice";
-import Login from "../../features/Authentication/Login/Login";
-import Register from "../../features/Authentication/Register/Register";
 import agent from "../../api/agent";
 import { handleResetUserState } from "../redux/actions/userSlice";
 import { handleResetAppState } from "../redux/actions/applicationSlice";
@@ -19,26 +16,6 @@ const TopNavbar = () => {
   const dispatch = useDispatch();
 
   const [show, setShow] = useState(false);
-
-  const handleAuthenticationRequest = (isLogin: boolean) => {
-    if (isLogin) {
-      dispatch(
-        handleToggleModal({
-          open: true,
-          body: <Login />,
-          size: "tiny",
-        })
-      );
-    } else {
-      dispatch(
-        handleToggleModal({
-          open: true,
-          body: <Register />,
-          size: "tiny",
-        })
-      );
-    }
-  };
 
   const handleSignout = async () => {
     try {
@@ -85,22 +62,7 @@ const TopNavbar = () => {
                   className=" mr-1 align-self-center"
                   onClick={() => setShow(true)}
                 />
-              ) : (
-                <div className="justify-content-end ml-3">
-                  <Button
-                    className="black-button mr-2"
-                    onClick={() => handleAuthenticationRequest(true)}
-                  >
-                    <h4>Login</h4>
-                  </Button>
-                  <Button
-                    className="black-button"
-                    onClick={() => handleAuthenticationRequest(false)}
-                  >
-                    <h4>Create account</h4>
-                  </Button>
-                </div>
-              )}
+              ) : null}
             </div>
             <Navbar.Offcanvas
               id={`offcanvasNavbar-expand-false`}

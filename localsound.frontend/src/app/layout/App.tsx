@@ -58,20 +58,28 @@ const App = () => {
       >
         <TopNavbar />
         <div className="d-flex flex-row w-100 justify-content-center app-holder">
-          <Container className="app-container">
-            <Route exact path="/" component={LandingPage} />
-            <Route
-              path={"/(.+)"}
-              render={() => (
+          <Route
+            exact
+            path="/"
+            render={() => (
+              <Container>
+                <LandingPage />
+              </Container>
+            )}
+          />
+          <Route
+            path={"/(.+)"}
+            render={() => (
+              <Container className="app-container">
                 <div className="masthead">
                   <Switch>
                     <PrivateRoute exact path="/home" component={HomePage} />
                     <Route exact path="/(.+)" component={UserProfile} />
                   </Switch>
                 </div>
-              )}
-            />
-          </Container>
+              </Container>
+            )}
+          />
         </div>
       </div>
     </>

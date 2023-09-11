@@ -2,7 +2,9 @@
 using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
+using localsound.backend.Domain.Model.Dto.Response;
 using localsound.backend.Domain.Model.Entity;
+using localsound.backend.Domain.Model.Interfaces.Entity;
 using localsound.backend.Domain.ModelAdaptor;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Persistence.DbContext;
@@ -28,13 +30,15 @@ namespace localsound.backend.Infrastructure.Repositories
         private readonly LocalSoundDbContext _context;
         private readonly IAccountRepository _accountRepository;
         private readonly IMapper _mapper;
+        private readonly IEmailRepository _emailRepository;
 
         public TokenRepository(UserManager<AppUser> userManager,
             IOptions<JwtSettingsAdaptor> settings,
             ILogger<TokenRepository> logger,
             LocalSoundDbContext context,
             IAccountRepository accountRepository,
-            IMapper mapper)
+            IMapper mapper,
+            IEmailRepository emailRepository)
         {
             _userManager = userManager;
             _settings = settings.Value;
@@ -42,6 +46,7 @@ namespace localsound.backend.Infrastructure.Repositories
             _context = context;
             _accountRepository = accountRepository;
             _mapper = mapper;
+            _emailRepository = emailRepository;
         }
 
         // Create new Access Token
@@ -55,7 +60,7 @@ namespace localsound.backend.Infrastructure.Repositories
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddMinutes(1),
+                Expires = DateTime.Now.AddMinutes(15),
                 SigningCredentials = credentials
             };
 
@@ -183,6 +188,124 @@ namespace localsound.backend.Infrastructure.Repositories
                 throw new SecurityTokenException("Invalid token");
 
             return principal;
+        }
+
+        public async Task<ServiceResponse<LoginResponseDto>> ConfirmEmailToken(string emailToken, ClaimsPrincipal claims)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(emailToken) || claims == null)
+                    return new ServiceResponse<LoginResponseDto>(HttpStatusCode.Unauthorized);
+
+                var id = claims.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (id == null)
+                {
+                    var unAuthedErrorMessage = $"{nameof(TokenRepository)} - {nameof(ConfirmEmailToken)} - ClaimsPrincipal does not contain user Id";
+                    _logger.LogError(unAuthedErrorMessage);
+
+                    return new ServiceResponse<LoginResponseDto>(HttpStatusCode.Unauthorized);
+                }
+
+                var user = await _userManager.FindByIdAsync(id);
+
+                if (user == null)
+                {
+                    return new ServiceResponse<LoginResponseDto>(HttpStatusCode.BadRequest);
+                }
+
+                // validate refresh token
+                var result = await _userManager.ConfirmEmailAsync(user, emailToken);
+
+                if (!result.Succeeded)
+                {
+                    return new ServiceResponse<LoginResponseDto>(HttpStatusCode.BadRequest, "The email confirmation token entered is incorrect, please try again..");
+                }
+
+                var returnUser = null as IAppUserDto;
+
+                // Create store or user based on customer type
+                if (user.CustomerType == CustomerTypeEnum.Artist)
+                {
+                    var customer = await _accountRepository.GetArtistFromDbAsync(id);
+
+                    if (!customer.IsSuccessStatusCode)
+                        return new ServiceResponse<LoginResponseDto>(HttpStatusCode.InternalServerError);
+
+                    returnUser = _mapper.Map<ArtistDto>(customer.ReturnData);
+                    returnUser.Email = user.Email;
+                }
+                else
+                {
+                    var store = await _accountRepository.GetNonArtistFromDbAsync(id);
+
+                    if (!store.IsSuccessStatusCode)
+                        return new ServiceResponse<LoginResponseDto>(HttpStatusCode.InternalServerError);
+
+                    returnUser = _mapper.Map<NonArtistDto>(store.ReturnData);
+                    returnUser.Email = user.Email;
+                }
+
+                var accessToken = CreateToken(GetClaims(user));
+                var refreshToken = await CreateRefreshToken(user);
+
+                return new ServiceResponse<LoginResponseDto>(HttpStatusCode.OK)
+                {
+                    ReturnData = new LoginResponseDto
+                    {
+                        AccessToken = accessToken,
+                        RefreshToken = refreshToken,
+                        UserDetails = returnUser
+                    }
+                };
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(TokenRepository)} - {nameof(ConfirmEmailToken)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<LoginResponseDto>(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = e.Message
+                };
+            }
+        }
+
+        public async Task<ServiceResponse> ResendConfirmEmailToken(ClaimsPrincipal claims)
+        {
+            try
+            {
+                var id = claims.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (id == null)
+                {
+                    var unAuthedErrorMessage = $"{nameof(TokenRepository)} - {nameof(ConfirmEmailToken)} - ClaimsPrincipal does not contain user Id";
+                    _logger.LogError(unAuthedErrorMessage);
+
+                    return new ServiceResponse<LoginResponseDto>(HttpStatusCode.Unauthorized);
+                }
+
+                var user = await _userManager.FindByIdAsync(id);
+
+                if (user == null || string.IsNullOrWhiteSpace(user.Email))
+                    return new ServiceResponse(HttpStatusCode.BadRequest);
+
+                // Send email address confirmation token
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                await _emailRepository.SendConfirmEmailTokenMessageAsync(token, user.Email);
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(TokenRepository)} - {nameof(ResendConfirmEmailToken)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = e.Message
+                };
+            }
         }
     }
 }

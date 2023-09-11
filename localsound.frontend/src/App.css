@@ -270,16 +270,21 @@ h6.inverse {
   color: white !important;
 }
 
+.landing-page-container {
+  height: 400px;
+  margin-top: 30px;
+  background: white;
+  border-radius: 5px;
+}
+
 .app-container {
   height: 100%;
-  transition: width 0.3s ease, margin-left 0.3s ease, margin-right 0.3s ease,
-    padding 0.3s ease !important;
+  transition: width 0.3s ease, margin-left 0.3s ease, margin-right 0.3s ease, padding 0.3s ease !important;
   background-color: white;
   min-height: calc(100vh - 79px);
   height: 1px;
   padding: 0px;
-  box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
-    rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+  box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
 }
 
 .app-holder {
@@ -301,7 +306,7 @@ h6.inverse {
 
 /** LOGOS **/
 .landing-page-logo {
-  background-image: url("./assets/logo3.png");
+  background-image: url("./assets/logo4.png");
   background-size: contain !important;
   background-attachment: inherit !important;
   background-position: center center;
@@ -367,6 +372,9 @@ h6.inverse {
 }
 
 /** LANDING PAGE **/
+#landing-page .auth-button {
+  width: 45%;
+}
 #landing-page .banner {
   height: 25rem;
   background-image: url("./assets/landing-page-banner/banner1.jpg");
@@ -379,6 +387,7 @@ h6.inverse {
   border: 1px solid #232323;
   width: 100%;
   margin: 0;
+  border-radius: 0px 0px 10px 10px;
 }
 #landing-page .banner .page-title {
   letter-spacing: 3.5px;
@@ -396,8 +405,7 @@ h6.inverse {
   width: 400px;
 }
 #landing-page .ui-container {
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 13px 27px -5px,
-    rgba(230, 230, 230, 0.3) 0px 10px 20px -4px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 13px 27px -5px, rgba(230, 230, 230, 0.3) 0px 10px 20px -4px;
   border-radius: 1px 1px 30px 5px;
   min-height: 150px;
   margin-bottom: 20px;
@@ -723,10 +731,7 @@ i.large.icon {
   background: white;
 }
 #auth-modal #search-genre .genre-dropdown .genre-dropdown-option:first-of-type,
-#edit-artist
-  #search-genre
-  .genre-dropdown
-  .genre-dropdown-option:first-of-type {
+#edit-artist #search-genre .genre-dropdown .genre-dropdown-option:first-of-type {
   border-top: 1px solid #232323;
 }
 #auth-modal #search-genre .genre-dropdown .genre-dropdown-option,
@@ -798,7 +803,7 @@ i.large.icon {
   top: 38px;
   border-radius: 1px 1px;
 }
-.form .form-body .autocomplete-dropdown-container > div:not([role="option"]) {
+.form .form-body .autocomplete-dropdown-container > div:not([role=option]) {
   display: none;
 }
 .form .form-body .suggestion-item {
@@ -828,8 +833,7 @@ i.large.icon {
 
 /** HOME PAGE **/
 #home-page .ui-container {
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 13px 27px -5px,
-    rgba(230, 230, 230, 0.3) 0px 10px 20px -4px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 13px 27px -5px, rgba(230, 230, 230, 0.3) 0px 10px 20px -4px;
   border-radius: 1px 1px 30px 5px;
   min-height: 150px;
   margin-bottom: 20px;
@@ -856,8 +860,7 @@ i.large.icon {
   display: inline;
 }
 #user-profile .ui-container {
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 13px 27px -5px,
-    rgba(230, 230, 230, 0.3) 0px 10px 20px -4px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 13px 27px -5px, rgba(230, 230, 230, 0.3) 0px 10px 20px -4px;
   border-radius: 1px 1px 30px 5px;
   min-height: 150px;
   margin-bottom: 20px;
@@ -1002,8 +1005,9 @@ i.large.icon {
   #app-layout {
     flex-direction: column !important;
   }
-  .app-container {
-    left: 0px;
+  .container {
+    padding-left: 0px;
+    padding-right: 0px;
   }
 }
 @media only screen and (max-width: 767px) {

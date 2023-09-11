@@ -2,6 +2,7 @@
 using localsound.backend.Domain.ModelAdaptor;
 using localsound.backend.Persistence.DbContext;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -19,13 +20,12 @@ namespace localsound.backend.api.Extensions
                 options.Password.RequireNonAlphanumeric = false;
                 options.SignIn.RequireConfirmedEmail = true;
                 options.Tokens.AuthenticatorTokenProvider = "RefreshTokenProviderExtension";
-                options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+                options.Tokens.EmailConfirmationTokenProvider = "ConfirmEmailTokenProviderExtension";
             })
                 .AddRoles<IdentityRole<Guid>>()
                 .AddRoleManager<RoleManager<IdentityRole<Guid>>>()
                 .AddTokenProvider<RefreshTokenProviderExtension<AppUser>>("RefreshTokenProviderExtension")
-                .AddDefaultTokenProviders()
-                .AddDefaultTokenProviders()
+                .AddTokenProvider<ConfirmEmailTokenProviderExtension<AppUser>>("ConfirmEmailTokenProviderExtension")
                 .AddEntityFrameworkStores<LocalSoundDbContext>()
                 .AddSignInManager<SignInManager<AppUser>>();
 

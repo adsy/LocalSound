@@ -161,6 +161,13 @@ $end: 10;
   color: white !important;
 }
 
+.landing-page-container {
+  height: 400px;
+  margin-top: 30px;
+  background: white;
+  border-radius: 5px;
+}
+
 .app-container {
   height: 100%;
   transition: width 0.3s ease, margin-left 0.3s ease, margin-right 0.3s ease,
@@ -235,6 +242,9 @@ $end: 10;
 
 /** LANDING PAGE **/
 #landing-page {
+  .auth-button {
+    width: 45%;
+  }
   .banner {
     height: 25rem;
     background-image: url("./assets/landing-page-banner/banner1.jpg");
@@ -247,6 +257,7 @@ $end: 10;
     border: 1px solid $borderColor;
     width: 100%;
     margin: 0;
+    border-radius: 0px 0px 10px 10px;
 
     .page-title {
       letter-spacing: 3.5px;
@@ -862,8 +873,10 @@ i.large.icon {
   #app-layout {
     flex-direction: column !important;
   }
-  .app-container {
-    left: 0px;
+
+  .container {
+    padding-left: 0px;
+    padding-right: 0px;
   }
 }
 

@@ -1,5 +1,6 @@
 ﻿using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
+using localsound.backend.Domain.Model.Dto.Response;
 using localsound.backend.Domain.Model.Entity;
 using System.Security.Claims;
 
@@ -11,5 +12,7 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
         List<Claim> GetClaims(AppUser user);
         Task<ServiceResponse<TokenDto>> ValidateRefreshToken(string accessToken, string refreshToken);
         Task<string> CreateRefreshToken(AppUser user);
+        Task<ServiceResponse<LoginResponseDto>> ConfirmEmailToken(string emailToken, ClaimsPrincipal claims);
+        Task<ServiceResponse> ResendConfirmEmailToken(ClaimsPrincipal claims);
     }
 }

@@ -12,6 +12,7 @@ namespace localsound.backend.Domain.Model.Dto.Entity
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public CustomerTypeEnum CustomerType { get; set; }
+        public bool EmailConfirmed { get; set; }
 
         public List<AccountImageDto> Images { get; set; }
     }
