@@ -93,16 +93,17 @@ const requests = {
 };
 
 const Authentication = {
-  login: (details: UserLoginModel) => requests.post(`account/login`, details),
+  login: (details: UserLoginModel) =>
+    requests.post<UserModel>(`account/login`, details),
   register: (details: UserRegistrationModel) =>
     requests.post(`account/register`, details),
   checkCurrentUser: () => requests.get<UserModel>("account"),
   refreshToken: () => requests.post<null>("token/refresh-token", {}),
-  // confirmEmail: (token: string) =>
-  //   requests.post<UserLoginState | StoreLoginState>("token/confirm-email", {
-  //     token,
-  //   }),
-  // resendEmailToken: () => requests.post("token/resend-email-token", {}),
+  confirmEmail: (token: string) =>
+    requests.post<UserModel>("token/confirm-email", {
+      token,
+    }),
+  resendEmailToken: () => requests.post("token/resend-email-token", {}),
   signOut: () => requests.post<null>("account/sign-out", null),
 };
 

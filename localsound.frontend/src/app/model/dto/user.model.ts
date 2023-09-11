@@ -16,6 +16,7 @@ export interface UserModel {
   spotifyUrl?: string;
   youtubeUrl?: string;
   aboutSection?: string;
+  emailConfirmed: boolean;
   genres: GenreModel[];
   images: AccountImageModel[];
 }

@@ -28,7 +28,7 @@ h3.inverse,
 h4.inverse,
 h5.inverse,
 h6.inverse {
-  color: black;
+  color: #232323;
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
@@ -659,7 +659,7 @@ i.large.icon {
   transition: border-bottom 0.2s ease-in-out !important;
   margin-right: 20px;
   padding-left: 0;
-  padding-right: 0;
+  padding-right: 10;
 }
 #auth-modal .nav-tabs,
 #edit-artist .nav-tabs {
@@ -684,7 +684,7 @@ i.large.icon {
   transition: border-bottom 0.2s ease-in-out !important;
   margin-right: 20px;
   padding-left: 0;
-  padding-right: 0;
+  padding-right: 10;
   border-bottom: 4px solid rgb(199, 199, 199);
 }
 #auth-modal .nav-link:hover,

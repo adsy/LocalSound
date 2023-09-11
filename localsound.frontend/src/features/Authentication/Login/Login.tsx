@@ -10,6 +10,7 @@ import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import { useDispatch } from "react-redux";
 import { handleSetUserDetails } from "../../../app/redux/actions/userSlice";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
+import ConfirmEmailPopUp from "../ConfirmEmail/ConfirmEmailPopUp";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -25,12 +26,22 @@ const Login = () => {
         password: values.password,
       });
 
-      dispatch(handleSetUserDetails(result));
-      dispatch(
-        handleToggleModal({
-          open: false,
-        })
-      );
+      if (result.emailConfirmed) {
+        dispatch(handleSetUserDetails(result));
+        dispatch(
+          handleToggleModal({
+            open: false,
+          })
+        );
+      } else {
+        dispatch(
+          handleToggleModal({
+            open: true,
+            body: <ConfirmEmailPopUp />,
+            size: "mini",
+          })
+        );
+      }
 
       // TODO: redirect once logged in
     } catch (error) {

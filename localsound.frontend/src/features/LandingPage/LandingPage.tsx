@@ -7,6 +7,7 @@ import Login from "../../features/Authentication/Login/Login";
 import Register from "../../features/Authentication/Register/Register";
 import { Button } from "react-bootstrap";
 import { handleToggleModal } from "../../app/redux/actions/modalSlice";
+import ConfirmEmailPopUp from "../Authentication/ConfirmEmail/ConfirmEmailPopUp";
 
 const LandingPage = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
@@ -14,8 +15,17 @@ const LandingPage = () => {
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {
-    if (userDetails) {
+    if (userDetails && userDetails.emailConfirmed) {
       history.push("/home");
+    }
+    if (userDetails && !userDetails.emailConfirmed) {
+      dispatch(
+        handleToggleModal({
+          open: true,
+          body: <ConfirmEmailPopUp />,
+          size: "mini",
+        })
+      );
     }
   }, [userDetails]);
 

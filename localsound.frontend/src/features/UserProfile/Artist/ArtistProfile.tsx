@@ -79,7 +79,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
   return (
     <>
       {imgsLoaded && !submittingRequest ? (
-        <div className="d-flex flex-col flex-wrap p-0 fade-in">
+        <div className="d-flex flex-col flex-wrap p-0 fade-in w-100">
           <Col md={12} lg={6} className="p-0 left-col">
             {!updatingCoverPhoto && !file ? (
               <div

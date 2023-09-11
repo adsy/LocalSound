@@ -21,11 +21,11 @@ const PrivateRoute = ({
 }: Props) => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
 
-  if (userDetails && allowedCustomerType) {
+  if (userDetails && userDetails.emailConfirmed && allowedCustomerType) {
     if (allowedCustomerType !== userDetails.customerType) {
       return <Redirect to={"/home"} />;
     }
-  } else if (!userDetails) {
+  } else if (!userDetails || !userDetails.emailConfirmed) {
     return <Redirect to={"/"} />;
   }
 

@@ -197,9 +197,9 @@ namespace localsound.backend.Infrastructure.Repositories
                 if (string.IsNullOrWhiteSpace(emailToken) || claims == null)
                     return new ServiceResponse<LoginResponseDto>(HttpStatusCode.Unauthorized);
 
-                var id = claims.FindFirstValue(ClaimTypes.NameIdentifier);
+                var id = Guid.TryParse(claims.FindFirstValue(ClaimTypes.NameIdentifier), out Guid parsedId) ? parsedId : Guid.Empty;
 
-                if (id == null)
+                if (id == Guid.Empty)
                 {
                     var unAuthedErrorMessage = $"{nameof(TokenRepository)} - {nameof(ConfirmEmailToken)} - ClaimsPrincipal does not contain user Id";
                     _logger.LogError(unAuthedErrorMessage);
@@ -207,7 +207,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     return new ServiceResponse<LoginResponseDto>(HttpStatusCode.Unauthorized);
                 }
 
-                var user = await _userManager.FindByIdAsync(id);
+                var user = await _userManager.FindByIdAsync(id.ToString());
 
                 if (user == null)
                 {
@@ -275,9 +275,9 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var id = claims.FindFirstValue(ClaimTypes.NameIdentifier);
+                var id = Guid.TryParse(claims.FindFirstValue(ClaimTypes.NameIdentifier), out Guid parsedId) ? parsedId : Guid.Empty;
 
-                if (id == null)
+                if (id == Guid.Empty)
                 {
                     var unAuthedErrorMessage = $"{nameof(TokenRepository)} - {nameof(ConfirmEmailToken)} - ClaimsPrincipal does not contain user Id";
                     _logger.LogError(unAuthedErrorMessage);
@@ -285,7 +285,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     return new ServiceResponse<LoginResponseDto>(HttpStatusCode.Unauthorized);
                 }
 
-                var user = await _userManager.FindByIdAsync(id);
+                var user = await _userManager.FindByIdAsync(id.ToString());
 
                 if (user == null || string.IsNullOrWhiteSpace(user.Email))
                     return new ServiceResponse(HttpStatusCode.BadRequest);

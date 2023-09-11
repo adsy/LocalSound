@@ -8,6 +8,7 @@ import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import { handleSetUserDetails } from "../../../app/redux/actions/userSlice";
 import agent from "../../../api/agent";
 import { RegistrationModel } from "../../../app/model/dto/user-registration.model";
+import ConfirmEmailPopUp from "../ConfirmEmail/ConfirmEmailPopUp";
 
 const Register = () => {
   const [showRegisterForm, setShowRegisterForm] = useState(false);
@@ -38,10 +39,11 @@ const Register = () => {
         registrationDto: values,
       });
 
-      dispatch(handleSetUserDetails(result));
       dispatch(
         handleToggleModal({
-          open: false,
+          open: true,
+          body: <ConfirmEmailPopUp />,
+          size: "mini",
         })
       );
 
