@@ -143,6 +143,12 @@ $end: 10;
   }
 }
 
+/** BANNERS **/
+.alert {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
 /** ANIMATIONS **/
 .fade-in {
   -webkit-animation: fade-in 0.5s; /* Safari, Chrome and Opera > 12.1 */

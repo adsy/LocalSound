@@ -1,6 +1,8 @@
-﻿namespace localsound.backend.Domain.Model.Entity
+﻿using localsound.backend.Domain.Model.Interfaces.Entity;
+
+namespace localsound.backend.Domain.Model.Entity
 {
-    public class NonArtist
+    public class NonArtist : CustomerType
     {
         public Guid AppUserId { get; set; }
         public string FirstName { get; set; }

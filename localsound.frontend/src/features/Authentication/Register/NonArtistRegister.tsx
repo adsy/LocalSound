@@ -7,6 +7,7 @@ import NonArtistRegisterForm from "./NonArtistRegisterForm";
 import { RegistrationModel } from "../../../app/model/dto/user-registration.model";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import { CustomerTypes } from "../../../app/model/enums/customerTypes";
+import ErrorBanner from "../../../common/banner/ErrorBanner";
 
 interface Props {
   handleRegisterRequest: (
@@ -64,12 +65,11 @@ const NonArtistRegister = ({ handleRegisterRequest }: Props) => {
                 values={values as RegistrationModel}
               />
             </div>
+
             {status?.error ? (
-              <Header
-                color="black"
-                as="h4"
-                content={status.error}
-                className="text-center fade-in mb-3"
+              <ErrorBanner
+                className="text-center fade-in mt-3 mb-0 api-error"
+                text={status.error}
               />
             ) : null}
             {!isSubmitting ? (

@@ -158,18 +158,9 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var userDto = null as IAppUserDto;
+                var userDto = await CreateAccountAsync(registrationDetails.CustomerType, registrationDetails.RegistrationDto, userResponse.ReturnData);
 
-                if (registrationDetails.CustomerType == CustomerTypeEnum.Artist)
-                {
-                    userDto = await CreateArtistAsync(registrationDetails.RegistrationDto, userResponse.ReturnData);
-                }
-                else
-                {
-                    userDto = await CreateNonArtistAsync(registrationDetails.RegistrationDto, userResponse.ReturnData);
-                }
-
-                if (userDto is null)
+                if (!userDto.IsSuccessStatusCode || userDto.ReturnData == null)
                 {
                     // If we cannot add into the user database, delete the user from the aspUsers table so they can resubmit
                     await _userManager.DeleteAsync(userResponse.ReturnData);
@@ -177,7 +168,7 @@ namespace localsound.backend.Infrastructure.Services
                     var message = $"{nameof(AccountService)} - {nameof(RegisterAsync)} - User account was created but could not be stored in the customer db using email:{registrationDetails.RegistrationDto.Email}";
                     _logger.LogError(message);
 
-                    return new ServiceResponse<LoginResponseDto>(HttpStatusCode.InternalServerError, "Something went wrong while creating your account, please try again.");
+                    return new ServiceResponse<LoginResponseDto>(HttpStatusCode.InternalServerError, userDto.ServiceResponseMessage ?? "Something went wrong while creating your account, please try again.");
                 }
 
                 if (userResponse.ReturnData?.MemberId != null) {
@@ -185,7 +176,7 @@ namespace localsound.backend.Infrastructure.Services
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(userResponse.ReturnData);
                     await _emailRepository.SendConfirmEmailTokenMessageAsync(token, userResponse.ReturnData.Email);
 
-                    userDto.MemberId = userResponse.ReturnData.MemberId;
+                    userDto.ReturnData.MemberId = userResponse.ReturnData.MemberId;
 
                     var accessToken = _tokenRepository.CreateToken(_tokenRepository.GetClaims(userResponse.ReturnData));
                     var refreshToken = await _tokenRepository.CreateRefreshToken(userResponse.ReturnData);
@@ -196,7 +187,7 @@ namespace localsound.backend.Infrastructure.Services
                         {
                             AccessToken = accessToken,
                             RefreshToken = refreshToken,
-                            UserDetails = userDto
+                            UserDetails = userDto.ReturnData
                         }
                     };
                 }
@@ -218,56 +209,63 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        private async Task<IAppUserDto> CreateNonArtistAsync(RegistrationDto registrationDto, AppUser user)
+        private async Task<ServiceResponse<IAppUserDto>> CreateAccountAsync(CustomerTypeEnum customerType, RegistrationDto registrationDto, AppUser user)
         {
-            var newNonArtist = new NonArtist
+            ServiceResponse<CustomerType>? customerDbResult;
+            if (customerType == CustomerTypeEnum.Artist)
             {
-                Address = registrationDto.Address,
-                FirstName = registrationDto.FirstName,
-                LastName = registrationDto.LastName,
-                PhoneNumber = registrationDto.PhoneNumber,
-                User = user,
-                AppUserId = user.Id,
-            };
+                var newArtist = new Artist
+                {
+                    Address = registrationDto.Address,
+                    Name = registrationDto.Name,
+                    ProfileUrl = registrationDto.ProfileUrl,
+                    PhoneNumber = registrationDto.PhoneNumber,
+                    User = user,
+                    AppUserId = user.Id,
+                    YoutubeUrl = registrationDto.YoutubeUrl,
+                    SpotifyUrl = registrationDto.SpotifyUrl,
+                    SoundcloudUrl = registrationDto.SoundcloudUrl
+                };
 
-            var customerDbResult = await _accountRepository.AddNonArtistToDbAsync(newNonArtist);
+                customerDbResult = await _accountRepository.AddArtistToDbAsync(newArtist);
+            }
+            else
+            {
+                var newNonArtist = new NonArtist
+                {
+                    Address = registrationDto.Address,
+                    FirstName = registrationDto.FirstName,
+                    LastName = registrationDto.LastName,
+                    PhoneNumber = registrationDto.PhoneNumber,
+                    User = user,
+                    AppUserId = user.Id,
+                };
+
+                customerDbResult = await _accountRepository.AddNonArtistToDbAsync(newNonArtist);
+            }
 
             if (customerDbResult.IsSuccessStatusCode)
             {
-                var returnUser = _mapper.Map<NonArtistDto>(newNonArtist);
+                IAppUserDto? returnUser;
 
-                return returnUser;
+                if (customerType == CustomerTypeEnum.Artist) 
+                    returnUser = _mapper.Map<ArtistDto>(customerDbResult.ReturnData);
+                else
+                    returnUser = _mapper.Map<NonArtistDto>(customerDbResult.ReturnData);
+
+                return new ServiceResponse<IAppUserDto>(HttpStatusCode.OK)
+                {
+                    ReturnData = returnUser
+                };
             }
 
-            return null;
-        }
-
-        private async Task<IAppUserDto> CreateArtistAsync(RegistrationDto registrationDto, AppUser user)
-        {
-            var newArtist = new Artist
+            return new ServiceResponse<IAppUserDto>(HttpStatusCode.BadRequest)
             {
-                Address = registrationDto.Address,
-                Name = registrationDto.Name,
-                ProfileUrl = registrationDto.ProfileUrl,
-                PhoneNumber = registrationDto.PhoneNumber,
-                User = user,
-                AppUserId = user.Id,
-                YoutubeUrl = registrationDto.YoutubeUrl,
-                SpotifyUrl = registrationDto.SpotifyUrl,
-                SoundcloudUrl = registrationDto.SoundcloudUrl
+                ServiceResponseMessage = customerDbResult.ServiceResponseMessage
             };
-
-            var customerDbResult = await _accountRepository.AddArtistToDbAsync(newArtist);
-
-            if (customerDbResult.IsSuccessStatusCode)
-            {
-                var returnUser = _mapper.Map<ArtistDto>(newArtist);
-
-                return returnUser;
-            }
-
-            return null;
         }
+
+        
 
         private async Task<ServiceResponse<AppUser>> CreateUserAsync(CustomerTypeEnum customerType, RegistrationDto registrationDto)
         {

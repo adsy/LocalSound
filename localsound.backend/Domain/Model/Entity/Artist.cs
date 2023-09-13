@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using localsound.backend.Domain.Model.Interfaces.Entity;
 
 namespace localsound.backend.Domain.Model.Entity
 {
-    public class Artist
+    public class Artist : CustomerType
     {
         [Key]
         [ForeignKey("User")]

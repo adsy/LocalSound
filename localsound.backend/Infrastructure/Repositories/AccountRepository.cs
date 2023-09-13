@@ -1,6 +1,7 @@
 ﻿using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Entity;
+using localsound.backend.Domain.Model.Interfaces.Entity;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Persistence.DbContext;
 using Microsoft.EntityFrameworkCore;
@@ -20,11 +21,11 @@ namespace localsound.backend.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public async Task<ServiceResponse<Artist>> AddArtistToDbAsync(Artist artist)
+        public async Task<ServiceResponse<CustomerType>> AddArtistToDbAsync(Artist artist)
         {
             try
             {
-                var fnResult = new ServiceResponse<Artist>(HttpStatusCode.BadRequest);
+                var fnResult = new ServiceResponse<CustomerType>(HttpStatusCode.BadRequest);
 
                 if (artist == null)
                 {
@@ -47,13 +48,15 @@ namespace localsound.backend.Infrastructure.Repositories
                 {
                     fnResult.ServiceResponseMessage = "That profile URL is already in use, please try another one.";
                 }
+                else
+                {
+                    var artistResult = await _dbContext.Artist.AddAsync(artist);
 
-                var artistResult = await _dbContext.Artist.AddAsync(artist);
+                    await _dbContext.SaveChangesAsync();
 
-                await _dbContext.SaveChangesAsync();
-
-                fnResult.StatusCode = HttpStatusCode.OK;
-                fnResult.ReturnData = artistResult.Entity;
+                    fnResult.StatusCode = HttpStatusCode.OK;
+                    fnResult.ReturnData = artistResult.Entity;
+                }
 
                 return fnResult;
             }
@@ -62,15 +65,15 @@ namespace localsound.backend.Infrastructure.Repositories
                 var message = $"{nameof(AccountRepository)} - {nameof(AddArtistToDbAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<Artist>(HttpStatusCode.InternalServerError);
+                return new ServiceResponse<CustomerType>(HttpStatusCode.InternalServerError);
             }
         }
 
-        public async Task<ServiceResponse<NonArtist>> AddNonArtistToDbAsync(NonArtist nonArtist)
+        public async Task<ServiceResponse<CustomerType>> AddNonArtistToDbAsync(NonArtist nonArtist)
         {
             try
             {
-                var fnResult = new ServiceResponse<NonArtist>(HttpStatusCode.BadRequest);
+                var fnResult = new ServiceResponse<CustomerType>(HttpStatusCode.BadRequest);
 
                 if (nonArtist == null)
                 {
@@ -93,14 +96,15 @@ namespace localsound.backend.Infrastructure.Repositories
                 {
                     fnResult.ServiceResponseMessage = "That profile URL is already in use, please try another one.";
                 }
+                else
+                {
+                    var nonartistResult = await _dbContext.NonArtist.AddAsync(nonArtist);
 
+                    await _dbContext.SaveChangesAsync();
 
-                var artistResult = await _dbContext.NonArtist.AddAsync(nonArtist);
-
-                await _dbContext.SaveChangesAsync();
-
-                fnResult.StatusCode = HttpStatusCode.OK;
-                fnResult.ReturnData = artistResult.Entity;
+                    fnResult.StatusCode = HttpStatusCode.OK;
+                    fnResult.ReturnData = nonartistResult.Entity;
+                }
 
                 return fnResult;
             }
@@ -109,7 +113,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 var message = $"{nameof(AccountRepository)} - {nameof(AddNonArtistToDbAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<NonArtist>(HttpStatusCode.InternalServerError);
+                return new ServiceResponse<CustomerType>(HttpStatusCode.InternalServerError);
             }
         }
 

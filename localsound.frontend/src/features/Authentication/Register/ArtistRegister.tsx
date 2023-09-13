@@ -8,6 +8,7 @@ import artistRegisterValidation from "../../../validation/ArtistRegisterValidati
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import ArtistRegisterForm from "./ArtistRegisterForm";
 import { CustomerTypes } from "../../../app/model/enums/customerTypes";
+import ErrorBanner from "../../../common/banner/ErrorBanner";
 
 interface Props {
   handleRegisterRequest: (
@@ -68,12 +69,11 @@ const ArtistRegister = ({ handleRegisterRequest }: Props) => {
                 values={values as RegistrationModel}
               />
             </div>
+
             {status?.error ? (
-              <Header
-                color="black"
-                as="h3"
-                content={status.error}
-                className="text-center white-text fade-in mb-3 mt-0"
+              <ErrorBanner
+                className="text-center fade-in mt-3 mb-0 api-error"
+                text={status.error}
               />
             ) : null}
             {!isSubmitting ? (
