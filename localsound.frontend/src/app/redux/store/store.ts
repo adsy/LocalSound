@@ -6,9 +6,11 @@ import {
 import { createLogger } from "redux-logger";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
-import ApplicationReducer from "../actions/applicationSlice";
+import ApplicationReducer, {
+  handleResetAppState,
+} from "../actions/applicationSlice";
 import ModalReducer from "../actions/modalSlice";
-import UserReducer from "../actions/userSlice";
+import UserReducer, { handleResetUserState } from "../actions/userSlice";
 
 const middleware = [];
 
@@ -38,5 +40,10 @@ const storeOptions: ConfigureStoreOptions = {
 const store = configureStore(storeOptions);
 
 const persistor = persistStore(store);
+
+export const resetState = () => {
+  store.dispatch(handleResetUserState());
+  store.dispatch(handleResetAppState());
+};
 
 export { store, persistor };

@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { handleSetUserDetails } from "../../../app/redux/actions/userSlice";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import ConfirmEmailPopUp from "../ConfirmEmail/ConfirmEmailPopUp";
+import ErrorBanner from "../../../common/banner/ErrorBanner";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -101,11 +102,6 @@ const Login = () => {
                     disabled={isSubmitting}
                   />
                 </div>
-                {status?.error ? (
-                  <p className="text-center fade-in mb-0 api-error">
-                    {status.error}
-                  </p>
-                ) : null}
                 {!isSubmitting ? (
                   <Button
                     className={`black-button w-100 align-self-center ${
@@ -123,6 +119,12 @@ const Login = () => {
                     <InPageLoadingComponent />
                   </div>
                 )}
+                {status?.error ? (
+                  <ErrorBanner
+                    className="text-center fade-in mt-3 mb-0 api-error"
+                    text={status.error}
+                  />
+                ) : null}
               </Form>
             );
           }}

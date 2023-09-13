@@ -5,17 +5,11 @@ import "./index.css";
 import "semantic-ui-css/semantic.min.css";
 import { Provider } from "react-redux";
 import { persistor, store } from "./app/redux/store/store.ts";
-import { createBrowserHistory } from "history";
 import { Router } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import LoadingComponent from "./common/components/Loading/LoadingComponent.tsx";
 import { Wrapper } from "@googlemaps/react-wrapper";
-import { store as reduxStore } from "./app/redux/store/store";
-import { injectStore as injectStoreIntoApi } from "./api/agent";
-
-injectStoreIntoApi(reduxStore);
-
-export const history = createBrowserHistory();
+import { history } from "./common/history/history.ts";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>

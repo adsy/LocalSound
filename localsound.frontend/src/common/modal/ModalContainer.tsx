@@ -15,7 +15,7 @@ const ModalContainer = () => {
         onOpen={() =>
           setTimeout(() => document.body.classList.add("modal-fade-in"), 0)
         }
-        transition={{ animation: "fly up", duration: 500 }}
+        transition={{ animation: "fly up", duration: 800 }}
       >
         <Modal
           open={true}

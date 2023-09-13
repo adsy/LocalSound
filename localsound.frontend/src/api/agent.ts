@@ -4,7 +4,6 @@ import axios, {
   AxiosRequestHeaders,
   AxiosResponse,
 } from "axios";
-import { Store as StoreType } from "redux";
 import { UserRegistrationModel } from "../app/model/dto/user-registration.model";
 import { UserLoginModel } from "../app/model/dto/user-login.model";
 import { UserModel } from "../app/model/dto/user.model";
@@ -12,15 +11,8 @@ import { UpdateArtistModel } from "../app/model/dto/update-artist.model";
 import { GenreModel } from "../app/model/dto/genre.model";
 import { AccountImageTypes } from "../app/model/enums/accountImageTypes";
 import { AccountImageModel } from "../app/model/dto/account-image.model";
-import { handleResetAppState } from "../app/redux/actions/applicationSlice";
-import { handleResetUserState } from "../app/redux/actions/userSlice";
-import { history } from "../main";
-
-let localStore: StoreType;
-
-export const injectStore = (_store: StoreType) => {
-  localStore = _store;
-};
+import { history } from "../common/history/history";
+import { resetState } from "../app/redux/store/store";
 
 const axiosApiInstance = axios.create();
 
@@ -63,8 +55,7 @@ axiosApiInstance.interceptors.response.use(
           await Authentication.refreshToken();
           return await requests.retry(config);
         } catch (err) {
-          localStore.dispatch(handleResetUserState());
-          localStore.dispatch(handleResetAppState());
+          resetState();
           history.push("/");
         }
       } else {
