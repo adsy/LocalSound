@@ -46,8 +46,6 @@ const Register = () => {
           size: "mini",
         })
       );
-
-      // TODO: redirect once logged in
     } catch (error) {
       if (error) {
         setStatus({

@@ -254,8 +254,14 @@ h6.inverse {
 
 /** BANNERS **/
 .alert {
-  padding-top: 6px;
-  padding-bottom: 6px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: #ff6969;
+  border: 1px solid #8a7070;
+  letter-spacing: 1px;
+  color: #001514;
+  font-size: 12px;
+  font-weight: 800;
 }
 
 /** ANIMATIONS **/

@@ -18,15 +18,11 @@ const TopNavbar = () => {
   const [show, setShow] = useState(false);
 
   const handleSignout = async () => {
-    try {
-      var result = await agent.Authentication.signOut();
-      history.push("/");
-      dispatch(handleResetUserState());
-      dispatch(handleResetAppState());
-      setShow(false);
-    } catch (error) {
-      //TODO: do something with error
-    }
+    await agent.Authentication.signOut();
+    history.push("/");
+    dispatch(handleResetUserState());
+    dispatch(handleResetAppState());
+    setShow(false);
   };
 
   return (

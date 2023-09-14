@@ -17,6 +17,7 @@ import {
 import { handleResetAppState } from "../redux/actions/applicationSlice";
 import { UserModel } from "../model/dto/user.model";
 import { State } from "../model/redux/state";
+import AccountSettings from "../../features/AccountSettings/AccountSettings";
 
 const App = () => {
   const history = useHistory();
@@ -74,6 +75,11 @@ const App = () => {
                 <div className="masthead">
                   <Switch>
                     <PrivateRoute exact path="/home" component={HomePage} />
+                    <PrivateRoute
+                      exact
+                      path="/account-settings"
+                      component={AccountSettings}
+                    />
                     <Route exact path="/(.+)" component={UserProfile} />
                   </Switch>
                 </div>

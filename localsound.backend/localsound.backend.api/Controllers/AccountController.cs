@@ -79,6 +79,7 @@ namespace localsound.backend.api.Controllers
         [Route("update-account-image/{memberId}/image-type/{imageType}")]
         public async Task<ActionResult> UpdateAccountProfileImage([FromForm] FileUploadDto formData, string memberId, AccountImageTypeEnum imageType)
         {
+            throw new Exception();
             var updateResult = await Mediator.Send(new UpdateAccountImageCommand
             {
                 UserId = CurrentUser.AppUserId,

@@ -71,10 +71,9 @@ const ArtistRegister = ({ handleRegisterRequest }: Props) => {
             </div>
 
             {status?.error ? (
-              <ErrorBanner
-                className="text-center fade-in mt-3 mb-0 api-error"
-                text={status.error}
-              />
+              <ErrorBanner className="text-center fade-in mt-0 mb-0 api-error">
+                {status.error}
+              </ErrorBanner>
             ) : null}
             {!isSubmitting ? (
               <Button

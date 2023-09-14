@@ -43,8 +43,6 @@ const Login = () => {
           })
         );
       }
-
-      // TODO: redirect once logged in
     } catch (error) {
       if (error) {
         setStatus({ error: error });
@@ -102,6 +100,11 @@ const Login = () => {
                     disabled={isSubmitting}
                   />
                 </div>
+                {status?.error ? (
+                  <ErrorBanner className="text-center fade-in mt-3 mb-0 api-error">
+                    {status.error}
+                  </ErrorBanner>
+                ) : null}
                 {!isSubmitting ? (
                   <Button
                     className={`black-button w-100 align-self-center ${
@@ -119,12 +122,6 @@ const Login = () => {
                     <InPageLoadingComponent />
                   </div>
                 )}
-                {status?.error ? (
-                  <ErrorBanner
-                    className="text-center fade-in mt-3 mb-0 api-error"
-                    text={status.error}
-                  />
-                ) : null}
               </Form>
             );
           }}

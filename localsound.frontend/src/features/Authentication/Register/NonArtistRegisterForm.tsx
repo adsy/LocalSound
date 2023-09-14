@@ -60,7 +60,7 @@ const NonArtistRegisterForm = (props: Props) => {
   };
 
   return (
-    <div className="d-flex flex-row flex-wrap p-2 register-form">
+    <div className="d-flex flex-row flex-wrap p-2 pb-0 register-form">
       <Col
         xxs={12}
         xs={12}

@@ -3,6 +3,7 @@ import { GenreModel } from "../../../../../app/model/dto/genre.model";
 import lodash from "lodash";
 import agent from "../../../../../api/agent";
 import GenreTypeLabel from "../../../../../common/components/Label/GenreTypeLabel";
+import ErrorBanner from "../../../../../common/banner/ErrorBanner";
 
 interface Props {
   selectedGenres: GenreModel[];
@@ -12,6 +13,7 @@ interface Props {
 const SearchGenreTypes = ({ selectedGenres, setSelectedGenres }: Props) => {
   const [genre, setGenre] = useState("");
   const [genreList, setGenreList] = useState<GenreModel[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const ref = useRef<() => void>();
 
   const onChange = async () => {
@@ -25,7 +27,9 @@ const SearchGenreTypes = ({ selectedGenres, setSelectedGenres }: Props) => {
         setGenreList(genres.slice(0, 5));
       }
     } catch (e) {
-      //TODO: Do something with error
+      setError(
+        "There was an error while searching, please refresh your page and try again."
+      );
     }
   };
 
@@ -92,6 +96,9 @@ const SearchGenreTypes = ({ selectedGenres, setSelectedGenres }: Props) => {
           </div>
         ) : null}
       </div>
+      {error ? (
+        <ErrorBanner className="mt-2 text-center">{error}</ErrorBanner>
+      ) : null}
     </div>
   );
 };

@@ -8,6 +8,7 @@ import agent from "../../../api/agent";
 import { useDispatch } from "react-redux";
 import { handleSetUserDetails } from "../../../app/redux/actions/userSlice";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
+import ErrorBanner from "../../../common/banner/ErrorBanner";
 
 const ConfirmEmailPopUp = () => {
   const [reloadError, setReloadError] = useState(false);
@@ -31,9 +32,7 @@ const ConfirmEmailPopUp = () => {
         })
       );
     } catch (err) {
-      console.log(err);
       setInvalidTokenError(true);
-      //TODO: Do something with the error
     }
   };
 
@@ -44,7 +43,7 @@ const ConfirmEmailPopUp = () => {
       await agent.Authentication.resendEmailToken();
       setResendingToken(false);
     } catch (err) {
-      //TODO: Do something with the error
+      setReloadError(true);
     }
   };
 
@@ -82,15 +81,15 @@ const ConfirmEmailPopUp = () => {
                   />
                 </div>
                 {invalidTokenError ? (
-                  <h5 className="inverse text-center fade-in mb-0 mt-3">
+                  <ErrorBanner className="inverse text-center fade-in mb-0 mt-3">
                     The token you have entered is incorrect, please try again..
-                  </h5>
+                  </ErrorBanner>
                 ) : null}
                 {reloadError ? (
-                  <h5 className="inverse text-center fade-in mb-0 mt-3">
+                  <ErrorBanner className="inverse text-center fade-in mb-0 mt-3">
                     There was an error performing this action, please close the
                     pop up and try logging in again..
-                  </h5>
+                  </ErrorBanner>
                 ) : null}
 
                 {isSubmitting || resendingToken ? (
