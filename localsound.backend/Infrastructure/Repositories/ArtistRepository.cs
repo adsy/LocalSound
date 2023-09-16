@@ -20,7 +20,42 @@ namespace localsound.backend.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public async Task<ServiceResponse> UpdateArtistDetailsAsync(Guid userId, UpdateArtistDto updateArtistDto)
+        public async Task<ServiceResponse> UpdateArtistPersonalDetails(Guid userId, UpdateArtistPersonalDetailsDto updateArtistDto)
+        {
+            try
+            {
+                var artist = await _dbContext.Artist
+                    .Include(x => x.Genres)
+                    .FirstOrDefaultAsync(x => x.AppUserId == userId);
+
+                // Artist should not be null here, otherwise its an issue with the artist creation/DB
+                if (artist == null)
+                {
+                    var message = $"{nameof(AccountRepository)} - {nameof(UpdateArtistPersonalDetails)} - Could not find matching artist with userId: {userId}";
+                    return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your details, please try again.");
+                }
+
+                artist.UpdateName(updateArtistDto.Name)
+                    .UpdateAddress(updateArtistDto.Address)
+                    .UpdatePhoneNumber(updateArtistDto.PhoneNumber)
+                    .UpdateProfileUrl(updateArtistDto.ProfileUrl)
+                    .UpdateSocialLinks(updateArtistDto.SoundcloudUrl, updateArtistDto.SpotifyUrl, updateArtistDto.YoutubeUrl)
+                    .UpdateAboutSection(updateArtistDto.AboutSection);
+
+                await _dbContext.SaveChangesAsync();
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch(Exception e)
+            {
+                var message = $"{nameof(AccountRepository)} - {nameof(UpdateArtistPersonalDetails)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your details, please try again.");
+            }
+        }
+
+        public async Task<ServiceResponse> UpdateArtistProfileDetails(Guid userId, UpdateArtistProfileDetailsDto updateArtistDto)
         {
             try
             {
@@ -29,7 +64,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 // Artist should not be null here, otherwise its an issue with the artist creation/DB
                 if (artist == null)
                 {
-                    var message = $"{nameof(AccountRepository)} - {nameof(UpdateArtistDetailsAsync)} - Could not find matching artist with userId: {userId}";
+                    var message = $"{nameof(AccountRepository)} - {nameof(UpdateArtistProfileDetails)} - Could not find matching artist with userId: {userId}";
                     return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your details, please try again.");
                 }
 
@@ -39,21 +74,29 @@ namespace localsound.backend.Infrastructure.Repositories
                     GenreId = x.GenreId
                 }).ToList();
 
-                artist.UpdateName(updateArtistDto.Name)
-                    .UpdateAddress(updateArtistDto.Address)
-                    .UpdatePhoneNumber(updateArtistDto.PhoneNumber)
-                    .UpdateProfileUrl(updateArtistDto.ProfileUrl)
-                    .UpdateSocialLinks(updateArtistDto.SoundcloudUrl, updateArtistDto.SpotifyUrl, updateArtistDto.YoutubeUrl)
-                    .UpdateAboutSection(updateArtistDto.AboutSection)
-                    .UpdateGenres(artistGenres);
+                var eventTypes = updateArtistDto.EventTypes.Select(x => new ArtistEventType
+                {
+                    AppUserId = artist.AppUserId,
+                    EventTypeId = x.EventTypeId
+                }).ToList();
+
+                var equipment = updateArtistDto.Equipment.Select(x => new ArtistEquipment
+                {
+                    AppUserId = artist.AppUserId,
+                    EquipmentId = x.EquipmentId
+                }).ToList();
+
+                artist.UpdateGenres(artistGenres)
+                    .UpdateEventTypes(eventTypes)
+                    .UpdateEquipment(equipment);
 
                 await _dbContext.SaveChangesAsync();
 
                 return new ServiceResponse(HttpStatusCode.OK);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                var message = $"{nameof(AccountRepository)} - {nameof(UpdateArtistDetailsAsync)} - {e.Message}";
+                var message = $"{nameof(AccountRepository)} - {nameof(UpdateArtistProfileDetails)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your details, please try again.");

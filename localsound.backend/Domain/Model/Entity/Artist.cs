@@ -19,6 +19,8 @@ namespace localsound.backend.Domain.Model.Entity
         public string? AboutSection { get; set; }
 
         public virtual ICollection<ArtistGenre> Genres { get; set; }
+        public virtual ICollection<ArtistEventType> EventTypes { get; set; }
+        public virtual ICollection<ArtistEquipment> Equipment { get; set; }
         public virtual AppUser User { get; set; }
 
         public Artist UpdateName(string name)
@@ -62,6 +64,18 @@ namespace localsound.backend.Domain.Model.Entity
         public Artist UpdateGenres(ICollection<ArtistGenre> genres)
         {
             Genres = genres;
+            return this;
+        }
+
+        public Artist UpdateEquipment(ICollection<ArtistEquipment> equipment)
+        {
+            Equipment = equipment;
+            return this;
+        }
+
+        public Artist UpdateEventTypes(ICollection<ArtistEventType> eventTypes)
+        {
+            EventTypes = eventTypes;
             return this;
         }
     }

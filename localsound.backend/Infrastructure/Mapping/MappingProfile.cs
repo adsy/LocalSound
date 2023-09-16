@@ -36,6 +36,22 @@ namespace localsound.backend.Infrastructure.Mapping
                 .ForMember(dest => dest.GenreId, source => source.MapFrom(x => x.Genre.GenreId))
                 .ForMember(dest => dest.GenreName, source => source.MapFrom(x => x.Genre.GenreName));
 
+            CreateMap<EventType, EventTypeDto>()
+                .ForMember(dest => dest.EventTypeId, source => source.MapFrom(x => x.EventTypeId))
+                .ForMember(dest => dest.EventTypeName, source => source.MapFrom(x => x.EventTypeName));
+
+            CreateMap<ArtistEventType, EventTypeDto>()
+                .ForMember(dest => dest.EventTypeId, source => source.MapFrom(x => x.EventType.EventTypeId))
+                .ForMember(dest => dest.EventTypeName, source => source.MapFrom(x => x.EventType.EventTypeName));
+
+            CreateMap<Equipment, EquipmentDto>()
+                .ForMember(dest => dest.EquipmentId, source => source.MapFrom(x => x.EquipmentId))
+                .ForMember(dest => dest.EquipmentName, source => source.MapFrom(x => x.EquipmentName));
+
+            CreateMap<ArtistEquipment, EquipmentDto>()
+                .ForMember(dest => dest.EquipmentId, source => source.MapFrom(x => x.Equipment.EquipmentId))
+                .ForMember(dest => dest.EquipmentName, source => source.MapFrom(x => x.Equipment.EquipmentName));
+
             CreateMap<AccountImage, AccountImageDto>()
                 .ForMember(dest => dest.AccountImageTypeId, source => source.MapFrom(x => x.AccountImageTypeId))
                 .ForMember(dest => dest.AccountImageUrl, source => source.MapFrom(x => x.AccountImageUrl));

@@ -3,7 +3,7 @@ using localsound.backend.api.Commands.Artist;
 
 namespace localsound.backend.api.Commands.Validators.Artist
 {
-    public class UpdateArtistDetailsCommandValidator:AbstractValidator<UpdateArtistDetailsCommand>
+    public class UpdateArtistDetailsCommandValidator:AbstractValidator<UpdateArtistPersonalDetailsCommand>
     {
         public UpdateArtistDetailsCommandValidator()
         {

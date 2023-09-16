@@ -5,6 +5,7 @@ namespace localsound.backend.Infrastructure.Interface.Services
 {
     public interface IArtistService
     {
-        Task<ServiceResponse> UpdateArtistDetails(Guid userId, string memberId, UpdateArtistDto updateArtistDto);
+        Task<ServiceResponse> UpdateArtistPersonalDetails(Guid userId, string memberId, UpdateArtistPersonalDetailsDto updateArtistDto);
+        Task<ServiceResponse> UpdateArtistProfileDetails(Guid userId, string memberId, UpdateArtistProfileDetailsDto updateArtistDto);
     }
 }

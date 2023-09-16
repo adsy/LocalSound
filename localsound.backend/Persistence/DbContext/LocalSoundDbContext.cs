@@ -27,9 +27,14 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<AppUser> AppUser { get; set; }
         public DbSet<AppUserToken> AppUserToken { get; set; }
         public DbSet<Artist> Artist { get; set; }
+        public DbSet<ArtistEquipment> ArtistEquipment { get; set; }
+        public DbSet<ArtistEventType> ArtistEventType { get; set; }
+        public DbSet<ArtistGenre> ArtistGenre { get; set; }
         public DbSet<ArtistTrackUpload> ArtistTrackUpload { get; set; }
-        public DbSet<Genre> Genres { get; set; }
+        public DbSet<Equipment> Equipment { get; set; }
+        public DbSet<EventType> EventType { get; set; }
         public DbSet<FileContent> FileContent { get; set; }
+        public DbSet<Genre> Genres { get; set; }
         public DbSet<NonArtist> NonArtist { get; set; }
         
 
@@ -88,21 +93,30 @@ namespace localsound.backend.Persistence.DbContext
             builder.HasSequence("MemberId", x => x.StartsAt(100000).IncrementsBy(1));
             builder.Entity<AppUser>().Property(x => x.MemberId).HasDefaultValueSql("NEXT VALUE FOR MemberId");
 
-            builder.Entity<NonArtist>().HasKey(x => x.AppUserId);
-            builder.Entity<NonArtist>().HasIndex(x => x.ProfileUrl).IsUnique();
+            builder.Entity<AppUserToken>().Property(o => o.ExpirationDate).HasDefaultValueSql("DateAdd(week,1,getDate())");
 
             builder.Entity<Artist>().HasKey(x => x.AppUserId);
             builder.Entity<Artist>().HasMany(x => x.Genres);
             builder.Entity<Artist>().HasIndex(x => x.ProfileUrl).IsUnique();
 
-            builder.Entity<AppUserToken>().Property(o => o.ExpirationDate).HasDefaultValueSql("DateAdd(week,1,getDate())");
-
+            builder.Entity<ArtistTrackUpload>().HasKey(x => x.ArtistTrackUploadId);
             builder.Entity<Genre>().HasKey(x => x.GenreId);
+            builder.Entity<EventType>().HasKey(x => x.EventTypeId);
+            builder.Entity<Equipment>().HasKey(x => x.EquipmentId);
 
-
-            builder.Entity<ArtistGenre>().HasKey(x => new {x.AppUserId, x.GenreId});
+            builder.Entity<ArtistEventType>().HasKey(x => new { x.AppUserId, x.EventTypeId });
+            builder.Entity<ArtistEventType>().HasOne(x => x.EventType);
+            builder.Entity<ArtistEventType>().HasOne(x => x.Artist);
+            builder.Entity<ArtistGenre>().HasKey(x => new { x.AppUserId, x.GenreId });
             builder.Entity<ArtistGenre>().HasOne(x => x.Genre);
             builder.Entity<ArtistGenre>().HasOne(x => x.Artist);
+            builder.Entity<ArtistEquipment>().HasKey(x => new { x.AppUserId, x.EquipmentId }).IsClustered(false);
+            builder.Entity<ArtistEquipment>().HasOne(x => x.Equipment);
+            builder.Entity<ArtistEquipment>().HasOne(x => x.Artist);
+            builder.Entity<ArtistEquipment>().HasIndex(x => x.AppUserId).IsClustered();
+
+            builder.Entity<NonArtist>().HasKey(x => x.AppUserId);
+            builder.Entity<NonArtist>().HasIndex(x => x.ProfileUrl).IsUnique();
 
             builder.Entity<AccountImageType>().HasKey(x => x.AccountImageTypeId);
 
@@ -115,11 +129,6 @@ namespace localsound.backend.Persistence.DbContext
             {
                 x.HasKey(x => x.FileContentId);
                 x.HasOne(x => x.Image).WithOne(x => x.FileContent).OnDelete(DeleteBehavior.Cascade);
-            });
-
-            builder.Entity<ArtistTrackUpload>(x =>
-            {
-                x.HasKey(x => x.ArtistTrackUploadId);
             });
         }
 

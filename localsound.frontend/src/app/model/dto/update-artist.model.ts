@@ -1,4 +1,4 @@
-export interface UpdateArtistModel {
+export interface UpdateArtistPersonalDetailsModel {
   address: string;
   phoneNumber: string;
   name?: string;

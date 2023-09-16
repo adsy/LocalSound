@@ -1,14 +1,14 @@
 import { Divider } from "semantic-ui-react";
 import MyTextInput from "../../../../../common/form/MyTextInput";
 import MyAddressInput from "../../../../../common/form/MyAddressInput";
-import { UpdateArtistModel } from "../../../../../app/model/dto/update-artist.model";
+import { UpdateArtistPersonalDetailsModel } from "../../../../../app/model/dto/update-artist.model";
 import MyTextArea from "../../../../../common/form/MyTextArea";
 import SearchGenreTypes from "./SearchGenreTypes";
 import { GenreModel } from "../../../../../app/model/dto/genre.model";
 
 interface Props {
   disabled?: boolean;
-  values: UpdateArtistModel;
+  values: UpdateArtistPersonalDetailsModel;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
   setFieldTouched: (
     field: string,
@@ -16,8 +16,8 @@ interface Props {
     shouldValidate?: boolean
   ) => void;
   setAddressError: (addressError: boolean) => void;
-  selectedGenres: GenreModel[];
-  setSelectedGenres: (genres: GenreModel[]) => void;
+  // selectedGenres: GenreModel[];
+  // setSelectedGenres: (genres: GenreModel[]) => void;
 }
 
 const EditArtistDetailsForm = ({
@@ -26,9 +26,9 @@ const EditArtistDetailsForm = ({
   setFieldTouched,
   setAddressError,
   values,
-  selectedGenres,
-  setSelectedGenres,
-}: Props) => {
+}: // selectedGenres,
+// setSelectedGenres,
+Props) => {
   const handleMobileNumberChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -62,7 +62,6 @@ const EditArtistDetailsForm = ({
 
   return (
     <div id="edit-form" className="d-flex flex-column">
-      <h3 className="mt-0">Personal details</h3>
       <div className="d-flex flex-row flex-wrap justify-content-between">
         <div className="d-flex flex-column col-12 col-md-6 px-3">
           <div className="mb-3">
@@ -77,16 +76,6 @@ const EditArtistDetailsForm = ({
             </div>
             <MyTextInput name="profileUrl" placeholder="" disabled={disabled} />
           </div>
-        </div>
-        <div className="col-12 col-md-6 px-3 mb-3">
-          <div className="d-flex">
-            <p className="form-label">ABOUT</p>
-          </div>
-          <MyTextArea name="aboutSection" placeholder="" rows={5} />
-        </div>
-      </div>
-      <div className="d-flex flex-row flex-wrap justify-content-between">
-        <div className="d-flex flex-column col-12 col-md-6 px-3">
           <div className="d-flex">
             <p className="form-label">MOBILE NUMBER</p>
           </div>
@@ -98,38 +87,6 @@ const EditArtistDetailsForm = ({
             onChange={(e) => handleMobileNumberChange(e)}
             onBlur={(e) => handleMobileNumberChange(e)}
           />
-        </div>
-        <div className="col-12 col-md-6 px-3">
-          <div className="d-flex">
-            <p className="form-label">ADDRESS</p>
-          </div>
-          <MyAddressInput
-            name="address"
-            placeholder=""
-            setFieldValue={setFieldValue}
-            setFieldTouched={setFieldTouched}
-            setAddressError={setAddressError}
-            disabled={disabled}
-            preselectedAddress={values.address}
-          />
-        </div>
-      </div>
-      <Divider className="my-4 px-3" />
-      <h3 className="mt-0">Profile details</h3>
-
-      <div className="d-flex flex-row flex-wrap justify-content-between">
-        <div className="d-flex flex-column col-12 col-md-6 px-3">
-          <div className="mb-3">
-            <div className="d-flex mb-1">
-              <p className="form-label">GENRES</p>
-            </div>
-            <SearchGenreTypes
-              selectedGenres={selectedGenres}
-              setSelectedGenres={setSelectedGenres}
-            />
-          </div>
-        </div>
-        <div className="d-flex flex-column col-12 col-md-6 px-3">
           <div className="mb-3">
             <div className="d-flex">
               <p className="form-label">SOUNDCLOUD PROFILE</p>
@@ -151,7 +108,44 @@ const EditArtistDetailsForm = ({
             <MyTextInput name="youtubeUrl" placeholder="" />
           </div>
         </div>
+        <div className="col-12 col-md-6 px-3 mb-3">
+          <div className="d-flex">
+            <p className="form-label">PROFILE PHOTO</p>
+          </div>
+          IMAGE WILL GO HERE
+          <div className="d-flex">
+            <p className="form-label">ABOUT</p>
+          </div>
+          <MyTextArea name="aboutSection" placeholder="" rows={5} />
+          <div className="d-flex">
+            <p className="form-label">ADDRESS</p>
+          </div>
+          <MyAddressInput
+            name="address"
+            placeholder=""
+            setFieldValue={setFieldValue}
+            setFieldTouched={setFieldTouched}
+            setAddressError={setAddressError}
+            disabled={disabled}
+            preselectedAddress={values.address}
+          />
+        </div>
       </div>
+
+      {/* <div className="d-flex flex-row flex-wrap justify-content-between">
+        <div className="d-flex flex-column col-12 col-md-6 px-3">
+          <div className="mb-3">
+            <div className="d-flex mb-1">
+              <p className="form-label">GENRES</p>
+            </div>
+            <SearchGenreTypes
+              selectedGenres={selectedGenres}
+              setSelectedGenres={setSelectedGenres}
+            />
+          </div>
+        </div>
+        <div className="d-flex flex-column col-12 col-md-6 px-3"></div>
+      </div> */}
     </div>
   );
 };

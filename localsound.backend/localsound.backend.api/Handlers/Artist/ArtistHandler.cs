@@ -1,12 +1,12 @@
 ﻿using localsound.backend.api.Commands.Artist;
 using localsound.backend.Domain.Model;
 using localsound.backend.Infrastructure.Interface.Services;
-using localsound.backend.Persistence.DbContext;
 using MediatR;
 
 namespace localsound.backend.api.Handlers.Artist
 {
-    public class ArtistHandler : IRequestHandler<UpdateArtistDetailsCommand, ServiceResponse>
+    public class ArtistHandler : IRequestHandler<UpdateArtistPersonalDetailsCommand, ServiceResponse>,
+        IRequestHandler<UpdateArtistProfileDetailsCommand, ServiceResponse>
     {
         private readonly IArtistService _artistService;
 
@@ -15,9 +15,14 @@ namespace localsound.backend.api.Handlers.Artist
             _artistService = artistService;
         }
 
-        public async Task<ServiceResponse> Handle(UpdateArtistDetailsCommand request, CancellationToken cancellationToken)
+        public async Task<ServiceResponse> Handle(UpdateArtistPersonalDetailsCommand request, CancellationToken cancellationToken)
         {
-            return await _artistService.UpdateArtistDetails(request.UserId, request.MemberId, request.UpdateArtistDto);
+            return await _artistService.UpdateArtistPersonalDetails(request.UserId, request.MemberId, request.UpdateArtistDto);
+        }
+
+        public async Task<ServiceResponse> Handle(UpdateArtistProfileDetailsCommand request, CancellationToken cancellationToken)
+        {
+            return await _artistService.UpdateArtistProfileDetails(request.UserId, request.MemberId, request.UpdateArtistDto);
         }
     }
 }

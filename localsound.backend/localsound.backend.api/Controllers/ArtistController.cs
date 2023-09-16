@@ -1,7 +1,6 @@
 ﻿using localsound.backend.api.Commands.Artist;
 using localsound.backend.Domain.Model.Dto.Submission;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace localsound.backend.api.Controllers
 {
@@ -10,13 +9,32 @@ namespace localsound.backend.api.Controllers
     public class ArtistController : BaseApiController
     {
         [HttpPut]
-        [Route("{memberId}")]
-        public async Task<ActionResult> UpdateArtistDetails([FromBody] UpdateArtistDto updateArtistDto, string memberId)
+        [Route("member/{memberId}/personal-details")]
+        public async Task<ActionResult> UpdateArtistPersonalDetails([FromBody] UpdateArtistPersonalDetailsDto updateArtistDto, string memberId)
         {
-            var result = await Mediator.Send(new UpdateArtistDetailsCommand
+            var result = await Mediator.Send(new UpdateArtistPersonalDetailsCommand
             {
                 UserId = CurrentUser.AppUserId,
-                MemberId = memberId, 
+                MemberId = memberId,
+                UpdateArtistDto = updateArtistDto
+            });
+
+            if (result.IsSuccessStatusCode)
+            {
+                return Ok();
+            }
+
+            return StatusCode((int)result.StatusCode);
+        }
+
+        [HttpPut]
+        [Route("member/{memberId}/profile-details")]
+        public async Task<ActionResult> UpdateArtistProfileDetails([FromBody] UpdateArtistProfileDetailsDto updateArtistDto, string memberId)
+        {
+            var result = await Mediator.Send(new UpdateArtistProfileDetailsCommand
+            {
+                UserId = CurrentUser.AppUserId,
+                MemberId = memberId,
                 UpdateArtistDto = updateArtistDto
             });
 

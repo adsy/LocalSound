@@ -7,7 +7,7 @@ import axios, {
 import { UserRegistrationModel } from "../app/model/dto/user-registration.model";
 import { UserLoginModel } from "../app/model/dto/user-login.model";
 import { UserModel } from "../app/model/dto/user.model";
-import { UpdateArtistModel } from "../app/model/dto/update-artist.model";
+import { UpdateArtistPersonalDetailsModel } from "../app/model/dto/update-artist.model";
 import { GenreModel } from "../app/model/dto/genre.model";
 import { AccountImageTypes } from "../app/model/enums/accountImageTypes";
 import { AccountImageModel } from "../app/model/dto/account-image.model";
@@ -111,8 +111,10 @@ const Profile = {
 };
 
 const Artist = {
-  updateArtistDetails: (memberId: string, editArtist: UpdateArtistModel) =>
-    requests.put<null>(`artist/${memberId}`, editArtist),
+  updateArtistPersonalDetails: (
+    memberId: string,
+    editArtist: UpdateArtistPersonalDetailsModel
+  ) => requests.put<null>(`artist/${memberId}`, editArtist),
 };
 
 const Genre = {

@@ -22,7 +22,7 @@ namespace localsound.backend.Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task<ServiceResponse> UpdateArtistDetails(Guid userId, string memberId, UpdateArtistDto updateArtistDto)
+        public async Task<ServiceResponse> UpdateArtistPersonalDetails(Guid userId, string memberId, UpdateArtistPersonalDetailsDto updateArtistDto)
         {
             try
             {
@@ -38,11 +38,38 @@ namespace localsound.backend.Infrastructure.Services
                     return new ServiceResponse(HttpStatusCode.Unauthorized, "There was an error while updating your details, please try again.");
                 }
 
-                return await _artistRepository.UpdateArtistDetailsAsync(userId, updateArtistDto);
+                return await _artistRepository.UpdateArtistPersonalDetails(userId, updateArtistDto);
             }
             catch(Exception e)
             {
-                var message = $"{nameof(AccountService)} - {nameof(UpdateArtistDetails)} - {e.Message}";
+                var message = $"{nameof(AccountService)} - {nameof(UpdateArtistPersonalDetails)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your details, please try again.");
+            }
+        }
+
+        public async Task<ServiceResponse> UpdateArtistProfileDetails(Guid userId, string memberId, UpdateArtistProfileDetailsDto updateArtistDto)
+        {
+            try
+            {
+                var appUser = await _dbContext.AppUser.FirstOrDefaultAsync(x => x.MemberId == memberId);
+
+                if (appUser == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.NotFound, "There was an error while updating your details, please try again.");
+                }
+
+                if (appUser.Id != userId)
+                {
+                    return new ServiceResponse(HttpStatusCode.Unauthorized, "There was an error while updating your details, please try again.");
+                }
+
+                return await _artistRepository.UpdateArtistProfileDetails(userId, updateArtistDto);
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(AccountService)} - {nameof(UpdateArtistProfileDetails)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your details, please try again.");

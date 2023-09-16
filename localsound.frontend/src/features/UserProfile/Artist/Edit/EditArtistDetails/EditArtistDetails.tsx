@@ -5,7 +5,7 @@ import InPageLoadingComponent from "../../../../../app/layout/InPageLoadingCompo
 import { useEffect, useState } from "react";
 import EditArtistDetailsForm from "./EditArtistDetailsForm";
 import { useDispatch } from "react-redux";
-import { UpdateArtistModel } from "../../../../../app/model/dto/update-artist.model";
+import { UpdateArtistPersonalDetailsModel } from "../../../../../app/model/dto/update-artist.model";
 import { Button } from "react-bootstrap";
 import agent from "../../../../../api/agent";
 import { handleSetUserDetails } from "../../../../../app/redux/actions/userSlice";
@@ -22,14 +22,13 @@ interface Props {
 const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
   const [addressError, setAddressError] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<GenreModel[]>([]);
-  const [updateError, setUpdateError] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     setSelectedGenres([...userDetails.genres]);
   }, [userDetails]);
 
-  const formValuesUntouched = (values: UpdateArtistModel) => {
+  const formValuesUntouched = (values: UpdateArtistPersonalDetailsModel) => {
     if (values.name !== userDetails.name) {
       return false;
     }
@@ -80,9 +79,9 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
           onSubmit={async (values, { setStatus }) => {
             setStatus(null);
             try {
-              var submissionData = { ...values, genres: selectedGenres };
+              var submissionData = { ...values };
 
-              var result = await agent.Artist.updateArtistDetails(
+              var result = await agent.Artist.updateArtistPersonalDetails(
                 userDetails?.memberId!,
                 submissionData
               );
@@ -129,9 +128,9 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
                     setFieldTouched={setFieldTouched}
                     setAddressError={setAddressError}
                     disabled={isSubmitting}
-                    values={values as UpdateArtistModel}
-                    selectedGenres={selectedGenres}
-                    setSelectedGenres={setSelectedGenres}
+                    values={values as UpdateArtistPersonalDetailsModel}
+                    // selectedGenres={selectedGenres}
+                    // setSelectedGenres={setSelectedGenres}
                   />
                 </div>
                 {status?.error ? (
