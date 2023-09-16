@@ -1,4 +1,5 @@
 import { Alert } from "react-bootstrap";
+import { Icon } from "semantic-ui-react";
 
 interface Props {
   className?: string;
@@ -7,8 +8,8 @@ interface Props {
 
 const ErrorBanner = ({ className, children }: Props) => {
   return (
-    <Alert variant="danger" className={className}>
-      {children}
+    <Alert variant="danger" className={className + " text-center"}>
+      <Icon name="warning sign" /> {children}
     </Alert>
   );
 };

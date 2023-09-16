@@ -45,8 +45,6 @@ axiosApiInstance.interceptors.response.use(
     }
     if (error && error.response) {
       const { status, config, headers } = error.response;
-
-      // Handle refresh token functionality
       if (
         status === 401 &&
         headers["www-authenticate"]?.includes("invalid_token")

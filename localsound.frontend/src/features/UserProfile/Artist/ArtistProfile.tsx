@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { AccountImageModel } from "../../../app/model/dto/account-image.model";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import EditCoverPhoto from "./Edit/EditCoverPhoto";
+import ErrorBanner from "../../../common/banner/ErrorBanner";
 
 interface Props {
   userDetails: UserModel;
@@ -18,6 +19,7 @@ interface Props {
 const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
   const [updatingCoverPhoto, setUpdatingCoverPhoto] = useState(false);
   const [submittingRequest, setSubmittingRequest] = useState(false);
+  const [photoUpdateError, setPhotoUpdateError] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [imgsLoaded, setImgsLoaded] = useState(true);
   const [coverImage, setCoverImage] = useState<AccountImageModel | null>(null);
@@ -155,6 +157,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                   setFile={setFile}
                   setUpdatingCoverPhoto={setUpdatingCoverPhoto}
                   setSubmittingRequest={setSubmittingRequest}
+                  setPhotoUpdateError={setPhotoUpdateError}
                 />
                 <div className="details-container flex-wrap">
                   <div className=""></div>
@@ -180,6 +183,13 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
               </div>
             )}
             <div className="d-flex flex-column p-2">
+              {photoUpdateError ? (
+                <div className="d-flex flex-row">
+                  <ErrorBanner className="w-100">
+                    {photoUpdateError}
+                  </ErrorBanner>
+                </div>
+              ) : null}
               <div className=" d-flex flex-row flex-wrap">
                 {userDetails?.soundcloudUrl ? (
                   <>

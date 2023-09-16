@@ -19,12 +19,6 @@ const AuthenticationRoute = ({
   isAuthPage = false,
   ...rest
 }: Props) => {
-  const userDetails = useSelector((state: State) => state.user.userDetails);
-
-  // if (userDetails) {
-  //   return <Redirect to={"/home"} />;
-  // }
-
   return <Route {...rest} render={(props) => <Component {...props} />} />;
 };
 

@@ -10,6 +10,7 @@ interface Props {
   setUpdatingCoverPhoto: (updating: boolean) => void;
   setFile: (file: File | null) => void;
   setSubmittingRequest: (submittingRequest: boolean) => void;
+  setPhotoUpdateError: (photoUpdateError: string) => void;
 }
 
 const EditCoverPhoto = ({
@@ -17,6 +18,7 @@ const EditCoverPhoto = ({
   setUpdatingCoverPhoto,
   setFile,
   setSubmittingRequest,
+  setPhotoUpdateError,
 }: Props) => {
   const userDetail = useSelector((state: State) => state.user.userDetails);
   const dispatch = useDispatch();
@@ -39,10 +41,12 @@ const EditCoverPhoto = ({
         setFile(null);
         setUpdatingCoverPhoto(false);
         dispatch(handleUpdateUserCoverPhoto(result));
-        setSubmittingRequest(false);
       } catch (err) {
-        //TODO: Do something with the errors here
+        setPhotoUpdateError(
+          "There was an error updating your cover photo, please try again.."
+        );
       }
+      setSubmittingRequest(false);
     }
   };
 

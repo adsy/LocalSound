@@ -12,6 +12,7 @@ import { handleSetUserDetails } from "../../../../../app/redux/actions/userSlice
 import { handleResetModal } from "../../../../../app/redux/actions/modalSlice";
 import { UserModel } from "../../../../../app/model/dto/user.model";
 import { GenreModel } from "../../../../../app/model/dto/genre.model";
+import ErrorBanner from "../../../../../common/banner/ErrorBanner";
 
 interface Props {
   userDetails: UserModel;
@@ -21,6 +22,7 @@ interface Props {
 const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
   const [addressError, setAddressError] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<GenreModel[]>([]);
+  const [updateError, setUpdateError] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -78,11 +80,9 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
           onSubmit={async (values, { setStatus }) => {
             setStatus(null);
             try {
-              setSubmittingRequest(true);
-              dispatch(handleResetModal());
               var submissionData = { ...values, genres: selectedGenres };
 
-              await agent.Artist.updateArtistDetails(
+              var result = await agent.Artist.updateArtistDetails(
                 userDetails?.memberId!,
                 submissionData
               );
@@ -92,10 +92,12 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
                   ...submissionData,
                 })
               );
-              setSubmittingRequest(false);
+              dispatch(handleResetModal());
             } catch (err) {
-              //TODO: Do something with the errors
-              console.log(err);
+              setStatus({
+                error:
+                  "There was an error updating your details, please try again..",
+              });
             }
           }}
           validationSchema={editArtistRegisterValidation}
@@ -133,19 +135,14 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
                   />
                 </div>
                 {status?.error ? (
-                  <Header
-                    color="black"
-                    as="h4"
-                    content={status.error}
-                    className="text-center fade-in mb-3"
-                  />
+                  <ErrorBanner className="fade-in mb-0 mx-3">
+                    {status.error}
+                  </ErrorBanner>
                 ) : null}
-                <div className="px-3 mt-4">
+                <div className="px-3 mt-3">
                   {!isSubmitting ? (
                     <Button
-                      className={`black-button w-100 px-5 align-self-center ${
-                        status?.error ? "mt-3" : "mt-4"
-                      }`}
+                      className={`black-button w-100 align-self-center`}
                       disabled={disabled || addressError}
                       onClick={() => submitForm()}
                     >
