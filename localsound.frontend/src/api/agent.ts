@@ -7,12 +7,14 @@ import axios, {
 import { UserRegistrationModel } from "../app/model/dto/user-registration.model";
 import { UserLoginModel } from "../app/model/dto/user-login.model";
 import { UserModel } from "../app/model/dto/user.model";
-import { UpdateArtistPersonalDetailsModel } from "../app/model/dto/update-artist.model";
+import { UpdateArtistPersonalDetailsModel } from "../app/model/dto/update-artist-personal.model";
 import { GenreModel } from "../app/model/dto/genre.model";
 import { AccountImageTypes } from "../app/model/enums/accountImageTypes";
 import { AccountImageModel } from "../app/model/dto/account-image.model";
 import { history } from "../common/history/history";
 import { resetState } from "../app/redux/store/store";
+import { UpdateArtistProfileDetailsModel } from "../app/model/dto/update-artist-profile.model";
+import { EventTypeModel } from "../app/model/dto/eventType.model";
 
 const axiosApiInstance = axios.create();
 
@@ -41,8 +43,6 @@ axiosApiInstance.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    if (import.meta.env.NODE_ENV === "development") {
-    }
     if (error && error.response) {
       const { status, config, headers } = error.response;
       if (
@@ -114,7 +114,15 @@ const Artist = {
   updateArtistPersonalDetails: (
     memberId: string,
     editArtist: UpdateArtistPersonalDetailsModel
-  ) => requests.put<null>(`artist/${memberId}`, editArtist),
+  ) =>
+    requests.put<null>(
+      `artist/member/${memberId}/personal-details`,
+      editArtist
+    ),
+  updateArtistProfileDetails: (
+    memberId: string,
+    editArtist: UpdateArtistProfileDetailsModel
+  ) => requests.put(`artist/member/${memberId}/profile-details`, editArtist),
 };
 
 const Genre = {
@@ -122,11 +130,17 @@ const Genre = {
     requests.get<GenreModel[]>(`genre/search-genre/${type}`),
 };
 
+const EventType = {
+  searchEventType: (type: string) =>
+    requests.get<EventTypeModel[]>(`eventType/seach-event-type/${type}`),
+};
+
 const agent = {
   Authentication,
   Profile,
   Artist,
   Genre,
+  EventType,
 };
 
 export default agent;

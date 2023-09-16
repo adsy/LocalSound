@@ -19,6 +19,8 @@ namespace localsound.backend.Domain.Model.Dto.Entity
         public bool EmailConfirmed { get; set; }
 
         public List<GenreDto> Genres { get; set; }
+        public List<EquipmentDto> Equipment { get; set; }
+        public List<EventTypeDto> EventTypes { get; set; }
         public List<AccountImageDto> Images { get; set; }
     }
 }

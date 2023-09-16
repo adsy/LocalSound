@@ -618,12 +618,12 @@ i.large.icon {
   padding: 0;
   font-size: 11px;
 }
-.purple-badge .badge-genre-name {
+.purple-badge .badge-name {
   padding-bottom: 4.675px;
   padding-left: 6.825px;
   padding-top: 3.675px;
 }
-.purple-badge .badge-genre-name.long {
+.purple-badge .badge-name.long {
   padding-right: 6.825px;
 }
 .purple-badge .badge-delete-btn {
@@ -707,8 +707,8 @@ i.large.icon {
 #edit-artist .nav-link.active {
   border-bottom: 4px solid #6d69fa;
 }
-#auth-modal #search-genre .genre-box,
-#edit-artist #search-genre .genre-box {
+#auth-modal #search-label-component .box,
+#edit-artist #search-label-component .box {
   margin: 0.28571429rem 0 0 0;
   background-color: white;
   min-height: 92px;
@@ -720,20 +720,20 @@ i.large.icon {
   border-radius: 0.28571429rem;
   box-shadow: 0 0 0 0 transparent inset;
 }
-#auth-modal #search-genre .genre-box .genre-container,
-#edit-artist #search-genre .genre-box .genre-container {
+#auth-modal #search-label-component .box .container,
+#edit-artist #search-label-component .box .container {
   padding: 0.67857143em 0.5em;
 }
-#auth-modal #search-genre .genre-box .genre-input,
-#edit-artist #search-genre .genre-box .genre-input {
+#auth-modal #search-label-component .box .input,
+#edit-artist #search-label-component .box .input {
   border-radius: 0;
   border-right: unset;
   border-bottom: unset;
   border-top: 1px solid #ececec;
   border-radius: 0px 0px 0.28571429rem 0.28571429rem;
 }
-#auth-modal #search-genre .genre-dropdown,
-#edit-artist #search-genre .genre-dropdown {
+#auth-modal #search-label-component .dropdown,
+#edit-artist #search-label-component .dropdown {
   border-radius: 2px;
   border-left: 1px solid #232323;
   border-right: 1px solid #232323;
@@ -742,12 +742,12 @@ i.large.icon {
   max-width: 300px;
   background: white;
 }
-#auth-modal #search-genre .genre-dropdown .genre-dropdown-option:first-of-type,
-#edit-artist #search-genre .genre-dropdown .genre-dropdown-option:first-of-type {
+#auth-modal #search-label-component .dropdown .dropdown-option:first-of-type,
+#edit-artist #search-label-component .dropdown .dropdown-option:first-of-type {
   border-top: 1px solid #232323;
 }
-#auth-modal #search-genre .genre-dropdown .genre-dropdown-option,
-#edit-artist #search-genre .genre-dropdown .genre-dropdown-option {
+#auth-modal #search-label-component .dropdown .dropdown-option,
+#edit-artist #search-label-component .dropdown .dropdown-option {
   border-bottom: 1px solid #232323;
   letter-spacing: 1px;
   font-size: 14px;
@@ -756,8 +756,8 @@ i.large.icon {
   align-self: center;
   padding: 8px;
 }
-#auth-modal #search-genre .genre-dropdown .genre-dropdown-option:hover,
-#edit-artist #search-genre .genre-dropdown .genre-dropdown-option:hover {
+#auth-modal #search-label-component .dropdown .dropdown-option:hover,
+#edit-artist #search-label-component .dropdown .dropdown-option:hover {
   font-size: 14px;
   letter-spacing: 1px;
   background-color: rgb(255, 255, 255);

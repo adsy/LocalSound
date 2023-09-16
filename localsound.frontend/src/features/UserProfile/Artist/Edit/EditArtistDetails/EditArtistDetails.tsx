@@ -1,17 +1,15 @@
 import { Form, Formik } from "formik";
 import editArtistRegisterValidation from "../../../../../validation/EditArtistValidation";
-import { Header } from "semantic-ui-react";
 import InPageLoadingComponent from "../../../../../app/layout/InPageLoadingComponent";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import EditArtistDetailsForm from "./EditArtistDetailsForm";
 import { useDispatch } from "react-redux";
-import { UpdateArtistPersonalDetailsModel } from "../../../../../app/model/dto/update-artist.model";
+import { UpdateArtistPersonalDetailsModel } from "../../../../../app/model/dto/update-artist-personal.model";
 import { Button } from "react-bootstrap";
 import agent from "../../../../../api/agent";
 import { handleSetUserDetails } from "../../../../../app/redux/actions/userSlice";
 import { handleResetModal } from "../../../../../app/redux/actions/modalSlice";
 import { UserModel } from "../../../../../app/model/dto/user.model";
-import { GenreModel } from "../../../../../app/model/dto/genre.model";
 import ErrorBanner from "../../../../../common/banner/ErrorBanner";
 
 interface Props {
@@ -21,12 +19,7 @@ interface Props {
 
 const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
   const [addressError, setAddressError] = useState(false);
-  const [selectedGenres, setSelectedGenres] = useState<GenreModel[]>([]);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    setSelectedGenres([...userDetails.genres]);
-  }, [userDetails]);
 
   const formValuesUntouched = (values: UpdateArtistPersonalDetailsModel) => {
     if (values.name !== userDetails.name) {
@@ -53,12 +46,6 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
     if (values.soundcloudUrl !== userDetails.soundcloudUrl) {
       return false;
     }
-    if (
-      JSON.stringify([...userDetails.genres]) !==
-      JSON.stringify([...selectedGenres])
-    ) {
-      return false;
-    }
     return true;
   };
 
@@ -81,7 +68,7 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
             try {
               var submissionData = { ...values };
 
-              var result = await agent.Artist.updateArtistPersonalDetails(
+              await agent.Artist.updateArtistPersonalDetails(
                 userDetails?.memberId!,
                 submissionData
               );
@@ -106,13 +93,10 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
             handleSubmit,
             isSubmitting,
             isValid,
-            dirty,
             status,
             setFieldValue,
             setFieldTouched,
-            errors,
             submitForm,
-            touched,
           }) => {
             const disabled =
               !isValid || isSubmitting || formValuesUntouched(values);
@@ -129,8 +113,6 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
                     setAddressError={setAddressError}
                     disabled={isSubmitting}
                     values={values as UpdateArtistPersonalDetailsModel}
-                    // selectedGenres={selectedGenres}
-                    // setSelectedGenres={setSelectedGenres}
                   />
                 </div>
                 {status?.error ? (
@@ -145,7 +127,7 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
                       disabled={disabled || addressError}
                       onClick={() => submitForm()}
                     >
-                      <h4>Update details</h4>
+                      <h4>Update personal details</h4>
                     </Button>
                   ) : (
                     <InPageLoadingComponent />

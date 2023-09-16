@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { GenreModel } from "../../../../../app/model/dto/genre.model";
 import lodash from "lodash";
 import agent from "../../../../../api/agent";
-import GenreTypeLabel from "../../../../../common/components/Label/GenreTypeLabel";
+import Label from "../../../../../common/components/Label/Label";
 import ErrorBanner from "../../../../../common/banner/ErrorBanner";
 
 interface Props {
@@ -33,10 +33,10 @@ const SearchGenreTypes = ({ selectedGenres, setSelectedGenres }: Props) => {
     }
   };
 
-  const deleteSelectedGenre = (genre: GenreModel) => {
+  const deleteSelectedGenre = (id: string) => {
     var genres = [...selectedGenres];
 
-    setSelectedGenres(genres.filter((x) => x.genreId != genre.genreId));
+    setSelectedGenres(genres.filter((x) => x.genreId != id));
   };
 
   const addGenre = (genre: GenreModel) => {
@@ -55,14 +55,15 @@ const SearchGenreTypes = ({ selectedGenres, setSelectedGenres }: Props) => {
   }, []);
 
   return (
-    <div id="search-genre">
-      <div className="genre-box d-flex flex-column justify-content-between">
-        <div className="genre-container">
+    <div id="search-label-component">
+      <div className="box d-flex flex-column justify-content-between">
+        <div className="container">
           {selectedGenres.map((selectedGenre, index) => (
             <span key={index}>
-              <GenreTypeLabel
-                genre={selectedGenre}
-                deleteSelectedGenre={deleteSelectedGenre}
+              <Label
+                label={selectedGenre.genreName}
+                id={selectedGenre.genreId}
+                deleteLabelItem={deleteSelectedGenre}
                 showDeleteButton={true}
               />
             </span>
@@ -70,7 +71,7 @@ const SearchGenreTypes = ({ selectedGenres, setSelectedGenres }: Props) => {
         </div>
 
         <input
-          className="genre-input"
+          className="input"
           placeholder="Search for a genre to add to your profile"
           value={genre}
           onChange={(e) => {
@@ -81,13 +82,13 @@ const SearchGenreTypes = ({ selectedGenres, setSelectedGenres }: Props) => {
       </div>
       <div className="positive-relative">
         {genreList.length > 0 ? (
-          <div className="genre-dropdown">
+          <div className="dropdown">
             {genreList.map((genre, index) => {
               return (
                 <div
                   key={index}
                   onClick={() => addGenre(genre)}
-                  className="genre-dropdown-option"
+                  className="dropdown-option"
                 >
                   {genre.genreName}
                 </div>

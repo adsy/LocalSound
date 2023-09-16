@@ -3,7 +3,7 @@ import { Col } from "react-bootstrap";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import { UserModel } from "../../../app/model/dto/user.model";
 import EditArtist from "./Edit/EditArtist";
-import GenreTypeLabel from "../../../common/components/Label/GenreTypeLabel";
+import Label from "../../../common/components/Label/Label";
 import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
 import { useEffect, useState } from "react";
 import { AccountImageModel } from "../../../app/model/dto/account-image.model";
@@ -140,7 +140,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                           <div className="about-text">
                             {userDetails.genres.map((genre, index) => (
                               <span key={index}>
-                                <GenreTypeLabel genre={genre} />
+                                <Label genre={genre} />
                               </span>
                             ))}
                           </div>
@@ -171,7 +171,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                           <div className="about-text">
                             {userDetails.genres.map((genre, index) => (
                               <span key={index}>
-                                <GenreTypeLabel genre={genre} />
+                                <Label genre={genre} />
                               </span>
                             ))}
                           </div>
@@ -233,7 +233,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                 <div className="about-text">
                   {userDetails.genres.map((genre, index) => (
                     <span key={index}>
-                      <GenreTypeLabel genre={genre} />
+                      <Label genre={genre} />
                     </span>
                   ))}
                 </div>

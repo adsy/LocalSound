@@ -31,7 +31,7 @@ const EditArtist = ({ userDetails, setSubmittingRequest }: Props) => {
           />
         </Tab>
         <Tab eventKey="artistDetails" title="Profile details" className="px-3">
-          <EditArtistProfile />
+          <EditArtistProfile userDetails={userDetails} />
         </Tab>
       </Tabs>
     </div>

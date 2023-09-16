@@ -1,10 +1,7 @@
-import { Divider } from "semantic-ui-react";
 import MyTextInput from "../../../../../common/form/MyTextInput";
 import MyAddressInput from "../../../../../common/form/MyAddressInput";
-import { UpdateArtistPersonalDetailsModel } from "../../../../../app/model/dto/update-artist.model";
+import { UpdateArtistPersonalDetailsModel } from "../../../../../app/model/dto/update-artist-personal.model";
 import MyTextArea from "../../../../../common/form/MyTextArea";
-import SearchGenreTypes from "./SearchGenreTypes";
-import { GenreModel } from "../../../../../app/model/dto/genre.model";
 
 interface Props {
   disabled?: boolean;
@@ -26,9 +23,7 @@ const EditArtistDetailsForm = ({
   setFieldTouched,
   setAddressError,
   values,
-}: // selectedGenres,
-// setSelectedGenres,
-Props) => {
+}: Props) => {
   const handleMobileNumberChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -131,21 +126,6 @@ Props) => {
           />
         </div>
       </div>
-
-      {/* <div className="d-flex flex-row flex-wrap justify-content-between">
-        <div className="d-flex flex-column col-12 col-md-6 px-3">
-          <div className="mb-3">
-            <div className="d-flex mb-1">
-              <p className="form-label">GENRES</p>
-            </div>
-            <SearchGenreTypes
-              selectedGenres={selectedGenres}
-              setSelectedGenres={setSelectedGenres}
-            />
-          </div>
-        </div>
-        <div className="d-flex flex-column col-12 col-md-6 px-3"></div>
-      </div> */}
     </div>
   );
 };
