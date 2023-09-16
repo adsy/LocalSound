@@ -30,6 +30,39 @@ namespace localsound.backend.Persistence.DbContext
 
                 await context.SaveChangesAsync();
             }
+
+            if (!(await context.EventType.AnyAsync()))
+            {
+                await context.EventType.AddRangeAsync(new List<EventType>
+                {
+                    new EventType
+                    {
+                        EventTypeId = Guid.NewGuid(),
+                        EventTypeName = "Weddings"
+                    },
+                    new EventType
+                    {
+                        EventTypeId = Guid.NewGuid(),
+                        EventTypeName = "House parties"
+                    },
+                    new EventType
+                    {
+                        EventTypeId = Guid.NewGuid(),
+                        EventTypeName = "Religious events"
+                    },
+                    new EventType
+                    {
+                        EventTypeId = Guid.NewGuid(),
+                        EventTypeName = "Club residency"
+                    },
+                    new EventType
+                    {
+                        EventTypeId = Guid.NewGuid(),
+                        EventTypeName = "Festivals"
+                    }
+                });
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

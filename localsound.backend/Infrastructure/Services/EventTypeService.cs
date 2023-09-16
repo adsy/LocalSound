@@ -14,24 +14,25 @@ namespace localsound.backend.Infrastructure.Services
         private readonly ILogger<EventTypeService> _logger;
         private readonly IMapper _mapper;
 
-        public EventTypeService(IMapper mapper, ILogger<EventTypeService> logger)
+        public EventTypeService(IMapper mapper, ILogger<EventTypeService> logger, IEventTypeRepository eventTypeRepository)
         {
             _mapper = mapper;
             _logger = logger;
+            _eventTypeRepository = eventTypeRepository;
         }
 
         public async Task<ServiceResponse<List<EventTypeDto>>> SearchEventType(string name, CancellationToken cancellationToken)
         {
             try
             {
-                var genreResult = await _eventTypeRepository.SearchEventTypeAsync(name, cancellationToken);
+                var eventTypeResult = await _eventTypeRepository.SearchEventTypeAsync(name, cancellationToken);
 
-                if (!genreResult.IsSuccessStatusCode)
+                if (!eventTypeResult.IsSuccessStatusCode)
                 {
-                    return new ServiceResponse<List<EventTypeDto>>(genreResult.StatusCode);
+                    return new ServiceResponse<List<EventTypeDto>>(eventTypeResult.StatusCode);
                 }
 
-                var returnList = _mapper.Map<List<EventTypeDto>>(genreResult.ReturnData);
+                var returnList = _mapper.Map<List<EventTypeDto>>(eventTypeResult.ReturnData);
 
                 return new ServiceResponse<List<EventTypeDto>>(HttpStatusCode.OK)
                 {

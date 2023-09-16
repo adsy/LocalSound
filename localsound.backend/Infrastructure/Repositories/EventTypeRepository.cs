@@ -3,6 +3,7 @@ using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Persistence.DbContext;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Net;
 
 namespace localsound.backend.Infrastructure.Repositories
@@ -10,10 +11,12 @@ namespace localsound.backend.Infrastructure.Repositories
     public class EventTypeRepository : IEventTypeRepository
     {
         private readonly LocalSoundDbContext _dbContext;
+        private readonly ILogger<EventTypeRepository> _logger;
 
-        public EventTypeRepository(LocalSoundDbContext dbContext)
+        public EventTypeRepository(LocalSoundDbContext dbContext, ILogger<EventTypeRepository> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public async Task<ServiceResponse<List<EventType>>> SearchEventTypeAsync(string name, CancellationToken cancellationToken)

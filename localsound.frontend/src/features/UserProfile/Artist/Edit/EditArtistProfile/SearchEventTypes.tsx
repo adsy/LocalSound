@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { EventTypeModel } from "../../../../../app/model/dto/eventType.model";
 import agent from "../../../../../api/agent";
 import lodash from "lodash";
-import { Label } from "semantic-ui-react";
 import ErrorBanner from "../../../../../common/banner/ErrorBanner";
+import Label from "../../../../../common/components/Label/Label";
 
 interface Props {
   eventTypes: EventTypeModel[];
@@ -20,6 +20,7 @@ const SearchEventTypes = ({ eventTypes, setEventTypes }: Props) => {
     try {
       setEventTypeList([]);
       if (eventType.length > 0) {
+        setError(null);
         var result = await agent.EventType.searchEventType(eventType);
         var eventTypesFilter = result.filter(
           (x) => !eventTypes.find((z) => x.eventTypeName === z.eventTypeName)
@@ -40,6 +41,7 @@ const SearchEventTypes = ({ eventTypes, setEventTypes }: Props) => {
   };
 
   const addEventType = (eventType: EventTypeModel) => {
+    console.log(eventType);
     setEventType("");
     setEventTypeList([]);
     setEventTypes([...eventTypes, eventType]);
