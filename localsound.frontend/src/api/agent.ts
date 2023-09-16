@@ -132,7 +132,7 @@ const Genre = {
 
 const EventType = {
   searchEventType: (type: string) =>
-    requests.get<EventTypeModel[]>(`eventType/seach-event-type/${type}`),
+    requests.get<EventTypeModel[]>(`event-type/seach-event-type/${type}`),
 };
 
 const agent = {

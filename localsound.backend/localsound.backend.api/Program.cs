@@ -46,6 +46,8 @@ builder.Services.AddTransient<ICurrentUserService, CurrentUserService>();
 builder.Services.AddTransient<ITokenRepository, TokenRepository>();
 builder.Services.AddTransient<IGenreService, GenreService>();
 builder.Services.AddTransient<IGenreRepository, GenreRepository>();
+builder.Services.AddTransient<IEventTypeService, EventTypeService>();
+builder.Services.AddTransient<IEventTypeRepository, EventTypeRepository>();
 builder.Services.AddTransient<IDbTransactionRepository, DbTransactionRepository>();
 builder.Services.AddTransient<IAccountImageRepository, AccountImageRepository>();
 builder.Services.AddTransient<IAccountImageService, AccountImageService>();
