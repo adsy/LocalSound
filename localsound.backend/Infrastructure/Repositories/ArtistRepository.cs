@@ -59,7 +59,11 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.Artist.Include(x => x.Genres).FirstOrDefaultAsync(x => x.AppUserId == userId);
+                var artist = await _dbContext.Artist
+                    .Include(x => x.Genres)
+                    .Include(x => x.EventTypes)
+                    .Include(x => x.Equipment)
+                    .FirstOrDefaultAsync(x => x.AppUserId == userId);
 
                 // Artist should not be null here, otherwise its an issue with the artist creation/DB
                 if (artist == null)

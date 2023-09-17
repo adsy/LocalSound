@@ -11,6 +11,7 @@ import { handleSetUserDetails } from "../../../../../app/redux/actions/userSlice
 import { handleResetModal } from "../../../../../app/redux/actions/modalSlice";
 import { UserModel } from "../../../../../app/model/dto/user.model";
 import ErrorBanner from "../../../../../common/banner/ErrorBanner";
+import SuccessBanner from "../../../../../common/banner/SuccessBanner";
 
 interface Props {
   userDetails: UserModel;
@@ -20,6 +21,7 @@ interface Props {
 const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
   const [addressError, setAddressError] = useState(false);
   const dispatch = useDispatch();
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const formValuesUntouched = (values: UpdateArtistPersonalDetailsModel) => {
     if (values.name !== userDetails.name) {
@@ -64,6 +66,7 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
             profileUrl: userDetails?.profileUrl,
           }}
           onSubmit={async (values, { setStatus }) => {
+            setShowSuccessMessage(false);
             setStatus(null);
             try {
               var submissionData = { ...values };
@@ -78,7 +81,7 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
                   ...submissionData,
                 })
               );
-              dispatch(handleResetModal());
+              setShowSuccessMessage(true);
             } catch (err) {
               setStatus({
                 error:
@@ -119,6 +122,11 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
                   <ErrorBanner className="fade-in mb-0 mx-3">
                     {status.error}
                   </ErrorBanner>
+                ) : null}
+                {showSuccessMessage ? (
+                  <SuccessBanner className="fade-in mb-0 mx-3">
+                    Your personal details have been successfully updated.
+                  </SuccessBanner>
                 ) : null}
                 <div className="px-3 mt-3">
                   {!isSubmitting ? (

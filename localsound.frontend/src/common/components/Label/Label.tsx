@@ -5,6 +5,7 @@ interface Props {
   id: string;
   deleteLabelItem?: (id: string) => void;
   showDeleteButton?: boolean;
+  color?: string;
 }
 
 const Label = ({
@@ -12,9 +13,10 @@ const Label = ({
   id,
   deleteLabelItem,
   showDeleteButton = false,
+  color = "black-badge",
 }: Props) => {
   return (
-    <Badge className="purple-badge mr-1">
+    <Badge className={`${color} mr-1`}>
       <div className="d-flex flex-row">
         <div className={`badge-name ${showDeleteButton ? "short" : "long"}`}>
           {label}

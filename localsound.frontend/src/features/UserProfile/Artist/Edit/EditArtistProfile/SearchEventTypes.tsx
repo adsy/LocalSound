@@ -36,12 +36,10 @@ const SearchEventTypes = ({ eventTypes, setEventTypes }: Props) => {
 
   const deleteSelectedEventType = (id: string) => {
     var eventTypeList = [...eventTypes];
-
-    setEventTypeList(eventTypeList.filter((x) => x.eventTypeId != id));
+    setEventTypes(eventTypeList.filter((x) => x.eventTypeId != id));
   };
 
   const addEventType = (eventType: EventTypeModel) => {
-    console.log(eventType);
     setEventType("");
     setEventTypeList([]);
     setEventTypes([...eventTypes, eventType]);
@@ -56,6 +54,8 @@ const SearchEventTypes = ({ eventTypes, setEventTypes }: Props) => {
     return lodash.debounce(callback, 500);
   }, []);
 
+  console.log(eventTypeList);
+
   return (
     <div id="search-label-component">
       <div className="box d-flex flex-column justify-content-between">
@@ -67,6 +67,7 @@ const SearchEventTypes = ({ eventTypes, setEventTypes }: Props) => {
                 id={eventType.eventTypeId}
                 deleteLabelItem={deleteSelectedEventType}
                 showDeleteButton={true}
+                color="purple-badge"
               />
             </span>
           ))}

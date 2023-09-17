@@ -253,13 +253,24 @@ h6.inverse {
 }
 
 /** BANNERS **/
-.alert {
+.alert.alert-danger {
   padding-top: 10px;
   padding-bottom: 10px;
   background: #ff6969;
   border: 1px solid #8a7070;
   letter-spacing: 1px;
   color: #001514;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.alert.alert-success {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: rgb(88, 207, 88);
+  border: 1px solid black;
+  letter-spacing: 1px;
+  color: #232323;
   font-size: 12px;
   font-weight: 800;
 }
@@ -612,19 +623,31 @@ i.large.icon {
 }
 
 /** BADGES **/
-.purple-badge {
+.black-badge {
   background-color: #232323 !important;
   margin-bottom: 5px;
   padding: 0;
-  font-size: 11px;
+  font-size: 12px;
+  border: 1px solid #6d69fa;
 }
-.purple-badge .badge-name {
-  padding-bottom: 4.675px;
-  padding-left: 6.825px;
-  padding-top: 3.675px;
-}
-.purple-badge .badge-name.long {
+.black-badge .badge-delete-btn {
   padding-right: 6.825px;
+  padding-top: 3.675px;
+  padding-left: 5.825px;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+  border-radius: 0px 0.15rem 0.15rem 0px;
+  background-color: #6d69fa;
+}
+
+.purple-badge {
+  background-color: #6d69fa !important;
+  margin-bottom: 5px;
+  padding: 0;
+  font-size: 12px;
+  color: #ececec;
+  border: 1px solid #232323;
 }
 .purple-badge .badge-delete-btn {
   padding-right: 6.825px;
@@ -633,8 +656,20 @@ i.large.icon {
   color: white;
   font-weight: 800;
   cursor: pointer;
-  border-radius: 0px 0.375rem 0.375rem 0px;
-  background-color: #6d69fa;
+  border-radius: 0px 0.15rem 0.15rem 0px;
+  background-color: #232323;
+}
+
+.black-badge .badge-name,
+.purple-badge .badge-name {
+  padding-bottom: 4.675px;
+  padding-left: 6.825px;
+  padding-top: 3.675px;
+  font-size: 12px;
+}
+.black-badge .badge-name.long,
+.purple-badge .badge-name.long {
+  padding-right: 6.825px;
 }
 
 /** AUTH MODAL **/

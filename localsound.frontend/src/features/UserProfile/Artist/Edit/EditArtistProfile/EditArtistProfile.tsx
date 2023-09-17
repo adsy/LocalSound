@@ -12,6 +12,7 @@ import InPageLoadingComponent from "../../../../../app/layout/InPageLoadingCompo
 import { EquipmentModel } from "../../../../../app/model/dto/equipment.model";
 import { EventTypeModel } from "../../../../../app/model/dto/eventType.model";
 import SearchEventTypes from "./SearchEventTypes";
+import SuccessBanner from "../../../../../common/banner/SuccessBanner";
 
 interface Props {
   userDetails: UserModel;
@@ -34,6 +35,18 @@ const EditArtistProfile = ({ userDetails }: Props) => {
     if (
       JSON.stringify([...userDetails.genres]) !==
       JSON.stringify([...selectedGenres])
+    ) {
+      return false;
+    }
+    if (
+      JSON.stringify([...userDetails.eventTypes]) !==
+      JSON.stringify([...eventTypes])
+    ) {
+      return false;
+    }
+    if (
+      JSON.stringify([...userDetails.equipment]) !==
+      JSON.stringify([...equipment])
     ) {
       return false;
     }
@@ -94,6 +107,11 @@ const EditArtistProfile = ({ userDetails }: Props) => {
                         <div className="d-flex mb-1">
                           <p className="form-label">GENRES</p>
                         </div>
+                        <p className="text-justify">
+                          Start typing a genre you play to attach to your
+                          profile. Attaching genres to your profile allow people
+                          to find you specifically for their next event.
+                        </p>
                         <SearchGenreTypes
                           selectedGenres={selectedGenres}
                           setSelectedGenres={setSelectedGenres}
@@ -105,6 +123,12 @@ const EditArtistProfile = ({ userDetails }: Props) => {
                         <div className="d-flex mb-1">
                           <p className="form-label">EVENT TYPES</p>
                         </div>
+                        <p>
+                          Search for event types which you would be available
+                          for. Attaching event types to your profile allow
+                          people to find you for the event type they want to
+                          host.
+                        </p>
                         <SearchEventTypes
                           eventTypes={eventTypes}
                           setEventTypes={setEventTypes}
@@ -117,6 +141,11 @@ const EditArtistProfile = ({ userDetails }: Props) => {
                   <ErrorBanner className="fade-in mb-0 mx-3">
                     {status.error}
                   </ErrorBanner>
+                ) : null}
+                {showSuccessMessage ? (
+                  <SuccessBanner className="fade-in mb-0 mx-3">
+                    Your profile details have been successfully updated.
+                  </SuccessBanner>
                 ) : null}
                 <div className="px-3 mt-3">
                   {!isSubmitting ? (

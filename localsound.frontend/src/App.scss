@@ -144,13 +144,24 @@ $end: 10;
 }
 
 /** BANNERS **/
-.alert {
+.alert.alert-danger {
   padding-top: 10px;
   padding-bottom: 10px;
   background: #ff6969;
   border: 1px solid #8a7070;
   letter-spacing: 1px;
   color: #001514;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.alert.alert-success {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: rgb(88, 207, 88);
+  border: 1px solid black;
+  letter-spacing: 1px;
+  color: $richBlack;
   font-size: 12px;
   font-weight: 800;
 }
@@ -474,21 +485,12 @@ i.large.icon {
 }
 
 /** BADGES **/
-.purple-badge {
+.black-badge {
   background-color: $richBlack !important;
   margin-bottom: 5px;
   padding: 0;
-  font-size: 11px;
-
-  .badge-name {
-    padding-bottom: 4.675px;
-    padding-left: 6.825px;
-    padding-top: 3.675px;
-  }
-
-  .badge-name.long {
-    padding-right: 6.825px;
-  }
+  font-size: 12px;
+  border: 1px solid $purple;
 
   .badge-delete-btn {
     padding-right: 6.825px;
@@ -497,8 +499,42 @@ i.large.icon {
     color: white;
     font-weight: 800;
     cursor: pointer;
-    border-radius: 0px 0.375rem 0.375rem 0px;
+    border-radius: 0px 0.15rem 0.15rem 0px;
     background-color: $purple;
+  }
+}
+
+.purple-badge {
+  background-color: $purple !important;
+  margin-bottom: 5px;
+  padding: 0;
+  font-size: 12px;
+  color: $offWhite;
+  border: 1px solid $richBlack;
+
+  .badge-delete-btn {
+    padding-right: 6.825px;
+    padding-top: 3.675px;
+    padding-left: 5.825px;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+    border-radius: 0px 0.15rem 0.15rem 0px;
+    background-color: $richBlack;
+  }
+}
+
+.black-badge,
+.purple-badge {
+  .badge-name {
+    padding-bottom: 4.675px;
+    padding-left: 6.825px;
+    padding-top: 3.675px;
+    font-size: 12px;
+  }
+
+  .badge-name.long {
+    padding-right: 6.825px;
   }
 }
 

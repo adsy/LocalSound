@@ -43,7 +43,7 @@ namespace localsound.backend.Persistence.DbContext
                     new EventType
                     {
                         EventTypeId = Guid.NewGuid(),
-                        EventTypeName = "House parties"
+                        EventTypeName = "House party"
                     },
                     new EventType
                     {

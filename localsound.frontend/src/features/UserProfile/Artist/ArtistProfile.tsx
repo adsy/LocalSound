@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { Col } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import { UserModel } from "../../../app/model/dto/user.model";
 import EditArtist from "./Edit/EditArtist";
@@ -81,15 +81,15 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
   return (
     <>
       {imgsLoaded && !submittingRequest ? (
-        <div className="d-flex flex-col flex-wrap p-0 fade-in w-100">
-          <Col md={12} lg={6} className="p-0 left-col">
+        <div className="d-flex flex-column flex-wrap p-0 fade-in w-100">
+          <div className="d-flex flex-row">
             {!updatingCoverPhoto && !file ? (
               <div
                 style={{
                   ...bannerStyle,
                   backgroundImage: `url(${coverImage?.accountImageUrl!})`,
                 }}
-                className="profile-banner position-relative"
+                className="profile-banner position-relative w-100"
               >
                 <div className="details-container flex-wrap">
                   <div className="d-flex flex-row justify-content-between pt-1 pr-1 pl-1 w-100">
@@ -140,7 +140,10 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                           <div className="about-text">
                             {userDetails.genres.map((genre, index) => (
                               <span key={index}>
-                                <Label genre={genre} />
+                                <Label
+                                  label={genre.genreName}
+                                  id={genre.genreId}
+                                />
                               </span>
                             ))}
                           </div>
@@ -151,7 +154,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                 </div>
               </div>
             ) : (
-              <div className="position-relative cropping">
+              <div className="position-relative cropping w-100">
                 <EditCoverPhoto
                   file={file!}
                   setFile={setFile}
@@ -171,7 +174,10 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                           <div className="about-text">
                             {userDetails.genres.map((genre, index) => (
                               <span key={index}>
-                                <Label genre={genre} />
+                                <Label
+                                  label={genre.genreName}
+                                  id={genre.genreId}
+                                />
                               </span>
                             ))}
                           </div>
@@ -182,90 +188,110 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                 </div>
               </div>
             )}
-            <div className="d-flex flex-column p-2">
-              {photoUpdateError ? (
-                <div className="d-flex flex-row">
-                  <ErrorBanner className="w-100">
-                    {photoUpdateError}
-                  </ErrorBanner>
-                </div>
-              ) : null}
-              <div className=" d-flex flex-row flex-wrap">
-                {userDetails?.soundcloudUrl ? (
-                  <>
-                    <a
-                      href={userDetails.soundcloudUrl}
-                      target="_blank"
-                      className="btn soundcloud-button w-fit-content d-flex flex-row mb-3 mr-1"
-                    >
-                      <div className="soundcloud-icon align-self-center mr-2"></div>
-                      <h4 className="align-self-center mt-0">Soundcloud</h4>
-                    </a>
-                  </>
+          </div>
+          <div className="d-flex flex-row flex-wrap">
+            <Col md={12} lg={6} className="p-0 left-col">
+              <div className="d-flex flex-column p-2">
+                {photoUpdateError ? (
+                  <div className="d-flex flex-row">
+                    <ErrorBanner className="w-100">
+                      {photoUpdateError}
+                    </ErrorBanner>
+                  </div>
                 ) : null}
-                {userDetails?.spotifyUrl ? (
-                  <>
-                    <a
-                      href={userDetails.spotifyUrl}
-                      target="_blank"
-                      className="btn spotify-button w-fit-content d-flex flex-row mb-3 mr-1"
-                    >
-                      <div className="spotify-icon align-self-center mr-2"></div>
-                      <h4 className="align-self-center mt-0">Spotify</h4>
-                    </a>
-                  </>
-                ) : null}
-                {userDetails?.youtubeUrl ? (
-                  <>
-                    <a
-                      href={userDetails.youtubeUrl}
-                      target="_blank"
-                      className="btn youtube-button w-fit-content d-flex flex-row mb-3"
-                    >
-                      <div className="soundcloud-icon align-self-center mr-2"></div>
-                      <h4 className="align-self-center mt-0">Youtube</h4>
-                    </a>
-                  </>
-                ) : null}
-              </div>
-              <div className="d-flex flex-column pb-2 genre-mobile">
-                <h4 className="section-title">Genres</h4>
-                <div className="about-text">
-                  {userDetails.genres.map((genre, index) => (
-                    <span key={index}>
-                      <Label genre={genre} />
-                    </span>
-                  ))}
+                <div className=" d-flex flex-row flex-wrap">
+                  {userDetails?.soundcloudUrl ? (
+                    <>
+                      <a
+                        href={userDetails.soundcloudUrl}
+                        target="_blank"
+                        className="btn soundcloud-button w-fit-content d-flex flex-row mb-3 mr-1"
+                      >
+                        <div className="soundcloud-icon align-self-center mr-2"></div>
+                        <h4 className="align-self-center mt-0">Soundcloud</h4>
+                      </a>
+                    </>
+                  ) : null}
+                  {userDetails?.spotifyUrl ? (
+                    <>
+                      <a
+                        href={userDetails.spotifyUrl}
+                        target="_blank"
+                        className="btn spotify-button w-fit-content d-flex flex-row mb-3 mr-1"
+                      >
+                        <div className="spotify-icon align-self-center mr-2"></div>
+                        <h4 className="align-self-center mt-0">Spotify</h4>
+                      </a>
+                    </>
+                  ) : null}
+                  {userDetails?.youtubeUrl ? (
+                    <>
+                      <a
+                        href={userDetails.youtubeUrl}
+                        target="_blank"
+                        className="btn youtube-button w-fit-content d-flex flex-row mb-3"
+                      >
+                        <div className="soundcloud-icon align-self-center mr-2"></div>
+                        <h4 className="align-self-center mt-0">Youtube</h4>
+                      </a>
+                    </>
+                  ) : null}
                 </div>
-              </div>
-              <div className="d-flex flex-column pb-4">
-                <h4 className="section-title">Followers</h4>
-                <div className="d-flex flex-row">
-                  <span className="about-text m-0 pr-3">0 followers</span>
-                  <span className="about-text m-0">0 following</span>
+                <div className="d-flex flex-column pb-2 genre-mobile">
+                  <h4 className="section-title inverse">Genres</h4>
+                  <div className="about-text">
+                    {userDetails.genres.map((genre, index) => (
+                      <span key={index}>
+                        <Label label={genre.genreName} id={genre.genreId} />
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div className="d-flex flex-column pb-4">
-                <h4 className="section-title">About</h4>
-                <span className="about-text">{userDetails.aboutSection}</span>
-              </div>
-              {/* <div className="d-flex flex-column pb-4">
-              <h4 className="section-title">Upcoming gigs</h4>
+                <div className="d-flex flex-column pb-2">
+                  <h4 className="section-title inverse">Event types</h4>
+                  <div className="about-text">
+                    {userDetails.eventTypes.map((eventType, index) => (
+                      <span key={index}>
+                        <Label
+                          label={eventType.eventTypeName}
+                          id={eventType.eventTypeId}
+                          color="purple-badge"
+                        />
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="d-flex flex-column pb-4">
+                  <h4 className="section-title inverse">Followers</h4>
+                  <div className="d-flex flex-row">
+                    <span className="about-text m-0 pr-3">0 followers</span>
+                    <span className="about-text m-0">0 following</span>
+                  </div>
+                </div>
+
+                <div className="d-flex flex-column pb-4">
+                  <h4 className="section-title inverse">About</h4>
+                  <span className="about-text">{userDetails.aboutSection}</span>
+                </div>
+                {/* <div className="d-flex flex-column pb-4">
+              <h4 className="section-title inverse">Upcoming gigs</h4>
             </div> */}
-            </div>
-          </Col>
-          <Col md={12} lg={6} className="p-0 right-col">
-            <div className="d-flex flex-column p-2">
-              <h4 className="section-title">Uploads</h4>
-              <span>track</span>
-              <span>track</span>
-              <span>track</span>
-              <span>track</span>
-              <span>track</span>
-              <span>track</span>
-              <span>track</span>
-            </div>
-          </Col>
+              </div>
+            </Col>
+            <Col md={12} lg={6} className="p-0 right-col">
+              <div className="d-flex flex-column p-2">
+                <h4 className="section-title inverse">Uploads</h4>
+                <span>track</span>
+                <span>track</span>
+                <span>track</span>
+                <span>track</span>
+                <span>track</span>
+                <span>track</span>
+                <span>track</span>
+              </div>
+            </Col>
+          </div>
         </div>
       ) : !imgsLoaded && !submittingRequest ? (
         <div className="h-100 d-flex justify-content-center align-self-center">
