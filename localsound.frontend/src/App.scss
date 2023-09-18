@@ -492,6 +492,7 @@ i.large.icon {
   margin-bottom: 5px;
   padding: 0;
   font-size: 14px;
+  text-wrap: initial;
 
   .badge-delete-btn {
     padding-right: 6.825px;
@@ -540,7 +541,10 @@ i.large.icon {
 
 /** AUTH MODAL **/
 #auth-modal,
-#edit-artist {
+#edit-artist,
+#artist-profile {
+  width: 100%;
+
   .header {
     padding: 10px;
   }
@@ -800,13 +804,6 @@ i.large.icon {
   .edit-cover-button {
     z-index: 999;
     display: none;
-  }
-
-  .left-col {
-    border-right: 1px solid #dedede;
-  }
-
-  .right-col {
   }
 
   .profile-img {

@@ -630,6 +630,7 @@ i.large.icon {
   margin-bottom: 5px;
   padding: 0;
   font-size: 14px;
+  text-wrap: initial;
 }
 .white-badge .badge-delete-btn {
   padding-right: 6.825px;
@@ -673,12 +674,19 @@ i.large.icon {
 }
 
 /** AUTH MODAL **/
+#auth-modal,
+#edit-artist,
+#artist-profile {
+  width: 100%;
+}
 #auth-modal .header,
-#edit-artist .header {
+#edit-artist .header,
+#artist-profile .header {
   padding: 10px;
 }
 #auth-modal .header-logo,
-#edit-artist .header-logo {
+#edit-artist .header-logo,
+#artist-profile .header-logo {
   background-image: url("./assets/logo-black.png");
   background-size: contain !important;
   background-attachment: inherit !important;
@@ -688,7 +696,8 @@ i.large.icon {
   height: 40px;
 }
 #auth-modal .header-title,
-#edit-artist .header-title {
+#edit-artist .header-title,
+#artist-profile .header-title {
   border-bottom: 4px solid #6d69fa;
   color: #001514 !important;
   font-size: 18px !important;
@@ -709,11 +718,13 @@ i.large.icon {
   padding-right: 10;
 }
 #auth-modal .nav-tabs,
-#edit-artist .nav-tabs {
+#edit-artist .nav-tabs,
+#artist-profile .nav-tabs {
   border-bottom: unset;
 }
 #auth-modal .nav-link,
-#edit-artist .nav-link {
+#edit-artist .nav-link,
+#artist-profile .nav-link {
   border-bottom: 4px solid #6d69fa;
   color: #001514 !important;
   font-size: 18px !important;
@@ -735,15 +746,18 @@ i.large.icon {
   border-bottom: 4px solid rgb(199, 199, 199);
 }
 #auth-modal .nav-link:hover,
-#edit-artist .nav-link:hover {
+#edit-artist .nav-link:hover,
+#artist-profile .nav-link:hover {
   border-bottom: 4px solid #232323;
 }
 #auth-modal .nav-link.active,
-#edit-artist .nav-link.active {
+#edit-artist .nav-link.active,
+#artist-profile .nav-link.active {
   border-bottom: 4px solid #6d69fa;
 }
 #auth-modal #search-label-component .box,
-#edit-artist #search-label-component .box {
+#edit-artist #search-label-component .box,
+#artist-profile #search-label-component .box {
   margin: 0.28571429rem 0 0 0;
   background-color: white;
   min-height: 92px;
@@ -756,11 +770,13 @@ i.large.icon {
   box-shadow: 0 0 0 0 transparent inset;
 }
 #auth-modal #search-label-component .box .container,
-#edit-artist #search-label-component .box .container {
+#edit-artist #search-label-component .box .container,
+#artist-profile #search-label-component .box .container {
   padding: 0.67857143em 0.5em;
 }
 #auth-modal #search-label-component .box .input,
-#edit-artist #search-label-component .box .input {
+#edit-artist #search-label-component .box .input,
+#artist-profile #search-label-component .box .input {
   border-radius: 0;
   border-right: unset;
   border-bottom: unset;
@@ -768,7 +784,8 @@ i.large.icon {
   border-radius: 0px 0px 0.28571429rem 0.28571429rem;
 }
 #auth-modal #search-label-component .dropdown,
-#edit-artist #search-label-component .dropdown {
+#edit-artist #search-label-component .dropdown,
+#artist-profile #search-label-component .dropdown {
   border-radius: 2px;
   border-left: 1px solid #232323;
   border-right: 1px solid #232323;
@@ -778,11 +795,13 @@ i.large.icon {
   background: white;
 }
 #auth-modal #search-label-component .dropdown .dropdown-option:first-of-type,
-#edit-artist #search-label-component .dropdown .dropdown-option:first-of-type {
+#edit-artist #search-label-component .dropdown .dropdown-option:first-of-type,
+#artist-profile #search-label-component .dropdown .dropdown-option:first-of-type {
   border-top: 1px solid #232323;
 }
 #auth-modal #search-label-component .dropdown .dropdown-option,
-#edit-artist #search-label-component .dropdown .dropdown-option {
+#edit-artist #search-label-component .dropdown .dropdown-option,
+#artist-profile #search-label-component .dropdown .dropdown-option {
   border-bottom: 1px solid #232323;
   letter-spacing: 1px;
   font-size: 14px;
@@ -792,7 +811,8 @@ i.large.icon {
   padding: 8px;
 }
 #auth-modal #search-label-component .dropdown .dropdown-option:hover,
-#edit-artist #search-label-component .dropdown .dropdown-option:hover {
+#edit-artist #search-label-component .dropdown .dropdown-option:hover,
+#artist-profile #search-label-component .dropdown .dropdown-option:hover {
   font-size: 14px;
   letter-spacing: 1px;
   background-color: rgb(255, 255, 255);
@@ -955,9 +975,6 @@ i.large.icon {
 #user-profile .edit-cover-button {
   z-index: 999;
   display: none;
-}
-#user-profile .left-col {
-  border-right: 1px solid #dedede;
 }
 #user-profile .profile-img {
   border: 4px solid;
