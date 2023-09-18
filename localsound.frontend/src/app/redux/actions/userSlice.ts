@@ -28,6 +28,20 @@ export const userSlice = createSlice({
 
       state.userDetails = user;
     },
+    handleUpdateUserProfilePhoto: (state, { payload }) => {
+      var images = state.userDetails?.images.filter(
+        (x) => x.accountImageTypeId == AccountImageTypes.CoverImage
+      );
+
+      var newArray = [...images!, payload];
+
+      var user = {
+        ...state.userDetails!,
+        images: newArray,
+      };
+
+      state.userDetails = user;
+    },
   },
 });
 
@@ -35,6 +49,7 @@ export const {
   handleResetUserState,
   handleSetUserDetails,
   handleUpdateUserCoverPhoto,
+  handleUpdateUserProfilePhoto,
 } = userSlice.actions;
 
 export default userSlice.reducer;

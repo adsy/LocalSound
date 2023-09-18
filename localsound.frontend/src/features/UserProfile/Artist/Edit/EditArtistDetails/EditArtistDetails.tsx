@@ -8,7 +8,6 @@ import { UpdateArtistPersonalDetailsModel } from "../../../../../app/model/dto/u
 import { Button } from "react-bootstrap";
 import agent from "../../../../../api/agent";
 import { handleSetUserDetails } from "../../../../../app/redux/actions/userSlice";
-import { handleResetModal } from "../../../../../app/redux/actions/modalSlice";
 import { UserModel } from "../../../../../app/model/dto/user.model";
 import ErrorBanner from "../../../../../common/banner/ErrorBanner";
 import SuccessBanner from "../../../../../common/banner/SuccessBanner";
@@ -116,7 +115,6 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
                     setAddressError={setAddressError}
                     disabled={isSubmitting}
                     values={values as UpdateArtistPersonalDetailsModel}
-                    userDetails={userDetails}
                   />
                 </div>
                 {status?.error ? (

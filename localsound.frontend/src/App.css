@@ -902,6 +902,14 @@ i.large.icon {
   color: #232323;
 }
 
+#profile-photo-update .cropper-view-box {
+  border-radius: 200px;
+}
+#profile-photo-update .cropper-crop-box {
+  height: 100% !important;
+  width: 100% !important;
+}
+
 /** USER PROFILE **/
 #user-profile {
   min-height: 100%;
@@ -910,9 +918,36 @@ i.large.icon {
   justify-content: center;
   align-content: stretch;
   flex-wrap: wrap;
+  /** CROPPER **/
+}
+#user-profile #cropper {
+  z-index: 2;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+#user-profile #cropper .cropper-crop-box {
+  z-index: 9;
+}
+#user-profile #cropper .cropper-line,
+#user-profile #cropper .cropper-point {
+  background-color: #6d69fa !important;
+}
+#user-profile #cropper .crop-action-row {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 10;
+}
+#user-profile #cropper .cropper-container {
+  width: unset !important;
+  height: 30rem !important;
 }
 #user-profile .cropping {
-  height: 24rem;
+  height: 30rem;
+}
+#user-profile .cropping .details-container {
+  justify-content: flex-end;
 }
 #user-profile .cropping .details-container .action-row {
   visibility: hidden !important;
@@ -994,31 +1029,6 @@ i.large.icon {
   #user-profile .genre-mobile {
     display: flex !important;
   }
-}
-
-/** CROPPER **/
-#cropper {
-  z-index: 2;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-}
-#cropper .cropper-crop-box {
-  z-index: 9;
-}
-#cropper .cropper-line,
-#cropper .cropper-point {
-  background-color: #6d69fa !important;
-}
-#cropper .crop-action-row {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  z-index: 10;
-}
-#cropper .cropper-container {
-  width: unset !important;
-  height: 24rem !important;
 }
 
 @keyframes fadein {

@@ -7,6 +7,12 @@ import { UserModel } from "../../../../../app/model/dto/user.model";
 import { AccountImageTypes } from "../../../../../app/model/enums/accountImageTypes";
 import userImg from "../../../../../assets/icons/user.svg";
 import { Button } from "react-bootstrap";
+import { useState } from "react";
+import CircleCropper from "../../../../../common/components/Cropper/CircleCropper";
+import agent from "../../../../../api/agent";
+import { useDispatch, useSelector } from "react-redux";
+import { handleUpdateUserProfilePhoto } from "../../../../../app/redux/actions/userSlice";
+import { State } from "../../../../../app/model/redux/state";
 
 interface Props {
   disabled?: boolean;
@@ -18,7 +24,6 @@ interface Props {
     shouldValidate?: boolean
   ) => void;
   setAddressError: (addressError: boolean) => void;
-  userDetails: UserModel;
 }
 
 const EditArtistDetailsForm = ({
@@ -27,9 +32,12 @@ const EditArtistDetailsForm = ({
   setFieldTouched,
   setAddressError,
   values,
-  userDetails,
 }: Props) => {
-  const userPhoto = userDetails.images.find(
+  const [file, setFile] = useState<File | null>(null);
+  const [updatingProfilePhoto, setUpdatingProfilePhoto] = useState(false);
+  const dispatch = useDispatch();
+  const userDetails = useSelector((state: State) => state.user.userDetails);
+  const userPhoto = userDetails!.images.find(
     (x) => x.accountImageTypeId == AccountImageTypes.ProfileImage
   );
 
@@ -62,6 +70,37 @@ const EditArtistDetailsForm = ({
         setFieldValue("phoneNumber", value);
       }
     }
+  };
+  const onFileUpload = async (file: Blob) => {
+    const formData = new FormData();
+
+    if (file) {
+      formData.append("fileName", "profilePhoto.jpg");
+      formData.append("formFile", file, "profilePhoto.jpg");
+
+      try {
+        // setSubmittingRequest(true);
+        var result = await agent.Profile.uploadProfileImage(
+          userDetails?.memberId!,
+          formData,
+          AccountImageTypes.ProfileImage
+        );
+
+        dispatch(handleUpdateUserProfilePhoto(result));
+        setUpdatingProfilePhoto(false);
+        setFile(null);
+      } catch (err) {
+        // setPhotoUpdateError(
+        //   "There was an error updating your cover photo, please try again.."
+        // );
+      }
+      // setSubmittingRequest(false);
+    }
+  };
+
+  const cancelCrop = () => {
+    setFile(null);
+    setUpdatingProfilePhoto(false);
   };
 
   return (
@@ -129,19 +168,51 @@ const EditArtistDetailsForm = ({
           <div className="d-flex mb-1">
             <p className="form-label">PROFILE PHOTO</p>
           </div>
-          <div className="d-flex justify-content-center flex-column align-content-center mb-4">
-            <Image
-              src={userPhoto ? userPhoto.accountImageUrl : userImg}
-              size="medium"
-              circular
-              className="align-self-center mb-2"
-            />
-            <Button
-              className={`black-button w-100 align-self-center`}
-              // onClick={() => submitForm()}
-            >
-              <h4>Upload profile photo</h4>
-            </Button>
+          <div
+            id="profile-photo-update"
+            className="d-flex justify-content-center flex-column align-content-center mb-4"
+          >
+            {!updatingProfilePhoto ? (
+              <>
+                <Image
+                  src={
+                    !updatingProfilePhoto && userPhoto
+                      ? userPhoto.accountImageUrl
+                      : !updatingProfilePhoto && !userPhoto
+                      ? userImg
+                      : updatingProfilePhoto
+                      ? URL.createObjectURL(file!)
+                      : null
+                  }
+                  size="medium"
+                  circular
+                  className="align-self-center mb-2"
+                />
+                <label
+                  htmlFor="profilePhotoInput"
+                  className="btn black-button w-100 align-self-center"
+                >
+                  <h4>Update cover photo</h4>
+                </label>
+                <input
+                  type="file"
+                  id="profilePhotoInput"
+                  style={{ display: "none" }}
+                  onChange={(event) => {
+                    if (event && event.target && event.target.files) {
+                      setFile(event.target.files[0]);
+                      setUpdatingProfilePhoto(true);
+                    }
+                  }}
+                />
+              </>
+            ) : file ? (
+              <CircleCropper
+                file={file}
+                onFileUpload={onFileUpload}
+                cancelCrop={cancelCrop}
+              />
+            ) : null}
           </div>
           <div className="d-flex">
             <p className="form-label">ABOUT</p>

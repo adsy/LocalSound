@@ -1,14 +1,13 @@
-import React, { useState, createRef } from "react";
-import Cropper, { ReactCropperElement } from "react-cropper";
-import "cropperjs/dist/cropper.css";
+import { createRef } from "react";
+import { Cropper, ReactCropperElement } from "react-cropper";
 
 interface Props {
   file: File;
-  onFileUpload: (file: Blob) => void;
+  onFileUpload: (blob: Blob) => void;
   cancelCrop: () => void;
 }
 
-const ImageCropper = ({ file, onFileUpload, cancelCrop }: Props) => {
+const CircleCropper = ({ file, onFileUpload, cancelCrop }: Props) => {
   const cropperRef = createRef<ReactCropperElement>();
 
   const getCropData = async () => {
@@ -28,30 +27,35 @@ const ImageCropper = ({ file, onFileUpload, cancelCrop }: Props) => {
 
   return (
     <div id="cropper">
-      <div style={{ width: "100%", position: "relative" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
         <Cropper
           ref={cropperRef}
-          style={{ height: "30rem", width: "100%", opacity: ".7" }}
+          style={{ height: "315px", width: "315px", alignSelf: "center" }}
           zoomTo={0.5}
-          initialAspectRatio={659 / 336}
+          aspectRatio={1 / 1}
           preview=".img-preview"
           src={URL.createObjectURL(file)}
-          viewMode={1}
-          minCropBoxHeight={10}
-          minCropBoxWidth={10}
+          viewMode={3}
           background={false}
           responsive={true}
           autoCropArea={1}
           checkOrientation={false}
           guides={true}
+          size={300}
         />
-        <div className="crop-action-row d-flex flex-row">
+        <div className="crop-action-row d-flex flex-row justify-content-center mt-2">
           <a
             onClick={async () => await getCropData()}
             target="_blank"
             className="btn black-button save-crop-btn"
           >
-            <h4>Save</h4>
+            <h4>Upload</h4>
           </a>
           <a
             onClick={() => cancelCrop()}
@@ -62,9 +66,8 @@ const ImageCropper = ({ file, onFileUpload, cancelCrop }: Props) => {
           </a>
         </div>
       </div>
-      {/* <Button>Cancel</Button> */}
     </div>
   );
 };
 
-export default ImageCropper;
+export default CircleCropper;
