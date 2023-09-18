@@ -116,6 +116,7 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
                     setAddressError={setAddressError}
                     disabled={isSubmitting}
                     values={values as UpdateArtistPersonalDetailsModel}
+                    userDetails={userDetails}
                   />
                 </div>
                 {status?.error ? (

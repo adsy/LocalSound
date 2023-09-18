@@ -2,6 +2,11 @@ import MyTextInput from "../../../../../common/form/MyTextInput";
 import MyAddressInput from "../../../../../common/form/MyAddressInput";
 import { UpdateArtistPersonalDetailsModel } from "../../../../../app/model/dto/update-artist-personal.model";
 import MyTextArea from "../../../../../common/form/MyTextArea";
+import { Image } from "semantic-ui-react";
+import { UserModel } from "../../../../../app/model/dto/user.model";
+import { AccountImageTypes } from "../../../../../app/model/enums/accountImageTypes";
+import userImg from "../../../../../assets/icons/user.svg";
+import { Button } from "react-bootstrap";
 
 interface Props {
   disabled?: boolean;
@@ -13,8 +18,7 @@ interface Props {
     shouldValidate?: boolean
   ) => void;
   setAddressError: (addressError: boolean) => void;
-  // selectedGenres: GenreModel[];
-  // setSelectedGenres: (genres: GenreModel[]) => void;
+  userDetails: UserModel;
 }
 
 const EditArtistDetailsForm = ({
@@ -23,7 +27,12 @@ const EditArtistDetailsForm = ({
   setFieldTouched,
   setAddressError,
   values,
+  userDetails,
 }: Props) => {
+  const userPhoto = userDetails.images.find(
+    (x) => x.accountImageTypeId == AccountImageTypes.ProfileImage
+  );
+
   const handleMobileNumberChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -82,6 +91,19 @@ const EditArtistDetailsForm = ({
             onChange={(e) => handleMobileNumberChange(e)}
             onBlur={(e) => handleMobileNumberChange(e)}
           />
+
+          <div className="d-flex">
+            <p className="form-label">ADDRESS</p>
+          </div>
+          <MyAddressInput
+            name="address"
+            placeholder=""
+            setFieldValue={setFieldValue}
+            setFieldTouched={setFieldTouched}
+            setAddressError={setAddressError}
+            disabled={disabled}
+            preselectedAddress={values.address}
+          />
           <div className="mb-3">
             <div className="d-flex">
               <p className="form-label">SOUNDCLOUD PROFILE</p>
@@ -104,26 +126,27 @@ const EditArtistDetailsForm = ({
           </div>
         </div>
         <div className="col-12 col-md-6 px-3 mb-3">
-          <div className="d-flex">
+          <div className="d-flex mb-1">
             <p className="form-label">PROFILE PHOTO</p>
           </div>
-          IMAGE WILL GO HERE
+          <div className="d-flex justify-content-center flex-column align-content-center mb-4">
+            <Image
+              src={userPhoto ? userPhoto.accountImageUrl : userImg}
+              size="medium"
+              circular
+              className="align-self-center mb-2"
+            />
+            <Button
+              className={`black-button w-100 align-self-center`}
+              // onClick={() => submitForm()}
+            >
+              <h4>Upload profile photo</h4>
+            </Button>
+          </div>
           <div className="d-flex">
             <p className="form-label">ABOUT</p>
           </div>
           <MyTextArea name="aboutSection" placeholder="" rows={5} />
-          <div className="d-flex">
-            <p className="form-label">ADDRESS</p>
-          </div>
-          <MyAddressInput
-            name="address"
-            placeholder=""
-            setFieldValue={setFieldValue}
-            setFieldTouched={setFieldTouched}
-            setAddressError={setAddressError}
-            disabled={disabled}
-            preselectedAddress={values.address}
-          />
         </div>
       </div>
     </div>

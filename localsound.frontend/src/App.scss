@@ -66,24 +66,21 @@ $purple: #6d69fa;
 }
 
 @mixin header-style {
-  border-bottom: 4px solid $purple;
+  border-bottom: 4px solid $richBlack;
   color: #001514 !important;
   font-size: 18px !important;
   @include text-shadow;
   font-weight: 800;
   letter-spacing: 1.5px;
   padding-bottom: 5px;
-  padding-right: 20px;
   font-family: "Barlow", serif !important;
   background: unset;
-  border-bottom: 4px solid $purple;
   border-left: unset;
   border-right: unset;
   border-top: unset;
   transition: border-bottom 0.2s ease-in-out !important;
   margin-right: 20px;
   padding-left: 0;
-  padding-right: 10;
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Barlow");
@@ -485,9 +482,9 @@ i.large.icon {
 }
 
 /** BADGES **/
-.white-badge {
-  color: #232323 !important;
-  background-color: #ececec !important;
+.black-badge {
+  color: $offWhite !important;
+  background-color: $richBlack !important;
   border: 1px solid black;
   margin-bottom: 5px;
   padding: 0;
@@ -498,11 +495,11 @@ i.large.icon {
     padding-right: 6.825px;
     padding-top: 3.675px;
     padding-left: 5.825px;
-    color: white;
+    color: $richBlack;
     font-weight: 800;
     cursor: pointer;
-    border-radius: 0px 0.375rem 0.375rem 0px;
-    background-color: $richBlack;
+    border-radius: 0px 0.275rem 0.275rem 0px;
+    background-color: $offWhite;
   }
 }
 
@@ -525,7 +522,7 @@ i.large.icon {
   }
 }
 
-.white-badge,
+.black-badge,
 .purple-badge {
   .badge-name {
     padding-bottom: 4.675px;
@@ -567,12 +564,13 @@ i.large.icon {
     @include header-style;
     border-bottom: 4px solid rgb(199, 199, 199);
   }
+
   .nav-link:hover {
-    border-bottom: 4px solid $richBlack;
+    border-bottom: 4px solid $purple;
   }
 
   .nav-link.active {
-    border-bottom: 4px solid $purple;
+    border-bottom: 4px solid $richBlack;
   }
 
   #search-label-component {
@@ -789,8 +787,12 @@ i.large.icon {
     padding-left: 0px;
   }
   .section-title {
-    font-size: 24px;
-    margin-bottom: 5px;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    // border-bottom: 1px $offWhite solid;
+    padding-right: 10px;
+    margin-bottom: 8px;
   }
 
   .followers {
@@ -817,6 +819,10 @@ i.large.icon {
 
   .genre-mobile {
     display: none !important;
+  }
+
+  .left-col {
+    border-right: 1px solid $offWhite;
   }
 
   @media only screen and (max-width: 767px) {
