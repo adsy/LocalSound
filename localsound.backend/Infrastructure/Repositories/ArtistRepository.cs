@@ -87,7 +87,8 @@ namespace localsound.backend.Infrastructure.Repositories
                 var equipment = updateArtistDto.Equipment.Select(x => new ArtistEquipment
                 {
                     AppUserId = artist.AppUserId,
-                    EquipmentId = x.EquipmentId
+                    EquipmentId = x.EquipmentId,
+                    EquipmentName = x.EquipmentName
                 }).ToList();
 
                 artist.UpdateGenres(artistGenres)

@@ -13,7 +13,7 @@ const Label = ({
   id,
   deleteLabelItem,
   showDeleteButton = false,
-  color = "black-badge",
+  color = "white-badge",
 }: Props) => {
   return (
     <Badge className={`${color} mr-1`}>

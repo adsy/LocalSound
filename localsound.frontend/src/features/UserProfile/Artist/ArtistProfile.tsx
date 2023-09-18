@@ -247,7 +247,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                     ))}
                   </div>
                 </div>
-                <div className="d-flex flex-column pb-2">
+                <div className="d-flex flex-column pb-4">
                   <h4 className="section-title inverse">Event types</h4>
                   <div className="about-text">
                     {userDetails.eventTypes.map((eventType, index) => (
@@ -255,7 +255,19 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                         <Label
                           label={eventType.eventTypeName}
                           id={eventType.eventTypeId}
-                          color="purple-badge"
+                        />
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="d-flex flex-column pb-4">
+                  <h4 className="section-title inverse">Equipment</h4>
+                  <div className="about-text">
+                    {userDetails.equipment.map((equipment, index) => (
+                      <span key={index}>
+                        <Label
+                          label={equipment.equipmentName}
+                          id={equipment.equipmentId}
                         />
                       </span>
                     ))}

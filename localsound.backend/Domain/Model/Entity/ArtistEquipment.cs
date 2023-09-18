@@ -6,10 +6,9 @@ namespace localsound.backend.Domain.Model.Entity
     {
         [ForeignKey("Artist")]
         public Guid AppUserId { get; set; }
-        [ForeignKey("Equipment")]
         public Guid EquipmentId { get; set; }
+        public string EquipmentName { get; set; }
 
         public Artist Artist { get; set; }
-        public Equipment Equipment { get; set; }
     }
 }

@@ -54,8 +54,6 @@ const SearchEventTypes = ({ eventTypes, setEventTypes }: Props) => {
     return lodash.debounce(callback, 500);
   }, []);
 
-  console.log(eventTypeList);
-
   return (
     <div id="search-label-component">
       <div className="box d-flex flex-column justify-content-between">
@@ -67,7 +65,6 @@ const SearchEventTypes = ({ eventTypes, setEventTypes }: Props) => {
                 id={eventType.eventTypeId}
                 deleteLabelItem={deleteSelectedEventType}
                 showDeleteButton={true}
-                color="purple-badge"
               />
             </span>
           ))}

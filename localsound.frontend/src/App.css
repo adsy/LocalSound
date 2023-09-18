@@ -623,22 +623,23 @@ i.large.icon {
 }
 
 /** BADGES **/
-.black-badge {
-  background-color: #232323 !important;
+.white-badge {
+  color: #232323 !important;
+  background-color: #ececec !important;
+  border: 1px solid black;
   margin-bottom: 5px;
   padding: 0;
-  font-size: 12px;
-  border: 1px solid #6d69fa;
+  font-size: 14px;
 }
-.black-badge .badge-delete-btn {
+.white-badge .badge-delete-btn {
   padding-right: 6.825px;
   padding-top: 3.675px;
   padding-left: 5.825px;
   color: white;
   font-weight: 800;
   cursor: pointer;
-  border-radius: 0px 0.15rem 0.15rem 0px;
-  background-color: #6d69fa;
+  border-radius: 0px 0.375rem 0.375rem 0px;
+  background-color: #232323;
 }
 
 .purple-badge {
@@ -647,7 +648,6 @@ i.large.icon {
   padding: 0;
   font-size: 12px;
   color: #ececec;
-  border: 1px solid #232323;
 }
 .purple-badge .badge-delete-btn {
   padding-right: 6.825px;
@@ -656,18 +656,18 @@ i.large.icon {
   color: white;
   font-weight: 800;
   cursor: pointer;
-  border-radius: 0px 0.15rem 0.15rem 0px;
+  border-radius: 0px 0.375rem 0.375rem 0px;
   background-color: #232323;
 }
 
-.black-badge .badge-name,
+.white-badge .badge-name,
 .purple-badge .badge-name {
   padding-bottom: 4.675px;
   padding-left: 6.825px;
   padding-top: 3.675px;
   font-size: 12px;
 }
-.black-badge .badge-name.long,
+.white-badge .badge-name.long,
 .purple-badge .badge-name.long {
   padding-right: 6.825px;
 }
@@ -943,7 +943,7 @@ i.large.icon {
   padding-left: 0px;
 }
 #user-profile .section-title {
-  font-size: 28px;
+  font-size: 24px;
   margin-bottom: 5px;
 }
 #user-profile .followers {

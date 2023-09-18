@@ -13,6 +13,7 @@ import { EquipmentModel } from "../../../../../app/model/dto/equipment.model";
 import { EventTypeModel } from "../../../../../app/model/dto/eventType.model";
 import SearchEventTypes from "./SearchEventTypes";
 import SuccessBanner from "../../../../../common/banner/SuccessBanner";
+import EquipmentEntry from "./EquipmentEntry";
 
 interface Props {
   userDetails: UserModel;
@@ -134,6 +135,23 @@ const EditArtistProfile = ({ userDetails }: Props) => {
                           setEventTypes={setEventTypes}
                         />
                       </div>
+                    </div>
+                  </div>
+                  <div className="d-flex flex-row px-3">
+                    <div className="mb-3">
+                      <div className="d-flex mb-1">
+                        <p className="form-label">PARTY EQUIPMENT</p>
+                      </div>
+                      <p className="text-justify">
+                        Everyone has different a different party setup. Show how
+                        prepared you are for your next party you play at. Type
+                        the name of your equipment and press enter to add it to
+                        your list.
+                      </p>
+                      <EquipmentEntry
+                        equipment={equipment}
+                        setEquipment={setEquipment}
+                      />
                     </div>
                   </div>
                 </div>

@@ -51,7 +51,6 @@ const ArtistRegister = ({ handleRegisterRequest }: Props) => {
         setFieldValue,
         setFieldTouched,
       }) => {
-        console.log(status);
         const disabled = !isValid || !dirty || isSubmitting;
         return (
           <Form

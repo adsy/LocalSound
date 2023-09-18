@@ -485,12 +485,13 @@ i.large.icon {
 }
 
 /** BADGES **/
-.black-badge {
-  background-color: $richBlack !important;
+.white-badge {
+  color: #232323 !important;
+  background-color: #ececec !important;
+  border: 1px solid black;
   margin-bottom: 5px;
   padding: 0;
-  font-size: 12px;
-  border: 1px solid $purple;
+  font-size: 14px;
 
   .badge-delete-btn {
     padding-right: 6.825px;
@@ -499,8 +500,8 @@ i.large.icon {
     color: white;
     font-weight: 800;
     cursor: pointer;
-    border-radius: 0px 0.15rem 0.15rem 0px;
-    background-color: $purple;
+    border-radius: 0px 0.375rem 0.375rem 0px;
+    background-color: $richBlack;
   }
 }
 
@@ -510,7 +511,6 @@ i.large.icon {
   padding: 0;
   font-size: 12px;
   color: $offWhite;
-  border: 1px solid $richBlack;
 
   .badge-delete-btn {
     padding-right: 6.825px;
@@ -519,12 +519,12 @@ i.large.icon {
     color: white;
     font-weight: 800;
     cursor: pointer;
-    border-radius: 0px 0.15rem 0.15rem 0px;
+    border-radius: 0px 0.375rem 0.375rem 0px;
     background-color: $richBlack;
   }
 }
 
-.black-badge,
+.white-badge,
 .purple-badge {
   .badge-name {
     padding-bottom: 4.675px;
@@ -785,7 +785,7 @@ i.large.icon {
     padding-left: 0px;
   }
   .section-title {
-    font-size: 28px;
+    font-size: 24px;
     margin-bottom: 5px;
   }
 

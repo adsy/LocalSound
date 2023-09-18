@@ -176,7 +176,6 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.EventTypes)
                     .ThenInclude(x => x.EventType)
                     .Include(x => x.Equipment)
-                    .ThenInclude(x => x.Equipment)
                     .FirstOrDefaultAsync(x => x.AppUserId == id);
 
                 if (artist == null)
@@ -210,7 +209,6 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.EventTypes)
                     .ThenInclude(x => x.EventType)
                     .Include(x => x.Equipment)
-                    .ThenInclude(x => x.Equipment)
                     .FirstOrDefaultAsync(x => x.ProfileUrl == profileUrl);
 
                 if (artist == null)

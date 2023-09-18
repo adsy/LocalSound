@@ -44,13 +44,9 @@ namespace localsound.backend.Infrastructure.Mapping
                 .ForMember(dest => dest.EventTypeId, source => source.MapFrom(x => x.EventType.EventTypeId))
                 .ForMember(dest => dest.EventTypeName, source => source.MapFrom(x => x.EventType.EventTypeName));
 
-            CreateMap<Equipment, EquipmentDto>()
+            CreateMap<ArtistEquipment, EquipmentDto>()
                 .ForMember(dest => dest.EquipmentId, source => source.MapFrom(x => x.EquipmentId))
                 .ForMember(dest => dest.EquipmentName, source => source.MapFrom(x => x.EquipmentName));
-
-            CreateMap<ArtistEquipment, EquipmentDto>()
-                .ForMember(dest => dest.EquipmentId, source => source.MapFrom(x => x.Equipment.EquipmentId))
-                .ForMember(dest => dest.EquipmentName, source => source.MapFrom(x => x.Equipment.EquipmentName));
 
             CreateMap<AccountImage, AccountImageDto>()
                 .ForMember(dest => dest.AccountImageTypeId, source => source.MapFrom(x => x.AccountImageTypeId))
