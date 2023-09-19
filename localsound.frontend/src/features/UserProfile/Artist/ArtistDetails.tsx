@@ -2,6 +2,9 @@ import { Col } from "react-bootstrap";
 import ErrorBanner from "../../../common/banner/ErrorBanner";
 import { UserModel } from "../../../app/model/dto/user.model";
 import Label from "../../../common/components/Label/Label";
+import { Image } from "semantic-ui-react";
+import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
+import userImg from "../../../assets/icons/user.svg";
 
 interface Props {
   photoUpdateError: string | null;
@@ -9,6 +12,10 @@ interface Props {
 }
 
 const ArtistDetails = ({ photoUpdateError, userDetails }: Props) => {
+  const userPhoto = userDetails.images.find(
+    (x) => x.accountImageTypeId == AccountImageTypes.ProfileImage
+  );
+
   return (
     <div className="d-flex flex-row flex-wrap">
       <Col md={12} lg={4} className="p-0 left-col">
@@ -18,6 +25,14 @@ const ArtistDetails = ({ photoUpdateError, userDetails }: Props) => {
               <ErrorBanner className="w-100">{photoUpdateError}</ErrorBanner>
             </div>
           ) : null}
+          <Image
+            src={userPhoto ? userPhoto.accountImageUrl : userImg}
+            size="small"
+            circular
+            className={`${
+              userPhoto ? "profile-photo" : null
+            } mb-4 summary-photo`}
+          />
           <div className="d-flex flex-column pb-4">
             <div className="d-flex">
               <h4 className="section-title inverse">Followers</h4>
@@ -27,7 +42,7 @@ const ArtistDetails = ({ photoUpdateError, userDetails }: Props) => {
               <span className="about-text m-0">0 following</span>
             </div>
           </div>
-          <div className="d-flex flex-column pb-2 genre-mobile">
+          <div className="d-flex flex-column pb-4 genre-mobile">
             <div className="d-flex">
               <h4 className="section-title inverse">Genres</h4>
             </div>

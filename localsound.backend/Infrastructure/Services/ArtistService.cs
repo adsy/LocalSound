@@ -12,30 +12,25 @@ namespace localsound.backend.Infrastructure.Services
     public class ArtistService : IArtistService
     {
         private readonly IArtistRepository _artistRepository;
-        private readonly LocalSoundDbContext _dbContext;
+        private readonly IAccountRepository _accountRepository;
         private readonly ILogger<ArtistService> _logger;
 
-        public ArtistService(IArtistRepository artistRepository, LocalSoundDbContext dbContext, ILogger<ArtistService> logger)
+        public ArtistService(IArtistRepository artistRepository, ILogger<ArtistService> logger, IAccountRepository accountRepository)
         {
             _artistRepository = artistRepository;
-            _dbContext = dbContext;
             _logger = logger;
+            _accountRepository = accountRepository;
         }
 
         public async Task<ServiceResponse> UpdateArtistPersonalDetails(Guid userId, string memberId, UpdateArtistPersonalDetailsDto updateArtistDto)
         {
             try
             {
-                var appUser = await _dbContext.AppUser.FirstOrDefaultAsync(x => x.MemberId == memberId);
+                var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
 
-                if (appUser == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
                 {
                     return new ServiceResponse(HttpStatusCode.NotFound, "There was an error while updating your details, please try again.");
-                }
-
-                if (appUser.Id != userId)
-                {
-                    return new ServiceResponse(HttpStatusCode.Unauthorized, "There was an error while updating your details, please try again.");
                 }
 
                 return await _artistRepository.UpdateArtistPersonalDetails(userId, updateArtistDto);
@@ -53,16 +48,11 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var appUser = await _dbContext.AppUser.FirstOrDefaultAsync(x => x.MemberId == memberId);
+                var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
 
-                if (appUser == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
                 {
                     return new ServiceResponse(HttpStatusCode.NotFound, "There was an error while updating your details, please try again.");
-                }
-
-                if (appUser.Id != userId)
-                {
-                    return new ServiceResponse(HttpStatusCode.Unauthorized, "There was an error while updating your details, please try again.");
                 }
 
                 return await _artistRepository.UpdateArtistProfileDetails(userId, updateArtistDto);

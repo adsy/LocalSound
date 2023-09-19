@@ -153,7 +153,10 @@ namespace localsound.backend.Infrastructure.Repositories
                     return new ServiceResponse<AppUser>(HttpStatusCode.Unauthorized);
                 }
 
-                return new ServiceResponse<AppUser>(HttpStatusCode.OK);
+                return new ServiceResponse<AppUser>(HttpStatusCode.OK)
+                {
+                    ReturnData = user
+                };
             }
             catch(Exception e)
             {

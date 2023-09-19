@@ -542,6 +542,18 @@ i.large.icon {
 #artist-profile {
   width: 100%;
 
+  .profile-photo {
+    border: 2px solid $richBlack;
+  }
+
+  .profile-photo.summary-photo {
+    width: 200px !important;
+  }
+
+  .profile-photo.banner-photo {
+    display: none;
+  }
+
   .header {
     padding: 10px;
   }
@@ -864,7 +876,7 @@ i.large.icon {
     border-right: 1px solid $offWhite;
   }
 
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 991px) {
     .genre-desktop {
       display: none !important;
     }
@@ -931,6 +943,14 @@ i.large.icon {
   .container {
     padding-left: 0px;
     padding-right: 0px;
+  }
+
+  .profile-photo.summary-photo {
+    display: none !important;
+  }
+
+  .profile-photo.banner-photo {
+    display: block !important;
   }
 }
 

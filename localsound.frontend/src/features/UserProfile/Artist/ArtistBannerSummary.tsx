@@ -1,8 +1,8 @@
 import { Image } from "semantic-ui-react";
 import { UserModel } from "../../../app/model/dto/user.model";
 import Label from "../../../common/components/Label/Label";
-import userImg from "../../../assets/icons/user.svg";
 import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
+import userImg from "../../../assets/icons/user.svg";
 
 interface Props {
   userDetails: UserModel;
@@ -12,18 +12,18 @@ const ArtistBannerSummary = ({ userDetails }: Props) => {
   const userPhoto = userDetails.images.find(
     (x) => x.accountImageTypeId == AccountImageTypes.ProfileImage
   );
-
   return (
     <div className="d-flex flex-column">
       <div className="d-flex flex-row ml-2">
         <div className="d-flex flex-column">
           <div className="d-flex flex-row flex-wrap mb-1">
-            <Image
-              src={userPhoto ? userPhoto.accountImageUrl : userImg}
-              size="small"
-              circular
-            />
-            <div className="d-flex flex-column ml-1 justify-content-end">
+            <div className="d-flex flex-column justify-content-end">
+              <Image
+                src={userPhoto ? userPhoto.accountImageUrl : userImg}
+                size="small"
+                circular
+                className={`${userPhoto ? "profile-photo" : null} banner-photo`}
+              />
               <span className="user-name mb-0">{userDetails?.name}</span>
               <div className=" d-flex flex-row flex-wrap">
                 {userDetails?.soundcloudUrl ? (

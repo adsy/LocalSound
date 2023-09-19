@@ -135,12 +135,26 @@ const EventType = {
     requests.get<EventTypeModel[]>(`event-type/search-event-type/${type}`),
 };
 
+const Tracks = {
+  uploadTrackChunk: (
+    memberId: string,
+    partialTrackId: string,
+    chunkId: int,
+    formData: FormData
+  ) =>
+    requests.post(
+      `upload-track/member/${memberId}/partial-track-id/${partialTrackId}/chunk/${chunkId}`,
+      formData
+    ),
+};
+
 const agent = {
   Authentication,
   Profile,
   Artist,
   Genre,
   EventType,
+  Tracks,
 };
 
 export default agent;

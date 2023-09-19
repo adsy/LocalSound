@@ -53,6 +53,8 @@ builder.Services.AddTransient<IAccountImageRepository, AccountImageRepository>()
 builder.Services.AddTransient<IAccountImageService, AccountImageService>();
 builder.Services.AddTransient<IBlobRepository, BlobRepository>();
 builder.Services.AddTransient<IEmailRepository, EmailRepository>();
+builder.Services.AddTransient<IUploadTrackService,  UploadTrackService>();
+builder.Services.AddTransient<IUploadTrackRepository,  UploadTrackRepository>();
 
 builder.Services.AddHttpContextAccessor();
 

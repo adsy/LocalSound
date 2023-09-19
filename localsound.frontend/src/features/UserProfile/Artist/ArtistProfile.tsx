@@ -11,6 +11,7 @@ import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import EditCoverPhoto from "./Edit/EditCoverPhoto";
 import ArtistDetails from "./ArtistDetails";
 import ArtistBannerSummary from "./ArtistBannerSummary";
+import ArtistUploads from "./Edit/ArtistUploads/ArtistUploads";
 
 interface Props {
   userDetails: UserModel;
@@ -164,7 +165,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                 />
               </Tab>
               <Tab eventKey="uploads" title="Uploads" className="">
-                <div className="w-100">test</div>
+                <ArtistUploads userDetails={userDetails} />
               </Tab>
             </Tabs>
           </div>

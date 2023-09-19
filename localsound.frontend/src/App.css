@@ -679,6 +679,21 @@ i.large.icon {
 #artist-profile {
   width: 100%;
 }
+#auth-modal .profile-photo,
+#edit-artist .profile-photo,
+#artist-profile .profile-photo {
+  border: 2px solid #232323;
+}
+#auth-modal .profile-photo.summary-photo,
+#edit-artist .profile-photo.summary-photo,
+#artist-profile .profile-photo.summary-photo {
+  width: 200px !important;
+}
+#auth-modal .profile-photo.banner-photo,
+#edit-artist .profile-photo.banner-photo,
+#artist-profile .profile-photo.banner-photo {
+  display: none;
+}
 #auth-modal .header,
 #edit-artist .header,
 #artist-profile .header {
@@ -1022,7 +1037,7 @@ i.large.icon {
 #user-profile .left-col {
   border-right: 1px solid #ececec;
 }
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 991px) {
   #user-profile .genre-desktop {
     display: none !important;
   }
@@ -1082,6 +1097,12 @@ i.large.icon {
   .container {
     padding-left: 0px;
     padding-right: 0px;
+  }
+  .profile-photo.summary-photo {
+    display: none !important;
+  }
+  .profile-photo.banner-photo {
+    display: block !important;
   }
 }
 @media only screen and (max-width: 767px) {
