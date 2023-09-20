@@ -6,5 +6,6 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
     public interface IUploadTrackRepository
     {
         Task<ServiceResponse<ArtistTrackChunk>> UploadTrackChunkAsync(string fileLocation, Guid partialTrackId, Guid userId, int chunkId);
+        Task<ServiceResponse<ArtistTrackUpload>> AddArtistTrackToDbAsync(Guid userId, string trackName, string fileLocation, string fileExt);
     }
 }

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { FileChunkSplitter } from "../../../../../util/FileChunkSplitter";
 import { UserModel } from "../../../../../app/model/dto/user.model";
+import { v4 as uuidv4 } from "uuid";
+import agent from "../../../../../api/agent";
 
 interface Props {
   userDetails: UserModel;
@@ -12,7 +14,23 @@ const ArtistUploads = ({ userDetails }: Props) => {
 
   useEffect(() => {
     if (file) {
-      splitter.uploadFile(file, userDetails.memberId);
+      var errorUploading = false;
+      var partialTrackId = uuidv4();
+
+      splitter
+        .uploadFile(file, userDetails.memberId, partialTrackId)
+        .catch((e) => {
+          console.log(e);
+          errorUploading = true;
+        })
+        .finally(() => {
+          if (errorUploading) {
+            // trigger clean up call
+            // TODO: display message saying upload failed
+          } else {
+            agent.Tracks.completeUpload(userDetails.memberId, partialTrackId);
+          }
+        });
     }
   }, [file]);
 

@@ -57,8 +57,10 @@ namespace localsound.backend.Infrastructure.Repositories
                     ReturnData = new BlobUriBuilder(new Uri(fullUri)).ToUri().ToString()
                 };
             }
-            catch(Exception ex)
+            catch(Exception e)
             {
+                var message = $"{nameof(BlobRepository)} - {nameof(UploadBlobAsync)} - {e.Message}";
+                _logger.LogError(e, message);
                 return new ServiceResponse<string>(HttpStatusCode.InternalServerError);
             }
         }
@@ -86,8 +88,10 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 return new ServiceResponse(HttpStatusCode.InternalServerError);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
+                var message = $"{nameof(BlobRepository)} - {nameof(DeleteBlobAsync)} - {e.Message}";
+                _logger.LogError(e, message);
                 return new ServiceResponse(HttpStatusCode.InternalServerError);
             }
         }

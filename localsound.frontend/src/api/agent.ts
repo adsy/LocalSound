@@ -139,12 +139,21 @@ const Tracks = {
   uploadTrackChunk: (
     memberId: string,
     partialTrackId: string,
-    chunkId: int,
+    chunkId: number,
     formData: FormData
   ) =>
     requests.post(
       `upload-track/member/${memberId}/partial-track-id/${partialTrackId}/chunk/${chunkId}`,
       formData
+    ),
+  completeUpload: (memberId: string, partialTrackId: string) =>
+    requests.post(
+      `upload-track/member/${memberId}/partial-track-id/${partialTrackId}/upload-complete`,
+      {}
+    ),
+  deleteFailedUpload: (memberId: string, partialTrackId: string) =>
+    requests.delete(
+      `upload-track/member/${memberId}/partial-track-id/${partialTrackId}/clean`
     ),
 };
 

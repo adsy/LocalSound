@@ -4,7 +4,7 @@ namespace localsound.backend.Domain.Model.Entity
 {
     public class ArtistTrackUpload
     {
-        public int ArtistTrackUploadId { get; set; }
+        public Guid ArtistTrackUploadId { get; set; }
         [ForeignKey(nameof(Artist))]
         public Guid AppUserId { get; set; }
         [ForeignKey(nameof(FileContent))]

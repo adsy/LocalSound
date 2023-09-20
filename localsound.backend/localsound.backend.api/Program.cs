@@ -1,3 +1,4 @@
+using Azure.Messaging.ServiceBus;
 using localsound.backend.api.Extensions;
 using localsound.backend.api.Middleware;
 using localsound.backend.Domain.ModelAdaptor;
@@ -5,6 +6,8 @@ using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
 using localsound.backend.Infrastructure.Repositories;
 using localsound.backend.Infrastructure.Services;
+using Microsoft.Azure.Amqp;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Events;
 
@@ -29,14 +32,26 @@ builder.Services.Configure<JwtSettingsAdaptor>(options => builder.Configuration.
 builder.Services.Configure<EmailSettingsAdaptor>(options => builder.Configuration.GetSection(EmailSettingsAdaptor.EmailSettingsKey).Bind(options));
 builder.Services.Configure<BlobStorageSettingsAdaptor>(options => builder.Configuration.GetSection(BlobStorageSettingsAdaptor.BlobSettings).Bind(options));
 
+var serviceBusSettings = new ServiceBusSettingsAdaptor();
+builder.Configuration.GetSection(ServiceBusSettingsAdaptor.ServiceBusSettings).Bind(serviceBusSettings);
+
 builder.Services.AddSingleton(new JwtSettingsAdaptor());
 builder.Services.AddSingleton(new EmailSettingsAdaptor());
 builder.Services.AddSingleton(new BlobStorageSettingsAdaptor());
+builder.Services.AddSingleton(serviceBusSettings);
 
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 await builder.Services.AddDbSeed(builder.Configuration);
 
+builder.Services.AddSingleton<ServiceBusClient>(x =>
+{
+    var clientOptions = new ServiceBusClientOptions()
+    {
+        TransportType = ServiceBusTransportType.AmqpWebSockets
+    };
+    return new ServiceBusClient(serviceBusSettings.ConnectionString, clientOptions);
+});
 
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
@@ -55,6 +70,7 @@ builder.Services.AddTransient<IBlobRepository, BlobRepository>();
 builder.Services.AddTransient<IEmailRepository, EmailRepository>();
 builder.Services.AddTransient<IUploadTrackService,  UploadTrackService>();
 builder.Services.AddTransient<IUploadTrackRepository,  UploadTrackRepository>();
+builder.Services.AddTransient<IServiceBusRepository, ServiceBusRepository>();
 
 builder.Services.AddHttpContextAccessor();
 

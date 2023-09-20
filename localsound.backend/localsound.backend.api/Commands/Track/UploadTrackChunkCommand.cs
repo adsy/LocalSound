@@ -1,9 +1,9 @@
 ﻿using localsound.backend.Domain.Model;
 using MediatR;
 
-namespace localsound.backend.api.Commands.File
+namespace localsound.backend.api.Commands.Track
 {
-    public class UploadFileChunkCommand : IRequest<ServiceResponse>
+    public class UploadTrackChunkCommand : IRequest<ServiceResponse>
     {
         public Guid AppUserId { get; set; }
         public string MemberId { get; set; }

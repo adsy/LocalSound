@@ -18,6 +18,46 @@ namespace localsound.backend.Infrastructure.Repositories
             _logger = logger;
         }
 
+        public async Task<ServiceResponse<ArtistTrackUpload>> AddArtistTrackToDbAsync(Guid userId, string trackName, string fileLocation, string fileExt)
+        {
+            try
+            {
+                var fileContentId = Guid.NewGuid();
+
+                // create new file content
+                var fileContent = new FileContent
+                {
+                    FileContentId = fileContentId,
+                    FileExtensionType = fileExt,
+                    FileLocation = fileLocation
+                };
+
+                var artistTrack = new ArtistTrackUpload
+                {
+                    ArtistTrackUploadId = Guid.NewGuid(),
+                    FileContent = fileContent,
+                    AppUserId = userId,
+                    TrackName = trackName
+                };
+
+                var result = await _dbContext.ArtistTrackUpload.AddAsync(artistTrack);
+
+                await _dbContext.SaveChangesAsync();
+
+                return new ServiceResponse<ArtistTrackUpload>(HttpStatusCode.OK)
+                {
+                    ReturnData = result.Entity
+                };
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(UploadTrackRepository)} - {nameof(AddArtistTrackToDbAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<ArtistTrackUpload>(HttpStatusCode.InternalServerError, "There was an error while uploading your track, please try again.");
+            }
+        }
+
         public async Task<ServiceResponse<ArtistTrackChunk>> UploadTrackChunkAsync(string fileLocation, Guid partialTrackId, Guid userId, int chunkId)
         {
             try
