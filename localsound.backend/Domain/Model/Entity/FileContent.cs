@@ -1,4 +1,6 @@
-﻿namespace localsound.backend.Domain.Model.Entity
+﻿using localsound.backend.Domain.Model.Dto.Entity;
+
+namespace localsound.backend.Domain.Model.Entity
 {
     public class FileContent
     {
@@ -7,5 +9,6 @@
         public string FileExtensionType { get; set; }
 
         public virtual AccountImage Image { get; set; }
+        public virtual ArtistTrackUpload ArtistTrackUpload { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using localsound.backend.Domain.Model;
+using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Domain.Model.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -99,7 +100,10 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<Artist>().HasMany(x => x.Genres);
             builder.Entity<Artist>().HasIndex(x => x.ProfileUrl).IsUnique();
 
-            builder.Entity<ArtistTrackUpload>().HasKey(x => x.ArtistTrackUploadId);
+            builder.Entity<ArtistTrackUpload>().HasKey(x => x.ArtistTrackUploadId).IsClustered(false);
+            builder.Entity<ArtistTrackUpload>().HasIndex(x => x.AppUserId).IsClustered(true);
+            builder.Entity<ArtistTrackUpload>().HasOne(x => x.TrackData).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<Genre>().HasKey(x => x.GenreId);
             builder.Entity<EventType>().HasKey(x => x.EventTypeId);
 

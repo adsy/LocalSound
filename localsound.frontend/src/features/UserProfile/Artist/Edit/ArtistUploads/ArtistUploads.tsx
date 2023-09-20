@@ -37,7 +37,7 @@ const ArtistUploads = ({ userDetails }: Props) => {
   return (
     <>
       <label htmlFor="trackUpload" className="btn black-button fade-in-out">
-        <h4>Update track</h4>
+        <h4>Upload track</h4>
       </label>
       <input
         type="file"

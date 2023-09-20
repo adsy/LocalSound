@@ -1,11 +1,11 @@
 ﻿using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.ServiceBus;
+using localsound.backend.Domain.Model.Dto.Submission;
 using localsound.backend.Domain.ModelAdaptor;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System.Net;
 using System.Text.Json;
 
@@ -32,7 +32,7 @@ namespace localsound.backend.Infrastructure.Services
             _serviceBusSettings = serviceBusSettings;
         }
 
-        public async Task<ServiceResponse> CompleteTrackUpload(Guid userId, string memberId, Guid partialTrackId)
+        public async Task<ServiceResponse> CompleteTrackUpload(Guid userId, string memberId, Guid partialTrackId, TrackUploadDto formData)
         {
             try
             {
@@ -45,18 +45,24 @@ namespace localsound.backend.Infrastructure.Services
 
                 await _dbTransactionRepository.BeginTransactionAsync();
 
-                //TODO: Get full track details from client and save in DB
+                //TODO: Get full track details from payload from client and fix up hardcoded test values
+                var trackId = Guid.NewGuid();
+                var trackImageId = Guid.NewGuid();
+                var trackImageFileExt = ".jpg";
+                var trackLocation = $"[tracks]/account/{userId}/uploads/{trackId}/{formData.TrackName}{formData.TrackFileExt}";
+                var imageLocation = $"[tracks]/account/{userId}/uploads/{trackId}/image/{trackImageId}{trackImageFileExt}";
 
-                var trackName = "test-track";
-                var fileExt = ".mp3";
-                var fileLocation = $"[tracks]/account/{userId}/uploads/{trackName}{fileExt}";
-
-                var result = await _uploadTrackRepository.AddArtistTrackToDbAsync(userId, trackName, fileLocation, fileExt);
+                var result = await _uploadTrackRepository.AddArtistTrackToDbAsync(userId, trackId, formData.TrackName, formData.TrackDescription, formData.TrackFileExt, trackLocation, trackImageId, trackImageFileExt, imageLocation);
 
                 if (!result.IsSuccessStatusCode || result.ReturnData == null)
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while uploading your track, please try again.");
                 }
+
+
+                // add image to blob 
+                var imageResult = await _blobRepository.UploadBlobAsync(imageLocation, formData.TrackImage);
+
                 var message = new CompleteTrackMessageDto
                 {
                     ArtistTrackUploadId = result.ReturnData.ArtistTrackUploadId,
@@ -80,6 +86,18 @@ namespace localsound.backend.Infrastructure.Services
                 _logger.LogError(e, message);
 
                 return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while uploading your track, please try again.");
+            }
+        }
+
+        public Task<ServiceResponse> MergeTrackChunks(Guid partialTrackId, Guid trackId)
+        {
+            try
+            {
+
+            }
+            catch(Exception e)
+            {
+
             }
         }
 

@@ -18,26 +18,34 @@ namespace localsound.backend.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public async Task<ServiceResponse<ArtistTrackUpload>> AddArtistTrackToDbAsync(Guid userId, string trackName, string fileLocation, string fileExt)
+        public async Task<ServiceResponse<ArtistTrackUpload>> AddArtistTrackToDbAsync(Guid userId, Guid trackId, string trackName, string trackDescription, string trackFileExt, string trackLocation, Guid trackImageId, string trackImageFileExt, string trackImageLocation)
         {
             try
             {
-                var fileContentId = Guid.NewGuid();
-
-                // create new file content
-                var fileContent = new FileContent
+                // create track file content
+                var trackContent = new FileContent
                 {
-                    FileContentId = fileContentId,
-                    FileExtensionType = fileExt,
-                    FileLocation = fileLocation
+                    FileContentId = Guid.NewGuid(),
+                    FileExtensionType = trackFileExt,
+                    FileLocation = trackLocation
+                };
+
+                // create track image file content
+                var trackImageContent = new FileContent
+                {
+                    FileContentId = trackImageId,
+                    FileExtensionType = trackImageFileExt,
+                    FileLocation = trackImageLocation
                 };
 
                 var artistTrack = new ArtistTrackUpload
                 {
-                    ArtistTrackUploadId = Guid.NewGuid(),
-                    FileContent = fileContent,
+                    ArtistTrackUploadId = trackId,
+                    TrackData = trackContent,
                     AppUserId = userId,
-                    TrackName = trackName
+                    TrackName = trackName,
+                    TrackDescription = trackDescription,
+                    TrackImage = trackImageContent
                 };
 
                 var result = await _dbContext.ArtistTrackUpload.AddAsync(artistTrack);

@@ -1,8 +1,8 @@
-﻿using localsound.backend.Domain.Model.Entity;
+﻿using localsound.backend.api.Authentication;
+using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Domain.ModelAdaptor;
 using localsound.backend.Persistence.DbContext;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -12,6 +12,8 @@ namespace localsound.backend.api.Extensions
 {
     public static class IdentityServiceExtensions
     {
+        private const string Key = "ApiKey";
+
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
         {
 
@@ -59,7 +61,12 @@ namespace localsound.backend.api.Extensions
                     };
                 });
 
-
+            services.AddAuthentication(ApiKeyAuthenticationScheme.ApiKeyScheme)
+                .AddScheme<ApiKeyAuthenticationSchemeOptions, ApiKeyAuthenticationSchemeHandler>(
+                    ApiKeyAuthenticationScheme.ApiKeyScheme,
+                    opts => opts.ApiKey = configuration.GetValue<string>(Key)
+                );
+            
             return services;
         }
     }

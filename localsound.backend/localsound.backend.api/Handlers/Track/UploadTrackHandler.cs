@@ -6,7 +6,8 @@ using MediatR;
 namespace localsound.backend.api.Handlers.Track
 {
     public class UploadTrackHandler : IRequestHandler<UploadTrackChunkCommand, ServiceResponse>,
-        IRequestHandler<CompleteTrackUploadCommand, ServiceResponse>
+        IRequestHandler<CompleteTrackUploadCommand, ServiceResponse>,
+        IRequestHandler<TriggerTrackMergeCommand, ServiceResponse>
     {
         private readonly IUploadTrackService _uploadTrackService;
 
@@ -22,7 +23,12 @@ namespace localsound.backend.api.Handlers.Track
 
         public async Task<ServiceResponse> Handle(CompleteTrackUploadCommand request, CancellationToken cancellationToken)
         {
-            return await _uploadTrackService.CompleteTrackUpload(request.AppUserId, request.MemberId, request.PartialTrackId);
+            return await _uploadTrackService.CompleteTrackUpload(request.AppUserId, request.MemberId, request.PartialTrackId, request.FormData);
+        }
+
+        public async Task<ServiceResponse> Handle(TriggerTrackMergeCommand request, CancellationToken cancellationToken)
+        {
+            return await _uploadTrackService.MergeTrackChunks(request.PartialTrackId, request.TrackId);
         }
     }
 }
