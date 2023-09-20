@@ -53,7 +53,7 @@ namespace localsound.backend.api.Controllers
 
         [Route("partial-track-id/{partialTrackId}/track/{trackId}/merge-chunks")]
         [HttpPost]
-        [Authorize(ApiKeyAuthenticationScheme.ApiKeyScheme)]
+        //[Authorize(ApiKeyAuthenticationScheme.ApiKeyScheme)]
         public async Task<ActionResult> TriggerChunkMerge(Guid partialTrackId, Guid trackId)
         {
             var result = await Mediator.Send(new TriggerTrackMergeCommand

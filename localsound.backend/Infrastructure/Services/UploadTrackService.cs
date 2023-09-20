@@ -6,6 +6,8 @@ using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Asn1.Cms;
+using Org.BouncyCastle.Asn1.Crmf;
 using System.Net;
 using System.Text.Json;
 
@@ -52,7 +54,7 @@ namespace localsound.backend.Infrastructure.Services
                 var trackLocation = $"[tracks]/account/{userId}/uploads/{trackId}/{formData.TrackName}{formData.TrackFileExt}";
                 var imageLocation = $"[tracks]/account/{userId}/uploads/{trackId}/image/{trackImageId}{trackImageFileExt}";
 
-                var result = await _uploadTrackRepository.AddArtistTrackToDbAsync(userId, trackId, formData.TrackName, formData.TrackDescription, formData.TrackFileExt, trackLocation, trackImageId, trackImageFileExt, imageLocation);
+                var result = await _uploadTrackRepository.AddArtistTrackToDbAsync(userId, trackId, formData.GenreId, formData.TrackName, formData.TrackDescription, formData.TrackFileExt, trackLocation, trackImageId, trackImageFileExt, imageLocation);
 
                 if (!result.IsSuccessStatusCode || result.ReturnData == null)
                 {
@@ -89,15 +91,70 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public Task<ServiceResponse> MergeTrackChunks(Guid partialTrackId, Guid trackId)
+        public async Task<ServiceResponse> MergeTrackChunks(Guid partialTrackId, Guid trackId)
         {
             try
             {
+                await _dbTransactionRepository.BeginTransactionAsync();
 
+                // get chunks from blob storage
+                var chunks = await _uploadTrackRepository.GetPartialTrackChunksAsync(partialTrackId);
+
+                if (!chunks.IsSuccessStatusCode || chunks.ReturnData == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError);
+                }
+
+                var mergeStream = new MemoryStream();
+                foreach (var chunk in chunks.ReturnData)
+                {
+                    var dataResult = await _blobRepository.DownloadChunkBlobAsync(chunk.FileLocation);
+
+                    if (!dataResult.IsSuccessStatusCode || dataResult.ReturnData == null) {
+                        // TODO: Need to push a new queue entry so this can be retried
+                        return new ServiceResponse(HttpStatusCode.InternalServerError);
+                    }
+                    chunk.Data = dataResult.ReturnData;
+
+                    await chunk.Data.CopyToAsync(mergeStream);
+                }
+                
+                var track = await _uploadTrackRepository.GetArtistTrackAsync(trackId);
+
+                if (!track.IsSuccessStatusCode || track.ReturnData == null)
+                {
+                    // TODO: Need to push a new queue entry so this can be retried
+
+                    return new ServiceResponse(HttpStatusCode.InternalServerError);
+                }
+
+                // upload to azure
+                var result = await _blobRepository.UploadBlobAsync(track.ReturnData.TrackData.FileLocation, mergeStream);
+
+                // delete chunks from blob storage
+                if (!result.IsSuccessStatusCode)
+                {
+                    // TODO: Need to push a new queue entry so this can be retried
+
+                    return new ServiceResponse(HttpStatusCode.InternalServerError);
+                }
+
+                // delete chunks from db
+                await _uploadTrackRepository.DeletePartialTrackChunksAysnc(partialTrackId);
+
+                // update trackReady property to true
+                await _uploadTrackRepository.SetTrackReadyAsync(trackId);
+
+                await _dbTransactionRepository.CommitTransactionAsync();
+
+                return new ServiceResponse(HttpStatusCode.OK);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
+                var message = $"{nameof(UploadTrackService)} - {nameof(MergeTrackChunks)} - {e.Message}";
+                _logger.LogError(e, message);
 
+                return new ServiceResponse(HttpStatusCode.InternalServerError);
             }
         }
 

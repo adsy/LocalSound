@@ -61,11 +61,11 @@ namespace localsound.backend.api.Extensions
                     };
                 });
 
-            services.AddAuthentication(ApiKeyAuthenticationScheme.ApiKeyScheme)
-                .AddScheme<ApiKeyAuthenticationSchemeOptions, ApiKeyAuthenticationSchemeHandler>(
-                    ApiKeyAuthenticationScheme.ApiKeyScheme,
-                    opts => opts.ApiKey = configuration.GetValue<string>(Key)
-                );
+            //services.AddAuthentication(ApiKeyAuthenticationScheme.ApiKeyScheme)
+            //    .AddScheme<ApiKeyAuthenticationSchemeOptions, ApiKeyAuthenticationSchemeHandler>(
+            //        ApiKeyAuthenticationScheme.ApiKeyScheme,
+            //        opts => opts.ApiKey = configuration.GetValue<string>(Key)
+            //    );
             
             return services;
         }

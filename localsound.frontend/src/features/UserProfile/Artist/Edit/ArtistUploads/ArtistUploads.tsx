@@ -10,6 +10,7 @@ interface Props {
 
 const ArtistUploads = ({ userDetails }: Props) => {
   const [file, setFile] = useState<File | null>(null);
+  const [trackImage, setTrackImage] = useState<File | null>(null);
   var splitter = new FileChunkSplitter();
 
   useEffect(() => {
@@ -28,7 +29,17 @@ const ArtistUploads = ({ userDetails }: Props) => {
             // trigger clean up call
             // TODO: display message saying upload failed
           } else {
-            agent.Tracks.completeUpload(userDetails.memberId, partialTrackId);
+            var formData = new FormData();
+            formData.append("trackName", "This is what it is");
+            formData.append("trackFileExt", ".mp3");
+            formData.append("trackDescription", "test description yoyoyoyoyo");
+            formData.append("genreId", "081C6B9C-29F2-4AD9-867B-02946A5D659B");
+            formData.append("trackImage", trackImage!);
+            agent.Tracks.completeUpload(
+              userDetails.memberId,
+              partialTrackId,
+              formData
+            );
           }
         });
     }
@@ -46,6 +57,20 @@ const ArtistUploads = ({ userDetails }: Props) => {
         onChange={(event) => {
           if (event && event.target && event.target.files) {
             setFile(event.target.files[0]);
+          }
+        }}
+      />
+
+      <label htmlFor="imageUpload" className="btn black-button fade-in-out">
+        <h4>Upload image</h4>
+      </label>
+      <input
+        type="file"
+        id="imageUpload"
+        style={{ display: "none" }}
+        onChange={(event) => {
+          if (event && event.target && event.target.files) {
+            setTrackImage(event.target.files[0]);
           }
         }}
       />

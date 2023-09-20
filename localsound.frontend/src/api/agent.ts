@@ -146,10 +146,14 @@ const Tracks = {
       `upload-track/member/${memberId}/partial-track-id/${partialTrackId}/chunk/${chunkId}`,
       formData
     ),
-  completeUpload: (memberId: string, partialTrackId: string) =>
+  completeUpload: (
+    memberId: string,
+    partialTrackId: string,
+    formData: FormData
+  ) =>
     requests.post(
       `upload-track/member/${memberId}/partial-track-id/${partialTrackId}/upload-complete`,
-      {}
+      formData
     ),
   deleteFailedUpload: (memberId: string, partialTrackId: string) =>
     requests.delete(
