@@ -6,6 +6,7 @@ import { TrackUploadSASModel } from "../../../../../app/model/dto/track-upload-s
 import {
   BlobServiceClient,
   BlockBlobParallelUploadOptions,
+  BlockBlobUploadOptions,
 } from "@azure/storage-blob";
 
 interface Props {
@@ -25,70 +26,14 @@ const ArtistUploads = ({ userDetails }: Props) => {
 
     var test = blobService.getContainerClient(uploadData!.containerName);
 
-    var blob = test.getBlockBlobClient(uploadData!.uploadLocation);
-
-    var maxConcurrency = 20; // max uploading concurrency
-    var blockSize = 4 * 1024 * 1024; // the block size in the uploaded block blob
-
-    var res = await blob.uploadBrowserData(file!, {
-      blockSize: 4 * 1024 * 1024, // 4MB block size
-      concurrency: 20, // 20 concurrency
+    test.uploadBlockBlob(uploadData!.uploadLocation, file!, file!.size, {
+      blockSize: 4 * 1024 * 1024,
+      concurrency: 20,
       onProgress: (ev) => {
         console.log(`you have upload ${ev.loadedBytes} bytes`);
         setProgress((ev.loadedBytes / file!.size) * 100);
       },
-    } as BlockBlobParallelUploadOptions);
-
-    // await test
-    //   .uploadBlockBlob(, file!, file!.size)
-    //   .then((e) => {
-    //     console.log(e);
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   })
-    //   .finally(() => {
-    //     console.log("here");
-    //   });
-
-    // var blobService = AzureStorageBlob..createBlobServiceWithSas(
-    //   blobUri,
-    //   sasToken
-    // );
-
-    // var file = $("#FileInput").get(0).files[0];
-
-    // var customBlockSize =
-    //   file.size > 1024 * 1024 * 32 ? 1024 * 1024 * 4 : 1024 * 512;
-    // blobService.singleBlobPutThresholdInBytes = customBlockSize;
-
-    // var finishedOrError = false;
-    // var speedSummary = blobService.createBlockBlobFromBrowserFile(
-    //   containerName,
-    //   file.name,
-    //   file,
-    //   { blockSize: customBlockSize },
-    //   function (error, result, response) {
-    //     finishedOrError = true;
-    //     if (error) {
-    //       alert("Error");
-    //     } else {
-    //       // displayProcess(100);
-    //     }
-    //   }
-    // );
-
-    // function refreshProgress() {
-    //   setTimeout(function () {
-    //     if (!finishedOrError) {
-    //       var process = speedSummary.getCompletePercent();
-    //       // displayProcess(process);
-    //       refreshProgress();
-    //     }
-    //   }, 200);
-    // }
-
-    // refreshProgress();
+    } as BlockBlobUploadOptions);
   };
 
   const getUploadData = async () => {

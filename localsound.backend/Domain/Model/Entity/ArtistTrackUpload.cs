@@ -15,6 +15,7 @@ namespace localsound.backend.Domain.Model.Entity
         public string TrackDescription { get; set; }
         [ForeignKey("Genre")]
         public Guid GenreId { get; set; }
+        public string TrackImageUrl { get; set; }
 
         public virtual Artist Artist {get;set;}
         public Genre Genre { get; set;}
