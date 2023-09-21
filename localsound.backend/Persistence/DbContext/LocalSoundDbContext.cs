@@ -32,7 +32,6 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<ArtistEventType> ArtistEventType { get; set; }
         public DbSet<ArtistGenre> ArtistGenre { get; set; }
         public DbSet<ArtistTrackUpload> ArtistTrackUpload { get; set; }
-        public DbSet<ArtistTrackChunk> ArtistTrackChunk { get; set; }
         public DbSet<EventType> EventType { get; set; }
         public DbSet<FileContent> FileContent { get; set; }
         public DbSet<Genre> Genres { get; set; }
@@ -116,9 +115,6 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<ArtistEquipment>().HasKey(x => new { x.AppUserId, x.EquipmentId }).IsClustered(false);
             builder.Entity<ArtistEquipment>().HasOne(x => x.Artist);
             builder.Entity<ArtistEquipment>().HasIndex(x => x.AppUserId).IsClustered();
-
-            builder.Entity<ArtistTrackChunk>().HasKey(x => new { x.ChunkId, x.PartialTrackId}).IsClustered(false);
-            builder.Entity<ArtistTrackChunk>().HasIndex(x => x.PartialTrackId).IsClustered();
 
             builder.Entity<NonArtist>().HasKey(x => x.AppUserId);
             builder.Entity<NonArtist>().HasIndex(x => x.ProfileUrl).IsUnique();

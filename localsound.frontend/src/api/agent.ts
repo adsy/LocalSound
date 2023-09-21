@@ -15,6 +15,7 @@ import { history } from "../common/history/history";
 import { resetState } from "../app/redux/store/store";
 import { UpdateArtistProfileDetailsModel } from "../app/model/dto/update-artist-profile.model";
 import { EventTypeModel } from "../app/model/dto/eventType.model";
+import { TrackUploadSASModel } from "../app/model/dto/track-upload-sas.model";
 
 const axiosApiInstance = axios.create();
 
@@ -136,28 +137,9 @@ const EventType = {
 };
 
 const Tracks = {
-  uploadTrackChunk: (
-    memberId: string,
-    partialTrackId: string,
-    chunkId: number,
-    formData: FormData
-  ) =>
-    requests.post(
-      `upload-track/member/${memberId}/partial-track-id/${partialTrackId}/chunk/${chunkId}`,
-      formData
-    ),
-  completeUpload: (
-    memberId: string,
-    partialTrackId: string,
-    formData: FormData
-  ) =>
-    requests.post(
-      `upload-track/member/${memberId}/partial-track-id/${partialTrackId}/upload-complete`,
-      formData
-    ),
-  deleteFailedUpload: (memberId: string, partialTrackId: string) =>
-    requests.delete(
-      `upload-track/member/${memberId}/partial-track-id/${partialTrackId}/clean`
+  getTrackData: (memberId: string) =>
+    requests.get<TrackUploadSASModel>(
+      `upload-track/member/${memberId}/upload-token`
     ),
 };
 

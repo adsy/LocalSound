@@ -30,14 +30,16 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<JwtSettingsAdaptor>(options => builder.Configuration.GetSection(JwtSettingsAdaptor.JwtSettings).Bind(options));
 builder.Services.Configure<EmailSettingsAdaptor>(options => builder.Configuration.GetSection(EmailSettingsAdaptor.EmailSettingsKey).Bind(options));
-builder.Services.Configure<BlobStorageSettingsAdaptor>(options => builder.Configuration.GetSection(BlobStorageSettingsAdaptor.BlobSettings).Bind(options));
+
+var blobStorageSettings = new BlobStorageSettingsAdaptor();
+builder.Configuration.GetSection(BlobStorageSettingsAdaptor.BlobSettings).Bind(blobStorageSettings);
 
 var serviceBusSettings = new ServiceBusSettingsAdaptor();
 builder.Configuration.GetSection(ServiceBusSettingsAdaptor.ServiceBusSettings).Bind(serviceBusSettings);
 
 builder.Services.AddSingleton(new JwtSettingsAdaptor());
 builder.Services.AddSingleton(new EmailSettingsAdaptor());
-builder.Services.AddSingleton(new BlobStorageSettingsAdaptor());
+builder.Services.AddSingleton(blobStorageSettings);
 builder.Services.AddSingleton(serviceBusSettings);
 
 builder.Services.AddApplicationServices(builder.Configuration);

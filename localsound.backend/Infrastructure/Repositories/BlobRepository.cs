@@ -15,9 +15,9 @@ namespace localsound.backend.Infrastructure.Repositories
         private readonly BlobStorageSettingsAdaptor _blobSettings;
         private readonly ILogger<BlobRepository> _logger;
 
-        public BlobRepository(IOptions<BlobStorageSettingsAdaptor> blobSettings, ILogger<BlobRepository> logger)
+        public BlobRepository(BlobStorageSettingsAdaptor blobSettings, ILogger<BlobRepository> logger)
         {
-            _blobSettings = blobSettings.Value;
+            _blobSettings = blobSettings;
             _logger = logger;
             _blobServiceClient = new BlobServiceClient(_blobSettings.ConnectionString);
         }

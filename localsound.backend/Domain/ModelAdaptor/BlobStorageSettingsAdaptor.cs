@@ -5,5 +5,6 @@
         public const string BlobSettings = "AzureBlobStorage";
 
         public string ConnectionString { get; set; }
+        public int TokenExpirationMinutes { get; set; }
     }
 }
