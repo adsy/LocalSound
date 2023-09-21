@@ -71,6 +71,7 @@ const EditArtistDetailsForm = ({
       }
     }
   };
+
   const onFileUpload = async (file: Blob) => {
     const formData = new FormData();
 
@@ -90,11 +91,11 @@ const EditArtistDetailsForm = ({
         setUpdatingProfilePhoto(false);
         setFile(null);
       } catch (err) {
+        // TODO: Handle error
         // setPhotoUpdateError(
         //   "There was an error updating your cover photo, please try again.."
         // );
       }
-      // setSubmittingRequest(false);
     }
   };
 

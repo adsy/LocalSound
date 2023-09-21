@@ -141,6 +141,12 @@ const Tracks = {
     requests.get<TrackUploadSASModel>(
       `upload-track/member/${memberId}/upload-token`
     ),
+  uploadTrackSupportingData: (
+    memberId: string,
+    trackId: string,
+    formData: FormData
+  ) =>
+    requests.post(`upload-track/member/${memberId}/track/${trackId}`, formData),
 };
 
 const agent = {
