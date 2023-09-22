@@ -3,8 +3,9 @@ using localsound.backend.Domain.Model.Entity;
 
 namespace localsound.backend.Infrastructure.Interface.Repositories
 {
-    public interface IUploadTrackRepository
+    public interface ITrackRepository
     {
         Task<ServiceResponse> AddArtistTrackUploadAsync(ArtistTrackUpload track);
+        Task<ServiceResponse<List<ArtistTrackUpload>>> GetArtistTracksAsync(string memberId);
     }
 }

@@ -673,6 +673,19 @@ i.large.icon {
   padding-right: 6.825px;
 }
 
+#track-upload {
+  height: 400px;
+  width: 100%;
+  padding: 10px;
+}
+#track-upload .dropzone {
+  height: 300px;
+  width: 100%;
+  border: 1px dashed rgb(178, 178, 178);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 /** AUTH MODAL **/
 #auth-modal,
 #edit-artist,

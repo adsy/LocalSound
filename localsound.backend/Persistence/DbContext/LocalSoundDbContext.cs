@@ -31,6 +31,7 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<ArtistEquipment> ArtistEquipment { get; set; }
         public DbSet<ArtistEventType> ArtistEventType { get; set; }
         public DbSet<ArtistGenre> ArtistGenre { get; set; }
+        public DbSet<ArtistTrackGenre> ArtistTrackGenre { get; set; }
         public DbSet<ArtistTrackUpload> ArtistTrackUpload { get; set; }
         public DbSet<EventType> EventType { get; set; }
         public DbSet<FileContent> FileContent { get; set; }
@@ -99,8 +100,13 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<Artist>().HasMany(x => x.Genres);
             builder.Entity<Artist>().HasIndex(x => x.ProfileUrl).IsUnique();
 
+            builder.Entity<ArtistTrackGenre>().HasKey(x => new { x.ArtistTrackUploadId, x.GenreId });
+            builder.Entity<ArtistTrackGenre>().HasOne(x => x.Genre);
+            builder.Entity<ArtistTrackGenre>().HasOne(x => x.ArtistTrackUpload);
+
             builder.Entity<ArtistTrackUpload>().HasKey(x => x.ArtistTrackUploadId).IsClustered(false);
             builder.Entity<ArtistTrackUpload>().HasIndex(x => x.AppUserId).IsClustered(true);
+            builder.Entity<ArtistTrackUpload>().HasMany(x => x.Genres);
             builder.Entity<ArtistTrackUpload>().HasOne(x => x.TrackData).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Genre>().HasKey(x => x.GenreId);

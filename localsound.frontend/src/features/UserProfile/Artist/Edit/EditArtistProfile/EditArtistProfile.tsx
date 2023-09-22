@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import SearchGenreTypes from "./SearchGenreTypes";
 import { GenreModel } from "../../../../../app/model/dto/genre.model";
 import { UserModel } from "../../../../../app/model/dto/user.model";
 import { Button, Form } from "react-bootstrap";
@@ -11,9 +10,10 @@ import ErrorBanner from "../../../../../common/banner/ErrorBanner";
 import InPageLoadingComponent from "../../../../../app/layout/InPageLoadingComponent";
 import { EquipmentModel } from "../../../../../app/model/dto/equipment.model";
 import { EventTypeModel } from "../../../../../app/model/dto/eventType.model";
-import SearchEventTypes from "./SearchEventTypes";
+import SearchEventTypes from "../Search/SearchEventTypes";
 import SuccessBanner from "../../../../../common/banner/SuccessBanner";
 import EquipmentEntry from "./EquipmentEntry";
+import SearchGenreTypes from "../Search/SearchGenreTypes";
 
 interface Props {
   userDetails: UserModel;
@@ -116,6 +116,9 @@ const EditArtistProfile = ({ userDetails }: Props) => {
                         <SearchGenreTypes
                           selectedGenres={selectedGenres}
                           setSelectedGenres={setSelectedGenres}
+                          placeholder={
+                            "Search for a genre to add to your profile"
+                          }
                         />
                       </div>
                     </div>

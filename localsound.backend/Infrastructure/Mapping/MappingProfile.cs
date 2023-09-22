@@ -52,6 +52,16 @@ namespace localsound.backend.Infrastructure.Mapping
                 .ForMember(dest => dest.AccountImageTypeId, source => source.MapFrom(x => x.AccountImageTypeId))
                 .ForMember(dest => dest.AccountImageUrl, source => source.MapFrom(x => x.AccountImageUrl));
 
+            CreateMap<ArtistTrackUpload, ArtistTrackUploadDto>()
+                .ForMember(dest => dest.ArtistTrackUploadId, source => source.MapFrom(x => x.ArtistTrackUploadId))
+                .ForMember(dest => dest.TrackName, source => source.MapFrom(x => x.TrackName))
+                .ForMember(dest => dest.TrackDescription, source => source.MapFrom(x => x.TrackDescription))
+                .ForMember(dest => dest.TrackImageUrl, source => source.MapFrom(x => x.TrackImageUrl))
+                .ForMember(dest => dest.TrackDataLocation, source => source.MapFrom(x => x.TrackData.FileLocation));
+
+            CreateMap<ArtistTrackGenre, GenreDto>()
+                .ForMember(dest => dest.GenreId, source => source.MapFrom(x => x.Genre.GenreId))
+                .ForMember(dest => dest.GenreName, source => source.MapFrom(x => x.Genre.GenreName));
         }
     }
 }

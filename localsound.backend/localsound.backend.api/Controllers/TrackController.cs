@@ -1,20 +1,19 @@
-﻿using Azure.Storage.Blobs;
-using Azure.Storage.Sas;
-using localsound.backend.api.Commands.Track;
+﻿using localsound.backend.api.Commands.Track;
 using localsound.backend.api.Queries.Track;
 using localsound.backend.Domain.Model.Dto.Submission;
 using localsound.backend.Domain.ModelAdaptor;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace localsound.backend.api.Controllers
 {
-    [Route("api/upload-track")]
+    [Route("api/track")]
     [ApiController]
-    public class UploadTrackController : BaseApiController
+    public class TrackController : BaseApiController
     {
         private readonly BlobStorageSettingsAdaptor _blobStorageSettings;
 
-        public UploadTrackController(BlobStorageSettingsAdaptor blobStorageSettings)
+        public TrackController(BlobStorageSettingsAdaptor blobStorageSettings)
         {
             _blobStorageSettings = blobStorageSettings;
         }
@@ -41,7 +40,7 @@ namespace localsound.backend.api.Controllers
         [Route("member/{memberId}/track/{trackId}")]
         public async Task<ActionResult> UploadTrackSupportingDetails([FromForm] TrackUploadDto data, string memberId, Guid trackId)
         {
-            var result = await Mediator.Send(new UploadTrackSupportingDetailsCommand
+            var result = await Mediator.Send(new AddTrackSupportingDetailsCommand
             {
                 AppUserId = CurrentUser.AppUserId,
                 MemberId = memberId,
@@ -55,6 +54,24 @@ namespace localsound.backend.api.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("member/{memberId}")]
+        [AllowAnonymous]
+        public async Task<ActionResult> GetArtistTrackUploads(string memberId)
+        {
+            var result = await Mediator.Send(new GetArtistTracksQuery
+            {
+                MemberId = memberId
+            });
+
+            if (!result.IsSuccessStatusCode)
+            {
+                return StatusCode((int)result.StatusCode);
+            }
+
+            return Ok(result.ReturnData);
         }
     }
 }

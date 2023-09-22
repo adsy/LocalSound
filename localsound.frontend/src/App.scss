@@ -536,6 +536,20 @@ i.large.icon {
   }
 }
 
+#track-upload {
+  height: 400px;
+  width: 100%;
+  padding: 10px;
+
+  .dropzone {
+    height: 300px;
+    width: 100%;
+    border: 1px dashed rgb(178, 178, 178);
+    border-radius: 5px;
+    cursor: pointer;
+  }
+}
+
 /** AUTH MODAL **/
 #auth-modal,
 #edit-artist,

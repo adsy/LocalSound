@@ -13,12 +13,10 @@ namespace localsound.backend.Domain.Model.Entity
         public Guid? TrackImageId { get; set; }
         public string TrackName { get; set; }
         public string TrackDescription { get; set; }
-        [ForeignKey("Genre")]
-        public Guid GenreId { get; set; }
         public string TrackImageUrl { get; set; }
 
         public virtual Artist Artist {get;set;}
-        public Genre Genre { get; set;}
+        public virtual ICollection<ArtistTrackGenre>  Genres { get; set;}
         public virtual FileContent TrackData { get;set;} 
         public virtual FileContent TrackImage { get;set; }
     }

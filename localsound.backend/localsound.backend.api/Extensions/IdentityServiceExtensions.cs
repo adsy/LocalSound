@@ -1,5 +1,4 @@
-﻿using localsound.backend.api.Authentication;
-using localsound.backend.Domain.Model.Entity;
+﻿using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Domain.ModelAdaptor;
 using localsound.backend.Persistence.DbContext;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -60,12 +59,6 @@ namespace localsound.backend.api.Extensions
                         }
                     };
                 });
-
-            //services.AddAuthentication(ApiKeyAuthenticationScheme.ApiKeyScheme)
-            //    .AddScheme<ApiKeyAuthenticationSchemeOptions, ApiKeyAuthenticationSchemeHandler>(
-            //        ApiKeyAuthenticationScheme.ApiKeyScheme,
-            //        opts => opts.ApiKey = configuration.GetValue<string>(Key)
-            //    );
             
             return services;
         }

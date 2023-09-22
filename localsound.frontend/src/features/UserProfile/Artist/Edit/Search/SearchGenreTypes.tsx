@@ -8,9 +8,14 @@ import ErrorBanner from "../../../../../common/banner/ErrorBanner";
 interface Props {
   selectedGenres: GenreModel[];
   setSelectedGenres: (genres: GenreModel[]) => void;
+  placeholder: string;
 }
 
-const SearchGenreTypes = ({ selectedGenres, setSelectedGenres }: Props) => {
+const SearchGenreTypes = ({
+  selectedGenres,
+  setSelectedGenres,
+  placeholder,
+}: Props) => {
   const [genre, setGenre] = useState("");
   const [genreList, setGenreList] = useState<GenreModel[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -72,7 +77,7 @@ const SearchGenreTypes = ({ selectedGenres, setSelectedGenres }: Props) => {
 
         <input
           className="input"
-          placeholder="Search for a genre to add to your profile"
+          placeholder={placeholder}
           value={genre}
           onChange={(e) => {
             doCallbackWithDebounce();

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace localsound.backend.api.Commands.Track
 {
-    public class UploadTrackSupportingDetailsCommand : IRequest<ServiceResponse>
+    public class AddTrackSupportingDetailsCommand : IRequest<ServiceResponse>
     {
         public Guid AppUserId { get; set; }
         public string MemberId { get; set; }

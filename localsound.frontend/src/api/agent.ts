@@ -16,6 +16,7 @@ import { resetState } from "../app/redux/store/store";
 import { UpdateArtistProfileDetailsModel } from "../app/model/dto/update-artist-profile.model";
 import { EventTypeModel } from "../app/model/dto/eventType.model";
 import { TrackUploadSASModel } from "../app/model/dto/track-upload-sas.model";
+import { ArtistTrackUploadModel } from "../app/model/dto/artist-track-upload.model";
 
 const axiosApiInstance = axios.create();
 
@@ -138,15 +139,14 @@ const EventType = {
 
 const Tracks = {
   getTrackData: (memberId: string) =>
-    requests.get<TrackUploadSASModel>(
-      `upload-track/member/${memberId}/upload-token`
-    ),
+    requests.get<TrackUploadSASModel>(`track/member/${memberId}/upload-token`),
   uploadTrackSupportingData: (
     memberId: string,
     trackId: string,
     formData: FormData
-  ) =>
-    requests.post(`upload-track/member/${memberId}/track/${trackId}`, formData),
+  ) => requests.post(`track/member/${memberId}/track/${trackId}`, formData),
+  getArtistUploads: (memberId: string) =>
+    requests.get<ArtistTrackUploadModel[]>(`track/member/${memberId}`),
 };
 
 const agent = {

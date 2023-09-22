@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { UserModel } from "../../../../../app/model/dto/user.model";
 import ArtistUploadsList from "./ArtistUploadsList";
-import ArtistUploadForm from "./ArtistUploadForm";
+import ArtistUploadForm from "./ArtistUploadTrackForm";
 
 interface Props {
   userDetails: UserModel;
