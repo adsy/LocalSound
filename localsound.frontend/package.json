@@ -35,6 +35,7 @@
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.4",
     "uuid": "^9.0.1",
+    "wavesurfer.js": "^7.3.2",
     "yup": "^1.1.1",
     "yup-password": "^0.2.2"
   },

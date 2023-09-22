@@ -1,8 +1,9 @@
 import { Button } from "react-bootstrap";
-import { UserModel } from "../../../../../app/model/dto/user.model";
+import { UserModel } from "../../../../app/model/dto/user.model";
 import { useEffect, useState } from "react";
-import agent from "../../../../../api/agent";
-import { ArtistTrackUploadModel } from "../../../../../app/model/dto/artist-track-upload.model";
+import agent from "../../../../api/agent";
+import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-upload.model";
+import WaveForm from "../../../../common/components/WaveForm/WaveForm";
 
 interface Props {
   userDetails: UserModel;
@@ -30,6 +31,12 @@ const ArtistUploadsList = ({ userDetails, uploading, setUploading }: Props) => {
       <Button onClick={() => setUploading(!uploading)} className="black-button">
         Upload track
       </Button>
+
+      {tracks.map((track, index) => (
+        <div key={index}>
+          <WaveForm track={track} />
+        </div>
+      ))}
     </>
   );
 };

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UserModel } from "../../../../../app/model/dto/user.model";
+import { UserModel } from "../../../../app/model/dto/user.model";
 import ArtistUploadsList from "./ArtistUploadsList";
 import ArtistUploadForm from "./ArtistUploadTrackForm";
 

@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import { UserModel } from "../../../../../app/model/dto/user.model";
-import agent from "../../../../../api/agent";
+import { UserModel } from "../../../../app/model/dto/user.model";
+import agent from "../../../../api/agent";
 import { Button, Form, ProgressBar } from "react-bootstrap";
-import { TrackUploadSASModel } from "../../../../../app/model/dto/track-upload-sas.model";
+import { TrackUploadSASModel } from "../../../../app/model/dto/track-upload-sas.model";
 import { BlockBlobUploadOptions, BlobClient } from "@azure/storage-blob";
-import ErrorBanner from "../../../../../common/banner/ErrorBanner";
+import ErrorBanner from "../../../../common/banner/ErrorBanner";
 import { Formik } from "formik";
-import SuccessBanner from "../../../../../common/banner/SuccessBanner";
+import SuccessBanner from "../../../../common/banner/SuccessBanner";
 import ArtistUploadsTrackSelection from "./ArtistUploadsTrackSelection";
-import MyTextInput from "../../../../../common/form/MyTextInput";
-import MyTextArea from "../../../../../common/form/MyTextArea";
-import SearchGenreTypes from "../Search/SearchGenreTypes";
-import { GenreModel } from "../../../../../app/model/dto/genre.model";
+import MyTextInput from "../../../../common/form/MyTextInput";
+import MyTextArea from "../../../../common/form/MyTextArea";
+import SearchGenreTypes from "../Edit/Search/SearchGenreTypes";
+import { GenreModel } from "../../../../app/model/dto/genre.model";
 import { v4 as uuidv4 } from "uuid";
 
 interface Props {

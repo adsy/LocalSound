@@ -6,12 +6,11 @@ import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
 import { UserModel } from "../../../app/model/dto/user.model";
 import { AccountImageModel } from "../../../app/model/dto/account-image.model";
 import EditArtist from "./Edit/EditArtist";
-import Label from "../../../common/components/Label/Label";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import EditCoverPhoto from "./Edit/EditCoverPhoto";
 import ArtistDetails from "./ArtistDetails";
 import ArtistBannerSummary from "./ArtistBannerSummary";
-import ArtistUploads from "./Edit/ArtistUploads/ArtistUploads";
+import ArtistUploads from "./ArtistUploads/ArtistUploads";
 
 interface Props {
   userDetails: UserModel;
