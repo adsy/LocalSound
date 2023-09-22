@@ -1,14 +1,9 @@
 import { useEffect, useState } from "react";
 import { UserModel } from "../../../../../app/model/dto/user.model";
 import agent from "../../../../../api/agent";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, ProgressBar } from "react-bootstrap";
 import { TrackUploadSASModel } from "../../../../../app/model/dto/track-upload-sas.model";
-import {
-  BlobServiceClient,
-  BlockBlobUploadOptions,
-  BlobClient,
-  PublicAccessType,
-} from "@azure/storage-blob";
+import { BlockBlobUploadOptions, BlobClient } from "@azure/storage-blob";
 import ErrorBanner from "../../../../../common/banner/ErrorBanner";
 import { Formik } from "formik";
 import SuccessBanner from "../../../../../common/banner/SuccessBanner";
@@ -17,6 +12,7 @@ import MyTextInput from "../../../../../common/form/MyTextInput";
 import MyTextArea from "../../../../../common/form/MyTextArea";
 import SearchGenreTypes from "../Search/SearchGenreTypes";
 import { GenreModel } from "../../../../../app/model/dto/genre.model";
+import { v4 as uuidv4 } from "uuid";
 
 interface Props {
   userDetails: UserModel;
@@ -62,8 +58,6 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
 
     var data = blobClient.getBlockBlobClient();
 
-    data.setAccessTier("blob");
-
     return await data.upload(file!, file!.size, {
       blockSize: 4 * 1024 * 1024,
       concurrency: 20,
@@ -80,7 +74,7 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
   };
 
   return (
-    <>
+    <div id="track-upload">
       {uploadDataError ? (
         <ErrorBanner>
           There was an error getting your upload data, please refresh the page
@@ -90,7 +84,7 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
 
       {!file ? (
         <ArtistUploadsTrackSelection setFile={setFile} />
-      ) : (
+      ) : !uploadTrackSuccess ? (
         <div className="fade-in pb-4 mt-4">
           <div className="w-100 fade-in">
             <Formik
@@ -225,12 +219,7 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
                         {status.error}
                       </ErrorBanner>
                     ) : null}
-                    {uploadTrackSuccess ? (
-                      <SuccessBanner className="fade-in mb-0 mx-3">
-                        Your track has been successfully updated. Go back to
-                        your track list to check it out.
-                      </SuccessBanner>
-                    ) : null}
+
                     <div className="px-3 mt-3">
                       {!isSubmitting ? (
                         <Button
@@ -241,7 +230,11 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
                           <h4>Upload track</h4>
                         </Button>
                       ) : (
-                        <h1>{progress}</h1>
+                        <ProgressBar
+                          animated
+                          now={progress}
+                          label={`${Math.round(progress)}%`}
+                        />
                       )}
                     </div>
                   </Form>
@@ -250,8 +243,16 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
             </Formik>
           </div>
         </div>
+      ) : (
+        <>
+          <SuccessBanner className="fade-in mb-0 mx-3">
+            Your track has been successfully updated. Go back to your track list
+            to check it out.
+          </SuccessBanner>
+          <Button>Go back to track list</Button>
+        </>
       )}
-    </>
+    </div>
   );
 };
 

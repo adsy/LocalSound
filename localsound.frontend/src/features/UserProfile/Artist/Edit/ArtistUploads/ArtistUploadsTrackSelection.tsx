@@ -19,7 +19,7 @@ const ArtistUploadsTrackSelection = ({ setFile }: Props) => {
   });
 
   return (
-    <div id="track-upload">
+    <div id="">
       <h5 className="inverse">
         Showcase your skills! Get started by clicking the zone below or dragging
         your track into it.

@@ -685,6 +685,9 @@ i.large.icon {
   border-radius: 5px;
   cursor: pointer;
 }
+#track-upload .progress-bar {
+  background-color: #232323 !important;
+}
 
 /** AUTH MODAL **/
 #auth-modal,

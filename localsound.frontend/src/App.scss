@@ -548,6 +548,10 @@ i.large.icon {
     border-radius: 5px;
     cursor: pointer;
   }
+
+  .progress-bar {
+    background-color: $richBlack !important;
+  }
 }
 
 /** AUTH MODAL **/

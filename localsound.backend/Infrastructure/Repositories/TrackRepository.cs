@@ -54,6 +54,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 var tracks = await _dbContext.ArtistTrackUpload
                     .Include(x => x.TrackData)
                     .Include(x => x.Genres)
+                    .ThenInclude(x => x.Genre)
                     .Where(x => x.AppUserId == artist.Id).ToListAsync();
 
                 return new ServiceResponse<List<ArtistTrackUpload>>(HttpStatusCode.OK)

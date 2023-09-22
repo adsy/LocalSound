@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Azure.Storage.Sas;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
@@ -46,6 +47,12 @@ namespace localsound.backend.Infrastructure.Services
                 }
 
                 BlobContainerClient container = new (_blobStorageSettings.ConnectionString, userId.ToString());
+
+                if (! await container.ExistsAsync())
+                {
+                    await container.CreateIfNotExistsAsync();
+                    await container.SetAccessPolicyAsync(PublicAccessType.Blob);
+                }
 
                 if (!container.CanGenerateSasUri)
                     return new ServiceResponse<TrackUploadSASDto>(HttpStatusCode.InternalServerError, "The container can't generate SAS URI");

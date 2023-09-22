@@ -43,8 +43,6 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
       const IMAGES = [...userDetails.images];
       Promise.all(IMAGES.map((image) => loadImage(image)))
         .then(() => {
-          setImgsLoaded(true);
-
           const coverImage = userDetails?.images?.find(
             (x) => x.accountImageTypeId == AccountImageTypes.CoverImage
           );
@@ -53,7 +51,10 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
             setCoverImage(coverImage);
           }
         })
-        .catch((err) => console.log("Failed to load images", err));
+        .catch((err) => console.log("Failed to load images", err))
+        .finally(() => {
+          setImgsLoaded(true);
+        });
     }
   }, [userDetails]);
 
