@@ -193,7 +193,7 @@ const EditArtistDetailsForm = ({
                   htmlFor="profilePhotoInput"
                   className="btn black-button w-100 align-self-center"
                 >
-                  <h4>Update cover photo</h4>
+                  <h4>Update profile photo</h4>
                 </label>
                 <input
                   type="file"

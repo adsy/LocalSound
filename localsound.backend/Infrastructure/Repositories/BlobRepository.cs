@@ -1,4 +1,5 @@
 ﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.ModelAdaptor;
 using localsound.backend.Infrastructure.Interface.Repositories;
@@ -31,9 +32,13 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 var blobContainerClient = _blobServiceClient.GetBlobContainerClient(containerName.Replace("[", string.Empty).Replace("]", string.Empty));
 
-                await blobContainerClient.CreateIfNotExistsAsync();
+                if (!await blobContainerClient.ExistsAsync())
+                {
+                    await blobContainerClient.CreateIfNotExistsAsync();
+                    await blobContainerClient.SetAccessPolicyAsync(PublicAccessType.Blob);
+                }
 
-                var blobClient = blobContainerClient.GetBlobClient(fileLocation);
+                var blobClient = blobContainerClient.GetBlobClient(blobPath);
 
                 // Delete the file if it already exists
                 await blobClient.DeleteIfExistsAsync();
@@ -50,7 +55,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 }
 
                 string uri = blobContainerClient.Uri.ToString();
-                var fullUri = $"{uri}/{fileLocation}";
+                var fullUri = $"{uri}/{blobPath}";
 
                 return new ServiceResponse<string>(HttpStatusCode.OK)
                 {

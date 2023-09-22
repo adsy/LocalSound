@@ -3,7 +3,12 @@ import { UserModel } from "../../../../../app/model/dto/user.model";
 import agent from "../../../../../api/agent";
 import { Button, Form } from "react-bootstrap";
 import { TrackUploadSASModel } from "../../../../../app/model/dto/track-upload-sas.model";
-import { BlobServiceClient, BlockBlobUploadOptions } from "@azure/storage-blob";
+import {
+  BlobServiceClient,
+  BlockBlobUploadOptions,
+  BlobClient,
+  PublicAccessType,
+} from "@azure/storage-blob";
 import ErrorBanner from "../../../../../common/banner/ErrorBanner";
 import { Formik } from "formik";
 import SuccessBanner from "../../../../../common/banner/SuccessBanner";
@@ -11,6 +16,7 @@ import ArtistUploadsTrackSelection from "./ArtistUploadsTrackSelection";
 import MyTextInput from "../../../../../common/form/MyTextInput";
 import MyTextArea from "../../../../../common/form/MyTextArea";
 import SearchGenreTypes from "../Search/SearchGenreTypes";
+import { GenreModel } from "../../../../../app/model/dto/genre.model";
 
 interface Props {
   userDetails: UserModel;
@@ -43,23 +49,29 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
   const [progress, setProgress] = useState(0);
 
   const uploadBlob = async () => {
-    const blobService = new BlobServiceClient(uploadData!.sasUri);
+    var url =
+      uploadData?.accountUrl +
+      "/" +
+      uploadData?.containerName +
+      "/" +
+      uploadData?.uploadLocation +
+      "?" +
+      uploadData?.sasToken;
 
-    var test = blobService.getContainerClient(uploadData!.containerName);
+    const blobClient = new BlobClient(url);
 
-    return await test.uploadBlockBlob(
-      uploadData!.uploadLocation,
-      file!,
-      file!.size,
-      {
-        blockSize: 4 * 1024 * 1024,
-        concurrency: 20,
-        onProgress: (ev) => {
-          console.log(`you have upload ${ev.loadedBytes} bytes`);
-          setProgress((ev.loadedBytes / file!.size) * 100);
-        },
-      } as BlockBlobUploadOptions
-    );
+    var data = blobClient.getBlockBlobClient();
+
+    data.setAccessTier("blob");
+
+    return await data.upload(file!, file!.size, {
+      blockSize: 4 * 1024 * 1024,
+      concurrency: 20,
+      onProgress: (ev) => {
+        console.log(`you have upload ${ev.loadedBytes} bytes`);
+        setProgress((ev.loadedBytes / file!.size) * 100);
+      },
+    } as BlockBlobUploadOptions);
   };
 
   const formValuesUntouched = (values: any) => {
@@ -109,9 +121,16 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
                     formData.append("trackFileExt", `.${fileExt}`);
                     formData.append("fileLocation", uploadData!.uploadLocation);
 
-                    selectedGenres.forEach((genre) =>
-                      formData.append("genres", genre)
-                    );
+                    selectedGenres.forEach((genre: GenreModel, index) => {
+                      formData.append(
+                        `genres[${index}].genreId`,
+                        genre.genreId
+                      );
+                      formData.append(
+                        `genres[${index}].genreName`,
+                        genre.genreName
+                      );
+                    });
 
                     await agent.Tracks.uploadTrackSupportingData(
                       userDetails.memberId,

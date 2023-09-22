@@ -66,7 +66,7 @@ namespace localsound.backend.Infrastructure.Services
             {
                 await _dbTransactionRepository.BeginTransactionAsync();
 
-                var fileLocation = $"[images]/account/{appUserId}/imageType/{(int)imageType}";
+                var fileLocation = $"[{appUserId}]/photos/imageType/{(int)imageType}";
 
                 // create database entries
                 var accountImageResult = await _accountImageRepository.UploadAccountImageAsync(imageType, appUserId, fileLocation);

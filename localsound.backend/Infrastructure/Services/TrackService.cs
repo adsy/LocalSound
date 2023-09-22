@@ -45,22 +45,31 @@ namespace localsound.backend.Infrastructure.Services
                     return new ServiceResponse<TrackUploadSASDto>(HttpStatusCode.InternalServerError);
                 }
 
-                BlobServiceClient service = new (_blobStorageSettings.ConnectionString);
+                BlobContainerClient container = new (_blobStorageSettings.ConnectionString, userId.ToString());
 
-                if (!service.CanGenerateAccountSasUri)
+                if (!container.CanGenerateSasUri)
                     return new ServiceResponse<TrackUploadSASDto>(HttpStatusCode.InternalServerError, "The container can't generate SAS URI");
 
-                var sasUri = service.GenerateAccountSasUri(AccountSasPermissions.All, DateTimeOffset.UtcNow.AddMinutes(_blobStorageSettings.TokenExpirationMinutes), AccountSasResourceTypes.Object);
+                var sasBuilder = new BlobSasBuilder
+                {
+                    BlobContainerName = container.Name,
+                    Resource = "c",
+                    ExpiresOn = DateTimeOffset.UtcNow.AddMinutes(_blobStorageSettings.TokenExpirationMinutes)
+                };
+
+                sasBuilder.SetPermissions(BlobContainerSasPermissions.All);
+
+                var sasUri = container.GenerateSasUri(sasBuilder);
 
                 var trackId = Guid.NewGuid();
 
                 var result = new TrackUploadSASDto
                 {
-                    AccountName = service.AccountName,
-                    AccountUrl = $"{service.Uri.Scheme}://{service.Uri.Host}",
-                    ContainerName = "tracks",
+                    AccountName = container.AccountName,
+                    AccountUrl = $"{container.Uri.Scheme}://{container.Uri.Host}",
+                    ContainerName = userId.ToString(),
                     TrackId = trackId,
-                    UploadLocation = $"account/{userId}/uploads/{trackId}",
+                    UploadLocation = $"uploads/{trackId}",
                     SasUri = sasUri,
                     SasToken = sasUri.Query.TrimStart('?'),
                 };
@@ -123,7 +132,7 @@ namespace localsound.backend.Infrastructure.Services
                 }
 
                 var imageId = Guid.NewGuid();
-                var imageFilePath = $"[tracks]/account/{userId}/uploads/{trackId}/image/{imageId}{trackUploadDto.TrackImageExt}";
+                var imageFilePath = $"[{userId}]/uploads/{trackId}/image/{imageId}{trackUploadDto.TrackImageExt}";
 
                 var result = await _blobRepository.UploadBlobAsync(imageFilePath, trackUploadDto.TrackImage);
 

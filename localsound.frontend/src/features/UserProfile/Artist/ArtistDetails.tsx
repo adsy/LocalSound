@@ -29,9 +29,7 @@ const ArtistDetails = ({ photoUpdateError, userDetails }: Props) => {
             src={userPhoto ? userPhoto.accountImageUrl : userImg}
             size="small"
             circular
-            className={`${
-              userPhoto ? "profile-photo" : null
-            } mb-4 summary-photo`}
+            className={`profile-photo mb-4 summary-photo`}
           />
           <div className="d-flex flex-column pb-4">
             <div className="d-flex">

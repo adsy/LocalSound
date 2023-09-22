@@ -22,7 +22,7 @@ const ArtistBannerSummary = ({ userDetails }: Props) => {
                 src={userPhoto ? userPhoto.accountImageUrl : userImg}
                 size="small"
                 circular
-                className={`${userPhoto ? "profile-photo" : null} banner-photo`}
+                className={`profile-photo banner-photo`}
               />
               <span className="user-name mb-0">{userDetails?.name}</span>
               <div className=" d-flex flex-row flex-wrap">
