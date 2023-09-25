@@ -1,4 +1,5 @@
 using Azure.Messaging.ServiceBus;
+using Azure.Storage.Blobs;
 using localsound.backend.api.Extensions;
 using localsound.backend.api.Middleware;
 using localsound.backend.Domain.ModelAdaptor;
@@ -45,6 +46,15 @@ builder.Services.AddSingleton(serviceBusSettings);
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 await builder.Services.AddDbSeed(builder.Configuration);
+
+builder.Services.AddSingleton<BlobServiceClient>(x =>
+{
+    var _blobServiceClient = new BlobServiceClient(blobStorageSettings.ConnectionString);
+    var properties = _blobServiceClient.GetProperties();
+    properties.Value.DefaultServiceVersion = "2013-08-15";
+    _blobServiceClient.SetProperties(properties.Value);
+    return _blobServiceClient;
+});
 
 builder.Services.AddSingleton<ServiceBusClient>(x =>
 {

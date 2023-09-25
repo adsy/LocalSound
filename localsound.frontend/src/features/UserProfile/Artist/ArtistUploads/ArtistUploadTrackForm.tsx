@@ -56,6 +56,8 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
 
     const blobClient = new BlobClient(url);
 
+    blobClient.getProperties();
+
     var data = blobClient.getBlockBlobClient();
 
     return await data.upload(file!, file!.size, {

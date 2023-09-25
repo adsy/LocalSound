@@ -1,5 +1,4 @@
 ﻿using localsound.backend.Domain.Model;
-using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Domain.Model.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

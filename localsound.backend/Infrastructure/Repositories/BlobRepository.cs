@@ -5,22 +5,19 @@ using localsound.backend.Domain.ModelAdaptor;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System.Net;
 
 namespace localsound.backend.Infrastructure.Repositories
 {
     public class BlobRepository : IBlobRepository
     {
-        private BlobServiceClient _blobServiceClient;
-        private readonly BlobStorageSettingsAdaptor _blobSettings;
+        private readonly BlobServiceClient _blobServiceClient;
         private readonly ILogger<BlobRepository> _logger;
 
-        public BlobRepository(BlobStorageSettingsAdaptor blobSettings, ILogger<BlobRepository> logger)
+        public BlobRepository(BlobServiceClient blobServiceClient, ILogger<BlobRepository> logger)
         {
-            _blobSettings = blobSettings;
+            _blobServiceClient = blobServiceClient;
             _logger = logger;
-            _blobServiceClient = new BlobServiceClient(_blobSettings.ConnectionString);
         }
 
         public async Task<ServiceResponse<string>> UploadBlobAsync(string fileLocation, IFormFile file)
@@ -122,7 +119,7 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 await blobContainerClient.CreateIfNotExistsAsync();
 
-                var blobClient = blobContainerClient.GetBlobClient(fileLocation);
+                var blobClient = blobContainerClient.GetBlobClient(blobPath);
 
                 // Delete the file if it already exists
                 var result = await blobClient.DeleteIfExistsAsync();
