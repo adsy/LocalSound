@@ -22,6 +22,7 @@ interface Props {
 
 const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
   const [file, setFile] = useState<File | null>(null);
+  const [trackExt, setTrackExt] = useState<string>(null);
   const [trackImage, setTrackImage] = useState<File | null>(null);
   const [uploadData, setUploadData] = useState<TrackUploadSASModel | null>(
     null
@@ -45,14 +46,8 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
   const [progress, setProgress] = useState(0);
 
   const uploadBlob = async () => {
-    var url =
-      uploadData?.accountUrl +
-      "/" +
-      uploadData?.containerName +
-      "/" +
-      uploadData?.uploadLocation +
-      "?" +
-      uploadData?.sasToken;
+    var trackUrl = `${uploadData?.accountUrl}/${uploadData?.containerName}/${uploadData?.uploadLocation}.${trackExt}`;
+    var url = `${trackUrl}?${uploadData?.sasToken}`;
 
     const blobClient = new BlobClient(url);
 
@@ -85,7 +80,10 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
       ) : null}
 
       {!file ? (
-        <ArtistUploadsTrackSelection setFile={setFile} />
+        <ArtistUploadsTrackSelection
+          setFile={setFile}
+          setTrackExt={setTrackExt}
+        />
       ) : !uploadTrackSuccess ? (
         <div className="fade-in pb-4 mt-4">
           <div className="w-100 fade-in">
@@ -97,10 +95,9 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
               onSubmit={async (values, { setStatus }) => {
                 try {
                   if (file && trackImage) {
-                    var uploadResult = await uploadBlob();
+                    await uploadBlob();
 
                     var trackImageExt = trackImage.name.split(/[.]+/).pop();
-                    var fileExt = file.name.split(/[.]+/).pop();
 
                     var formData = new FormData();
                     formData.append("trackName", values.trackName);
@@ -114,8 +111,15 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
                       trackImage?.name
                     );
                     formData.append("trackImageExt", `.${trackImageExt}`);
-                    formData.append("trackFileExt", `.${fileExt}`);
-                    formData.append("fileLocation", uploadData!.uploadLocation);
+                    formData.append("trackFileExt", `.${trackExt}`);
+                    formData.append(
+                      "fileLocation",
+                      uploadData!.uploadLocation + `.${trackExt}`
+                    );
+                    formData.append(
+                      "trackUrl",
+                      `${uploadData?.accountUrl}/${uploadData?.containerName}/${uploadData?.uploadLocation}.${trackExt}`
+                    );
 
                     selectedGenres.forEach((genre: GenreModel, index) => {
                       formData.append(
@@ -204,6 +208,7 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
                             </label>
                             <input
                               type="file"
+                              accept=".jpg,.png,.jpeg"
                               id="trackUpload"
                               style={{ display: "none" }}
                               onChange={async (event) => {

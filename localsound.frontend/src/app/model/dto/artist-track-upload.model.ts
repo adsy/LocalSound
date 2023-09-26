@@ -1,8 +1,11 @@
+import { GenreModel } from "./genre.model";
+
 export interface ArtistTrackUploadModel {
   artistTrackUploadId: string;
   trackName: string;
   trackDescription: string;
-  genreName: string;
+  genres: GenreModel[];
   trackImageUrl: string;
   trackDataLocation: string;
+  trackUrl: string;
 }

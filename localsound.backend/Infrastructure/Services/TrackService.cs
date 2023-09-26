@@ -164,7 +164,7 @@ namespace localsound.backend.Infrastructure.Services
                     TrackData = new FileContent
                     {
                         FileContentId = Guid.NewGuid(),
-                        FileLocation = "[tracks]/"+trackUploadDto.FileLocation,
+                        FileLocation = $"[{userId}]/"+trackUploadDto.FileLocation,
                         FileExtensionType = trackUploadDto.TrackFileExt
                     },
                     TrackImage = new FileContent
@@ -173,7 +173,8 @@ namespace localsound.backend.Infrastructure.Services
                         FileLocation = imageFilePath,
                         FileExtensionType = trackUploadDto.TrackImageExt
                     },
-                    TrackImageUrl = result.ReturnData
+                    TrackImageUrl = result.ReturnData,
+                    TrackUrl = trackUploadDto.TrackUrl
                 };
 
                 var addTrackResult = await _trackRepository.AddArtistTrackUploadAsync(track);

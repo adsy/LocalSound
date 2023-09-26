@@ -4,11 +4,14 @@ import { Icon } from "semantic-ui-react";
 
 interface Props {
   setFile: (file: File | null) => void;
+  setTrackExt: (ext: string) => void;
 }
 
-const ArtistUploadsTrackSelection = ({ setFile }: Props) => {
+const ArtistUploadsTrackSelection = ({ setFile, setTrackExt }: Props) => {
   const onDrop = useCallback((acceptedFile: File[]) => {
     if (acceptedFile[0]) {
+      var trackExt = acceptedFile[0].name.split(/[.]+/).pop();
+      setTrackExt(trackExt!);
       setFile(acceptedFile[0]);
     }
   }, []);

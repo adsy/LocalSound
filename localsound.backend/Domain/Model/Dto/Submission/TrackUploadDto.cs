@@ -12,5 +12,6 @@ namespace localsound.backend.Domain.Model.Dto.Submission
         public IFormFile TrackImage { get; set; }
         public string TrackImageExt { get; set; }
         public string FileLocation { get; set; }
+        public string TrackUrl { get; set; }
     }
 }

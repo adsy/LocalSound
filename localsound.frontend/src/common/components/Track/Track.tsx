@@ -3,12 +3,13 @@ import { ArtistTrackUploadModel } from "../../../app/model/dto/artist-track-uplo
 import WaveFormContainer from "./WaveFormContainer";
 import PlayButton from "./PlayButton";
 import { Button } from "react-bootstrap";
+import Label from "../Label/Label";
 
 interface Props {
   track: ArtistTrackUploadModel;
 }
 
-const WaveForm = ({ track }: Props) => {
+const Track = ({ track }: Props) => {
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState<any>(null);
   const [totalTime, setTotalTime] = useState<string | null>(null);
@@ -73,8 +74,7 @@ const WaveForm = ({ track }: Props) => {
   const handlePlay = async () => {
     if (waveformRef.current) {
       if (!waveformRef.current.src) {
-        waveformRef.current.src =
-          "https://localsoundstorage.blob.core.windows.net/d872fc6d-47df-4ef3-3665-08db56bd8a55/uploads/Hermitude - Tapedeck Sound.mp3";
+        waveformRef.current.src = track.trackUrl;
       }
 
       if (playing) {
@@ -93,7 +93,8 @@ const WaveForm = ({ track }: Props) => {
   };
 
   return (
-    <div id="waveform" className="d-flex flex-column">
+    <div id="waveform" className="d-flex flex-column mt-3">
+      <h3 className="mb-0">{track.trackName}</h3>
       <WaveFormContainer>
         <PlayButton handlePlay={handlePlay} playing={playing} />
         <div id="waveform" />
@@ -104,10 +105,20 @@ const WaveForm = ({ track }: Props) => {
           onTimeUpdate={(e) => updateTime(e)}
         ></audio>
       </WaveFormContainer>
-      <Button onClick={() => test()}>Test</Button>
-      {time}\{totalTime}
+      {/* <Button onClick={() => test()}>Test</Button> */}
+      {/* {time && totalTime ? (
+        <>
+          {time}\{totalTime}
+        </>
+      ) : null} */}
+      <div>
+        {track.genres.map((genre) => (
+          <Label id={genre.genreId} label={genre.genreName} />
+        ))}
+      </div>
+      <p>{track.trackDescription}</p>
     </div>
   );
 };
 
-export default WaveForm;
+export default Track;

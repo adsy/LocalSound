@@ -7,6 +7,7 @@
         public string TrackDescription { get; set; }
         public string TrackImageUrl { get; set; }
         public string TrackDataLocation { get; set; }
+        public string TrackUrl { get; set; }
 
         public List<GenreDto> Genres { get; set; }
     }
