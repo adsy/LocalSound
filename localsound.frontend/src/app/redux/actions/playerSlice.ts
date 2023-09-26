@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PlayerState } from "../../model/redux/playerState";
-import { resourceUsage } from "process";
 
 const initialState: PlayerState = {
   trackId: null,
   playing: false,
   trackUrl: null,
+  trackName: null,
+  artistProfile: null,
 };
 
 export const playerSlice = createSlice({
@@ -17,6 +18,8 @@ export const playerSlice = createSlice({
       state.trackId = payload.trackId;
       state.trackUrl = payload.trackUrl;
       state.playing = true;
+      state.trackName = payload.trackName;
+      state.artistProfile = payload.artistProfile;
     },
     handlePauseSong: (state) => {
       state.playing = false;

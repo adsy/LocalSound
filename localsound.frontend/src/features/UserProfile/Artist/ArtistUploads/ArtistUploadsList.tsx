@@ -33,7 +33,7 @@ const ArtistUploadsList = ({ userDetails, uploading, setUploading }: Props) => {
 
       {tracks.map((track, index) => (
         <div key={index}>
-          <Track track={track} />
+          <Track track={track} artistDetails={userDetails} />
         </div>
       ))}
     </>

@@ -9,12 +9,14 @@ import {
   handleSetPlayerSong,
 } from "../../../app/redux/actions/playerSlice";
 import { State } from "../../../app/model/redux/state";
+import { UserModel } from "../../../app/model/dto/user.model";
 
 interface Props {
   track: ArtistTrackUploadModel;
+  artistDetails: UserModel;
 }
 
-const Track = ({ track }: Props) => {
+const Track = ({ track, artistDetails }: Props) => {
   const player = useSelector((state: State) => state.player);
   const dispatch = useDispatch();
 
@@ -31,6 +33,8 @@ const Track = ({ track }: Props) => {
         handleSetPlayerSong({
           trackId: track.artistTrackUploadId,
           trackUrl: track.trackUrl,
+          artistProfile: artistDetails.profileUrl,
+          trackName: track.trackName,
         })
       );
     }
@@ -49,8 +53,8 @@ const Track = ({ track }: Props) => {
       </TrackContainer>
 
       <div>
-        {track.genres.map((genre) => (
-          <Label id={genre.genreId} label={genre.genreName} />
+        {track.genres.map((genre, index) => (
+          <Label key={index} id={genre.genreId} label={genre.genreName} />
         ))}
       </div>
       <p>{track.trackDescription}</p>

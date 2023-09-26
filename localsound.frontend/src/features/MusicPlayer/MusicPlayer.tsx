@@ -1,28 +1,29 @@
-import {
-  SyntheticEvent,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
-import { ArtistTrackUploadModel } from "../../../app/model/dto/artist-track-upload.model";
-import WaveFormContainer from "./TrackContainer";
-import PlayButton from "./PlayButton";
-import { Button } from "react-bootstrap";
-import Label from "../Label/Label";
+import { SyntheticEvent, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { handleSetPlayerSong } from "../../../app/redux/actions/playerSlice";
 import { State } from "../../app/model/redux/state";
+import { Icon } from "semantic-ui-react";
+import { Container } from "react-bootstrap";
+import {
+  handlePauseSong,
+  handlePlaySong,
+} from "../../app/redux/actions/playerSlice";
 
 const MusicPlayer = () => {
   const player = useSelector((state: State) => state.player);
   const [time, setTime] = useState<any>(null);
   const [totalTime, setTotalTime] = useState<string | null>(null);
+  const [currentTrack, setCurrentTrack] = useState<string | null>(null);
   const waveformRef = useRef<HTMLAudioElement>(null);
+  const seekerRef = useRef<HTMLInputElement>(null);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (waveformRef.current) {
-      waveformRef.current.src = player.trackUrl!;
+      if (currentTrack !== player.trackId) {
+        waveformRef.current.src = player.trackUrl!;
+        setCurrentTrack(player.trackId);
+        seekerRef!.current!.value = "0";
+      }
 
       if (player.playing) {
         waveformRef.current.play();
@@ -85,23 +86,57 @@ const MusicPlayer = () => {
     getTotalTime();
     setTime(`00:${minsText}:${secondsText}`);
   };
+
+  const updateCurrentTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    var percentage = Number.parseInt(e.target.value) / 10000;
+    var pointOfSong = waveformRef.current?.duration! * percentage;
+    waveformRef!.current!.currentTime = pointOfSong;
+  };
+
   return (
-    <>
-      container
-      <div id="waveform" />
-      <audio
-        id="music"
-        preload="all"
-        ref={waveformRef}
-        onTimeUpdate={(e) => updateTime(e)}
-      ></audio>
-      {/* <Button onClick={() => test()}>Test</Button> */}
-      {time && totalTime ? (
-        <>
-          {time}\{totalTime}
-        </>
-      ) : null}
-    </>
+    <div id="music-player" className="fade-in">
+      <Container className="p-0 player-container">
+        <audio
+          id="music"
+          preload="all"
+          ref={waveformRef}
+          onTimeUpdate={(e) => updateTime(e)}
+        ></audio>
+        {!player.playing ? (
+          <Icon
+            className="audio-button"
+            name="play"
+            size="large"
+            color="grey"
+            onClick={() => {
+              dispatch(handlePlaySong());
+            }}
+          />
+        ) : (
+          <Icon
+            className="audio-button"
+            name="pause"
+            size="large"
+            color="grey"
+            onClick={() => {
+              dispatch(handlePauseSong());
+            }}
+          />
+        )}
+        <h5 className="m-0 pr-3">{time}</h5>
+        <input
+          ref={seekerRef}
+          type="range"
+          className="seek-slider"
+          max="10000"
+          onChange={(e) => {
+            updateCurrentTime(e);
+          }}
+        ></input>
+        {/* <h3 className="m-0">{player.trackName}</h3> */}
+        {time && totalTime ? <h5 className="m-0 pl-3">{totalTime}</h5> : null}
+      </Container>
+    </div>
   );
 };
 

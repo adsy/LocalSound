@@ -673,6 +673,28 @@ i.large.icon {
   padding-right: 6.825px;
 }
 
+#music-player {
+  position: fixed;
+  bottom: 0;
+  background-color: #232323;
+  border-top: 8px solid #001514;
+  height: 50px;
+  width: 100%;
+  color: #ececec;
+}
+#music-player .player-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+}
+#music-player .audio-button {
+  cursor: pointer;
+}
+#music-player .seek-slider {
+  flex-grow: 1;
+}
+
 #waveform .waveform-container {
   display: flex;
   flex-direction: row;
@@ -691,7 +713,7 @@ i.large.icon {
   align-items: center;
   width: 60px;
   height: 60px;
-  background: #efefef;
+  background: #232323;
   border-radius: 50%;
   border: none;
   outline: none;

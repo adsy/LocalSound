@@ -24,6 +24,7 @@ const App = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const userDetails = useSelector((state: State) => state.user?.userDetails);
+  const player = useSelector((state: State) => state.player);
 
   useEffect(() => {
     if (userDetails) {
@@ -87,8 +88,8 @@ const App = () => {
               </Container>
             )}
           />
-          <MusicPlayer />
         </div>
+        {player.trackId ? <MusicPlayer /> : null}
       </div>
     </>
   );

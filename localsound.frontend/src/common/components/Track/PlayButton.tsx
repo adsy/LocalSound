@@ -10,9 +10,9 @@ const PlayButton = ({ handlePlay, playing }: Props) => {
   return (
     <Button className="play-button" onClick={() => handlePlay()}>
       {!playing ? (
-        <Icon name="play" size="small" color="black" />
+        <Icon name="play" size="small" color="grey" />
       ) : (
-        <Icon name="pause" size="small" color="black" />
+        <Icon name="pause" size="small" color="grey" />
       )}
     </Button>
   );
