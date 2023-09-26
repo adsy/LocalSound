@@ -18,6 +18,7 @@ import { handleResetAppState } from "../redux/actions/applicationSlice";
 import { UserModel } from "../model/dto/user.model";
 import { State } from "../model/redux/state";
 import AccountSettings from "../../features/AccountSettings/AccountSettings";
+import MusicPlayer from "../../features/MusicPlayer/MusicPlayer";
 
 const App = () => {
   const history = useHistory();
@@ -86,6 +87,7 @@ const App = () => {
               </Container>
             )}
           />
+          <MusicPlayer />
         </div>
       </div>
     </>

@@ -4,8 +4,8 @@ interface Props {
   children: ReactNode;
 }
 
-const WaveFormContainer = ({ children }: Props) => {
+const TrackContainer = ({ children }: Props) => {
   return <div className="waveform-container">{children}</div>;
 };
 
-export default WaveFormContainer;
+export default TrackContainer;
