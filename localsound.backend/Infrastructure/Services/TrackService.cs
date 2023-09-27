@@ -174,7 +174,8 @@ namespace localsound.backend.Infrastructure.Services
                         FileExtensionType = trackUploadDto.TrackImageExt
                     },
                     TrackImageUrl = result.ReturnData,
-                    TrackUrl = trackUploadDto.TrackUrl
+                    TrackUrl = trackUploadDto.TrackUrl,
+                    WaveformUrl = trackUploadDto.WaveformUrl,
                 };
 
                 var addTrackResult = await _trackRepository.AddArtistTrackUploadAsync(track);

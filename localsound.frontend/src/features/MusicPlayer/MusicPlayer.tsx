@@ -95,34 +95,36 @@ const MusicPlayer = () => {
 
   return (
     <div id="music-player" className="fade-in">
-      <Container className="p-0 player-container">
+      <Container className="px-3 player-container">
         <audio
           id="music"
           preload="all"
           ref={waveformRef}
           onTimeUpdate={(e) => updateTime(e)}
         ></audio>
-        {!player.playing ? (
-          <Icon
-            className="audio-button"
-            name="play"
-            size="large"
-            color="grey"
-            onClick={() => {
-              dispatch(handlePlaySong());
-            }}
-          />
-        ) : (
-          <Icon
-            className="audio-button"
-            name="pause"
-            size="large"
-            color="grey"
-            onClick={() => {
-              dispatch(handlePauseSong());
-            }}
-          />
-        )}
+        <div className="pr-3">
+          {!player.playing ? (
+            <Icon
+              className="audio-button"
+              name="play"
+              size="large"
+              color="grey"
+              onClick={() => {
+                dispatch(handlePlaySong());
+              }}
+            />
+          ) : (
+            <Icon
+              className="audio-button"
+              name="pause"
+              size="large"
+              color="grey"
+              onClick={() => {
+                dispatch(handlePauseSong());
+              }}
+            />
+          )}
+        </div>
         <h5 className="m-0 pr-3">{time}</h5>
         <input
           ref={seekerRef}

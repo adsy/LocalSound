@@ -173,6 +173,10 @@ $end: 10;
 }
 
 /** TOP LEVEL CLASSES **/
+.canvasjs-chart-credit {
+  display: none;
+}
+
 .font-bold {
   font-weight: bold;
 }
@@ -572,10 +576,10 @@ i.large.icon {
     background: transparent;
   }
 
-  #waveform {
-    width: 100%;
-    height: 90px;
-  }
+  // #waveform {
+  //   width: 100%;
+  //   height: 90px;
+  // }
 
   .play-button {
     display: flex;
@@ -612,8 +616,12 @@ i.large.icon {
     cursor: pointer;
   }
 
-  .progress-bar {
+  .waveform-progress {
     background-color: $richBlack !important;
+  }
+
+  .track-progress {
+    background-color: $purple !important;
   }
 }
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { UserModel } from "../../../../app/model/dto/user.model";
 import agent from "../../../../api/agent";
 import { Button, Form, ProgressBar } from "react-bootstrap";
@@ -12,7 +12,6 @@ import MyTextInput from "../../../../common/form/MyTextInput";
 import MyTextArea from "../../../../common/form/MyTextArea";
 import SearchGenreTypes from "../Edit/Search/SearchGenreTypes";
 import { GenreModel } from "../../../../app/model/dto/genre.model";
-import { v4 as uuidv4 } from "uuid";
 
 interface Props {
   userDetails: UserModel;
@@ -31,6 +30,9 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
   const [uploadTrackError, setUploadTrackError] = useState(false);
   const [uploadDataError, setUploadDataError] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<GenreModel[]>([]);
+  const [dps, setDps] = useState<{ [x: string]: any } | null>(null);
+  const [trackProgress, setTrackProgress] = useState(0);
+  const [waveformProgress, setWaveformProgress] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -43,8 +45,6 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
     })();
   }, []);
 
-  const [progress, setProgress] = useState(0);
-
   const uploadBlob = async () => {
     var trackUrl = `${uploadData?.accountUrl}/${uploadData?.containerName}/${uploadData?.uploadLocation}.${trackExt}`;
     var url = `${trackUrl}?${uploadData?.sasToken}`;
@@ -53,14 +53,36 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
 
     blobClient.getProperties();
 
-    var data = blobClient.getBlockBlobClient();
+    var client = blobClient.getBlockBlobClient();
 
-    return await data.upload(file!, file!.size, {
+    return await client.upload(file!, file!.size, {
       blockSize: 4 * 1024 * 1024,
       concurrency: 20,
       onProgress: (ev) => {
-        console.log(`you have upload ${ev.loadedBytes} bytes`);
-        setProgress((ev.loadedBytes / file!.size) * 100);
+        setTrackProgress((ev.loadedBytes / file!.size) * 100);
+      },
+    } as BlockBlobUploadOptions);
+  };
+
+  const uploadWaveForm = async () => {
+    var trackUrl = `${uploadData?.accountUrl}/${uploadData?.containerName}/${uploadData?.uploadLocation}.json`;
+    var url = `${trackUrl}?${uploadData?.sasToken}`;
+
+    const blobClient = new BlobClient(url);
+
+    blobClient.getProperties();
+
+    var client = blobClient.getBlockBlobClient();
+
+    var dpsString = JSON.stringify({
+      data: dps,
+    });
+
+    return await client.upload(dpsString, dpsString.length, {
+      blockSize: 4 * 1024 * 1024,
+      concurrency: 20,
+      onProgress: (ev) => {
+        setWaveformProgress((ev.loadedBytes / file!.size) * 100);
       },
     } as BlockBlobUploadOptions);
   };
@@ -69,6 +91,8 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
     //TODO: add checks
     return false;
   };
+
+  console.log(dps);
 
   return (
     <div id="track-upload">
@@ -83,6 +107,7 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
         <ArtistUploadsTrackSelection
           setFile={setFile}
           setTrackExt={setTrackExt}
+          setDps={setDps}
         />
       ) : !uploadTrackSuccess ? (
         <div className="fade-in pb-4 mt-4">
@@ -95,6 +120,7 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
               onSubmit={async (values, { setStatus }) => {
                 try {
                   if (file && trackImage) {
+                    await uploadWaveForm();
                     await uploadBlob();
 
                     var trackImageExt = trackImage.name.split(/[.]+/).pop();
@@ -119,6 +145,10 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
                     formData.append(
                       "trackUrl",
                       `${uploadData?.accountUrl}/${uploadData?.containerName}/${uploadData?.uploadLocation}.${trackExt}`
+                    );
+                    formData.append(
+                      "waveformUrl",
+                      `${uploadData?.accountUrl}/${uploadData?.containerName}/${uploadData?.uploadLocation}.json`
                     );
 
                     selectedGenres.forEach((genre: GenreModel, index) => {
@@ -237,11 +267,18 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
                           <h4>Upload track</h4>
                         </Button>
                       ) : (
-                        <ProgressBar
-                          animated
-                          now={progress}
-                          label={`${Math.round(progress)}%`}
-                        />
+                        <ProgressBar>
+                          <ProgressBar
+                            className="waveform-progress"
+                            animated
+                            now={waveformProgress}
+                          />
+                          <ProgressBar
+                            className="track-progress"
+                            animated
+                            now={trackProgress}
+                          />
+                        </ProgressBar>
                       )}
                     </div>
                   </Form>

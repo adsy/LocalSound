@@ -8,6 +8,7 @@
         public string TrackImageUrl { get; set; }
         public string TrackDataLocation { get; set; }
         public string TrackUrl { get; set; }
+        public string WaveformUrl { get; set; }
 
         public List<GenreDto> Genres { get; set; }
     }

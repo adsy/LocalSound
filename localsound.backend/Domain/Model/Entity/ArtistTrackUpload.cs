@@ -15,6 +15,7 @@ namespace localsound.backend.Domain.Model.Entity
         public string TrackDescription { get; set; }
         public string TrackImageUrl { get; set; }
         public string TrackUrl { get; set; }
+        public string WaveformUrl { get; set; }
 
         public virtual Artist Artist {get;set;}
         public virtual ICollection<ArtistTrackGenre>  Genres { get; set;}

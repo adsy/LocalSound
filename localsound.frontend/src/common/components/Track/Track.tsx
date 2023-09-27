@@ -10,6 +10,10 @@ import {
 } from "../../../app/redux/actions/playerSlice";
 import { State } from "../../../app/model/redux/state";
 import { UserModel } from "../../../app/model/dto/user.model";
+import { Image } from "semantic-ui-react";
+// @ts-ignore
+import CanvasJSReact from "@canvasjs/react-charts";
+import { useLayoutEffect, useState } from "react";
 
 interface Props {
   track: ArtistTrackUploadModel;
@@ -19,6 +23,47 @@ interface Props {
 const Track = ({ track, artistDetails }: Props) => {
   const player = useSelector((state: State) => state.player);
   const dispatch = useDispatch();
+  const [dps, setDps] = useState<{ [key: string]: any }>(null);
+
+  useLayoutEffect(() => {
+    (async () => {
+      await fetch(track.waveformUrl)
+        .then((data) => {
+          return data.json();
+        })
+        .then((json) => {
+          const options = {
+            height: 100,
+            title: {
+              dockInsidePlotArea: true,
+              verticalAlign: "center",
+            },
+            axisX: {
+              tickLength: 0,
+              lineThickness: 0,
+              labelFontSize: 0,
+            },
+            axisY: {
+              tickLength: 0,
+              lineThickness: 0,
+              gridThickness: 0,
+              labelFontSize: 0,
+            },
+            data: [
+              {
+                type: "rangeArea",
+                toolTipContent: null,
+                highlightEnabled: false,
+                color: "#6d69fa",
+                dataPoints: json.data,
+              },
+            ],
+          };
+
+          setDps(options);
+        });
+    })();
+  }, []);
 
   const playSong = () => {
     if (player.playing && player.trackId === track.artistTrackUploadId) {
@@ -40,23 +85,41 @@ const Track = ({ track, artistDetails }: Props) => {
     }
   };
 
-  return (
-    <div id="waveform" className="d-flex flex-column mt-3">
-      <h3 className="mb-0">{track.trackName}</h3>
-      <TrackContainer>
-        <PlayButton
-          handlePlay={playSong}
-          playing={
-            track.artistTrackUploadId === player.trackId && player.playing
-          }
-        />
-      </TrackContainer>
+  var CanvasJS = CanvasJSReact.CanvasJS;
+  var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-      <div>
-        {track.genres.map((genre, index) => (
-          <Label key={index} id={genre.genreId} label={genre.genreName} />
-        ))}
+  return (
+    <div id="waveform" className="d-flex flex-column mt-3 w-100">
+      <div className="d-flex flex-column">
+        <div className="d-flex flex-row w-100">
+          <Image size="small" rounded src={track.trackImageUrl} />
+          <div className="d-flex flex-column justify-content-between">
+            <div className="d-flex flex-column">
+              <div>
+                <h3 className="mb-0">{track.trackName}</h3>
+              </div>
+            </div>
+            <div style={{ height: "50px" }}>
+              {dps ? <CanvasJSChart options={dps} /> : null}
+            </div>
+
+            <TrackContainer>
+              <PlayButton
+                handlePlay={playSong}
+                playing={
+                  track.artistTrackUploadId === player.trackId && player.playing
+                }
+              />
+            </TrackContainer>
+            <div>
+              {track.genres.map((genre, index) => (
+                <Label key={index} id={genre.genreId} label={genre.genreName} />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
+
       <p>{track.trackDescription}</p>
     </div>
   );

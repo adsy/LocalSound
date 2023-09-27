@@ -285,6 +285,10 @@ h6.inverse {
 }
 
 /** TOP LEVEL CLASSES **/
+.canvasjs-chart-credit {
+  display: none;
+}
+
 .font-bold {
   font-weight: bold;
 }
@@ -703,10 +707,6 @@ i.large.icon {
   width: 100%;
   background: transparent;
 }
-#waveform #waveform {
-  width: 100%;
-  height: 90px;
-}
 #waveform .play-button {
   display: flex;
   justify-content: center;
@@ -739,8 +739,11 @@ i.large.icon {
   border-radius: 5px;
   cursor: pointer;
 }
-#track-upload .progress-bar {
+#track-upload .waveform-progress {
   background-color: #232323 !important;
+}
+#track-upload .track-progress {
+  background-color: #6d69fa !important;
 }
 
 /** AUTH MODAL **/

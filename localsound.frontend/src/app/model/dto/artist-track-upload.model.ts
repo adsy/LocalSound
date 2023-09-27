@@ -8,4 +8,5 @@ export interface ArtistTrackUploadModel {
   trackImageUrl: string;
   trackDataLocation: string;
   trackUrl: string;
+  waveformUrl: string;
 }
