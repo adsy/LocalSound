@@ -681,7 +681,7 @@ i.large.icon {
   position: fixed;
   bottom: 0;
   background-color: #232323;
-  border-top: 8px solid #001514;
+  border-top: 3px solid #001514;
   height: 50px;
   width: 100%;
   color: #ececec;
@@ -699,36 +699,30 @@ i.large.icon {
   flex-grow: 1;
 }
 
-#waveform .waveform-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  background: transparent;
+#track .playbutton-container {
+  left: 40px;
 }
-#waveform .play-button {
+#track .play-button {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 60px;
   height: 60px;
-  background: #232323;
+  background: unset;
   border-radius: 50%;
   border: none;
   outline: none;
   cursor: pointer;
   padding-bottom: 3px;
 }
-#waveform .play-button:hover {
-  background: #ddd;
+#track .play-button:hover {
+  background: #232323;
 }
-#waveform .play-button i.small.icon {
+#track .play-button i.small.icon {
   margin: 0;
 }
 
 #track-upload {
-  height: 400px;
   width: 100%;
   padding: 10px;
 }
@@ -744,6 +738,16 @@ i.large.icon {
 }
 #track-upload .track-progress {
   background-color: #6d69fa !important;
+}
+
+#waveform-container {
+  width: 100%;
+  height: 80px;
+  position: relative;
+}
+#waveform-container canvas {
+  width: 100%;
+  height: 80px;
 }
 
 /** AUTH MODAL **/
@@ -1006,6 +1010,7 @@ i.large.icon {
   justify-content: center;
   align-content: stretch;
   flex-wrap: wrap;
+  padding-bottom: 80px;
   /** CROPPER **/
 }
 #user-profile #cropper {

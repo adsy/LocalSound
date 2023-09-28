@@ -17,7 +17,7 @@ const ArtistUploadsTrackSelection = ({
     if (acceptedFile[0]) {
       var trackExt = acceptedFile[0].name.split(/[.]+/).pop();
       setTrackExt(trackExt!);
-      await generateWaveForm(acceptedFile[0]);
+      // await generateWaveForm(acceptedFile[0]);
       setFile(acceptedFile[0]);
     }
   }, []);
@@ -27,40 +27,39 @@ const ArtistUploadsTrackSelection = ({
     multiple: false,
   });
 
-  const generateWaveForm = async (file: File) => {
-    let margin = 0,
-      chunkSize = 20000,
-      height = 10,
-      scaleFactor = (height - margin * 2) / 5;
+  // const generateWaveForm = async (file: File) => {
+  //   let margin = 0,
+  //     chunkSize = 100000,
+  //     height = 1000,
+  //     scaleFactor = (height - margin * 2) / 1;
 
-    var audioContext = new AudioContext();
+  //   var audioContext = new AudioContext();
 
-    let buffer = await file!.arrayBuffer(),
-      audioBuffer = await audioContext.decodeAudioData(buffer),
-      float32Array = audioBuffer.getChannelData(0);
+  //   let buffer = await file!.arrayBuffer(),
+  //     audioBuffer = await audioContext.decodeAudioData(buffer),
+  //     float32Array = audioBuffer.getChannelData(0);
 
-    let array = [],
-      i = 0,
-      length = float32Array.length;
+  //   let array = [],
+  //     i = 0,
+  //     length = float32Array.length;
 
-    while (i < length) {
-      array.push(
-        float32Array.slice(i, (i += chunkSize)).reduce(function (total, value) {
-          return Math.max(total, Math.abs(value));
-        })
-      );
-    }
+  //   while (i < length) {
+  //     array.push(
+  //       float32Array.slice(i, (i += chunkSize)).reduce(function (total, value) {
+  //         return Math.max(total, Math.abs(value));
+  //       })
+  //     );
+  //   }
+  //   let dps = [];
+  //   for (let index in array) {
+  //     dps.push({
+  //       x: margin + Number(index),
+  //       y: 50 + array[index] * scaleFactor,
+  //     });
+  //   }
 
-    let dps = [];
-    for (let index in array) {
-      dps.push({
-        x: margin + Number(index),
-        y: [50 - array[index] * scaleFactor, 50 + array[index] * scaleFactor],
-      });
-    }
-
-    setDps(dps);
-  };
+  //   setDps(dps);
+  // };
 
   return (
     <div id="">

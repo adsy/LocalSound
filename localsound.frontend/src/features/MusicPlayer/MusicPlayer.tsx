@@ -7,6 +7,7 @@ import {
   handlePauseSong,
   handlePlaySong,
 } from "../../app/redux/actions/playerSlice";
+import WaveForm from "./WaveFrom";
 
 const MusicPlayer = () => {
   const player = useSelector((state: State) => state.player);
@@ -16,13 +17,16 @@ const MusicPlayer = () => {
   const waveformRef = useRef<HTMLAudioElement>(null);
   const seekerRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
+  const [analyzerData, setAnalyzerData] = useState<any>();
 
   useLayoutEffect(() => {
     if (waveformRef.current) {
+      waveformRef!.current!.crossOrigin = "anonymous";
       if (currentTrack !== player.trackId) {
         waveformRef.current.src = player.trackUrl!;
         setCurrentTrack(player.trackId);
         seekerRef!.current!.value = "0";
+        audioAnalyzer();
       }
 
       if (player.playing) {
@@ -32,6 +36,26 @@ const MusicPlayer = () => {
       }
     }
   }, [player]);
+
+  const audioAnalyzer = () => {
+    // create a new AudioContext
+    const audioCtx = new window.AudioContext();
+    // create an analyzer node with a buffer size of 2048
+    const analyzer = audioCtx.createAnalyser();
+    analyzer.fftSize = 2048;
+
+    const bufferLength = analyzer.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    const source = audioCtx.createMediaElementSource(waveformRef!.current!);
+    source.connect(analyzer);
+    source.connect(audioCtx.destination);
+
+    source.addEventListener("onended", () => {
+      source.disconnect();
+    });
+    // set the analyzerData state with the analyzer, bufferLength, and dataArray
+    setAnalyzerData({ analyzer, bufferLength, dataArray });
+  };
 
   const getTotalTime = () => {
     var time = waveformRef!.current!.duration;
@@ -56,35 +80,45 @@ const MusicPlayer = () => {
   };
 
   const updateTime = (event: SyntheticEvent<HTMLAudioElement, Event>) => {
-    var time =
-      waveformRef.current?.currentTime && waveformRef.current.currentTime > 0
-        ? waveformRef.current.currentTime
-        : 0;
+    if (waveformRef.current && seekerRef.current) {
+      var time =
+        waveformRef.current?.currentTime && waveformRef.current.currentTime > 0
+          ? waveformRef.current.currentTime
+          : 0;
 
-    time = Math.trunc(time);
+      seekerRef.current.value = `${
+        (waveformRef.current.currentTime / waveformRef.current.duration) * 10000
+      }`;
 
-    var mins = 0;
-    if (time > 60) {
-      mins = Math.trunc(time / 60);
+      time = Math.trunc(time);
+
+      var mins = 0;
+      if (time > 60) {
+        mins = Math.trunc(time / 60);
+      }
+
+      if (mins > 0) {
+        time = time - mins * 60;
+      } else {
+        mins = 0;
+      }
+
+      var secondsText = time.toString();
+      var minsText = mins.toString();
+
+      if (secondsText.length < 2) {
+        secondsText = "0" + secondsText;
+      }
+      if (minsText.length < 2) {
+        minsText = "0" + minsText;
+      }
+      getTotalTime();
+      setTime(`00:${minsText}:${secondsText}`);
+
+      if (waveformRef.current.currentTime == waveformRef.current.duration) {
+        dispatch(handlePauseSong());
+      }
     }
-
-    if (mins > 0) {
-      time = time - mins * 60;
-    } else {
-      mins = 0;
-    }
-
-    var secondsText = time.toString();
-    var minsText = mins.toString();
-
-    if (secondsText.length < 2) {
-      secondsText = "0" + secondsText;
-    }
-    if (minsText.length < 2) {
-      minsText = "0" + minsText;
-    }
-    getTotalTime();
-    setTime(`00:${minsText}:${secondsText}`);
   };
 
   const updateCurrentTime = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,48 +129,51 @@ const MusicPlayer = () => {
 
   return (
     <div id="music-player" className="fade-in">
-      <Container className="px-3 player-container">
-        <audio
-          id="music"
-          preload="all"
-          ref={waveformRef}
-          onTimeUpdate={(e) => updateTime(e)}
-        ></audio>
-        <div className="pr-3">
-          {!player.playing ? (
-            <Icon
-              className="audio-button"
-              name="play"
-              size="large"
-              color="grey"
-              onClick={() => {
-                dispatch(handlePlaySong());
-              }}
-            />
-          ) : (
-            <Icon
-              className="audio-button"
-              name="pause"
-              size="large"
-              color="grey"
-              onClick={() => {
-                dispatch(handlePauseSong());
-              }}
-            />
-          )}
+      <Container className="px-3 d-flex flex-column align-items-between h-100">
+        <div className="mt-3 player-container mb-2">
+          <audio
+            id="music"
+            preload="all"
+            ref={waveformRef}
+            onTimeUpdate={(e) => updateTime(e)}
+          ></audio>
+          <div className="pr-3">
+            {!player.playing ? (
+              <Icon
+                className="audio-button"
+                name="play"
+                size="large"
+                color="grey"
+                onClick={() => {
+                  dispatch(handlePlaySong());
+                }}
+              />
+            ) : (
+              <Icon
+                className="audio-button"
+                name="pause"
+                size="large"
+                color="grey"
+                onClick={() => {
+                  dispatch(handlePauseSong());
+                }}
+              />
+            )}
+          </div>
+          <h5 className="m-0 pr-3">{time}</h5>
+          <input
+            ref={seekerRef}
+            type="range"
+            className="seek-slider"
+            max="10000"
+            onChange={(e) => {
+              updateCurrentTime(e);
+            }}
+          ></input>
+          {/* <h3 className="m-0">{player.trackName}</h3> */}
+          {time && totalTime ? <h5 className="m-0 pl-3">{totalTime}</h5> : null}
         </div>
-        <h5 className="m-0 pr-3">{time}</h5>
-        <input
-          ref={seekerRef}
-          type="range"
-          className="seek-slider"
-          max="10000"
-          onChange={(e) => {
-            updateCurrentTime(e);
-          }}
-        ></input>
-        {/* <h3 className="m-0">{player.trackName}</h3> */}
-        {time && totalTime ? <h5 className="m-0 pl-3">{totalTime}</h5> : null}
+        {analyzerData && <WaveForm analyzerData={analyzerData} />}
       </Container>
     </div>
   );

@@ -21,7 +21,7 @@ interface Props {
 
 const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
   const [file, setFile] = useState<File | null>(null);
-  const [trackExt, setTrackExt] = useState<string>(null);
+  const [trackExt, setTrackExt] = useState<string | null>(null);
   const [trackImage, setTrackImage] = useState<File | null>(null);
   const [uploadData, setUploadData] = useState<TrackUploadSASModel | null>(
     null
@@ -64,28 +64,28 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
     } as BlockBlobUploadOptions);
   };
 
-  const uploadWaveForm = async () => {
-    var trackUrl = `${uploadData?.accountUrl}/${uploadData?.containerName}/${uploadData?.uploadLocation}.json`;
-    var url = `${trackUrl}?${uploadData?.sasToken}`;
+  // const uploadWaveForm = async () => {
+  //   var trackUrl = `${uploadData?.accountUrl}/${uploadData?.containerName}/${uploadData?.uploadLocation}.json`;
+  //   var url = `${trackUrl}?${uploadData?.sasToken}`;
 
-    const blobClient = new BlobClient(url);
+  //   const blobClient = new BlobClient(url);
 
-    blobClient.getProperties();
+  //   blobClient.getProperties();
 
-    var client = blobClient.getBlockBlobClient();
+  //   var client = blobClient.getBlockBlobClient();
 
-    var dpsString = JSON.stringify({
-      data: dps,
-    });
+  //   var dpsString = JSON.stringify({
+  //     data: dps,
+  //   });
 
-    return await client.upload(dpsString, dpsString.length, {
-      blockSize: 4 * 1024 * 1024,
-      concurrency: 20,
-      onProgress: (ev) => {
-        setWaveformProgress((ev.loadedBytes / file!.size) * 100);
-      },
-    } as BlockBlobUploadOptions);
-  };
+  //   return await client.upload(dpsString, dpsString.length, {
+  //     blockSize: 4 * 1024 * 1024,
+  //     concurrency: 20,
+  //     onProgress: (ev) => {
+  //       setWaveformProgress((ev.loadedBytes / file!.size) * 100);
+  //     },
+  //   } as BlockBlobUploadOptions);
+  // };
 
   const formValuesUntouched = (values: any) => {
     //TODO: add checks
@@ -120,7 +120,7 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
               onSubmit={async (values, { setStatus }) => {
                 try {
                   if (file && trackImage) {
-                    await uploadWaveForm();
+                    // await uploadWaveForm();
                     await uploadBlob();
 
                     var trackImageExt = trackImage.name.split(/[.]+/).pop();
@@ -268,11 +268,11 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
                         </Button>
                       ) : (
                         <ProgressBar>
-                          <ProgressBar
+                          {/* <ProgressBar
                             className="waveform-progress"
                             animated
                             now={waveformProgress}
-                          />
+                          /> */}
                           <ProgressBar
                             className="track-progress"
                             animated

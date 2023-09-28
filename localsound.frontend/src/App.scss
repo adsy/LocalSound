@@ -544,7 +544,7 @@ i.large.icon {
   position: fixed;
   bottom: 0;
   background-color: $richBlack;
-  border-top: 8px solid $navbarColor;
+  border-top: 3px solid $navbarColor;
   height: 50px;
   width: 100%;
   color: $offWhite;
@@ -565,21 +565,10 @@ i.large.icon {
   }
 }
 
-#waveform {
-  .waveform-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    // height: 50px;
-    width: 100%;
-    background: transparent;
+#track {
+  .playbutton-container {
+    left: 40px;
   }
-
-  // #waveform {
-  //   width: 100%;
-  //   height: 90px;
-  // }
 
   .play-button {
     display: flex;
@@ -587,14 +576,14 @@ i.large.icon {
     align-items: center;
     width: 60px;
     height: 60px;
-    background: $richBlack;
+    background: unset;
     border-radius: 50%;
     border: none;
     outline: none;
     cursor: pointer;
     padding-bottom: 3px;
     &:hover {
-      background: #ddd;
+      background: $richBlack;
     }
 
     i.small.icon {
@@ -604,7 +593,6 @@ i.large.icon {
 }
 
 #track-upload {
-  height: 400px;
   width: 100%;
   padding: 10px;
 
@@ -622,6 +610,16 @@ i.large.icon {
 
   .track-progress {
     background-color: $purple !important;
+  }
+}
+
+#waveform-container {
+  width: 100%;
+  height: 80px;
+  position: relative;
+  canvas {
+    width: 100%;
+    height: 80px;
   }
 }
 
@@ -850,6 +848,7 @@ i.large.icon {
   justify-content: center;
   align-content: stretch;
   flex-wrap: wrap;
+  padding-bottom: 80px;
 
   /** CROPPER **/
   #cropper {
