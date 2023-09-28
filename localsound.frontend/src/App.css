@@ -695,6 +695,7 @@ i.large.icon {
   height: 50px;
   width: 100%;
   color: #ececec;
+  z-index: 999;
 }
 #music-player .player-container {
   display: flex;
@@ -719,6 +720,9 @@ i.large.icon {
 
 #track .artist-name {
   color: gray;
+}
+#track .line {
+  border-bottom: 1px solid #232323;
 }
 #track .track-name {
   font-size: 20px;

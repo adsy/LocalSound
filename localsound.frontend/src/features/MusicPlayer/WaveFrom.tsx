@@ -9,7 +9,8 @@ interface Props {
 // Component to render the waveform
 const WaveForm = ({ analyzerData }: Props) => {
   // Ref for the canvas element
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
   const { dataArray, analyzer, bufferLength } = analyzerData;
 
   const animateBars = (
@@ -26,7 +27,7 @@ const WaveForm = ({ analyzerData }: Props) => {
     canvasCtx.fillStyle = "#000";
 
     // Calculate the height of the canvas.
-    const HEIGHT = canvas.height / 10;
+    const HEIGHT = canvas.height / 1;
 
     // Calculate the width of each bar in the waveform based on the canvas width and the buffer length.
     var barWidth = Math.ceil(canvas.width / bufferLength) * 2.5;
@@ -43,12 +44,9 @@ const WaveForm = ({ analyzerData }: Props) => {
       // Generate random RGB values for each bar.
       const maximum = 20;
       const minimum = -20;
-      var r =
-        113 + Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
-      var g =
-        93 + Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
-      var b =
-        242 + Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+      var r = 0 + Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+      var g = 0 + Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+      var b = 0 + Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
 
       // Set the canvas fill style to the random RGB values..
       canvasCtx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
@@ -63,17 +61,20 @@ const WaveForm = ({ analyzerData }: Props) => {
 
   // Function to draw the waveform
   const draw = (dataArray, analyzer, bufferLength) => {
-    const canvas = canvasRef.current;
-    if (!canvas || !analyzer) return;
-    const canvasCtx = canvas.getContext("2d");
+    if (canvasRef.current) {
+      const canvas = canvasRef.current;
+      if (!canvas || !analyzer) return;
+      const canvasCtx = canvas.getContext("2d");
 
-    const animate = () => {
-      requestAnimationFrame(animate);
-      canvas.width = canvas.width;
-      animateBars(analyzer, canvas, canvasCtx, dataArray, bufferLength);
-    };
+      const animate = () => {
+        requestAnimationFrame(animate);
+        canvas.width = canvas.width;
+        canvas.height = 2000;
+        animateBars(analyzer, canvas, canvasCtx, dataArray, bufferLength);
+      };
 
-    animate();
+      animate();
+    }
   };
 
   // Effect to draw the waveform on mount and update
@@ -88,7 +89,9 @@ const WaveForm = ({ analyzerData }: Props) => {
         position: "absolute",
         top: "0",
         left: "0",
-        zIndex: "-10",
+        zIndex: "10",
+        width: "100%",
+        height: "100%",
       }}
       ref={canvasRef}
       width={window.innerWidth}

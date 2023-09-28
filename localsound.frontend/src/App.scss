@@ -564,6 +564,7 @@ i.large.icon {
   height: 50px;
   width: 100%;
   color: $offWhite;
+  z-index: 999;
 
   .player-container {
     display: flex;
@@ -597,6 +598,10 @@ i.large.icon {
 
   .artist-name {
     color: gray;
+  }
+
+  .line {
+    border-bottom: 1px solid $richBlack;
   }
 
   .track-name {

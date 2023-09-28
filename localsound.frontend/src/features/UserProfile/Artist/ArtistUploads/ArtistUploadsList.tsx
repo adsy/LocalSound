@@ -32,7 +32,7 @@ const ArtistUploadsList = ({ userDetails, uploading, setUploading }: Props) => {
   return (
     <>
       {loggedInUser?.memberId == userDetails.memberId ? (
-        <div className="d-flex flex-row justify-content-end align-items-center">
+        <div className="d-flex flex-row justify-content-end align-items-center mb-4">
           {/* <h3 className="inverse mb-0">Uploads</h3> */}
           <Button
             onClick={() => setUploading(!uploading)}

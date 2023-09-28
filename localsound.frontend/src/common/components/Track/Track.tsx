@@ -11,9 +11,14 @@ import {
 import { State } from "../../../app/model/redux/state";
 import { UserModel } from "../../../app/model/dto/user.model";
 import { Image } from "semantic-ui-react";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 // import Waveform from "./Waveform";
 import { BargraphData } from "../../../app/model/dto/bargraph-data-model";
+import {
+  SingletonClass,
+  SingletonFactory,
+} from "../../waveformGenerator/waveformGenerator";
+import WaveForm from "../../../features/MusicPlayer/WaveFrom";
 
 interface Props {
   track: ArtistTrackUploadModel;
@@ -24,18 +29,16 @@ const Track = ({ track, artistDetails }: Props) => {
   const player = useSelector((state: State) => state.player);
   const dispatch = useDispatch();
   const [dps, setDps] = useState<BargraphData[] | null>(null);
+  const [singleton, setSingleton] = useState<SingletonClass>(
+    SingletonFactory.getInstance()
+  );
+  const [analyzerData, setAnalyzerData] = useState();
 
-  // useLayoutEffect(() => {
-  //   (async () => {
-  //     await fetch(track.waveformUrl)
-  //       .then((data) => {
-  //         return data.json();
-  //       })
-  //       .then((json) => {
-  //         setDps(json.data);
-  //       });
-  //   })();
-  // }, []);
+  useEffect(() => {
+    if (player.trackId === track.artistTrackUploadId) {
+      setAnalyzerData(singleton.analyzerData);
+    }
+  }, [player.trackId, player.trackName, player.playing]);
 
   const playSong = () => {
     if (player.playing && player.trackId === track.artistTrackUploadId) {
@@ -57,8 +60,10 @@ const Track = ({ track, artistDetails }: Props) => {
     }
   };
 
+  // console.log(singleton);
+
   return (
-    <div id="track">
+    <div id="track" className="mb-4">
       <div className="d-flex flex-row w-100">
         <Image size="small" src={track.trackImageUrl} className="mr-3" />
 
@@ -88,7 +93,13 @@ const Track = ({ track, artistDetails }: Props) => {
           </div>
 
           <div className="w-100 h-100 d-flex flex-column align-items-center">
-            <div className="line w-100 h-100"></div>
+            <div className="line w-100 h-100 position-relative">
+              {track.artistTrackUploadId === player.trackId && analyzerData && (
+                <div>
+                  <WaveForm analyzerData={analyzerData} />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

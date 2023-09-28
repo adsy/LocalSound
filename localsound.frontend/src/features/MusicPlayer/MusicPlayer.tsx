@@ -8,6 +8,7 @@ import {
   handlePlaySong,
 } from "../../app/redux/actions/playerSlice";
 import WaveForm from "./WaveFrom";
+import { SingletonFactory } from "../../common/waveformGenerator/waveformGenerator";
 
 const MusicPlayer = () => {
   const player = useSelector((state: State) => state.player);
@@ -16,17 +17,23 @@ const MusicPlayer = () => {
   const [currentTrack, setCurrentTrack] = useState<string | null>(null);
   const waveformRef = useRef<HTMLAudioElement>(null);
   const seekerRef = useRef<HTMLInputElement>(null);
+  const [mediaElementSource, setMediaElementSource] =
+    useState<MediaElementAudioSourceNode>();
   const dispatch = useDispatch();
-  const [analyzerData, setAnalyzerData] = useState<any>();
+
+  var singleton = SingletonFactory.getInstance();
 
   useLayoutEffect(() => {
     if (waveformRef.current) {
+      singleton.audioElementRef = waveformRef;
       waveformRef!.current!.crossOrigin = "anonymous";
       if (currentTrack !== player.trackId) {
         waveformRef.current.src = player.trackUrl!;
         setCurrentTrack(player.trackId);
         seekerRef!.current!.value = "0";
-        audioAnalyzer();
+        if (!mediaElementSource) {
+          audioAnalyzer();
+        }
       }
 
       if (player.playing) {
@@ -46,15 +53,17 @@ const MusicPlayer = () => {
 
     const bufferLength = analyzer.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
-    const source = audioCtx.createMediaElementSource(waveformRef!.current!);
-    source.connect(analyzer);
-    source.connect(audioCtx.destination);
 
-    source.addEventListener("onended", () => {
-      source.disconnect();
-    });
+    if (!mediaElementSource) {
+      const source = audioCtx.createMediaElementSource(waveformRef!.current!);
+      source.connect(analyzer);
+      source.connect(audioCtx.destination);
+      setMediaElementSource(source);
+    }
+    // source.disconnect();
     // set the analyzerData state with the analyzer, bufferLength, and dataArray
-    setAnalyzerData({ analyzer, bufferLength, dataArray });
+    // setAnalyzerData({ analyzer, bufferLength, dataArray });
+    singleton.analyzerData = { analyzer, bufferLength, dataArray };
   };
 
   const getTotalTime = () => {
@@ -173,7 +182,6 @@ const MusicPlayer = () => {
           {/* <h3 className="m-0">{player.trackName}</h3> */}
           {time && totalTime ? <h5 className="m-0 pl-3">{totalTime}</h5> : null}
         </div>
-        {analyzerData && <WaveForm analyzerData={analyzerData} />}
       </Container>
     </div>
   );
