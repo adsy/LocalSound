@@ -101,19 +101,18 @@ h3,
 h4,
 h5,
 h6 {
-  color: white;
-  @include inverse-text-shadow;
+  color: black;
 }
 
-h1.inverse,
-h2.inverse,
-h3.inverse,
-h4.inverse,
-h5.inverse,
-h6.inverse {
-  color: $richBlack;
-  @include text-shadow;
-}
+// h1.inverse,
+// h2.inverse,
+// h3.inverse,
+// h4.inverse,
+// h5.inverse,
+// h6.inverse {
+//   color: $richBlack;
+//   @include text-shadow;
+// }
 
 $start: 0;
 $end: 10;
@@ -388,6 +387,7 @@ i.large.icon {
 
   .sidebar-text {
     @include inverse-text-shadow;
+    color: white;
   }
 
   .sidebar-item.active {
@@ -418,6 +418,22 @@ i.large.icon {
 .purple-button:focus {
   background-color: $navbarColor !important;
   border: 1px solid white;
+}
+
+.white-button {
+  @include button-style;
+  background-color: white;
+  border: 1px solid $richBlack;
+  padding: 8px;
+  transition: background-color 0.5s ease;
+}
+
+.white-button:hover,
+.white-button:active,
+.white-button:focus {
+  background-color: $richBlack;
+  border: 1px solid white;
+  color: white;
 }
 
 .black-button {
@@ -554,6 +570,15 @@ i.large.icon {
     flex-direction: row;
     align-items: center;
     height: 100%;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: white !important;
+    }
   }
 
   .audio-button {
@@ -567,27 +592,41 @@ i.large.icon {
 
 #track {
   .playbutton-container {
-    left: 40px;
+    // left: 40px;
+  }
+
+  .artist-name {
+    color: gray;
+  }
+
+  .track-name {
+    font-size: 20px;
+    font-weight: 800;
   }
 
   .play-button {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     background: unset;
     border-radius: 50%;
     border: none;
     outline: none;
     cursor: pointer;
     padding-bottom: 3px;
+    // background-color: $richBlack;
+    transition: border 0.1s ease-in-out !important;
+
     &:hover {
-      background: $richBlack;
+      border: 2px solid $richBlack;
     }
 
-    i.small.icon {
-      margin: 0;
+    i.icon {
+      margin: 0 !important;
+      color: $richBlack !important;
+      margin-left: 3px !important;
     }
   }
 }

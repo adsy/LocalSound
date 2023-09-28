@@ -14,7 +14,8 @@ namespace localsound.backend.Infrastructure.Mapping
                 .ForMember(dest => dest.LastName, source => source.MapFrom(x => x.LastName))
                 .ForMember(dest => dest.PhoneNumber, source => source.MapFrom(x => x.PhoneNumber))
                 .ForMember(dest => dest.CustomerType, source => source.MapFrom(x => x.User.CustomerType))
-                .ForMember(dest => dest.EmailConfirmed, source => source.MapFrom(x => x.User.EmailConfirmed));
+                .ForMember(dest => dest.EmailConfirmed, source => source.MapFrom(x => x.User.EmailConfirmed))
+                .ForMember(dest => dest.MemberId, source => source.MapFrom(x => x.User.MemberId));
 
             CreateMap<Artist, ArtistDto>()
                 .ForMember(dest => dest.Address, source => source.MapFrom(x => x.Address))
@@ -26,7 +27,8 @@ namespace localsound.backend.Infrastructure.Mapping
                 .ForMember(dest => dest.SpotifyUrl, source => source.MapFrom(x => x.SpotifyUrl))
                 .ForMember(dest => dest.CustomerType, source => source.MapFrom(x => x.User.CustomerType))
                 .ForMember(dest => dest.AboutSection, source => source.MapFrom(x => x.AboutSection))
-                .ForMember(dest => dest.EmailConfirmed, source => source.MapFrom(x => x.User.EmailConfirmed));
+                .ForMember(dest => dest.EmailConfirmed, source => source.MapFrom(x => x.User.EmailConfirmed))
+                .ForMember(dest => dest.MemberId, source => source.MapFrom(x => x.User.MemberId));
 
             CreateMap<Genre, GenreDto>()
                 .ForMember(dest => dest.GenreId, source => source.MapFrom(x => x.GenreId))

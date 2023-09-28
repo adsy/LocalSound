@@ -5,9 +5,7 @@ interface Props {
 }
 
 const TrackContainer = ({ children }: Props) => {
-  return (
-    <div className="playbutton-container position-absolute">{children}</div>
-  );
+  return <div className="playbutton-container">{children}</div>;
 };
 
 export default TrackContainer;

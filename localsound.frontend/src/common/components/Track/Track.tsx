@@ -59,12 +59,24 @@ const Track = ({ track, artistDetails }: Props) => {
 
   return (
     <div id="track">
-      <div className="d-flex flex-column">
-        <div className="d-flex flex-row w-100 align-items-center">
-          <div className="d-flex flex-column justify-content-between">
-            <div className="d-flex flex-column">
-              <div>
-                <h3 className="mb-0">{track.trackName}</h3>
+      <div className="d-flex flex-row w-100">
+        <Image size="small" src={track.trackImageUrl} className="mr-3" />
+
+        <div className="d-flex flex-column w-100">
+          <div className="d-flex flex-row justify-content-between">
+            <div className="d-flex flex-row">
+              <TrackContainer>
+                <PlayButton
+                  handlePlay={playSong}
+                  playing={
+                    track.artistTrackUploadId === player.trackId &&
+                    player.playing
+                  }
+                />
+              </TrackContainer>
+              <div className="d-flex flex-column ml-2">
+                <p className="artist-name mb-0">{artistDetails.name}</p>
+                <p className="mb-0 track-name">{track.trackName}</p>
               </div>
             </div>
 
@@ -74,19 +86,11 @@ const Track = ({ track, artistDetails }: Props) => {
               ))}
             </div>
           </div>
-        </div>
-      </div>
-      <div className="d-flex flex-row w-100 align-items-center position-relative">
-        <Image size="small" rounded src={track.trackImageUrl} />
 
-        <TrackContainer>
-          <PlayButton
-            handlePlay={playSong}
-            playing={
-              track.artistTrackUploadId === player.trackId && player.playing
-            }
-          />
-        </TrackContainer>
+          <div className="w-100 h-100 d-flex flex-column align-items-center">
+            <div className="line w-100 h-100"></div>
+          </div>
+        </div>
       </div>
     </div>
   );

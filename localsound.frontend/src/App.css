@@ -18,18 +18,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: white;
-  text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
-}
-
-h1.inverse,
-h2.inverse,
-h3.inverse,
-h4.inverse,
-h5.inverse,
-h6.inverse {
-  color: #232323;
-  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  color: black;
 }
 
 .pl-0 {
@@ -513,6 +502,7 @@ i.large.icon {
 }
 #offcanvasNavbar-expand-false .sidebar-text {
   text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
+  color: white;
 }
 #offcanvasNavbar-expand-false .sidebar-item.active {
   background-color: #6d69fa !important;
@@ -543,6 +533,26 @@ i.large.icon {
 .purple-button:focus {
   background-color: #001514 !important;
   border: 1px solid white;
+}
+
+.white-button {
+  color: #232323;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  transition: border-color 0.5s ease;
+  background-color: white;
+  border: 1px solid #232323;
+  padding: 8px;
+  transition: background-color 0.5s ease;
+}
+
+.white-button:hover,
+.white-button:active,
+.white-button:focus {
+  background-color: #232323;
+  border: 1px solid white;
+  color: white;
 }
 
 .black-button {
@@ -692,6 +702,14 @@ i.large.icon {
   align-items: center;
   height: 100%;
 }
+#music-player .player-container h1,
+#music-player .player-container h2,
+#music-player .player-container h3,
+#music-player .player-container h4,
+#music-player .player-container h5,
+#music-player .player-container h6 {
+  color: white !important;
+}
 #music-player .audio-button {
   cursor: pointer;
 }
@@ -699,27 +717,34 @@ i.large.icon {
   flex-grow: 1;
 }
 
-#track .playbutton-container {
-  left: 40px;
+#track .artist-name {
+  color: gray;
+}
+#track .track-name {
+  font-size: 20px;
+  font-weight: 800;
 }
 #track .play-button {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   background: unset;
   border-radius: 50%;
   border: none;
   outline: none;
   cursor: pointer;
   padding-bottom: 3px;
+  transition: border 0.1s ease-in-out !important;
 }
 #track .play-button:hover {
-  background: #232323;
+  border: 2px solid #232323;
 }
-#track .play-button i.small.icon {
-  margin: 0;
+#track .play-button i.icon {
+  margin: 0 !important;
+  color: #232323 !important;
+  margin-left: 3px !important;
 }
 
 #track-upload {
