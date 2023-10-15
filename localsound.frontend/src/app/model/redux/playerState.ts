@@ -3,5 +3,6 @@ export interface PlayerState {
   playing: boolean;
   trackUrl: string | null;
   trackName: string | null;
+  artistName: string | null;
   artistProfile: string | null;
 }

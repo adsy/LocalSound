@@ -69,7 +69,7 @@ const WaveForm = ({ analyzerData }: Props) => {
       const animate = () => {
         requestAnimationFrame(animate);
         canvas.width = canvas.width;
-        canvas.height = 2000;
+        canvas.height = 100;
         animateBars(analyzer, canvas, canvasCtx, dataArray, bufferLength);
       };
 
@@ -89,7 +89,7 @@ const WaveForm = ({ analyzerData }: Props) => {
         position: "absolute",
         top: "0",
         left: "0",
-        zIndex: "10",
+        zIndex: "1",
         width: "100%",
         height: "100%",
       }}

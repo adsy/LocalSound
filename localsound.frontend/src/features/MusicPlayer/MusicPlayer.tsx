@@ -7,7 +7,7 @@ import {
   handlePauseSong,
   handlePlaySong,
 } from "../../app/redux/actions/playerSlice";
-import WaveForm from "./WaveFrom";
+import WaveForm from "./Waveform";
 import { SingletonFactory } from "../../common/waveformGenerator/waveformGenerator";
 
 const MusicPlayer = () => {
@@ -139,35 +139,59 @@ const MusicPlayer = () => {
   return (
     <div id="music-player" className="fade-in">
       <Container className="px-3 d-flex flex-column align-items-between h-100">
-        <div className="mt-3 player-container mb-2">
+        <div className="mt-2 player-container mb-2">
           <audio
             id="music"
             preload="all"
             ref={waveformRef}
             onTimeUpdate={(e) => updateTime(e)}
           ></audio>
-          <div className="pr-3">
-            {!player.playing ? (
+          <div className="pr-3 d-flex flex-row">
+            <div className="pr-2">
               <Icon
                 className="audio-button"
-                name="play"
+                name="backward"
                 size="large"
                 color="grey"
                 onClick={() => {
-                  dispatch(handlePlaySong());
+                  // dispatch(handlePlaySong());
                 }}
               />
-            ) : (
+            </div>
+            <div>
+              {!player.playing ? (
+                <Icon
+                  className="audio-button m-0"
+                  name="play"
+                  size="large"
+                  color="grey"
+                  onClick={() => {
+                    dispatch(handlePlaySong());
+                  }}
+                />
+              ) : (
+                <Icon
+                  className="audio-button m-0"
+                  name="pause"
+                  size="large"
+                  color="grey"
+                  onClick={() => {
+                    dispatch(handlePauseSong());
+                  }}
+                />
+              )}
+            </div>
+            <div className="pl-2">
               <Icon
                 className="audio-button"
-                name="pause"
+                name="forward"
                 size="large"
                 color="grey"
                 onClick={() => {
-                  dispatch(handlePauseSong());
+                  // dispatch(handlePlaySong());
                 }}
               />
-            )}
+            </div>
           </div>
           <h5 className="m-0 pr-3">{time}</h5>
           <input
@@ -181,6 +205,10 @@ const MusicPlayer = () => {
           ></input>
           {/* <h3 className="m-0">{player.trackName}</h3> */}
           {time && totalTime ? <h5 className="m-0 pl-3">{totalTime}</h5> : null}
+          <div className="d-flex flex-column ml-5">
+            <div className="track-name">{player.trackName}</div>
+            <div className="artist-name">{player.artistName}</div>
+          </div>
         </div>
       </Container>
     </div>

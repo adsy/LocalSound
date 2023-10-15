@@ -692,10 +692,19 @@ i.large.icon {
   bottom: 0;
   background-color: #232323;
   border-top: 3px solid #001514;
-  height: 50px;
+  height: 60px;
   width: 100%;
   color: #ececec;
   z-index: 999;
+  /********** Range Input Styles **********/
+  /*Range Reset*/
+  /* Removes default focus */
+  /***** Chrome, Safari, Opera and Edge Chromium styles *****/
+  /* slider track */
+  /* slider thumb */
+  /******** Firefox styles ********/
+  /* slider track */
+  /* slider thumb */
 }
 #music-player .player-container {
   display: flex;
@@ -713,16 +722,67 @@ i.large.icon {
 }
 #music-player .audio-button {
   cursor: pointer;
+  color: white !important;
 }
 #music-player .seek-slider {
   flex-grow: 1;
+}
+#music-player .artist-name {
+  color: gray;
+}
+#music-player .track-name {
+  font-size: 18px;
+  font-weight: 800;
+}
+#music-player input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 15rem;
+}
+#music-player input[type=range]:focus {
+  outline: none;
+}
+#music-player input[type=range]::-webkit-slider-runnable-track {
+  background-color: #6d69fa;
+  border-radius: 0.5rem;
+  height: 0.1rem;
+}
+#music-player input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  margin-top: -6px; /* Centers thumb on the track */
+  /*custom styles*/
+  background-color: #ececec;
+  border-radius: 200px;
+  height: 1rem;
+  width: 1rem;
+}
+#music-player input[type=range]::-moz-range-track {
+  background-color: #6d69fa;
+  border-radius: 0.5rem;
+  height: 0.1rem;
+}
+#music-player input[type=range]::-moz-range-thumb {
+  border: none; /*Removes extra border that FF applies*/
+  border-radius: 0; /*Removes default border-radius that FF applies*/
+  /*custom styles*/
+  background-color: #ececec;
+  border-radius: 200px;
+  height: 1rem;
+  width: 1rem;
 }
 
 #track .artist-name {
   color: gray;
 }
+#track .track-name {
+  font-size: 20px;
+  font-weight: 800;
+}
 #track .line {
-  border-bottom: 1px solid #232323;
+  border-bottom: 1px solid rgb(219, 219, 219);
 }
 #track .track-name {
   font-size: 20px;

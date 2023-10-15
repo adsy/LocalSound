@@ -18,7 +18,7 @@ import {
   SingletonClass,
   SingletonFactory,
 } from "../../waveformGenerator/waveformGenerator";
-import WaveForm from "../../../features/MusicPlayer/WaveFrom";
+import WaveForm from "../../../features/MusicPlayer/Waveform";
 
 interface Props {
   track: ArtistTrackUploadModel;
@@ -55,6 +55,7 @@ const Track = ({ track, artistDetails }: Props) => {
           trackUrl: track.trackUrl,
           artistProfile: artistDetails.profileUrl,
           trackName: track.trackName,
+          artistName: artistDetails.name,
         })
       );
     }
