@@ -9,6 +9,8 @@
         public string TrackDataLocation { get; set; }
         public string TrackUrl { get; set; }
         public string WaveformUrl { get; set; }
+        public double Duration { get; set; }
+        public DateTime UploadDate { get; set; }
 
         public List<GenreDto> Genres { get; set; }
     }

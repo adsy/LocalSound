@@ -1,7 +1,7 @@
 import { SyntheticEvent, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../app/model/redux/state";
-import { Icon } from "semantic-ui-react";
+import { Icon, Image } from "semantic-ui-react";
 import { Container } from "react-bootstrap";
 import {
   handlePauseSong,
@@ -28,9 +28,12 @@ const MusicPlayer = () => {
       singleton.audioElementRef = waveformRef;
       waveformRef!.current!.crossOrigin = "anonymous";
       if (currentTrack !== player.trackId) {
-        waveformRef.current.src = player.trackUrl!;
+        getTotalTime();
         setCurrentTrack(player.trackId);
+
         seekerRef!.current!.value = "0";
+        waveformRef.current.src = player.trackUrl!;
+
         if (!mediaElementSource) {
           audioAnalyzer();
         }
@@ -60,14 +63,18 @@ const MusicPlayer = () => {
       source.connect(audioCtx.destination);
       setMediaElementSource(source);
     }
+
     // source.disconnect();
     // set the analyzerData state with the analyzer, bufferLength, and dataArray
     // setAnalyzerData({ analyzer, bufferLength, dataArray });
+
     singleton.analyzerData = { analyzer, bufferLength, dataArray };
   };
 
   const getTotalTime = () => {
-    var time = waveformRef!.current!.duration;
+    var time = player.duration
+      ? player.duration
+      : waveformRef!.current!.duration;
     var totalHours = Math.trunc(time / 3600);
     var hoursRemainder = (time % 3600) / 3600;
 
@@ -95,9 +102,14 @@ const MusicPlayer = () => {
           ? waveformRef.current.currentTime
           : 0;
 
-      seekerRef.current.value = `${
-        (waveformRef.current.currentTime / waveformRef.current.duration) * 10000
-      }`;
+      if (waveformRef.current.duration >= 0) {
+        seekerRef.current.value = `${
+          (waveformRef.current.currentTime / waveformRef.current.duration) *
+          10000
+        }`;
+      } else {
+        seekerRef.current.value = "0";
+      }
 
       time = Math.trunc(time);
 
@@ -121,7 +133,6 @@ const MusicPlayer = () => {
       if (minsText.length < 2) {
         minsText = "0" + minsText;
       }
-      getTotalTime();
       setTime(`00:${minsText}:${secondsText}`);
 
       if (waveformRef.current.currentTime == waveformRef.current.duration) {
@@ -205,7 +216,10 @@ const MusicPlayer = () => {
           ></input>
           {/* <h3 className="m-0">{player.trackName}</h3> */}
           {time && totalTime ? <h5 className="m-0 pl-3">{totalTime}</h5> : null}
-          <div className="d-flex flex-column ml-5">
+          <div>
+            <Image size="mini" src={player.trackImage} className="ml-5" />
+          </div>
+          <div className="d-flex flex-column ml-2">
             <div className="track-name">{player.trackName}</div>
             <div className="artist-name">{player.artistName}</div>
           </div>

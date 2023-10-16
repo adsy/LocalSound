@@ -32,7 +32,7 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
   const [selectedGenres, setSelectedGenres] = useState<GenreModel[]>([]);
   const [dps, setDps] = useState<{ [x: string]: any } | null>(null);
   const [trackProgress, setTrackProgress] = useState(0);
-  const [waveformProgress, setWaveformProgress] = useState(0);
+  // const [waveformProgress, setWaveformProgress] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -92,7 +92,21 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
     return false;
   };
 
-  console.log(dps);
+  const getDuration = async (file: File): Promise<number> => {
+    const url = URL.createObjectURL(file);
+
+    return new Promise((resolve) => {
+      const audio = document.createElement("audio");
+      audio.muted = true;
+      const source = document.createElement("source");
+      source.src = url;
+      audio.preload = "metadata";
+      audio.appendChild(source);
+      audio.onloadedmetadata = function () {
+        resolve(audio.duration);
+      };
+    });
+  };
 
   return (
     <div id="track-upload">
@@ -122,6 +136,8 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
                   if (file && trackImage) {
                     // await uploadWaveForm();
                     await uploadBlob();
+
+                    var duration = await getDuration(file);
 
                     var trackImageExt = trackImage.name.split(/[.]+/).pop();
 
@@ -161,6 +177,8 @@ const ArtistUploadForm = ({ userDetails, uploading, setUploading }: Props) => {
                         genre.genreName
                       );
                     });
+
+                    formData.append("duration", `${duration}`);
 
                     await agent.Tracks.uploadTrackSupportingData(
                       userDetails.memberId,

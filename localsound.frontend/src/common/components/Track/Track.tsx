@@ -56,6 +56,8 @@ const Track = ({ track, artistDetails }: Props) => {
           artistProfile: artistDetails.profileUrl,
           trackName: track.trackName,
           artistName: artistDetails.name,
+          trackImage: track.trackImageUrl,
+          duration: track.duration,
         })
       );
     }

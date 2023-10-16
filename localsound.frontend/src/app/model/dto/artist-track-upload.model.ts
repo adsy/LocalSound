@@ -9,4 +9,6 @@ export interface ArtistTrackUploadModel {
   trackDataLocation: string;
   trackUrl: string;
   waveformUrl: string;
+  duration: number;
+  uploadDate: Date;
 }
