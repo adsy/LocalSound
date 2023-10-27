@@ -31,20 +31,6 @@ const ArtistUploadsList = ({ userDetails, uploading, setUploading }: Props) => {
 
   return (
     <>
-      {loggedInUser?.memberId == userDetails.memberId ? (
-        <div className="d-flex flex-row justify-content-end align-items-center mb-4">
-          {/* <h3 className="inverse mb-0">Uploads</h3> */}
-          <Button
-            onClick={() => setUploading(!uploading)}
-            className="white-button d-flex flex-row align-content-center"
-          >
-            <h4 className="m-0">Upload track</h4>
-            <h4 className="mt-0 mb-0 ml-2">
-              <Icon name="upload" className="m-0" />
-            </h4>
-          </Button>
-        </div>
-      ) : null}
       {tracks.map((track, index) => (
         <div key={index}>
           <Track track={track} artistDetails={userDetails} />

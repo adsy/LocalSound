@@ -45,7 +45,7 @@ $purple: #6d69fa;
   color: $richBlack;
   font-size: 16px;
   letter-spacing: 2px;
-  @include text-shadow;
+  // @include text-shadow;
   transition: border-color 0.5s ease;
 }
 
@@ -102,6 +102,10 @@ h4,
 h5,
 h6 {
   color: black;
+}
+
+.btn h4 {
+  color: $offWhite;
 }
 
 // h1.inverse,
@@ -460,7 +464,11 @@ i.large.icon {
 }
 
 .soundcloud-button {
+  h4 {
+    color: $richBlack;
+  }
   @include button-style;
+  @include text-shadow;
   transition: background-color 0.5s ease;
   background-color: #ff6100;
   border: black 1px solid;
@@ -474,6 +482,10 @@ i.large.icon {
 }
 
 .spotify-button {
+  h4 {
+    color: $richBlack;
+  }
+  @include text-shadow;
   @include button-style;
   transition: background-color 0.5s ease;
   background-color: #1ed75d;

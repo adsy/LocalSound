@@ -25,6 +25,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
   const [imgsLoaded, setImgsLoaded] = useState(true);
   const [coverImage, setCoverImage] = useState<AccountImageModel | null>(null);
   const [key, setKey] = useState<string | null>("artistDetails");
+  const [uploading, setUploading] = useState(false);
   const dispatch = useDispatch();
 
   const loadImage = (image: AccountImageModel) => {
@@ -70,6 +71,11 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
         size: "large",
       })
     );
+  };
+
+  const uploadTrack = () => {
+    setKey("uploads");
+    setUploading(true);
   };
 
   const bannerStyle = {
@@ -123,13 +129,22 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                             />
                           </div>
                         </div>
-                        <a
-                          onClick={() => editArtistProfile()}
-                          target="_blank"
-                          className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3"
-                        >
-                          <h4>Edit profile</h4>
-                        </a>
+                        <div className="d-flex flex-row">
+                          <a
+                            onClick={() => editArtistProfile()}
+                            target="_blank"
+                            className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3 mr-1"
+                          >
+                            <h4>Edit profile</h4>
+                          </a>
+                          <a
+                            onClick={() => uploadTrack()}
+                            target="_blank"
+                            className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3"
+                          >
+                            <h4>Upload track</h4>
+                          </a>
+                        </div>
                       </>
                     ) : null}
                   </div>
@@ -155,7 +170,12 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
             <Tabs
               id="controlled-tab-example"
               activeKey={key!}
-              onSelect={(k) => setKey(k)}
+              onSelect={(k) => {
+                if (uploading) {
+                  setUploading(!uploading);
+                }
+                setKey(k);
+              }}
               className="mb-4"
             >
               <Tab eventKey="artistDetails" title="Artist details" className="">
@@ -165,7 +185,11 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                 />
               </Tab>
               <Tab eventKey="uploads" title="Uploads" className="">
-                <ArtistUploads userDetails={userDetails} />
+                <ArtistUploads
+                  userDetails={userDetails}
+                  setUploading={setUploading}
+                  uploading={uploading}
+                />
               </Tab>
             </Tabs>
           </div>

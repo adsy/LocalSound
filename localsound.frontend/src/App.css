@@ -21,6 +21,10 @@ h6 {
   color: black;
 }
 
+.btn h4 {
+  color: #ececec;
+}
+
 .pl-0 {
   padding-left: 0rem;
 }
@@ -521,7 +525,6 @@ i.large.icon {
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: border-color 0.5s ease;
   background-color: #6d69fa !important;
   border: 1px solid black;
@@ -539,7 +542,6 @@ i.large.icon {
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: border-color 0.5s ease;
   background-color: white;
   border: 1px solid #232323;
@@ -559,7 +561,6 @@ i.large.icon {
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: border-color 0.5s ease;
   transition: background-color 0.5s ease;
   background-color: #232323;
@@ -586,11 +587,14 @@ i.large.icon {
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: border-color 0.5s ease;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: background-color 0.5s ease;
   background-color: #ff6100;
   border: black 1px solid;
+}
+.soundcloud-button h4 {
+  color: #232323;
 }
 
 .soundcloud-button:hover,
@@ -601,14 +605,17 @@ i.large.icon {
 }
 
 .spotify-button {
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: border-color 0.5s ease;
   transition: background-color 0.5s ease;
   background-color: #1ed75d;
   border: black 1px solid;
+}
+.spotify-button h4 {
+  color: #232323;
 }
 
 .spotify-button:hover,
@@ -622,7 +629,6 @@ i.large.icon {
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   transition: border-color 0.5s ease;
   transition: background-color 0.5s ease;
   background-color: #ff0000;

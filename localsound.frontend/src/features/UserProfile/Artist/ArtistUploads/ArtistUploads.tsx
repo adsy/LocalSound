@@ -1,15 +1,14 @@
-import { useState } from "react";
 import { UserModel } from "../../../../app/model/dto/user.model";
 import ArtistUploadsList from "./ArtistUploadsList";
 import ArtistUploadForm from "./ArtistUploadTrackForm";
 
 interface Props {
   userDetails: UserModel;
+  uploading: boolean;
+  setUploading: (uploading: boolean) => void;
 }
 
-const ArtistUploads = ({ userDetails }: Props) => {
-  const [uploading, setUploading] = useState(false);
-
+const ArtistUploads = ({ userDetails, uploading, setUploading }: Props) => {
   return (
     <div>
       {!uploading ? (
