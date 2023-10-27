@@ -1,25 +1,31 @@
 // WaveForm.jsx
 
 import { useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { State } from "../../app/model/redux/state";
 
 interface Props {
   analyzerData: any;
+  trackId: string;
+  playing: boolean;
 }
 
 // Component to render the waveform
-const WaveForm = ({ analyzerData }: Props) => {
+const WaveForm = ({ analyzerData, trackId, playing }: Props) => {
   // Ref for the canvas element
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const player = useSelector((state: State) => state.player);
 
-  const { dataArray, analyzer, bufferLength } = analyzerData;
+  const { dataArray, analyzer, bufferLength, trackid } = analyzerData;
 
   const animateBars = (
-    analyser,
-    canvas,
-    canvasCtx,
-    dataArray,
-    bufferLength
+    analyser: any,
+    canvas: any,
+    canvasCtx: any,
+    dataArray: any,
+    bufferLength: any
   ) => {
+    console.log(trackId);
     // Analyze the audio data using the Web Audio API's `getByteFrequencyData` method.
     analyser.getByteFrequencyData(dataArray);
 
@@ -60,7 +66,7 @@ const WaveForm = ({ analyzerData }: Props) => {
   };
 
   // Function to draw the waveform
-  const draw = (dataArray, analyzer, bufferLength) => {
+  const draw = (dataArray: any, analyzer: any, bufferLength: any) => {
     if (canvasRef.current) {
       const canvas = canvasRef.current;
       if (!canvas || !analyzer) return;
@@ -70,17 +76,29 @@ const WaveForm = ({ analyzerData }: Props) => {
         requestAnimationFrame(animate);
         canvas.width = canvas.width;
         canvas.height = 100;
-        animateBars(analyzer, canvas, canvasCtx, dataArray, bufferLength);
+
+        var id = trackid;
+        if (player.playing) {
+          animateBars(analyzer, canvas, canvasCtx, dataArray, bufferLength);
+        }
       };
 
       animate();
     }
   };
 
+  useEffect(() => {
+    console.log(playing);
+  }, [playing]);
+
   // Effect to draw the waveform on mount and update
   useEffect(() => {
-    draw(dataArray, analyzer, bufferLength);
-  }, [dataArray, analyzer, bufferLength]);
+    if (playing) {
+      draw(dataArray, analyzer, bufferLength);
+    } else {
+      console.log("here");
+    }
+  }, [dataArray, analyzer, bufferLength, playing]);
 
   // Return the canvas element
   return (

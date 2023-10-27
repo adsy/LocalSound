@@ -7,7 +7,6 @@ import {
   handlePauseSong,
   handlePlaySong,
 } from "../../app/redux/actions/playerSlice";
-import WaveForm from "./Waveform";
 import { SingletonFactory } from "../../common/waveformGenerator/waveformGenerator";
 
 const MusicPlayer = () => {
@@ -19,6 +18,9 @@ const MusicPlayer = () => {
   const seekerRef = useRef<HTMLInputElement>(null);
   const [mediaElementSource, setMediaElementSource] =
     useState<MediaElementAudioSourceNode>();
+  const [audioContext, setAudioContext] = useState<AudioContext>(
+    new window.AudioContext()
+  );
   const dispatch = useDispatch();
 
   var singleton = SingletonFactory.getInstance();
@@ -27,48 +29,61 @@ const MusicPlayer = () => {
     if (waveformRef.current) {
       singleton.audioElementRef = waveformRef;
       waveformRef!.current!.crossOrigin = "anonymous";
+
       if (currentTrack !== player.trackId) {
+        // disconnect the source if it exists when swapping tracks
+        mediaElementSource?.disconnect();
+
+        // get track data
         getTotalTime();
         setCurrentTrack(player.trackId);
 
+        // set ref values
         seekerRef!.current!.value = "0";
         waveformRef.current.src = player.trackUrl!;
 
-        if (!mediaElementSource) {
-          audioAnalyzer();
-        }
-      }
+        // create audio analyzer
+        audioAnalyzer();
 
-      if (player.playing) {
+        // play the song
+        setTimeout(() => {
+          waveformRef!.current!.play();
+          dispatch(handlePlaySong());
+        }, 200);
+      } else if (player.playing) {
+        // create audio analyzer
+        audioAnalyzer();
+
         waveformRef.current.play();
-      } else {
+        dispatch(handlePlaySong());
+      } else if (!player.playing) {
         waveformRef.current.pause();
+        // mediaElementSource?.disconnect();
       }
     }
   }, [player]);
 
   const audioAnalyzer = () => {
-    // create a new AudioContext
-    const audioCtx = new window.AudioContext();
     // create an analyzer node with a buffer size of 2048
-    const analyzer = audioCtx.createAnalyser();
+    var analyzer = audioContext.createAnalyser();
     analyzer.fftSize = 2048;
 
     const bufferLength = analyzer.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
     if (!mediaElementSource) {
-      const source = audioCtx.createMediaElementSource(waveformRef!.current!);
+      const source = audioContext.createMediaElementSource(
+        waveformRef!.current!
+      );
       source.connect(analyzer);
-      source.connect(audioCtx.destination);
+      source.connect(audioContext.destination);
       setMediaElementSource(source);
+    } else {
+      mediaElementSource!.connect(analyzer);
+      mediaElementSource!.connect(audioContext.destination);
     }
-
-    // source.disconnect();
-    // set the analyzerData state with the analyzer, bufferLength, and dataArray
-    // setAnalyzerData({ analyzer, bufferLength, dataArray });
-
-    singleton.analyzerData = { analyzer, bufferLength, dataArray };
+    var trackid = player.trackId;
+    singleton.analyzerData = { analyzer, bufferLength, dataArray, trackid };
   };
 
   const getTotalTime = () => {

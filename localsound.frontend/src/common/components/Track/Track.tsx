@@ -12,7 +12,6 @@ import { State } from "../../../app/model/redux/state";
 import { UserModel } from "../../../app/model/dto/user.model";
 import { Image } from "semantic-ui-react";
 import { useEffect, useState } from "react";
-// import Waveform from "./Waveform";
 import { BargraphData } from "../../../app/model/dto/bargraph-data-model";
 import {
   SingletonClass,
@@ -32,11 +31,17 @@ const Track = ({ track, artistDetails }: Props) => {
   const [singleton, setSingleton] = useState<SingletonClass>(
     SingletonFactory.getInstance()
   );
-  const [analyzerData, setAnalyzerData] = useState();
+  const [analyzerData, setAnalyzerData] = useState<any>(null);
 
   useEffect(() => {
-    if (player.trackId === track.artistTrackUploadId) {
-      setAnalyzerData(singleton.analyzerData);
+    if (player.trackId === track.artistTrackUploadId && player.playing) {
+      if (!analyzerData) {
+        setAnalyzerData(singleton.analyzerData);
+      }
+    } else {
+      if (analyzerData !== null) {
+        setAnalyzerData(null);
+      }
     }
   }, [player.trackId, player.trackName, player.playing]);
 
@@ -97,11 +102,16 @@ const Track = ({ track, artistDetails }: Props) => {
 
           <div className="w-100 h-100 d-flex flex-column align-items-center">
             <div className="line w-100 h-100 position-relative">
-              {track.artistTrackUploadId === player.trackId && analyzerData && (
+              {track.artistTrackUploadId === player.trackId && analyzerData ? (
                 <div>
-                  <WaveForm analyzerData={analyzerData} />
+                  LAHLAHLAHLAHLAHLAHLAHLAHLAHLAH
+                  <WaveForm
+                    trackId={track.artistTrackUploadId}
+                    analyzerData={analyzerData}
+                    playing={player.playing}
+                  />
                 </div>
-              )}
+              ) : null}
             </div>
           </div>
         </div>
