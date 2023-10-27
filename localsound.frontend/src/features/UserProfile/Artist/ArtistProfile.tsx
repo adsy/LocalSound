@@ -11,6 +11,7 @@ import EditCoverPhoto from "./Edit/EditCoverPhoto";
 import ArtistDetails from "./ArtistDetails";
 import ArtistBannerSummary from "./ArtistBannerSummary";
 import ArtistUploads from "./ArtistUploads/ArtistUploads";
+import { Icon } from "semantic-ui-react";
 
 interface Props {
   userDetails: UserModel;
@@ -110,7 +111,9 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                               htmlFor="exampleInput"
                               className="btn black-button fade-in-out"
                             >
-                              <h4>Update cover photo</h4>
+                              <h4>
+                                <Icon name="photo" className="m-0" />
+                              </h4>
                             </label>
                             <input
                               type="file"
@@ -135,14 +138,18 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                             target="_blank"
                             className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3 mr-1"
                           >
-                            <h4>Edit profile</h4>
+                            <h4>
+                              <Icon name="pencil" className="m-0" />
+                            </h4>
                           </a>
                           <a
                             onClick={() => uploadTrack()}
                             target="_blank"
                             className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3"
                           >
-                            <h4>Upload track</h4>
+                            <h4>
+                              <Icon name="upload" className="m-0" />
+                            </h4>
                           </a>
                         </div>
                       </>
