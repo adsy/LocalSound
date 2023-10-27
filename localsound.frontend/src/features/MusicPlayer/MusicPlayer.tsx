@@ -46,19 +46,16 @@ const MusicPlayer = () => {
         audioAnalyzer();
 
         // play the song
-        setTimeout(() => {
-          waveformRef!.current!.play();
-          dispatch(handlePlaySong());
-        }, 200);
+        waveformRef!.current!.play();
+        dispatch(handlePlaySong());
       } else if (player.playing) {
         // create audio analyzer
         audioAnalyzer();
-
         waveformRef.current.play();
         dispatch(handlePlaySong());
       } else if (!player.playing) {
         waveformRef.current.pause();
-        // mediaElementSource?.disconnect();
+        mediaElementSource?.disconnect();
       }
     }
   }, [player]);

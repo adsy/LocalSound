@@ -12,7 +12,6 @@ import { State } from "../../../app/model/redux/state";
 import { UserModel } from "../../../app/model/dto/user.model";
 import { Image } from "semantic-ui-react";
 import { useEffect, useState } from "react";
-import { BargraphData } from "../../../app/model/dto/bargraph-data-model";
 import {
   SingletonClass,
   SingletonFactory,
@@ -27,7 +26,6 @@ interface Props {
 const Track = ({ track, artistDetails }: Props) => {
   const player = useSelector((state: State) => state.player);
   const dispatch = useDispatch();
-  const [dps, setDps] = useState<BargraphData[] | null>(null);
   const [singleton, setSingleton] = useState<SingletonClass>(
     SingletonFactory.getInstance()
   );
@@ -68,13 +66,10 @@ const Track = ({ track, artistDetails }: Props) => {
     }
   };
 
-  // console.log(singleton);
-
   return (
     <div id="track" className="mb-4">
       <div className="d-flex flex-row w-100">
         <Image size="small" src={track.trackImageUrl} className="mr-3" />
-
         <div className="d-flex flex-column w-100">
           <div className="d-flex flex-row justify-content-between">
             <div className="d-flex flex-row">
@@ -104,11 +99,9 @@ const Track = ({ track, artistDetails }: Props) => {
             <div className="line w-100 h-100 position-relative">
               {track.artistTrackUploadId === player.trackId && analyzerData ? (
                 <div>
-                  LAHLAHLAHLAHLAHLAHLAHLAHLAHLAH
                   <WaveForm
                     trackId={track.artistTrackUploadId}
                     analyzerData={analyzerData}
-                    playing={player.playing}
                   />
                 </div>
               ) : null}

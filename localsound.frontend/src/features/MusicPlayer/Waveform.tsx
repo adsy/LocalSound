@@ -7,16 +7,15 @@ import { State } from "../../app/model/redux/state";
 interface Props {
   analyzerData: any;
   trackId: string;
-  playing: boolean;
 }
 
 // Component to render the waveform
-const WaveForm = ({ analyzerData, trackId, playing }: Props) => {
+const WaveForm = ({ analyzerData, trackId }: Props) => {
   // Ref for the canvas element
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const player = useSelector((state: State) => state.player);
 
-  const { dataArray, analyzer, bufferLength, trackid } = analyzerData;
+  const { dataArray, analyzer, bufferLength } = analyzerData;
 
   const animateBars = (
     analyser: any,
@@ -25,7 +24,6 @@ const WaveForm = ({ analyzerData, trackId, playing }: Props) => {
     dataArray: any,
     bufferLength: any
   ) => {
-    console.log(trackId);
     // Analyze the audio data using the Web Audio API's `getByteFrequencyData` method.
     analyser.getByteFrequencyData(dataArray);
 
@@ -65,40 +63,30 @@ const WaveForm = ({ analyzerData, trackId, playing }: Props) => {
     }
   };
 
-  // Function to draw the waveform
-  const draw = (dataArray: any, analyzer: any, bufferLength: any) => {
+  const animate = () => {
     if (canvasRef.current) {
       const canvas = canvasRef.current;
       if (!canvas || !analyzer) return;
+
+      requestAnimationFrame(animate);
+      canvas.width = canvas.width;
+      canvas.height = 100;
       const canvasCtx = canvas.getContext("2d");
 
-      const animate = () => {
-        requestAnimationFrame(animate);
-        canvas.width = canvas.width;
-        canvas.height = 100;
-
-        var id = trackid;
-        if (player.playing) {
-          animateBars(analyzer, canvas, canvasCtx, dataArray, bufferLength);
-        }
-      };
-
-      animate();
+      if (player.playing) {
+        animateBars(analyzer, canvas, canvasCtx, dataArray, bufferLength);
+      }
     }
   };
 
-  useEffect(() => {
-    console.log(playing);
-  }, [playing]);
-
   // Effect to draw the waveform on mount and update
   useEffect(() => {
-    if (playing) {
-      draw(dataArray, analyzer, bufferLength);
-    } else {
-      console.log("here");
-    }
-  }, [dataArray, analyzer, bufferLength, playing]);
+    animate();
+
+    return () => {
+      if (canvasRef.current) canvasRef.current.remove();
+    };
+  }, [dataArray, analyzer, bufferLength]);
 
   // Return the canvas element
   return (
