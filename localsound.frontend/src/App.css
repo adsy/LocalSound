@@ -456,7 +456,8 @@ i.large.icon {
 }
 #navbar .navbar-title {
   font-size: 32px !important;
-  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
+  color: #ececec;
   letter-spacing: 3.5px;
 }
 #navbar .navbar-toggler-icon {
@@ -819,7 +820,25 @@ i.large.icon {
 
 #track-upload {
   width: 100%;
-  padding: 10px;
+}
+#track-upload .header-title {
+  border-bottom: 4px solid #232323;
+  color: #001514 !important;
+  font-size: 18px !important;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding-bottom: 5px;
+  font-family: "Barlow", serif !important;
+  background: unset;
+  border-left: unset;
+  border-right: unset;
+  border-top: unset;
+  transition: border-bottom 0.2s ease-in-out !important;
+  margin-right: 20px;
+  padding-left: 0;
+  padding-right: 14px;
+  padding-top: 7px;
 }
 #track-upload .dropzone {
   height: 300px;
@@ -846,37 +865,37 @@ i.large.icon {
 }
 
 /** AUTH MODAL **/
-#auth-modal,
+#modal-popup,
 #edit-artist,
 #artist-profile {
   width: 100%;
 }
-#auth-modal .photo-icon,
+#modal-popup .photo-icon,
 #edit-artist .photo-icon,
 #artist-profile .photo-icon {
   padding-left: 2px;
 }
-#auth-modal .profile-photo,
+#modal-popup .profile-photo,
 #edit-artist .profile-photo,
 #artist-profile .profile-photo {
   border: 2px solid #232323;
 }
-#auth-modal .profile-photo.summary-photo,
+#modal-popup .profile-photo.summary-photo,
 #edit-artist .profile-photo.summary-photo,
 #artist-profile .profile-photo.summary-photo {
   width: 200px !important;
 }
-#auth-modal .profile-photo.banner-photo,
+#modal-popup .profile-photo.banner-photo,
 #edit-artist .profile-photo.banner-photo,
 #artist-profile .profile-photo.banner-photo {
   display: none;
 }
-#auth-modal .header,
+#modal-popup .header,
 #edit-artist .header,
 #artist-profile .header {
   padding: 10px;
 }
-#auth-modal .header-logo,
+#modal-popup .header-logo,
 #edit-artist .header-logo,
 #artist-profile .header-logo {
   background-image: url("./assets/logo-black.png");
@@ -887,7 +906,7 @@ i.large.icon {
   width: 40px;
   height: 40px;
 }
-#auth-modal .header-title,
+#modal-popup .header-title,
 #edit-artist .header-title,
 #artist-profile .header-title {
   border-bottom: 4px solid #232323;
@@ -905,13 +924,15 @@ i.large.icon {
   transition: border-bottom 0.2s ease-in-out !important;
   margin-right: 20px;
   padding-left: 0;
+  padding-right: 14px;
+  padding-top: 7px;
 }
-#auth-modal .nav-tabs,
+#modal-popup .nav-tabs,
 #edit-artist .nav-tabs,
 #artist-profile .nav-tabs {
   border-bottom: unset;
 }
-#auth-modal .nav-link,
+#modal-popup .nav-link,
 #edit-artist .nav-link,
 #artist-profile .nav-link {
   border-bottom: 4px solid #232323;
@@ -929,19 +950,21 @@ i.large.icon {
   transition: border-bottom 0.2s ease-in-out !important;
   margin-right: 20px;
   padding-left: 0;
+  padding-right: 14px;
+  padding-top: 7px;
   border-bottom: 4px solid rgb(199, 199, 199);
 }
-#auth-modal .nav-link:hover,
+#modal-popup .nav-link:hover,
 #edit-artist .nav-link:hover,
 #artist-profile .nav-link:hover {
   border-bottom: 4px solid #6d69fa;
 }
-#auth-modal .nav-link.active,
+#modal-popup .nav-link.active,
 #edit-artist .nav-link.active,
 #artist-profile .nav-link.active {
   border-bottom: 4px solid #232323;
 }
-#auth-modal #search-label-component .box,
+#modal-popup #search-label-component .box,
 #edit-artist #search-label-component .box,
 #artist-profile #search-label-component .box {
   margin: 0.28571429rem 0 0 0;
@@ -955,12 +978,12 @@ i.large.icon {
   border-radius: 0.28571429rem;
   box-shadow: 0 0 0 0 transparent inset;
 }
-#auth-modal #search-label-component .box .container,
+#modal-popup #search-label-component .box .container,
 #edit-artist #search-label-component .box .container,
 #artist-profile #search-label-component .box .container {
   padding: 0.67857143em 0.5em;
 }
-#auth-modal #search-label-component .box .input,
+#modal-popup #search-label-component .box .input,
 #edit-artist #search-label-component .box .input,
 #artist-profile #search-label-component .box .input {
   border-radius: 0;
@@ -969,7 +992,7 @@ i.large.icon {
   border-top: 1px solid #ececec;
   border-radius: 0px 0px 0.28571429rem 0.28571429rem;
 }
-#auth-modal #search-label-component .dropdown,
+#modal-popup #search-label-component .dropdown,
 #edit-artist #search-label-component .dropdown,
 #artist-profile #search-label-component .dropdown {
   border-radius: 2px;
@@ -980,12 +1003,12 @@ i.large.icon {
   max-width: 300px;
   background: white;
 }
-#auth-modal #search-label-component .dropdown .dropdown-option:first-of-type,
+#modal-popup #search-label-component .dropdown .dropdown-option:first-of-type,
 #edit-artist #search-label-component .dropdown .dropdown-option:first-of-type,
 #artist-profile #search-label-component .dropdown .dropdown-option:first-of-type {
   border-top: 1px solid #232323;
 }
-#auth-modal #search-label-component .dropdown .dropdown-option,
+#modal-popup #search-label-component .dropdown .dropdown-option,
 #edit-artist #search-label-component .dropdown .dropdown-option,
 #artist-profile #search-label-component .dropdown .dropdown-option {
   border-bottom: 1px solid #232323;
@@ -996,7 +1019,7 @@ i.large.icon {
   align-self: center;
   padding: 8px;
 }
-#auth-modal #search-label-component .dropdown .dropdown-option:hover,
+#modal-popup #search-label-component .dropdown .dropdown-option:hover,
 #edit-artist #search-label-component .dropdown .dropdown-option:hover,
 #artist-profile #search-label-component .dropdown .dropdown-option:hover {
   font-size: 14px;

@@ -48,7 +48,7 @@ const ConfirmEmailPopUp = () => {
   };
 
   return (
-    <div id="auth-modal">
+    <div id="modal-popup">
       <div className="navbar-logo d-flex flex-column justify-content-center align-content-center">
         <div className="d-flex justify-content-center pb-2"></div>
         <div className="d-flex mb-4 mt-2">

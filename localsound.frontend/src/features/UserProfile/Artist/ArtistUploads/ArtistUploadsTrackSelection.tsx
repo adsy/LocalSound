@@ -12,7 +12,6 @@ const ArtistUploadsTrackSelection = ({ setFile, setTrackExt }: Props) => {
     if (acceptedFile[0]) {
       var trackExt = acceptedFile[0].name.split(/[.]+/).pop();
       setTrackExt(trackExt!);
-      // await generateWaveForm(acceptedFile[0]);
       setFile(acceptedFile[0]);
     }
   }, []);
@@ -23,11 +22,11 @@ const ArtistUploadsTrackSelection = ({ setFile, setTrackExt }: Props) => {
   });
 
   return (
-    <div id="">
-      <h5 className="inverse">
+    <div>
+      <p className="mb-2">
         Showcase your skills! Get started by clicking the zone below or dragging
         your track into it.
-      </h5>
+      </p>
 
       <div {...getRootProps()}>
         <input {...getInputProps()} />

@@ -81,6 +81,8 @@ $purple: #6d69fa;
   transition: border-bottom 0.2s ease-in-out !important;
   margin-right: 20px;
   padding-left: 0;
+  padding-right: 14px;
+  padding-top: 7px;
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Barlow");
@@ -336,7 +338,8 @@ i.large.icon {
 
   .navbar-title {
     font-size: 32px !important;
-    @include text-shadow;
+    @include inverse-text-shadow;
+    color: $offWhite;
     letter-spacing: 3.5px;
   }
 
@@ -720,8 +723,11 @@ i.large.icon {
 }
 
 #track-upload {
+  .header-title {
+    @include header-style;
+  }
+
   width: 100%;
-  padding: 10px;
 
   .dropzone {
     height: 300px;
@@ -751,7 +757,7 @@ i.large.icon {
 }
 
 /** AUTH MODAL **/
-#auth-modal,
+#modal-popup,
 #edit-artist,
 #artist-profile {
   width: 100%;

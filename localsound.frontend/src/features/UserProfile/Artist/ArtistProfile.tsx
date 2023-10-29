@@ -10,9 +10,9 @@ import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import EditCoverPhoto from "./Edit/EditCoverPhoto";
 import ArtistDetails from "./ArtistDetails";
 import ArtistBannerSummary from "./ArtistBannerSummary";
-import ArtistUploads from "./ArtistUploads/ArtistUploads";
 import { Icon } from "semantic-ui-react";
 import ArtistUploadForm from "./ArtistUploads/ArtistUploadTrackForm";
+import ArtistUploadsList from "./ArtistUploads/ArtistUploadsList";
 
 interface Props {
   userDetails: UserModel;
@@ -200,7 +200,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                 />
               </Tab>
               <Tab eventKey="uploads" title="Uploads" className="">
-                <ArtistUploads userDetails={userDetails} />
+                <ArtistUploadsList userDetails={userDetails} />
               </Tab>
             </Tabs>
           </div>
