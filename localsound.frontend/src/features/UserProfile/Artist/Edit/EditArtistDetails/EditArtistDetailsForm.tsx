@@ -6,11 +6,12 @@ import { Image } from "semantic-ui-react";
 import { AccountImageTypes } from "../../../../../app/model/enums/accountImageTypes";
 import userImg from "../../../../../assets/icons/user.svg";
 import { useState } from "react";
-import CircleCropper from "../../../../../common/components/Cropper/CircleCropper";
 import agent from "../../../../../api/agent";
 import { useDispatch, useSelector } from "react-redux";
 import { handleUpdateUserProfilePhoto } from "../../../../../app/redux/actions/userSlice";
 import { State } from "../../../../../app/model/redux/state";
+import { CropTypes } from "../../../../../app/model/enums/cropTypes";
+import ImageCropper from "../../../../../common/components/Cropper/ImageCropper";
 
 interface Props {
   disabled?: boolean;
@@ -206,10 +207,11 @@ const EditArtistDetailsForm = ({
                 />
               </>
             ) : file ? (
-              <CircleCropper
+              <ImageCropper
                 file={file}
                 onFileUpload={onFileUpload}
                 cancelCrop={cancelCrop}
+                cropType={CropTypes.Circle}
               />
             ) : null}
           </div>

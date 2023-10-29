@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../../app/model/redux/state";
 import { AccountImageTypes } from "../../../../app/model/enums/accountImageTypes";
 import { handleUpdateUserCoverPhoto } from "../../../../app/redux/actions/userSlice";
+import { CropTypes } from "../../../../app/model/enums/cropTypes";
 
 interface Props {
   file: File;
@@ -61,6 +62,7 @@ const EditCoverPhoto = ({
         file={file!}
         onFileUpload={onFileUpload}
         cancelCrop={cancelCrop}
+        cropType={CropTypes.Flexible}
       />
     </>
   );

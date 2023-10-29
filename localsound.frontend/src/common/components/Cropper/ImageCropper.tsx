@@ -1,14 +1,16 @@
 import React, { useState, createRef } from "react";
 import Cropper, { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
+import { CropTypes } from "../../../app/model/enums/cropTypes";
 
 interface Props {
   file: File;
   onFileUpload: (file: Blob) => void;
   cancelCrop: () => void;
+  cropType: CropTypes;
 }
 
-const ImageCropper = ({ file, onFileUpload, cancelCrop }: Props) => {
+const ImageCropper = ({ file, onFileUpload, cancelCrop, cropType }: Props) => {
   const cropperRef = createRef<ReactCropperElement>();
 
   const getCropData = async () => {
@@ -28,24 +30,79 @@ const ImageCropper = ({ file, onFileUpload, cancelCrop }: Props) => {
 
   return (
     <div id="cropper">
-      <div style={{ width: "100%", position: "relative" }}>
-        <Cropper
-          ref={cropperRef}
-          style={{ height: "30rem", width: "100%", opacity: ".7" }}
-          zoomTo={0.5}
-          initialAspectRatio={659 / 336}
-          preview=".img-preview"
-          src={URL.createObjectURL(file)}
-          viewMode={1}
-          minCropBoxHeight={10}
-          minCropBoxWidth={10}
-          background={false}
-          responsive={true}
-          autoCropArea={1}
-          checkOrientation={false}
-          guides={true}
-        />
-        <div className="crop-action-row d-flex flex-row">
+      <div
+        style={
+          cropType === CropTypes.Circle
+            ? {
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }
+            : cropType === CropTypes.Flexible
+            ? { width: "100%", position: "relative" }
+            : { width: "100%", position: "relative" }
+        }
+      >
+        {cropType === CropTypes.Flexible ? (
+          <Cropper
+            ref={cropperRef}
+            style={{ height: "30rem", width: "100%", opacity: ".7" }}
+            zoomTo={0.5}
+            initialAspectRatio={659 / 336}
+            preview=".img-preview"
+            src={URL.createObjectURL(file)}
+            viewMode={1}
+            minCropBoxHeight={10}
+            minCropBoxWidth={10}
+            background={false}
+            responsive={true}
+            autoCropArea={1}
+            checkOrientation={false}
+            guides={true}
+          />
+        ) : cropType === CropTypes.Circle ? (
+          <Cropper
+            ref={cropperRef}
+            style={{
+              height: "315px",
+              width: "315px",
+              minHeight: "315px",
+              minWidth: "315px",
+              maxHeight: "315px",
+              maxWidth: "315px",
+              alignSelf: "center",
+            }}
+            zoomTo={0.5}
+            aspectRatio={1 / 1}
+            preview=".img-preview"
+            src={URL.createObjectURL(file)}
+            viewMode={3}
+            background={false}
+            responsive={true}
+            autoCropArea={1}
+            checkOrientation={false}
+            guides={true}
+            size={315}
+          />
+        ) : (
+          <Cropper
+            ref={cropperRef}
+            style={{ height: "315px", width: "315px", alignSelf: "center" }}
+            zoomTo={0.5}
+            aspectRatio={1 / 1}
+            preview=".img-preview"
+            src={URL.createObjectURL(file)}
+            viewMode={3}
+            background={false}
+            responsive={true}
+            autoCropArea={1}
+            checkOrientation={false}
+            guides={true}
+            size={300}
+          />
+        )}
+
+        <div className="crop-action-row d-flex flex-row mt-2 justify-content-center">
           <a
             onClick={async () => await getCropData()}
             target="_blank"

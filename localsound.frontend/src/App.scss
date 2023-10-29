@@ -762,6 +762,10 @@ i.large.icon {
 #artist-profile {
   width: 100%;
 
+  .ui.medium.image {
+    width: 315px !important;
+  }
+
   .photo-icon {
     padding-left: 2px;
   }

@@ -870,6 +870,11 @@ i.large.icon {
 #artist-profile {
   width: 100%;
 }
+#modal-popup .ui.medium.image,
+#edit-artist .ui.medium.image,
+#artist-profile .ui.medium.image {
+  width: 315px !important;
+}
 #modal-popup .photo-icon,
 #edit-artist .photo-icon,
 #artist-profile .photo-icon {
