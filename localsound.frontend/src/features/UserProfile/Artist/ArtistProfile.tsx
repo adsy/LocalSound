@@ -12,6 +12,7 @@ import ArtistDetails from "./ArtistDetails";
 import ArtistBannerSummary from "./ArtistBannerSummary";
 import ArtistUploads from "./ArtistUploads/ArtistUploads";
 import { Icon } from "semantic-ui-react";
+import ArtistUploadForm from "./ArtistUploads/ArtistUploadTrackForm";
 
 interface Props {
   userDetails: UserModel;
@@ -75,6 +76,13 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
   };
 
   const uploadTrack = () => {
+    dispatch(
+      handleToggleModal({
+        open: true,
+        body: <ArtistUploadForm userDetails={userDetails} />,
+        size: "large",
+      })
+    );
     setKey("uploads");
     setUploading(true);
   };
@@ -112,7 +120,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                               className="btn black-button fade-in-out"
                             >
                               <h4>
-                                <Icon name="photo" className="m-0" />
+                                <Icon name="photo" className="m-0 photo-icon" />
                               </h4>
                             </label>
                             <input
@@ -192,11 +200,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                 />
               </Tab>
               <Tab eventKey="uploads" title="Uploads" className="">
-                <ArtistUploads
-                  userDetails={userDetails}
-                  setUploading={setUploading}
-                  uploading={uploading}
-                />
+                <ArtistUploads userDetails={userDetails} />
               </Tab>
             </Tabs>
           </div>

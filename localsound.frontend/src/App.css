@@ -851,6 +851,11 @@ i.large.icon {
 #artist-profile {
   width: 100%;
 }
+#auth-modal .photo-icon,
+#edit-artist .photo-icon,
+#artist-profile .photo-icon {
+  padding-left: 2px;
+}
 #auth-modal .profile-photo,
 #edit-artist .profile-photo,
 #artist-profile .profile-photo {

@@ -1,21 +1,14 @@
-import { Button } from "react-bootstrap";
 import { UserModel } from "../../../../app/model/dto/user.model";
 import { useEffect, useState } from "react";
 import agent from "../../../../api/agent";
 import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-upload.model";
 import Track from "../../../../common/components/Track/Track";
-import { Divider, Icon } from "semantic-ui-react";
-import { useSelector } from "react-redux";
-import { State } from "../../../../app/model/redux/state";
 
 interface Props {
   userDetails: UserModel;
-  uploading: boolean;
-  setUploading: (uploading: boolean) => void;
 }
 
-const ArtistUploadsList = ({ userDetails, uploading, setUploading }: Props) => {
-  const loggedInUser = useSelector((state: State) => state.user.userDetails);
+const ArtistUploadsList = ({ userDetails }: Props) => {
   const [tracks, setTracks] = useState<ArtistTrackUploadModel[]>([]);
 
   useEffect(() => {
