@@ -19,6 +19,10 @@ const ArtistUploadsTrackSelection = ({ setFile, setTrackExt }: Props) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: false,
+    accept: {
+      "audio/mpeg": [".mp3"],
+      "audio/wav": [".wav"],
+    },
   });
 
   return (

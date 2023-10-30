@@ -14,6 +14,8 @@ import SearchGenreTypes from "../Edit/Search/SearchGenreTypes";
 import { GenreModel } from "../../../../app/model/dto/genre.model";
 import userImg from "../../../../assets/icons/user.svg";
 import { Image } from "semantic-ui-react";
+import ImageCropper from "../../../../common/components/Cropper/ImageCropper";
+import { CropTypes } from "../../../../app/model/enums/cropTypes";
 
 interface Props {
   userDetails: UserModel;
@@ -23,6 +25,7 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
   const [file, setFile] = useState<File | null>(null);
   const [trackExt, setTrackExt] = useState<string | null>(null);
   const [trackImage, setTrackImage] = useState<File | null>(null);
+  const [croppedImage, setCroppedImage] = useState<Blob | null>(null);
   const [uploadData, setUploadData] = useState<TrackUploadSASModel | null>(
     null
   );
@@ -31,6 +34,7 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
   const [uploadDataError, setUploadDataError] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<GenreModel[]>([]);
   const [trackProgress, setTrackProgress] = useState(0);
+  const [updatingTrackPhoto, setUpdatingTrackPhoto] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -65,6 +69,16 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
   const formValuesUntouched = (values: any) => {
     //TODO: add checks
     return false;
+  };
+
+  const onFileUpload = async (file: Blob) => {
+    setCroppedImage(file);
+    setUpdatingTrackPhoto(false);
+  };
+
+  const cancelCrop = () => {
+    setFile(null);
+    setUpdatingTrackPhoto(false);
   };
 
   const getDuration = async (file: File): Promise<number> => {
@@ -111,13 +125,13 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
                 }}
                 onSubmit={async (values, { setStatus }) => {
                   try {
-                    if (file && trackImage) {
+                    if (file && croppedImage) {
                       // await uploadWaveForm();
                       await uploadBlob();
 
                       var duration = await getDuration(file);
 
-                      var trackImageExt = trackImage.name.split(/[.]+/).pop();
+                      var trackImageExt = ".jpg";
 
                       var formData = new FormData();
                       formData.append("trackName", values.trackName);
@@ -125,9 +139,10 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
                         "trackDescription",
                         values.trackDescription
                       );
+
                       formData.append(
                         "trackImage",
-                        trackImage!,
+                        croppedImage!,
                         trackImage?.name
                       );
                       formData.append("trackImageExt", `.${trackImageExt}`);
@@ -230,36 +245,47 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
                               </div>
                             </div>
                             <div className="d-flex flex-column col-12 col-md-6 px-3">
-                              <div className="d-flex">
+                              <div className="d-flex mb-1">
                                 <p className="form-label">ALBUM PHOTO</p>
                               </div>
-                              <Image
-                                src={
-                                  !trackImage
-                                    ? userImg
-                                    : URL.createObjectURL(trackImage!)
-                                }
-                                size="medium"
-                                circular
-                                className="align-self-center mb-2"
-                              />
-                              <label
-                                htmlFor="trackUpload"
-                                className="btn black-button fade-in-out"
-                              >
-                                <h4>Select track photo</h4>
-                              </label>
-                              <input
-                                type="file"
-                                accept=".jpg,.png,.jpeg"
-                                id="trackUpload"
-                                style={{ display: "none" }}
-                                onChange={async (event) => {
-                                  if (event?.target?.files) {
-                                    setTrackImage(event.target.files[0]);
-                                  }
-                                }}
-                              />
+                              {!updatingTrackPhoto ? (
+                                <>
+                                  <Image
+                                    src={
+                                      !trackImage
+                                        ? userImg
+                                        : URL.createObjectURL(croppedImage!)
+                                    }
+                                    size="medium"
+                                    className="align-self-center mb-2"
+                                  />
+                                  <label
+                                    htmlFor="trackUpload"
+                                    className="btn black-button fade-in-out"
+                                  >
+                                    <h4>Select track photo</h4>
+                                  </label>
+                                  <input
+                                    type="file"
+                                    accept=".jpg,.png,.jpeg"
+                                    id="trackUpload"
+                                    style={{ display: "none" }}
+                                    onChange={async (event) => {
+                                      if (event?.target?.files) {
+                                        setTrackImage(event.target.files[0]);
+                                        setUpdatingTrackPhoto(true);
+                                      }
+                                    }}
+                                  />
+                                </>
+                              ) : trackImage ? (
+                                <ImageCropper
+                                  file={trackImage}
+                                  onFileUpload={onFileUpload}
+                                  cancelCrop={cancelCrop}
+                                  cropType={CropTypes.Square}
+                                />
+                              ) : null}
                             </div>
                           </div>
                         </div>

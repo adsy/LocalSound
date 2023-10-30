@@ -40,7 +40,11 @@ const ImageCropper = ({ file, onFileUpload, cancelCrop, cropType }: Props) => {
               }
             : cropType === CropTypes.Flexible
             ? { width: "100%", position: "relative" }
-            : { width: "100%", position: "relative" }
+            : {
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }
         }
       >
         {cropType === CropTypes.Flexible ? (
@@ -66,10 +70,6 @@ const ImageCropper = ({ file, onFileUpload, cancelCrop, cropType }: Props) => {
             style={{
               height: "315px",
               width: "315px",
-              minHeight: "315px",
-              minWidth: "315px",
-              maxHeight: "315px",
-              maxWidth: "315px",
               alignSelf: "center",
             }}
             zoomTo={0.5}
@@ -77,12 +77,14 @@ const ImageCropper = ({ file, onFileUpload, cancelCrop, cropType }: Props) => {
             preview=".img-preview"
             src={URL.createObjectURL(file)}
             viewMode={3}
+            minCropBoxHeight={315}
+            minCropBoxWidth={315}
             background={false}
-            responsive={true}
-            autoCropArea={1}
+            responsive={false}
+            autoCropArea={0.5}
             checkOrientation={false}
             guides={true}
-            size={315}
+            scalable={false}
           />
         ) : (
           <Cropper
