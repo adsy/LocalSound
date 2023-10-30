@@ -190,7 +190,7 @@ const EditArtistDetailsForm = ({
                 />
                 <label
                   htmlFor="profilePhotoInput"
-                  className="btn black-button w-100 align-self-center"
+                  className="btn white-button align-self-center w-fit-content align-self-center px-5"
                 >
                   <h4>Update profile photo</h4>
                 </label>

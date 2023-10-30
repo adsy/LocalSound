@@ -110,16 +110,6 @@ h6 {
   color: $offWhite;
 }
 
-// h1.inverse,
-// h2.inverse,
-// h3.inverse,
-// h4.inverse,
-// h5.inverse,
-// h6.inverse {
-//   color: $richBlack;
-//   @include text-shadow;
-// }
-
 $start: 0;
 $end: 10;
 
@@ -413,34 +403,28 @@ i.large.icon {
 }
 
 /** BUTTONS **/
-.purple-button {
-  @include button-style;
-  background-color: $purple !important;
-  border: 1px solid black;
-  padding: 8px;
-}
-
-.purple-button:hover,
-.purple-button:active,
-.purple-button:focus {
-  background-color: $navbarColor !important;
-  border: 1px solid white;
-}
-
 .white-button {
   @include button-style;
-  background-color: white;
-  border: 1px solid $richBlack;
+  // background-color: $purple !important;
+  border: 1px solid black;
   padding: 8px;
-  transition: background-color 0.5s ease;
+  color: black !important;
+  background-color: $offWhite;
 }
 
 .white-button:hover,
 .white-button:active,
 .white-button:focus {
-  background-color: $richBlack;
+  background-color: $navbarColor !important;
   border: 1px solid white;
-  color: white;
+}
+
+.white-button h4 {
+  color: $navbarColor;
+}
+
+.white-button:hover h4 {
+  color: $offWhite !important;
 }
 
 .black-button {
@@ -843,15 +827,18 @@ i.large.icon {
       border-radius: 2px;
       border-left: 1px solid $richBlack;
       border-right: 1px solid $richBlack;
-      position: absolute;
+      position: fixed;
+      z-index: 999;
       min-width: 200px;
       max-width: 300px;
       background: white;
+      border-radius: 0.28571429rem;
 
       .dropdown-option:first-of-type {
         border-top: 1px solid $richBlack;
       }
       .dropdown-option {
+        border-left: 4px solid $navbarColor;
         border-bottom: 1px solid $richBlack;
         letter-spacing: 1px;
         font-size: 14px;
@@ -860,6 +847,14 @@ i.large.icon {
         align-self: center;
         padding: 8px;
       }
+
+      .dropdown-option:first-child {
+        border-radius: 0.28571429rem 0.28571429rem 0 0;
+      }
+      .dropdown-option:last-child {
+        border-radius: 0 0 0.28571429rem 0.28571429rem;
+      }
+
       .dropdown-option:hover {
         font-size: 14px;
         letter-spacing: 1px;
@@ -880,6 +875,7 @@ i.large.icon {
     border: 1px solid $navbarColor;
     padding-top: 5px !important;
     background-color: $offWhite !important;
+    height: fit-content;
   }
 }
 

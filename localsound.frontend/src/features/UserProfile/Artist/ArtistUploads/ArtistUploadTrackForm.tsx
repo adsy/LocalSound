@@ -13,7 +13,7 @@ import MyTextArea from "../../../../common/form/MyTextArea";
 import SearchGenreTypes from "../Edit/Search/SearchGenreTypes";
 import { GenreModel } from "../../../../app/model/dto/genre.model";
 import userImg from "../../../../assets/icons/user.svg";
-import { Image } from "semantic-ui-react";
+import { Image, Placeholder } from "semantic-ui-react";
 import ImageCropper from "../../../../common/components/Cropper/ImageCropper";
 import { CropTypes } from "../../../../app/model/enums/cropTypes";
 
@@ -77,7 +77,7 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
   };
 
   const cancelCrop = () => {
-    setFile(null);
+    // setFile(null);
     setUpdatingTrackPhoto(false);
   };
 
@@ -240,30 +240,32 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
                                 <MyTextArea
                                   name="trackDescription"
                                   placeholder=""
-                                  rows={6}
+                                  rows={7}
                                 />
                               </div>
                             </div>
                             <div className="d-flex flex-column col-12 col-md-6 px-3">
                               <div className="d-flex mb-1">
-                                <p className="form-label">ALBUM PHOTO</p>
+                                <p className="form-label">TRACK PHOTO</p>
                               </div>
                               {!updatingTrackPhoto ? (
                                 <>
                                   <Image
                                     src={
-                                      !trackImage
+                                      !croppedImage
                                         ? userImg
                                         : URL.createObjectURL(croppedImage!)
                                     }
                                     size="medium"
                                     className="align-self-center mb-2"
+                                    style={{ borderRadius: "5px" }}
                                   />
+
                                   <label
                                     htmlFor="trackUpload"
-                                    className="btn black-button fade-in-out"
+                                    className="btn white-button fade-in-out w-fit-content align-self-center px-5"
                                   >
-                                    <h4>Select track photo</h4>
+                                    <h4>Select photo</h4>
                                   </label>
                                   <input
                                     type="file"
@@ -300,7 +302,12 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
                         {!isSubmitting ? (
                           <Button
                             className={`black-button w-100 align-self-center`}
-                            disabled={disabled || uploadDataError}
+                            disabled={
+                              disabled ||
+                              uploadDataError ||
+                              !file ||
+                              !croppedImage
+                            }
                             onClick={() => submitForm()}
                           >
                             <h4>Upload track</h4>

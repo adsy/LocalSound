@@ -18,6 +18,7 @@ const ModalContainer = () => {
         transition={{ animation: "fly up", duration: 800 }}
       >
         <Modal
+          closeOnDimmerClick={false}
           open={true}
           onClose={() => {
             document.body.classList.remove("modal-fade-in");

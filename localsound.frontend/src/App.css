@@ -522,40 +522,30 @@ i.large.icon {
 }
 
 /** BUTTONS **/
-.purple-button {
-  color: #232323;
-  font-size: 16px;
-  letter-spacing: 2px;
-  transition: border-color 0.5s ease;
-  background-color: #6d69fa !important;
-  border: 1px solid black;
-  padding: 8px;
-}
-
-.purple-button:hover,
-.purple-button:active,
-.purple-button:focus {
-  background-color: #001514 !important;
-  border: 1px solid white;
-}
-
 .white-button {
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
   transition: border-color 0.5s ease;
-  background-color: white;
-  border: 1px solid #232323;
+  border: 1px solid black;
   padding: 8px;
-  transition: background-color 0.5s ease;
+  color: black !important;
+  background-color: #ececec;
 }
 
 .white-button:hover,
 .white-button:active,
 .white-button:focus {
-  background-color: #232323;
+  background-color: #001514 !important;
   border: 1px solid white;
-  color: white;
+}
+
+.white-button h4 {
+  color: #001514;
+}
+
+.white-button:hover h4 {
+  color: #ececec !important;
 }
 
 .black-button {
@@ -1003,10 +993,12 @@ i.large.icon {
   border-radius: 2px;
   border-left: 1px solid #232323;
   border-right: 1px solid #232323;
-  position: absolute;
+  position: fixed;
+  z-index: 999;
   min-width: 200px;
   max-width: 300px;
   background: white;
+  border-radius: 0.28571429rem;
 }
 #modal-popup #search-label-component .dropdown .dropdown-option:first-of-type,
 #edit-artist #search-label-component .dropdown .dropdown-option:first-of-type,
@@ -1016,6 +1008,7 @@ i.large.icon {
 #modal-popup #search-label-component .dropdown .dropdown-option,
 #edit-artist #search-label-component .dropdown .dropdown-option,
 #artist-profile #search-label-component .dropdown .dropdown-option {
+  border-left: 4px solid #001514;
   border-bottom: 1px solid #232323;
   letter-spacing: 1px;
   font-size: 14px;
@@ -1023,6 +1016,16 @@ i.large.icon {
   cursor: pointer;
   align-self: center;
   padding: 8px;
+}
+#modal-popup #search-label-component .dropdown .dropdown-option:first-child,
+#edit-artist #search-label-component .dropdown .dropdown-option:first-child,
+#artist-profile #search-label-component .dropdown .dropdown-option:first-child {
+  border-radius: 0.28571429rem 0.28571429rem 0 0;
+}
+#modal-popup #search-label-component .dropdown .dropdown-option:last-child,
+#edit-artist #search-label-component .dropdown .dropdown-option:last-child,
+#artist-profile #search-label-component .dropdown .dropdown-option:last-child {
+  border-radius: 0 0 0.28571429rem 0.28571429rem;
 }
 #modal-popup #search-label-component .dropdown .dropdown-option:hover,
 #edit-artist #search-label-component .dropdown .dropdown-option:hover,
@@ -1042,6 +1045,7 @@ i.large.icon {
   border: 1px solid #001514;
   padding-top: 5px !important;
   background-color: #ececec !important;
+  height: fit-content;
 }
 
 /** FORM **/

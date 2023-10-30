@@ -89,7 +89,13 @@ const ImageCropper = ({ file, onFileUpload, cancelCrop, cropType }: Props) => {
         ) : (
           <Cropper
             ref={cropperRef}
-            style={{ height: "315px", width: "315px", alignSelf: "center" }}
+            style={{
+              maxWidth: "400px",
+              minWidth: "315px",
+              minHeight: "315px",
+              maxHeight: "350px",
+              alignSelf: "center",
+            }}
             zoomTo={0.5}
             aspectRatio={1 / 1}
             preview=".img-preview"
@@ -115,7 +121,7 @@ const ImageCropper = ({ file, onFileUpload, cancelCrop, cropType }: Props) => {
           <a
             onClick={() => cancelCrop()}
             target="_blank"
-            className="ml-1 btn purple-button save-crop-btn"
+            className="ml-1 btn white-button save-crop-btn"
           >
             <h4>Cancel</h4>
           </a>
