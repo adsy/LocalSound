@@ -10,13 +10,14 @@ import {
 } from "../../../app/redux/actions/playerSlice";
 import { State } from "../../../app/model/redux/state";
 import { UserModel } from "../../../app/model/dto/user.model";
-import { Image } from "semantic-ui-react";
+import { Icon, Image } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 import {
   SingletonClass,
   SingletonFactory,
 } from "../../waveformGenerator/waveformGenerator";
 import WaveForm from "../../../features/MusicPlayer/Waveform";
+import { Button } from "react-bootstrap";
 
 interface Props {
   track: ArtistTrackUploadModel;
@@ -92,15 +93,18 @@ const Track = ({ track, artistDetails }: Props) => {
               </div>
             </div>
 
-            <div className="track-genre-list">
-              {track.genres.map((genre, index) => (
-                <Label key={index} id={genre.genreId} label={genre.genreName} />
-              ))}
+            <div className="my-1">
+              <Button className="black-button like-button mr-1">
+                <Icon name="heart" size="small" className="mr-0" />
+              </Button>
+              <Button className="black-button like-button">
+                <Icon name="pencil" size="small" className="mr-0" />
+              </Button>
             </div>
           </div>
 
           <div className="w-100 h-100 d-flex flex-column align-items-center">
-            <div className="line w-100 h-100 position-relative">
+            <div className="w-100 h-100 position-relative">
               {track.artistTrackUploadId === player.trackId && analyzerData ? (
                 <div>
                   <WaveForm
@@ -111,6 +115,14 @@ const Track = ({ track, artistDetails }: Props) => {
               ) : null}
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="d-flex flex-row justify-content-end gray-line">
+        <div className="track-genre-list">
+          {track.genres.map((genre, index) => (
+            <Label key={index} id={genre.genreId} label={genre.genreName} />
+          ))}
         </div>
       </div>
     </div>

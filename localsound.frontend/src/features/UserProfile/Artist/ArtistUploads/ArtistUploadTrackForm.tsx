@@ -306,7 +306,10 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
                               disabled ||
                               uploadDataError ||
                               !file ||
-                              !croppedImage
+                              !croppedImage ||
+                              !values.trackName ||
+                              !values.trackDescription ||
+                              selectedGenres.length == 0
                             }
                             onClick={() => submitForm()}
                           >
@@ -314,11 +317,6 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
                           </Button>
                         ) : (
                           <ProgressBar>
-                            {/* <ProgressBar
-                            className="waveform-progress"
-                            animated
-                            now={waveformProgress}
-                          /> */}
                             <ProgressBar
                               className="track-progress"
                               animated

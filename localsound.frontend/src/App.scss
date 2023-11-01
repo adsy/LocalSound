@@ -657,13 +657,28 @@ i.large.icon {
 }
 
 #track {
+  .like-button {
+    padding-top: 1px;
+    padding-bottom: 2px;
+    padding-left: 5px;
+    padding-right: 6px;
+    color: $offWhite !important;
+
+    .small {
+      margin-right: 0px;
+      padding-left: 1px;
+    }
+  }
+
   .track-image {
     border-radius: 5px;
+    width: 150px;
   }
 
   .track-genre-list {
+    margin-top: 5px;
     text-align: right;
-    width: 50%;
+    // width: 50%;
   }
 
   .playbutton-container {
@@ -679,8 +694,12 @@ i.large.icon {
     font-weight: 800;
   }
 
-  .line {
+  .gray-line {
     border-bottom: 1px solid rgb(219, 219, 219);
+  }
+
+  .black-line {
+    border-bottom: 1px solid $navbarColor;
   }
 
   .track-name {
@@ -735,7 +754,7 @@ i.large.icon {
   }
 
   .track-progress {
-    background-color: $purple !important;
+    background-color: $navbarColor !important;
   }
 }
 

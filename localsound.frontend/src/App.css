@@ -771,12 +771,24 @@ i.large.icon {
   width: 1rem;
 }
 
+#track .like-button {
+  padding-top: 1px;
+  padding-bottom: 2px;
+  padding-left: 5px;
+  padding-right: 6px;
+  color: #ececec !important;
+}
+#track .like-button .small {
+  margin-right: 0px;
+  padding-left: 1px;
+}
 #track .track-image {
   border-radius: 5px;
+  width: 150px;
 }
 #track .track-genre-list {
+  margin-top: 5px;
   text-align: right;
-  width: 50%;
 }
 #track .artist-name {
   color: gray;
@@ -785,8 +797,11 @@ i.large.icon {
   font-size: 20px;
   font-weight: 800;
 }
-#track .line {
+#track .gray-line {
   border-bottom: 1px solid rgb(219, 219, 219);
+}
+#track .black-line {
+  border-bottom: 1px solid #001514;
 }
 #track .track-name {
   font-size: 20px;
@@ -848,7 +863,7 @@ i.large.icon {
   background-color: #232323 !important;
 }
 #track-upload .track-progress {
-  background-color: #6d69fa !important;
+  background-color: #001514 !important;
 }
 
 #waveform-container {

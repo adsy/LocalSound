@@ -27,6 +27,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
   const [imgsLoaded, setImgsLoaded] = useState(false);
   const [coverImage, setCoverImage] = useState<AccountImageModel | null>(null);
   const [key, setKey] = useState<string | null>("artistDetails");
+  const [onUploads, setOnUploads] = useState(false);
   const [uploading, setUploading] = useState(false);
   const dispatch = useDispatch();
 
@@ -41,7 +42,6 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
   };
 
   useEffect(() => {
-    console.log(imgsLoaded);
     if (userDetails?.images?.length > 0) {
       const IMAGES = [...userDetails.images];
       Promise.all(IMAGES.map((image) => loadImage(image)))
@@ -191,6 +191,11 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                   setUploading(!uploading);
                 }
                 setKey(k);
+                if (k === "uploads") {
+                  setOnUploads(true);
+                } else {
+                  setOnUploads(false);
+                }
               }}
               className="mb-4"
             >
@@ -201,7 +206,10 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                 />
               </Tab>
               <Tab eventKey="uploads" title="Uploads" className="">
-                <ArtistUploadsList userDetails={userDetails} key={key} />
+                <ArtistUploadsList
+                  userDetails={userDetails}
+                  onUploads={onUploads}
+                />
               </Tab>
             </Tabs>
           </div>

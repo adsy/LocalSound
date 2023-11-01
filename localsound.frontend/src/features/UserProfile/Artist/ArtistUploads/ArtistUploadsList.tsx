@@ -3,37 +3,31 @@ import { useEffect, useRef, useState } from "react";
 import agent from "../../../../api/agent";
 import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-upload.model";
 import Track from "../../../../common/components/Track/Track";
-import { Button } from "react-bootstrap";
 import { debounce } from "lodash";
 import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
 
 interface Props {
   userDetails: UserModel;
-  key: string;
+  onUploads: boolean;
 }
 
-const ArtistUploadsList = ({ userDetails, key }: Props) => {
+const ArtistUploadsList = ({ userDetails, onUploads }: Props) => {
   const [tracks, setTracks] = useState<ArtistTrackUploadModel[]>([]);
   const [page, setPage] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
-  const [canLoadMore, setCanLoadMore] = useState(false);
+  const [canLoadMore, setCanLoadMore] = useState(true);
 
   window.onscroll = debounce(() => {
     if (listRef?.current) {
-      console.log(
-        window.innerHeight +
-          document.documentElement.scrollTop -
-          listRef?.current?.offsetHeight
-      );
       if (
-        key == "uploads" &&
+        onUploads &&
         !loading &&
         canLoadMore &&
         window.innerHeight +
           document.documentElement.scrollTop -
           listRef?.current?.offsetHeight <
-          690
+          1000
       ) {
         setPage(page + 1);
       }
@@ -42,20 +36,22 @@ const ArtistUploadsList = ({ userDetails, key }: Props) => {
 
   useEffect(() => {
     (async () => {
-      try {
-        setLoading(true);
-        var result = await agent.Tracks.getArtistUploads(
-          userDetails!.memberId,
-          page
-        );
-        setLoading(false);
-        setTracks([...tracks, ...result.trackList]);
-        setCanLoadMore(result.canLoadMore);
-      } catch (err) {
-        //TODO: Do something with error
+      if (onUploads && canLoadMore) {
+        try {
+          setLoading(true);
+          var result = await agent.Tracks.getArtistUploads(
+            userDetails!.memberId,
+            page
+          );
+          setLoading(false);
+          setTracks([...tracks, ...result.trackList]);
+          setCanLoadMore(result.canLoadMore);
+        } catch (err) {
+          //TODO: Do something with error
+        }
       }
     })();
-  }, [page]);
+  }, [page, onUploads]);
 
   return (
     <div ref={listRef}>
