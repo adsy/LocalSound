@@ -72,7 +72,7 @@ const SearchEventTypes = ({ eventTypes, setEventTypes }: Props) => {
 
         <input
           className="input"
-          placeholder="Search for a genre to add to your profile"
+          placeholder="Add some event types to your profile so you can be found"
           value={eventType}
           onChange={(e) => {
             doCallbackWithDebounce();

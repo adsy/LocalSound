@@ -59,11 +59,12 @@ namespace localsound.backend.api.Controllers
         [HttpGet]
         [Route("member/{memberId}")]
         [AllowAnonymous]
-        public async Task<ActionResult> GetArtistTrackUploads(string memberId)
+        public async Task<ActionResult> GetArtistTrackUploads(string memberId, [FromQuery]int page)
         {
             var result = await Mediator.Send(new GetArtistTracksQuery
             {
-                MemberId = memberId
+                MemberId = memberId,
+                Page = page
             });
 
             if (!result.IsSuccessStatusCode)

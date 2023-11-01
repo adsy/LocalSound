@@ -744,12 +744,12 @@ i.large.icon {
 #music-player input[type=range]::-webkit-slider-runnable-track {
   background-color: #6d69fa;
   border-radius: 0.5rem;
-  height: 0.1rem;
+  height: 0.5rem;
 }
 #music-player input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default look */
   appearance: none;
-  margin-top: -6px; /* Centers thumb on the track */
+  margin-top: -3px; /* Centers thumb on the track */
   /*custom styles*/
   background-color: #ececec;
   border-radius: 200px;
@@ -759,7 +759,7 @@ i.large.icon {
 #music-player input[type=range]::-moz-range-track {
   background-color: #6d69fa;
   border-radius: 0.5rem;
-  height: 0.1rem;
+  height: 0.5rem;
 }
 #music-player input[type=range]::-moz-range-thumb {
   border: none; /*Removes extra border that FF applies*/
@@ -771,6 +771,13 @@ i.large.icon {
   width: 1rem;
 }
 
+#track .track-image {
+  border-radius: 5px;
+}
+#track .track-genre-list {
+  text-align: right;
+  width: 50%;
+}
 #track .artist-name {
   color: gray;
 }
@@ -1142,7 +1149,7 @@ i.large.icon {
   justify-content: center;
   align-content: stretch;
   flex-wrap: wrap;
-  padding-bottom: 80px;
+  padding-bottom: 30px;
   /** CROPPER **/
 }
 #user-profile #cropper {

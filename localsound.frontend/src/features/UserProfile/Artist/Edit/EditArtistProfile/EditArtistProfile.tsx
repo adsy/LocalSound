@@ -116,9 +116,7 @@ const EditArtistProfile = ({ userDetails }: Props) => {
                         <SearchGenreTypes
                           selectedGenres={selectedGenres}
                           setSelectedGenres={setSelectedGenres}
-                          placeholder={
-                            "Search for a genre to add to your profile"
-                          }
+                          placeholder={"Add up to 10 genres for your profile"}
                         />
                       </div>
                     </div>

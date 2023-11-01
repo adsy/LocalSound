@@ -17,6 +17,7 @@ import { UpdateArtistProfileDetailsModel } from "../app/model/dto/update-artist-
 import { EventTypeModel } from "../app/model/dto/eventType.model";
 import { TrackUploadSASModel } from "../app/model/dto/track-upload-sas.model";
 import { ArtistTrackUploadModel } from "../app/model/dto/artist-track-upload.model";
+import { TrackListResponse } from "../app/model/dto/track-list-response.model";
 
 const axiosApiInstance = axios.create();
 
@@ -145,8 +146,8 @@ const Tracks = {
     trackId: string,
     formData: FormData
   ) => requests.post(`track/member/${memberId}/track/${trackId}`, formData),
-  getArtistUploads: (memberId: string) =>
-    requests.get<ArtistTrackUploadModel[]>(`track/member/${memberId}`),
+  getArtistUploads: (memberId: string, page: number) =>
+    requests.get<TrackListResponse>(`track/member/${memberId}?page=${page}`),
 };
 
 const agent = {

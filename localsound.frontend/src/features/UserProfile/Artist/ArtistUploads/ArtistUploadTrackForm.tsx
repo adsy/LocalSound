@@ -227,7 +227,7 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
                                   selectedGenres={selectedGenres}
                                   setSelectedGenres={setSelectedGenres}
                                   placeholder={
-                                    "Search for a genre to add to your track"
+                                    "Add up to 10 genres for your track"
                                   }
                                 />
                               </div>

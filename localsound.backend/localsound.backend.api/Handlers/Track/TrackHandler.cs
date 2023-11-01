@@ -10,7 +10,7 @@ namespace localsound.backend.api.Handlers.Track
 {
     public class TrackHandler : IRequestHandler<GetUploadTrackDataQuery, ServiceResponse<TrackUploadSASDto>>,
         IRequestHandler<AddTrackSupportingDetailsCommand, ServiceResponse>,
-        IRequestHandler<GetArtistTracksQuery, ServiceResponse<List<ArtistTrackUploadDto>>>
+        IRequestHandler<GetArtistTracksQuery, ServiceResponse<TrackListResponseDto>>
     {
         private readonly ITrackService _trackService;
 
@@ -29,9 +29,9 @@ namespace localsound.backend.api.Handlers.Track
             return await _trackService.UploadTrackSupportingDetails(request.AppUserId, request.MemberId, request.TrackId, request.TrackData);
         }
 
-        public async Task<ServiceResponse<List<ArtistTrackUploadDto>>> Handle(GetArtistTracksQuery request, CancellationToken cancellationToken)
+        public async Task<ServiceResponse<TrackListResponseDto>> Handle(GetArtistTracksQuery request, CancellationToken cancellationToken)
         {
-            return await _trackService.GetArtistTracks(request.MemberId);
+            return await _trackService.GetArtistTracks(request.MemberId, request.Page);
         }
     }
 }

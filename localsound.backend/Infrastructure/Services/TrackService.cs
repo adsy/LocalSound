@@ -12,7 +12,6 @@ using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
 using Microsoft.Extensions.Logging;
 using System.Net;
-using System.Text.Json;
 
 namespace localsound.backend.Infrastructure.Services
 {
@@ -98,21 +97,27 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<List<ArtistTrackUploadDto>>> GetArtistTracks(string memberId)
+        public async Task<ServiceResponse<TrackListResponseDto>> GetArtistTracks(string memberId, int page)
         {
             try
             {
-                var tracks = await _trackRepository.GetArtistTracksAsync(memberId);
+                var tracks = await _trackRepository.GetArtistTracksAsync(memberId, page);
 
                 if (!tracks.IsSuccessStatusCode || tracks.ReturnData == null)
 
                 {
-                    return new ServiceResponse<List<ArtistTrackUploadDto>>(tracks.StatusCode);
+                    return new ServiceResponse<TrackListResponseDto>(tracks.StatusCode);
                 }
 
-                return new ServiceResponse<List<ArtistTrackUploadDto>>(HttpStatusCode.OK)
+                var trackList = _mapper.Map<List<ArtistTrackUploadDto>>(tracks.ReturnData);
+
+                return new ServiceResponse<TrackListResponseDto>(HttpStatusCode.OK)
                 {
-                    ReturnData = _mapper.Map<List<ArtistTrackUploadDto>>(tracks.ReturnData)
+                    ReturnData = new TrackListResponseDto
+                    {
+                        TrackList = trackList,
+                        CanLoadMore = trackList.Count == 10
+                    }
                 };
             }
             catch(Exception e)
@@ -120,7 +125,7 @@ namespace localsound.backend.Infrastructure.Services
                 var message = $"{nameof(TrackService)} - {nameof(GetArtistTracks)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<List<ArtistTrackUploadDto>>(HttpStatusCode.InternalServerError)
+                return new ServiceResponse<TrackListResponseDto>(HttpStatusCode.InternalServerError)
                 {
                     ServiceResponseMessage = "An error occured uploading your track, please try again..."
                 };

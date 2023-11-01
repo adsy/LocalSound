@@ -40,7 +40,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<List<ArtistTrackUpload>>> GetArtistTracksAsync(string memberId)
+        public async Task<ServiceResponse<List<ArtistTrackUpload>>> GetArtistTracksAsync(string memberId, int page)
         {
             try
             {
@@ -55,7 +55,11 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.TrackData)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
-                    .Where(x => x.AppUserId == artist.Id).ToListAsync();
+                    .Where(x => x.AppUserId == artist.Id)
+                    .OrderByDescending(x => x.UploadDate)
+                    .Skip(10 * page)
+                    .Take(10)
+                    .ToListAsync();
 
                 return new ServiceResponse<List<ArtistTrackUpload>>(HttpStatusCode.OK)
                 {

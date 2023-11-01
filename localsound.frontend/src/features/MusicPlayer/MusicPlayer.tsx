@@ -126,18 +126,28 @@ const MusicPlayer = () => {
       time = Math.trunc(time);
 
       var mins = 0;
+      var hours = 0;
       if (time > 60) {
         mins = Math.trunc(time / 60);
+        hours = Math.trunc(time / (60 * 60));
+        if (hours > 0) {
+          mins = mins - hours * 60;
+        }
       }
 
-      if (mins > 0) {
+      if (mins > 0 && hours == 0) {
         time = time - mins * 60;
+      } else if (hours > 0) {
+        var hourTime = 60 * 60 * hours;
+        var minTime = 60 * mins;
+        time = time - (hourTime + minTime);
       } else {
         mins = 0;
       }
 
       var secondsText = time.toString();
       var minsText = mins.toString();
+      var hoursText = hours.toString();
 
       if (secondsText.length < 2) {
         secondsText = "0" + secondsText;
@@ -145,7 +155,10 @@ const MusicPlayer = () => {
       if (minsText.length < 2) {
         minsText = "0" + minsText;
       }
-      setTime(`00:${minsText}:${secondsText}`);
+      if (hoursText.length < 2) {
+        hoursText = "0" + hoursText;
+      }
+      setTime(`${hoursText}:${minsText}:${secondsText}`);
 
       if (waveformRef.current.currentTime == waveformRef.current.duration) {
         dispatch(handlePauseSong());

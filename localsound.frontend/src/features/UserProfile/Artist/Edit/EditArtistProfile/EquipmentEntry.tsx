@@ -42,7 +42,7 @@ const EquipmentEntry = ({ equipment, setEquipment }: Props) => {
 
         <input
           className="input"
-          placeholder="Search for a genre to add to your profile"
+          placeholder="Show how prepared you are by adding your equipment to your profile"
           value={newEquipment}
           onChange={(e) => {
             setNewEquipment(e.target.value);

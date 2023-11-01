@@ -75,15 +75,17 @@ const SearchGenreTypes = ({
           ))}
         </div>
 
-        <input
-          className="input"
-          placeholder={placeholder}
-          value={genre}
-          onChange={(e) => {
-            doCallbackWithDebounce();
-            setGenre(e.target.value);
-          }}
-        />
+        {selectedGenres.length < 10 ? (
+          <input
+            className="input"
+            placeholder={placeholder}
+            value={genre}
+            onChange={(e) => {
+              doCallbackWithDebounce();
+              setGenre(e.target.value);
+            }}
+          />
+        ) : null}
       </div>
       <div className="positive-relative">
         {genreList.length > 0 ? (

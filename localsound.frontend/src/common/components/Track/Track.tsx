@@ -69,7 +69,11 @@ const Track = ({ track, artistDetails }: Props) => {
   return (
     <div id="track" className="mb-4">
       <div className="d-flex flex-row w-100">
-        <Image size="small" src={track.trackImageUrl} className="mr-3" />
+        <Image
+          size="small"
+          src={track.trackImageUrl}
+          className="mr-3 track-image"
+        />
         <div className="d-flex flex-column w-100">
           <div className="d-flex flex-row justify-content-between">
             <div className="d-flex flex-row">
@@ -88,7 +92,7 @@ const Track = ({ track, artistDetails }: Props) => {
               </div>
             </div>
 
-            <div>
+            <div className="track-genre-list">
               {track.genres.map((genre, index) => (
                 <Label key={index} id={genre.genreId} label={genre.genreName} />
               ))}
