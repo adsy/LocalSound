@@ -56,6 +56,26 @@ namespace localsound.backend.api.Controllers
             return Ok();
         }
 
+        [HttpPut]
+        [Route("member/{memberId}/track/{trackId}")]
+        public async Task<ActionResult> UpdateTrackSupportingDetails([FromForm] TrackUpdateDto data, string memberId, Guid trackId)
+        {
+            var result = await Mediator.Send(new UpdateTrackSupportingDetailsCommand
+            {
+                AppUserId = CurrentUser.AppUserId,
+                MemberId = memberId,
+                TrackId = trackId,
+                TrackData = data
+            });
+
+            if (!result.IsSuccessStatusCode)
+            {
+                return StatusCode((int)result.StatusCode);
+            }
+
+            return Ok();
+        }
+
         [HttpGet]
         [Route("member/{memberId}")]
         [AllowAnonymous]
@@ -65,6 +85,25 @@ namespace localsound.backend.api.Controllers
             {
                 MemberId = memberId,
                 Page = page
+            });
+
+            if (!result.IsSuccessStatusCode)
+            {
+                return StatusCode((int)result.StatusCode);
+            }
+
+            return Ok(result.ReturnData);
+        }
+
+        [HttpGet]
+        [Route("member/{memberId}/track/{trackId}")]
+        [AllowAnonymous]
+        public async Task<ActionResult> GetArtistTrack(string memberId, Guid trackId)
+        {
+            var result = await Mediator.Send(new GetArtistTrackQuery
+            {
+                MemberId = memberId,
+                TrackId = trackId
             });
 
             if (!result.IsSuccessStatusCode)

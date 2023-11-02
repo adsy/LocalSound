@@ -97,6 +97,31 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
+        public async Task<ServiceResponse<ArtistTrackUploadDto>> GetArtistTrack(string memberId, Guid trackId)
+        {
+            try
+            {
+                var track = await _trackRepository.GetArtistTrackAsync(memberId, trackId);
+
+                var returnData = _mapper.Map<ArtistTrackUploadDto>(track.ReturnData);
+
+                return new ServiceResponse<ArtistTrackUploadDto>(HttpStatusCode.OK)
+                { 
+                    ReturnData = returnData 
+                };
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(TrackService)} - {nameof(GetArtistTrack)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<ArtistTrackUploadDto>(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured retrieving track details, please try again..."
+                };
+            }
+        }
+
         public async Task<ServiceResponse<TrackListResponseDto>> GetArtistTracks(string memberId, int page)
         {
             try
@@ -128,6 +153,45 @@ namespace localsound.backend.Infrastructure.Services
                 return new ServiceResponse<TrackListResponseDto>(HttpStatusCode.InternalServerError)
                 {
                     ServiceResponseMessage = "An error occured uploading your track, please try again..."
+                };
+            }
+        }
+
+        public async Task<ServiceResponse> UpdateTrackSupportingDetails(Guid userId, string memberId, Guid trackId, TrackUpdateDto trackData)
+        {
+            try
+            {
+                var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
+
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                {
+                    return new ServiceResponse<TrackUploadSASDto>(HttpStatusCode.InternalServerError);
+                }
+
+                // Check if new image was added
+                FileContent newTrackImage = null;
+
+                // If it was then upload to azure and get details
+
+                // push a delete operation to a queue to delete the old photo datas so execution doesnt hang
+
+                var updateResult = await _trackRepository.UpdateArtistTrackUploadAsync(appUser.ReturnData, trackId, trackData.TrackName, trackData.TrackDescription, trackData.Genres, trackData.TrackImageExt, newTrackImage);
+
+                if (updateResult == null || updateResult.StatusCode != HttpStatusCode.OK) 
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError);
+                }
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch(Exception e)
+            {
+                var message = $"{nameof(TrackService)} - {nameof(UpdateTrackSupportingDetails)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured updating your track, please try again..."
                 };
             }
         }

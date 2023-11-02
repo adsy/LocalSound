@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { UserModel } from "../../../../app/model/dto/user.model";
 import agent from "../../../../api/agent";
 import { Button, Form, ProgressBar } from "react-bootstrap";
@@ -13,15 +13,18 @@ import MyTextArea from "../../../../common/form/MyTextArea";
 import SearchGenreTypes from "../Edit/Search/SearchGenreTypes";
 import { GenreModel } from "../../../../app/model/dto/genre.model";
 import userImg from "../../../../assets/icons/user.svg";
-import { Image, Placeholder } from "semantic-ui-react";
+import { Image } from "semantic-ui-react";
 import ImageCropper from "../../../../common/components/Cropper/ImageCropper";
 import { CropTypes } from "../../../../app/model/enums/cropTypes";
+import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-upload.model";
 
 interface Props {
   userDetails: UserModel;
+  tracks: ArtistTrackUploadModel[];
+  setTracks: (tracks: ArtistTrackUploadModel[]) => void;
 }
 
-const ArtistUploadForm = ({ userDetails }: Props) => {
+const ArtistUploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
   const [file, setFile] = useState<File | null>(null);
   const [trackExt, setTrackExt] = useState<string | null>(null);
   const [trackImage, setTrackImage] = useState<File | null>(null);
@@ -64,11 +67,6 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
         setTrackProgress((ev.loadedBytes / file!.size) * 100);
       },
     } as BlockBlobUploadOptions);
-  };
-
-  const formValuesUntouched = (values: any) => {
-    //TODO: add checks
-    return false;
   };
 
   const onFileUpload = async (file: Blob) => {
@@ -126,7 +124,6 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
                 onSubmit={async (values, { setStatus }) => {
                   try {
                     if (file && croppedImage) {
-                      // await uploadWaveForm();
                       await uploadBlob();
 
                       var duration = await getDuration(file);
@@ -173,11 +170,20 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
 
                       formData.append("duration", `${duration}`);
 
+                      // Upload track
                       await agent.Tracks.uploadTrackSupportingData(
                         userDetails.memberId,
                         uploadData!.trackId,
                         formData
                       );
+
+                      // Get the uploaded track details so its updated in the upload list
+                      var uploadedTrack = await agent.Tracks.getTrackDetails(
+                        userDetails.memberId,
+                        uploadData!.trackId
+                      );
+
+                      setTracks([uploadedTrack, ...tracks]);
 
                       setUploadTrackSuccess(true);
                     }
@@ -187,7 +193,6 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
                     setUploadTrackError(true);
                   }
                 }}
-                // validationSchema={} // TODO: Need to add validation
               >
                 {({
                   values,
@@ -197,8 +202,7 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
                   status,
                   submitForm,
                 }) => {
-                  const disabled =
-                    !isValid || isSubmitting || formValuesUntouched(values);
+                  const disabled = !isValid || isSubmitting;
                   return (
                     <Form
                       className="ui form error fade-in"
@@ -344,4 +348,4 @@ const ArtistUploadForm = ({ userDetails }: Props) => {
   );
 };
 
-export default ArtistUploadForm;
+export default ArtistUploadTrackForm;

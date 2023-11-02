@@ -9,10 +9,16 @@ import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponen
 interface Props {
   userDetails: UserModel;
   onUploads: boolean;
+  tracks: ArtistTrackUploadModel[];
+  setTracks: (tracks: ArtistTrackUploadModel[]) => void;
 }
 
-const ArtistUploadsList = ({ userDetails, onUploads }: Props) => {
-  const [tracks, setTracks] = useState<ArtistTrackUploadModel[]>([]);
+const ArtistUploadsList = ({
+  userDetails,
+  onUploads,
+  tracks,
+  setTracks,
+}: Props) => {
   const [page, setPage] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
@@ -57,7 +63,12 @@ const ArtistUploadsList = ({ userDetails, onUploads }: Props) => {
     <div ref={listRef}>
       {tracks.map((track, index) => (
         <div key={index} className="fade-in">
-          <Track track={track} artistDetails={userDetails} />
+          <Track
+            track={track}
+            artistDetails={userDetails}
+            tracks={tracks}
+            setTracks={setTracks}
+          />
         </div>
       ))}
       {loading ? (

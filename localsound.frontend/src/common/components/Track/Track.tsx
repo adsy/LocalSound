@@ -18,14 +18,19 @@ import {
 } from "../../waveformGenerator/waveformGenerator";
 import WaveForm from "../../../features/MusicPlayer/Waveform";
 import { Button } from "react-bootstrap";
+import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
+import ArtistEditTrackForm from "../../../features/UserProfile/Artist/ArtistUploads/ArtistEditTrackForm";
 
 interface Props {
   track: ArtistTrackUploadModel;
   artistDetails: UserModel;
+  tracks: ArtistTrackUploadModel[];
+  setTracks: (tracks: ArtistTrackUploadModel[]) => void;
 }
 
-const Track = ({ track, artistDetails }: Props) => {
+const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
   const player = useSelector((state: State) => state.player);
+  const loggedInUser = useSelector((state: State) => state.user.userDetails);
   const dispatch = useDispatch();
   const [singleton, setSingleton] = useState<SingletonClass>(
     SingletonFactory.getInstance()
@@ -67,6 +72,23 @@ const Track = ({ track, artistDetails }: Props) => {
     }
   };
 
+  const openEditTrackModal = () => {
+    dispatch(
+      handleToggleModal({
+        open: true,
+        body: (
+          <ArtistEditTrackForm
+            userDetails={loggedInUser!}
+            trackDetails={track}
+            tracks={tracks}
+            setTracks={setTracks}
+          />
+        ),
+        size: "large",
+      })
+    );
+  };
+
   return (
     <div id="track" className="mb-4">
       <div className="d-flex flex-row w-100">
@@ -94,12 +116,30 @@ const Track = ({ track, artistDetails }: Props) => {
             </div>
 
             <div className="my-1">
-              <Button className="black-button like-button mr-1">
-                <Icon name="heart" size="small" className="mr-0" />
-              </Button>
-              <Button className="black-button like-button">
-                <Icon name="pencil" size="small" className="mr-0" />
-              </Button>
+              {loggedInUser ? (
+                <Button className="white-button track-button mr-1">
+                  <h4>
+                    <Icon name="heart" size="small" className="mr-0" />
+                  </h4>
+                </Button>
+              ) : null}
+              {artistDetails.memberId === loggedInUser?.memberId ? (
+                <Button
+                  className="white-button track-button mr-1"
+                  onClick={() => openEditTrackModal()}
+                >
+                  <h4>
+                    <Icon name="pencil" size="small" className="mr-0" />
+                  </h4>
+                </Button>
+              ) : null}
+              {artistDetails.memberId === loggedInUser?.memberId ? (
+                <Button className="white-button track-button bin-button">
+                  <h4>
+                    <Icon name="trash" size="small" className="mr-0" />
+                  </h4>
+                </Button>
+              ) : null}
             </div>
           </div>
 

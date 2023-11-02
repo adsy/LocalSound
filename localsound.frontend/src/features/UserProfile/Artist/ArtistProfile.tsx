@@ -11,8 +11,9 @@ import EditCoverPhoto from "./Edit/EditCoverPhoto";
 import ArtistDetails from "./ArtistDetails";
 import ArtistBannerSummary from "./ArtistBannerSummary";
 import { Icon } from "semantic-ui-react";
-import ArtistUploadForm from "./ArtistUploads/ArtistUploadTrackForm";
+import ArtistUploadTrackForm from "./ArtistUploads/ArtistUploadTrackForm";
 import ArtistUploadsList from "./ArtistUploads/ArtistUploadsList";
+import { ArtistTrackUploadModel } from "../../../app/model/dto/artist-track-upload.model";
 
 interface Props {
   userDetails: UserModel;
@@ -29,6 +30,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
   const [key, setKey] = useState<string | null>("artistDetails");
   const [onUploads, setOnUploads] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [tracks, setTracks] = useState<ArtistTrackUploadModel[]>([]);
   const dispatch = useDispatch();
 
   const loadImage = (image: AccountImageModel) => {
@@ -80,7 +82,13 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
     dispatch(
       handleToggleModal({
         open: true,
-        body: <ArtistUploadForm userDetails={userDetails} />,
+        body: (
+          <ArtistUploadTrackForm
+            userDetails={userDetails}
+            tracks={tracks}
+            setTracks={setTracks}
+          />
+        ),
         size: "large",
       })
     );
@@ -209,6 +217,8 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                 <ArtistUploadsList
                   userDetails={userDetails}
                   onUploads={onUploads}
+                  tracks={tracks}
+                  setTracks={setTracks}
                 />
               </Tab>
             </Tabs>

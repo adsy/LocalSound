@@ -146,8 +146,17 @@ const Tracks = {
     trackId: string,
     formData: FormData
   ) => requests.post(`track/member/${memberId}/track/${trackId}`, formData),
+  editTrackSupportingDetails: (
+    memberId: string,
+    trackId: string,
+    formData: FormData
+  ) => requests.put(`track/member/${memberId}/track/${trackId}`, formData),
   getArtistUploads: (memberId: string, page: number) =>
     requests.get<TrackListResponse>(`track/member/${memberId}?page=${page}`),
+  getTrackDetails: (memberId: string, trackId: string) =>
+    requests.get<ArtistTrackUploadModel>(
+      `track/member/${memberId}/track/${trackId}`
+    ),
 };
 
 const agent = {

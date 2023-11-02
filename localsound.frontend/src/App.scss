@@ -657,7 +657,7 @@ i.large.icon {
 }
 
 #track {
-  .like-button {
+  .track-button {
     padding-top: 1px;
     padding-bottom: 2px;
     padding-left: 5px;
@@ -667,6 +667,12 @@ i.large.icon {
     .small {
       margin-right: 0px;
       padding-left: 1px;
+    }
+  }
+
+  .bin-button {
+    .small {
+      padding-left: 2px;
     }
   }
 
@@ -1216,5 +1222,15 @@ i.large.icon {
 
   .ui.container {
     width: unset !important;
+  }
+
+  #track {
+    .track-image {
+      width: 80px !important;
+    }
+
+    .track-name {
+      font-size: 14px !important;
+    }
   }
 }

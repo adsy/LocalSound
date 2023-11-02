@@ -771,16 +771,19 @@ i.large.icon {
   width: 1rem;
 }
 
-#track .like-button {
+#track .track-button {
   padding-top: 1px;
   padding-bottom: 2px;
   padding-left: 5px;
   padding-right: 6px;
   color: #ececec !important;
 }
-#track .like-button .small {
+#track .track-button .small {
   margin-right: 0px;
   padding-left: 1px;
+}
+#track .bin-button .small {
+  padding-left: 2px;
 }
 #track .track-image {
   border-radius: 5px;
@@ -1343,6 +1346,12 @@ i.large.icon {
   }
   .ui.container {
     width: unset !important;
+  }
+  #track .track-image {
+    width: 80px !important;
+  }
+  #track .track-name {
+    font-size: 14px !important;
   }
 }
 
