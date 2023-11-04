@@ -41,6 +41,27 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
+        public async Task<ServiceResponse> DeleteTrackAsync(ArtistTrackUpload track)
+        {
+            try
+            {
+                _dbContext.FileContent.Remove(track.TrackData);
+                _dbContext.FileContent.Remove(track.TrackImage);
+                _dbContext.ArtistTrackUpload.Remove(track);
+
+                await _dbContext.SaveChangesAsync();
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(TrackRepository)} - {nameof(DeleteTrackAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError);
+            }
+        }
+
         public async Task<ServiceResponse<ArtistTrackUpload>> GetArtistTrackAsync(string memberId, Guid trackId)
         {
             try
@@ -54,6 +75,7 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 var track = await _dbContext.ArtistTrackUpload
                     .Include(x => x.TrackData)
+                    .Include(x => x.TrackImage)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
                     .FirstOrDefaultAsync(x => x.AppUserId == artist.Id && x.ArtistTrackUploadId == trackId);
@@ -112,11 +134,14 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> UpdateArtistTrackUploadAsync(AppUser appUser, Guid trackId, string trackName, string trackDescription, List<GenreDto> genres, string? trackImageExt, FileContent? newTrackImage)
+        public async Task<ServiceResponse> UpdateArtistTrackUploadAsync(AppUser appUser, Guid trackId, string trackName, string trackDescription, List<GenreDto> genres, string? trackImageExt, FileContent? newTrackImage, string newTrackImageUrl)
         {
             try
             {
-                var track = await _dbContext.ArtistTrackUpload.FirstOrDefaultAsync(x => x.AppUserId == appUser.Id && x.ArtistTrackUploadId == trackId);
+                var track = await _dbContext.ArtistTrackUpload
+                    .Include(x => x.Genres)
+                    .Include(x => x.TrackImage)
+                    .FirstOrDefaultAsync(x => x.AppUserId == appUser.Id && x.ArtistTrackUploadId == trackId);
 
                 if (track == null)
                 {
@@ -133,7 +158,10 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 if (newTrackImage != null)
                 {
-                    // update track image with track data
+                    await _dbContext.FileContent.AddAsync(newTrackImage);
+                    _dbContext.FileContent.Remove(track.TrackImage);
+                    track.TrackImage = newTrackImage;
+                    track.TrackImageUrl = newTrackImageUrl;
                 }
 
                 await _dbContext.SaveChangesAsync();

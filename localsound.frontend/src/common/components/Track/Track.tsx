@@ -20,6 +20,7 @@ import WaveForm from "../../../features/MusicPlayer/Waveform";
 import { Button } from "react-bootstrap";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import ArtistEditTrackForm from "../../../features/UserProfile/Artist/ArtistUploads/ArtistEditTrackForm";
+import agent from "../../../api/agent";
 
 interface Props {
   track: ArtistTrackUploadModel;
@@ -89,6 +90,24 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
     );
   };
 
+  const deleteTrack = async () => {
+    try {
+      if (loggedInUser?.memberId && track.artistTrackUploadId) {
+        await agent.Tracks.deleteTrack(
+          loggedInUser?.memberId,
+          track.artistTrackUploadId
+        );
+
+        var tracksFiltered = tracks.filter(
+          (x) => x.artistTrackUploadId !== track.artistTrackUploadId
+        );
+        setTracks(tracksFiltered);
+      }
+    } catch (err) {
+      //TODO: Do something with error
+    }
+  };
+
   return (
     <div id="track" className="mb-4">
       <div className="d-flex flex-row w-100">
@@ -116,13 +135,6 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
             </div>
 
             <div className="my-1">
-              {loggedInUser ? (
-                <Button className="white-button track-button mr-1">
-                  <h4>
-                    <Icon name="heart" size="small" className="mr-0" />
-                  </h4>
-                </Button>
-              ) : null}
               {artistDetails.memberId === loggedInUser?.memberId ? (
                 <Button
                   className="white-button track-button mr-1"
@@ -134,7 +146,10 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
                 </Button>
               ) : null}
               {artistDetails.memberId === loggedInUser?.memberId ? (
-                <Button className="white-button track-button bin-button">
+                <Button
+                  className="white-button track-button bin-button"
+                  onClick={async () => await deleteTrack()}
+                >
                   <h4>
                     <Icon name="trash" size="small" className="mr-0" />
                   </h4>

@@ -7,6 +7,7 @@ namespace localsound.backend.Infrastructure.Interface.Services
 {
     public interface ITrackService
     {
+        Task<ServiceResponse> DeleteArtistTrack(Guid userId, string memberId, Guid trackId);
         Task<ServiceResponse<TrackUploadSASDto>> GenerateTrackUploadSASDto(Guid userId, string memberId);
         Task<ServiceResponse<ArtistTrackUploadDto>> GetArtistTrack(string memberId, Guid trackId);
         Task<ServiceResponse<TrackListResponseDto>> GetArtistTracks(string memberId, int page);

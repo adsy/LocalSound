@@ -1,6 +1,7 @@
 ﻿using localsound.backend.api.Commands.Track;
 using localsound.backend.api.Queries.Track;
 using localsound.backend.Domain.Model.Dto.Submission;
+using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Domain.ModelAdaptor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -112,6 +113,25 @@ namespace localsound.backend.api.Controllers
             }
 
             return Ok(result.ReturnData);
+        }
+
+        [HttpDelete]
+        [Route("member/{memberId}/track/{trackId}")]
+        public async Task<ActionResult> DeleteArtistTrack(string memberId, Guid trackId)
+        {
+            var result = await Mediator.Send(new DeleteArtistTrackCommand
+            {
+                AppUserId = CurrentUser.AppUserId,
+                MemberId = memberId,
+                TrackId = trackId
+            });
+
+            if (!result.IsSuccessStatusCode)
+            {
+                return StatusCode((int)result.StatusCode);
+            }
+
+            return Ok();
         }
     }
 }

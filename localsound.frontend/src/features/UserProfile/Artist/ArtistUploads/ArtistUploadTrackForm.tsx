@@ -338,7 +338,7 @@ const ArtistUploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
         ) : (
           <>
             <SuccessBanner className="fade-in mb-0 mx-3">
-              Your track has been successfully updated. Go back to your track
+              Your track has been successfully uploaded. Go back to your track
               list to check it out.
             </SuccessBanner>
           </>

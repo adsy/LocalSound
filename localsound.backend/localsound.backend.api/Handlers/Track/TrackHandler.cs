@@ -12,7 +12,8 @@ namespace localsound.backend.api.Handlers.Track
         IRequestHandler<AddTrackSupportingDetailsCommand, ServiceResponse>,
         IRequestHandler<GetArtistTracksQuery, ServiceResponse<TrackListResponseDto>>,
         IRequestHandler<GetArtistTrackQuery, ServiceResponse<ArtistTrackUploadDto>>,
-        IRequestHandler<UpdateTrackSupportingDetailsCommand, ServiceResponse>
+        IRequestHandler<UpdateTrackSupportingDetailsCommand, ServiceResponse>,
+        IRequestHandler<DeleteArtistTrackCommand, ServiceResponse>
     {
         private readonly ITrackService _trackService;
 
@@ -44,6 +45,11 @@ namespace localsound.backend.api.Handlers.Track
         public async Task<ServiceResponse> Handle(UpdateTrackSupportingDetailsCommand request, CancellationToken cancellationToken)
         {
             return await _trackService.UpdateTrackSupportingDetails(request.AppUserId, request.MemberId, request.TrackId, request.TrackData); 
+        }
+
+        public async Task<ServiceResponse> Handle(DeleteArtistTrackCommand request, CancellationToken cancellationToken)
+        {
+            return await _trackService.DeleteArtistTrack(request.AppUserId, request.MemberId, request.TrackId);
         }
     }
 }

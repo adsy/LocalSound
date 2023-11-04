@@ -34,6 +34,66 @@ namespace localsound.backend.Infrastructure.Services
             _mapper = mapper;
         }
 
+        public async Task<ServiceResponse> DeleteArtistTrack(Guid userId, string memberId, Guid trackId)
+        {
+            try
+            {
+                var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
+
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured deleting your track, please try again..."
+                    };
+                }
+
+                var track = await _trackRepository.GetArtistTrackAsync(memberId, trackId);
+
+                if (track == null || track.ReturnData == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.NotFound)
+                    {
+                        ServiceResponseMessage = "An error occured deleting your track, please try again..."
+                    };
+                }
+
+                var imageDeleteResult = await _blobRepository.DeleteBlobAsync(track.ReturnData.TrackImage.FileLocation);
+
+                if (imageDeleteResult == null || !imageDeleteResult.IsSuccessStatusCode)
+                {
+                    // Push delete operation to a queue so it can be done at a different time
+                }
+
+                var trackDeleteResult = await _blobRepository.DeleteBlobAsync(track.ReturnData.TrackData.FileLocation);
+
+                if (trackDeleteResult == null || !trackDeleteResult.IsSuccessStatusCode)
+                {
+                    // Push delete operation to a queue so it can be done at a different time
+                }
+
+                var dbDeleteResult = await _trackRepository.DeleteTrackAsync(track.ReturnData);
+
+                if (dbDeleteResult == null || !dbDeleteResult.IsSuccessStatusCode)
+                    return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured deleting your track, please try again..."
+                    };
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch(Exception e)
+            {
+                var message = $"{nameof(TrackService)} - {nameof(DeleteArtistTrack)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured deleting your track, please try again..."
+                };
+            }
+        }
+
         public async Task<ServiceResponse<TrackUploadSASDto>> GenerateTrackUploadSASDto(Guid userId, string memberId)
         {
             try
@@ -165,17 +225,60 @@ namespace localsound.backend.Infrastructure.Services
 
                 if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
                 {
-                    return new ServiceResponse<TrackUploadSASDto>(HttpStatusCode.InternalServerError);
+                    return new ServiceResponse(HttpStatusCode.InternalServerError);
+                }
+
+                var track = await _trackRepository.GetArtistTrackAsync(memberId, trackId);
+
+                if (track == null || track.ReturnData == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.NotFound);
                 }
 
                 // Check if new image was added
-                FileContent newTrackImage = null;
-
+                FileContent? newTrackImage = null;
+                ServiceResponse<string>? uploadResponse = null;
+                ServiceResponse? deleteResponse = null;
+                string newTrackImageUrl = null;
                 // If it was then upload to azure and get details
+                if (trackData.TrackImage != null)
+                {
+                    var imageId = Guid.NewGuid();
+                    var imageFilePath = $"[{userId}]/uploads/{trackId}/image/{imageId}{trackData.TrackImageExt}";
 
-                // push a delete operation to a queue to delete the old photo datas so execution doesnt hang
+                    uploadResponse = await _blobRepository.UploadBlobAsync(imageFilePath, trackData.TrackImage);
 
-                var updateResult = await _trackRepository.UpdateArtistTrackUploadAsync(appUser.ReturnData, trackId, trackData.TrackName, trackData.TrackDescription, trackData.Genres, trackData.TrackImageExt, newTrackImage);
+                    if (uploadResponse != null && 
+                        (!uploadResponse.IsSuccessStatusCode || 
+                        uploadResponse.ReturnData == null || 
+                        string.IsNullOrWhiteSpace(uploadResponse.ReturnData)))
+                    {
+                        return new ServiceResponse(HttpStatusCode.InternalServerError)
+                        {
+                            ServiceResponseMessage = "An error occured updating your track, please try again..."
+                        };
+                    }
+
+                    deleteResponse = await _blobRepository.DeleteBlobAsync(track.ReturnData.TrackImage.FileLocation);
+
+                    newTrackImageUrl = uploadResponse.ReturnData;
+                    newTrackImage = new FileContent
+                    {
+                        FileContentId = imageId,
+                        FileLocation = imageFilePath,
+                        FileExtensionType = trackData.TrackImageExt != null ? trackData.TrackImageExt : ".jpg",
+                    };
+                }
+
+                if (deleteResponse != null && !deleteResponse.IsSuccessStatusCode)
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured updating your track, please try again..."
+                    };
+                }
+
+                var updateResult = await _trackRepository.UpdateArtistTrackUploadAsync(appUser.ReturnData, trackId, trackData.TrackName, trackData.TrackDescription, trackData.Genres, trackData.TrackImageExt, newTrackImage, newTrackImageUrl);
 
                 if (updateResult == null || updateResult.StatusCode != HttpStatusCode.OK) 
                 {

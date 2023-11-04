@@ -90,10 +90,8 @@ const ImageCropper = ({ file, onFileUpload, cancelCrop, cropType }: Props) => {
           <Cropper
             ref={cropperRef}
             style={{
-              maxWidth: "400px",
-              minWidth: "315px",
-              minHeight: "315px",
-              maxHeight: "350px",
+              height: "315px",
+              width: "315px",
               alignSelf: "center",
             }}
             zoomTo={0.5}
@@ -106,7 +104,7 @@ const ImageCropper = ({ file, onFileUpload, cancelCrop, cropType }: Props) => {
             autoCropArea={1}
             checkOrientation={false}
             guides={true}
-            size={300}
+            size={315}
           />
         )}
 

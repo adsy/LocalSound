@@ -157,6 +157,8 @@ const Tracks = {
     requests.get<ArtistTrackUploadModel>(
       `track/member/${memberId}/track/${trackId}`
     ),
+  deleteTrack: (memberId: string, trackId: string) =>
+    requests.delete(`track/member/${memberId}/track/${trackId}`),
 };
 
 const agent = {
