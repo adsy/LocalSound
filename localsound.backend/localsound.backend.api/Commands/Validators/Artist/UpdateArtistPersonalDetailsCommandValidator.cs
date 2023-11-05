@@ -3,9 +3,9 @@ using localsound.backend.api.Commands.Artist;
 
 namespace localsound.backend.api.Commands.Validators.Artist
 {
-    public class UpdateArtistDetailsCommandValidator:AbstractValidator<UpdateArtistPersonalDetailsCommand>
+    public class UpdateArtistPersonalDetailsCommandValidator:AbstractValidator<UpdateArtistPersonalDetailsCommand>
     {
-        public UpdateArtistDetailsCommandValidator()
+        public UpdateArtistPersonalDetailsCommandValidator()
         {
             RuleFor(m => m.UserId)
                 .NotEmpty()

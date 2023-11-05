@@ -29,7 +29,7 @@ namespace localsound.backend.api.Handlers.Track
 
         public async Task<ServiceResponse> Handle(AddTrackSupportingDetailsCommand request, CancellationToken cancellationToken)
         {
-            return await _trackService.UploadTrackSupportingDetails(request.AppUserId, request.MemberId, request.TrackId, request.TrackData);
+            return await _trackService.UploadTrackSupportingDetails(request.UserId, request.MemberId, request.TrackId, request.TrackData);
         }
 
         public async Task<ServiceResponse<TrackListResponseDto>> Handle(GetArtistTracksQuery request, CancellationToken cancellationToken)
@@ -44,12 +44,12 @@ namespace localsound.backend.api.Handlers.Track
 
         public async Task<ServiceResponse> Handle(UpdateTrackSupportingDetailsCommand request, CancellationToken cancellationToken)
         {
-            return await _trackService.UpdateTrackSupportingDetails(request.AppUserId, request.MemberId, request.TrackId, request.TrackData); 
+            return await _trackService.UpdateTrackSupportingDetails(request.UserId, request.MemberId, request.TrackId, request.TrackData); 
         }
 
         public async Task<ServiceResponse> Handle(DeleteArtistTrackCommand request, CancellationToken cancellationToken)
         {
-            return await _trackService.DeleteArtistTrack(request.AppUserId, request.MemberId, request.TrackId);
+            return await _trackService.DeleteArtistTrack(request.UserId, request.MemberId, request.TrackId);
         }
     }
 }

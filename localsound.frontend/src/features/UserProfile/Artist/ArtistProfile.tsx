@@ -219,6 +219,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                   onUploads={onUploads}
                   tracks={tracks}
                   setTracks={setTracks}
+                  viewingOwnProfile={viewingOwnProfile}
                 />
               </Tab>
             </Tabs>

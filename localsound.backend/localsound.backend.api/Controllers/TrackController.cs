@@ -43,7 +43,7 @@ namespace localsound.backend.api.Controllers
         {
             var result = await Mediator.Send(new AddTrackSupportingDetailsCommand
             {
-                AppUserId = CurrentUser.AppUserId,
+                UserId = CurrentUser.AppUserId,
                 MemberId = memberId,
                 TrackId = trackId,
                 TrackData = data
@@ -63,7 +63,7 @@ namespace localsound.backend.api.Controllers
         {
             var result = await Mediator.Send(new UpdateTrackSupportingDetailsCommand
             {
-                AppUserId = CurrentUser.AppUserId,
+                UserId = CurrentUser.AppUserId,
                 MemberId = memberId,
                 TrackId = trackId,
                 TrackData = data
@@ -121,7 +121,7 @@ namespace localsound.backend.api.Controllers
         {
             var result = await Mediator.Send(new DeleteArtistTrackCommand
             {
-                AppUserId = CurrentUser.AppUserId,
+                UserId = CurrentUser.AppUserId,
                 MemberId = memberId,
                 TrackId = trackId
             });

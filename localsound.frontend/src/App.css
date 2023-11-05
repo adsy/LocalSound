@@ -396,7 +396,7 @@ h6 {
   width: 45%;
 }
 #landing-page .banner {
-  height: 25rem;
+  height: 30rem;
   background-image: url("./assets/landing-page-banner/banner1.jpg");
   background-size: cover !important;
   background-attachment: inherit !important;
@@ -470,6 +470,9 @@ i.large.icon {
   background-position: center;
   background-size: 100%;
   border: unset !important;
+}
+#navbar .navbar-toggler {
+  margin-right: 0 !important;
 }
 #navbar .navbar-toggler.collapsed {
   border: unset !important;
@@ -642,6 +645,7 @@ i.large.icon {
   padding: 0;
   font-size: 14px;
   text-wrap: initial;
+  margin-left: 0.25rem;
 }
 .black-badge .badge-delete-btn {
   padding-right: 6.825px;
@@ -801,9 +805,6 @@ i.large.icon {
 #track .track-genre-list {
   margin-top: 5px;
   text-align: right;
-}
-#track .track-genre-list .black-badge:last-child {
-  margin-right: 0px;
 }
 #track .artist-name {
   color: gray;
@@ -1230,6 +1231,10 @@ i.large.icon {
   text-align: justify;
   white-space: break-spaces;
 }
+#user-profile .about-text .black-badge {
+  margin-left: 0;
+  margin-right: 0.25rem;
+}
 #user-profile .details-container {
   position: absolute;
   bottom: 0px;
@@ -1353,6 +1358,10 @@ i.large.icon {
   }
 }
 @media only screen and (max-width: 767px) {
+  #navbar .navbar {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
   #navbar .navbar-title {
     display: none;
   }
@@ -1360,7 +1369,8 @@ i.large.icon {
     width: unset !important;
   }
   #track .track-image {
-    width: 80px !important;
+    width: 130px !important;
+    height: 130px !important;
   }
   #track .track-name {
     font-size: 14px !important;

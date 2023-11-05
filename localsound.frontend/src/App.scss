@@ -265,7 +265,7 @@ $end: 10;
     width: 45%;
   }
   .banner {
-    height: 25rem;
+    height: 30rem;
     background-image: url("./assets/landing-page-banner/banner1.jpg");
     background-size: cover !important;
     background-attachment: inherit !important;
@@ -343,6 +343,10 @@ i.large.icon {
     background-position: center;
     background-size: 100%;
     border: unset !important;
+  }
+
+  .navbar-toggler {
+    margin-right: 0 !important;
   }
 
   .navbar-toggler.collapsed {
@@ -509,6 +513,7 @@ i.large.icon {
   padding: 0;
   font-size: 14px;
   text-wrap: initial;
+  margin-left: 0.25rem;
 
   .badge-delete-btn {
     padding-right: 6.825px;
@@ -696,11 +701,6 @@ i.large.icon {
   .track-genre-list {
     margin-top: 5px;
     text-align: right;
-    // width: 50%;
-
-    .black-badge:last-child {
-      margin-right: 0px;
-    }
   }
 
   .playbutton-container {
@@ -1086,6 +1086,10 @@ i.large.icon {
     letter-spacing: 1px;
     text-align: justify;
     white-space: break-spaces;
+    .black-badge {
+      margin-left: 0;
+      margin-right: 0.25rem;
+    }
   }
 
   .details-container {
@@ -1231,6 +1235,11 @@ i.large.icon {
 
 @media only screen and (max-width: 767px) {
   #navbar {
+    .navbar {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
     .navbar-title {
       display: none;
     }
@@ -1242,7 +1251,8 @@ i.large.icon {
 
   #track {
     .track-image {
-      width: 80px !important;
+      width: 130px !important;
+      height: 130px !important;
     }
 
     .track-name {

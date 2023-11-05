@@ -6,7 +6,7 @@ namespace localsound.backend.api.Commands.Track
 {
     public class UpdateTrackSupportingDetailsCommand : IRequest<ServiceResponse>
     {
-        public Guid AppUserId { get; set; }
+        public Guid UserId { get; set; }
         public string MemberId { get; set; }
         public Guid TrackId { get; set; }
         public TrackUpdateDto TrackData { get; set; }

@@ -49,9 +49,7 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
       const IMAGES = [track.trackImageUrl];
       Promise.all(IMAGES.map((image) => loadImage(image)))
         .then(() => {
-          setTimeout(() => {
-            setTrackImage(track.trackImageUrl);
-          }, 10000);
+          setTrackImage(track.trackImageUrl);
         })
         .catch((err) => console.log("Failed to load images", err))
         .finally(() => {

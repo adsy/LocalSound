@@ -11,6 +11,7 @@ interface Props {
   onUploads: boolean;
   tracks: ArtistTrackUploadModel[];
   setTracks: (tracks: ArtistTrackUploadModel[]) => void;
+  viewingOwnProfile: boolean;
 }
 
 const ArtistUploadsList = ({
@@ -18,6 +19,7 @@ const ArtistUploadsList = ({
   onUploads,
   tracks,
   setTracks,
+  viewingOwnProfile,
 }: Props) => {
   const [page, setPage] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
@@ -74,6 +76,20 @@ const ArtistUploadsList = ({
       {loading ? (
         <div className="h-100 mt-5 d-flex justify-content-center align-self-center">
           <InPageLoadingComponent height={80} width={80} />
+        </div>
+      ) : null}
+      {tracks.length < 1 ? (
+        <div className="d-flex flex-row justify-content-center mt-5">
+          <h5>
+            {viewingOwnProfile ? (
+              <span>
+                There are no tracks available. Click on the upload icon within
+                your profile banner to start uploading a track.
+              </span>
+            ) : (
+              <span>This artist has no tracks uploaded yet.</span>
+            )}
+          </h5>
         </div>
       ) : null}
     </div>

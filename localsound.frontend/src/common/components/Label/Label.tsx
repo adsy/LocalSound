@@ -16,7 +16,7 @@ const Label = ({
   color = "black-badge",
 }: Props) => {
   return (
-    <Badge className={`${color} mr-1`}>
+    <Badge className={`${color}`}>
       <div className="d-flex flex-row">
         <div className={`badge-name ${showDeleteButton ? "short" : "long"}`}>
           {label}

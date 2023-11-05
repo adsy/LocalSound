@@ -2,13 +2,16 @@ import Navbar from "react-bootstrap/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../model/redux/state";
 import logo from "../../assets/logo3.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Container, Nav, Offcanvas } from "react-bootstrap";
 import { Divider, Icon } from "semantic-ui-react";
 import { NavLink, useHistory } from "react-router-dom";
 import agent from "../../api/agent";
 import { handleResetUserState } from "../redux/actions/userSlice";
 import { handleResetAppState } from "../redux/actions/applicationSlice";
+import { handleToggleModal } from "../redux/actions/modalSlice";
+import Login from "../../features/Authentication/Login/Login";
+import Register from "../../features/Authentication/Register/Register";
 
 const TopNavbar = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
@@ -23,6 +26,26 @@ const TopNavbar = () => {
     dispatch(handleResetUserState());
     dispatch(handleResetAppState());
     setShow(false);
+  };
+
+  const handleAuthenticationRequest = (isLogin: boolean) => {
+    if (isLogin) {
+      dispatch(
+        handleToggleModal({
+          open: true,
+          body: <Login />,
+          size: "tiny",
+        })
+      );
+    } else {
+      dispatch(
+        handleToggleModal({
+          open: true,
+          body: <Register />,
+          size: "tiny",
+        })
+      );
+    }
   };
 
   return (
@@ -51,14 +74,29 @@ const TopNavbar = () => {
                 LocalSound
               </h4>
             </div>
-            <div className="d-flex flex-row ml-1">
+            <div className={`d-flex flex-row ml-1`}>
               {userDetails ? (
                 <Navbar.Toggle
                   aria-controls={`offcanvasNavbar-expand-false`}
                   className=" mr-1 align-self-center"
                   onClick={() => setShow(true)}
                 />
-              ) : null}
+              ) : (
+                <div className="d-flex flex-row justify-content-center">
+                  <Button
+                    className="black-button mr-2 auth-button"
+                    onClick={() => handleAuthenticationRequest(true)}
+                  >
+                    <h4>Login</h4>
+                  </Button>
+                  <Button
+                    className="black-button auth-button"
+                    onClick={() => handleAuthenticationRequest(false)}
+                  >
+                    <h4>Create account</h4>
+                  </Button>
+                </div>
+              )}
             </div>
             <Navbar.Offcanvas
               id={`offcanvasNavbar-expand-false`}
