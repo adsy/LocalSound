@@ -18,6 +18,7 @@ namespace localsound.backend.Domain.Model.Entity
         public string WaveformUrl { get; set; }
         public double Duration { get; set; }
         public DateTime UploadDate { get; set; }
+        public int FileSizeInBytes { get; set; }
 
         public virtual Artist Artist {get;set;}
         public virtual ICollection<ArtistTrackGenre>  Genres { get; set;}

@@ -349,7 +349,8 @@ namespace localsound.backend.Infrastructure.Services
                     TrackUrl = trackUploadDto.TrackUrl,
                     WaveformUrl = trackUploadDto.WaveformUrl,
                     Duration = double.TryParse(trackUploadDto.Duration, out var duration) ? duration : 0,
-                    UploadDate = DateTime.Now.ToLocalTime()
+                    UploadDate = DateTime.Now.ToLocalTime(),
+                    FileSizeInBytes = int.Parse(trackUploadDto.FileSize)
                 };
 
                 var addTrackResult = await _trackRepository.AddArtistTrackUploadAsync(track);

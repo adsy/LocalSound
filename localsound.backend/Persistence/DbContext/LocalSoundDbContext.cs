@@ -136,6 +136,11 @@ namespace localsound.backend.Persistence.DbContext
                 x.HasKey(x => x.FileContentId);
                 x.HasOne(x => x.Image).WithOne(x => x.FileContent).OnDelete(DeleteBehavior.Cascade);
             });
+
+            //builder.Entity<ArtistFollower>(x =>
+            //{
+            //    x.HasKey(key => new { key.Follower, key.Followee });
+            //});
         }
 
         public async Task<ServiceResponse> HandleSavingDB()

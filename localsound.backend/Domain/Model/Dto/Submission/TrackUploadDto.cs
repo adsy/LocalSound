@@ -15,5 +15,6 @@ namespace localsound.backend.Domain.Model.Dto.Submission
         public string TrackUrl { get; set; }
         public string WaveformUrl { get; set; }
         public string Duration { get; set; }
+        public string FileSize { get; set; }
     }
 }

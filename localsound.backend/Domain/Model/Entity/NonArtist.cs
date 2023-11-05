@@ -12,5 +12,6 @@ namespace localsound.backend.Domain.Model.Entity
         public string ProfileUrl { get; set; }
 
         public virtual AppUser User { get; set; }
+        //public virtual ArtistFollower ArtistsFollowing { get; set; }
     }
 }

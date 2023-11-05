@@ -170,6 +170,8 @@ const ArtistUploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
 
                       formData.append("duration", `${duration}`);
 
+                      formData.append("fileSize", `${file.size}`);
+
                       // Upload track
                       await agent.Tracks.uploadTrackSupportingData(
                         userDetails.memberId,
