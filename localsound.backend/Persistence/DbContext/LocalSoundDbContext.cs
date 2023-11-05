@@ -32,6 +32,7 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<ArtistGenre> ArtistGenre { get; set; }
         public DbSet<ArtistTrackGenre> ArtistTrackGenre { get; set; }
         public DbSet<ArtistTrackUpload> ArtistTrackUpload { get; set; }
+        public DbSet<ArtistFollower> ArtistFollower { get; set; }
         public DbSet<EventType> EventType { get; set; }
         public DbSet<FileContent> FileContent { get; set; }
         public DbSet<Genre> Genres { get; set; }
@@ -137,10 +138,12 @@ namespace localsound.backend.Persistence.DbContext
                 x.HasOne(x => x.Image).WithOne(x => x.FileContent).OnDelete(DeleteBehavior.Cascade);
             });
 
-            //builder.Entity<ArtistFollower>(x =>
-            //{
-            //    x.HasKey(key => new { key.Follower, key.Followee });
-            //});
+            builder.Entity<ArtistFollower>(x =>
+            {
+                x.HasKey(key => new { key.ArtistId, key.FollowerId });
+                x.HasOne(x => x.Artist).WithMany(x => x.Followers);
+                x.HasOne(x => x.Follower).WithMany(x => x.Following);
+            });
         }
 
         public async Task<ServiceResponse> HandleSavingDB()

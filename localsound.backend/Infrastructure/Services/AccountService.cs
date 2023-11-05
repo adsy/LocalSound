@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Execution;
 using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
@@ -102,6 +103,16 @@ namespace localsound.backend.Infrastructure.Services
                     {
                         returnDto = _mapper.Map<NonArtistDto>(nonArtist.ReturnData);
                         returnDto.Images = _mapper.Map<List<AccountImageDto>>(nonArtist.ReturnData.User.Images);
+
+                        foreach (var artistFollowing in nonArtist.ReturnData.User.Following)
+                        {
+                            returnDto.Following.Add(new ArtistSummaryDto
+                            {
+                                Name = artistFollowing.Artist.Name,
+                                ProfileUrl = artistFollowing.Artist.ProfileUrl,
+                                Images = _mapper.Map<List<AccountImageDto>>(artistFollowing.Artist.User.Images)
+                            });
+                        }
                     }
                     else
                     {
@@ -239,6 +250,7 @@ namespace localsound.backend.Infrastructure.Services
                     PhoneNumber = registrationDto.PhoneNumber,
                     User = user,
                     AppUserId = user.Id,
+                    ProfileUrl = registrationDto.ProfileUrl
                 };
 
                 customerDbResult = await _accountRepository.AddNonArtistToDbAsync(newNonArtist);
@@ -467,6 +479,16 @@ namespace localsound.backend.Infrastructure.Services
                             {
                                 returnDto = _mapper.Map<NonArtistDto>(nonArtist.ReturnData);
                                 returnDto.Images = _mapper.Map<List<AccountImageDto>>(nonArtist.ReturnData.User.Images);
+
+                                foreach(var artistFollowing in nonArtist.ReturnData.User.Following)
+                                {
+                                    returnDto.Following.Add(new ArtistSummaryDto
+                                    {
+                                        Name = artistFollowing.Artist.Name,
+                                        ProfileUrl = artistFollowing.Artist.ProfileUrl,
+                                        Images = _mapper.Map<List<AccountImageDto>>(artistFollowing.Artist.User.Images)
+                                    });
+                                }
                             }
                             else
                             {

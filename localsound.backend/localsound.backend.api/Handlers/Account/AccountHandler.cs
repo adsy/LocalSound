@@ -1,4 +1,5 @@
 ﻿using localsound.backend.api.Commands.Account;
+using localsound.backend.api.Commands.Artist;
 using localsound.backend.api.Queries.Account;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;

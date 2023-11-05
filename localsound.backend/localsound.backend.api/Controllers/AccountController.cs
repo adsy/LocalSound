@@ -1,4 +1,5 @@
-﻿using localsound.backend.api.Commands.Account;
+﻿using AutoMapper.Execution;
+using localsound.backend.api.Commands.Account;
 using localsound.backend.api.Queries.Account;
 using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model.Dto.Entity;
@@ -105,7 +106,7 @@ namespace localsound.backend.api.Controllers
 
             return StatusCode((int)updateResult.StatusCode, updateResult.ServiceResponseMessage);
         }
-        [Authorize]
+
         [HttpGet]
         public async Task<ActionResult<IAppUserDto>> CheckCurrentUserToken()
         {
@@ -121,6 +122,7 @@ namespace localsound.backend.api.Controllers
 
             return StatusCode((int)result.StatusCode, result);
         }
+
 
         private void AddCookies(string token, string refreshToken)
         {

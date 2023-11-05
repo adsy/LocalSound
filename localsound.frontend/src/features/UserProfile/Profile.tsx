@@ -63,7 +63,8 @@ const UserProfileSummary = () => {
       ) : null}
       {!loading && profile?.customerType === CustomerTypes.Artist ? (
         <ArtistProfile
-          userDetails={profile}
+          loggedInUser={userDetail!}
+          artistDetails={profile}
           viewingOwnProfile={viewingOwnProfile}
         />
       ) : null}

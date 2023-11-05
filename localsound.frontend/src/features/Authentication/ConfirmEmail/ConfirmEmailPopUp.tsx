@@ -104,7 +104,7 @@ const ConfirmEmailPopUp = () => {
                       type="submit"
                       disabled={isSubmitting || !values.token}
                     >
-                      <h5>Confirm token</h5>
+                      <h4>Confirm token</h4>
                     </Button>
                     <div className="d-flex justify-content-center mt-2">
                       <Button onClick={() => resendEmailToken()} variant="link">

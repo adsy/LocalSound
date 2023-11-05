@@ -89,22 +89,6 @@ const NonArtistRegisterForm = (props: Props) => {
         />
         <Divider />
         <div className="mb-2">
-          Your mobile number will be used for account verification and other
-          methods of contact.
-        </div>
-        <div className="d-flex">
-          <p className="form-label">MOBILE NUMBER</p>
-        </div>
-        <MyTextInput
-          name="phoneNumber"
-          placeholder=""
-          className="mb-2"
-          disabled={disabled}
-          onChange={(e) => handleMobileNumberChange(e)}
-          onBlur={(e) => handleMobileNumberChange(e)}
-        />
-        <Divider />
-        <div className="mb-2">
           Your address can be used to help locate performers that are closest to
           you.
         </div>
@@ -118,6 +102,22 @@ const NonArtistRegisterForm = (props: Props) => {
           setFieldTouched={setFieldTouched}
           setAddressError={setAddressError}
           disabled={disabled}
+        />
+        <Divider />
+        <div className="mb-2">
+          Your mobile number will be used for account verification and other
+          methods of contact.
+        </div>
+        <div className="d-flex">
+          <p className="form-label">MOBILE NUMBER</p>
+        </div>
+        <MyTextInput
+          name="phoneNumber"
+          placeholder=""
+          className="mb-2"
+          disabled={disabled}
+          onChange={(e) => handleMobileNumberChange(e)}
+          onBlur={(e) => handleMobileNumberChange(e)}
         />
       </Col>
 

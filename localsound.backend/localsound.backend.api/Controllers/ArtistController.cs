@@ -1,4 +1,5 @@
-﻿using localsound.backend.api.Commands.Artist;
+﻿using localsound.backend.api.Commands.Account;
+using localsound.backend.api.Commands.Artist;
 using localsound.backend.Domain.Model.Dto.Submission;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,6 +45,25 @@ namespace localsound.backend.api.Controllers
             }
 
             return StatusCode((int)result.StatusCode);
+        }
+
+        [HttpPost]
+        [Route("follow-artist/member/{followerId}/artist/{artistId}")]
+        public async Task<ActionResult> FollowArtist(string followerId, string artistId)
+        {
+            var result = await Mediator.Send(new FollowArtistCommand
+            {
+                UserId = CurrentUser.AppUserId,
+                ArtistId = artistId,
+                MemberId = followerId
+            });
+
+            if (result.IsSuccessStatusCode)
+            {
+                return Ok();
+            }
+
+            return StatusCode((int)result.StatusCode, result);
         }
 
         // Search artists by genre

@@ -15,6 +15,7 @@ namespace localsound.backend.Infrastructure.Mapping
                 .ForMember(dest => dest.PhoneNumber, source => source.MapFrom(x => x.PhoneNumber))
                 .ForMember(dest => dest.CustomerType, source => source.MapFrom(x => x.User.CustomerType))
                 .ForMember(dest => dest.EmailConfirmed, source => source.MapFrom(x => x.User.EmailConfirmed))
+                .ForMember(dest => dest.ProfileUrl, source => source.MapFrom(x => x.ProfileUrl))
                 .ForMember(dest => dest.MemberId, source => source.MapFrom(x => x.User.MemberId));
 
             CreateMap<Artist, ArtistDto>()

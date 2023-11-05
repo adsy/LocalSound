@@ -207,6 +207,8 @@ namespace localsound.backend.Infrastructure.Repositories
                 var artist = await _dbContext.Artist
                     .Include(x => x.User)
                     .ThenInclude(x => x.Images)
+                    .Include(x => x.User)
+                    .ThenInclude(x => x.Following)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
                     .Include(x => x.EventTypes)
@@ -239,6 +241,11 @@ namespace localsound.backend.Infrastructure.Repositories
             {
                 var nonArtist = await _dbContext.NonArtist
                     .Include(x => x.User)
+                    .ThenInclude(x => x.Images)
+                    .Include(x => x.User)
+                    .ThenInclude(x => x.Following)
+                    .ThenInclude(x => x.Artist)
+                    .ThenInclude(x => x.User)
                     .ThenInclude(x => x.Images)
                     .FirstOrDefaultAsync(x => x.AppUserId == id);
 

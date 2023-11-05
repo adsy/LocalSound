@@ -9,5 +9,6 @@ namespace localsound.backend.Domain.Model.Entity
         public string? MemberId { get; set; }
 
         public virtual ICollection<AccountImage> Images { get; set; }
+        public virtual ICollection<ArtistFollower> Following { get; set; }
     }
 }

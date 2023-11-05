@@ -20,6 +20,38 @@ namespace localsound.backend.Infrastructure.Repositories
             _logger = logger;
         }
 
+        public async Task<ServiceResponse> FollowArtistAsync(AppUser follower, string artistId)
+        {
+            try
+            {
+                var artist = await _dbContext.Artist
+                    .Include(x => x.User)
+                    .FirstOrDefaultAsync(x => x.User.MemberId == artistId);
+
+                if (artist == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.NotFound);
+                }
+
+                await _dbContext.ArtistFollower.AddAsync(new ArtistFollower
+                {
+                    ArtistId = artist.AppUserId,
+                    FollowerId = follower.Id
+                });
+
+                await _dbContext.SaveChangesAsync();
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch(Exception e)
+            {
+                var message = $"{nameof(AccountRepository)} - {nameof(FollowArtistAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while following the artist, please try again.");
+            }
+        }
+
         public async Task<ServiceResponse> UpdateArtistPersonalDetails(Guid userId, UpdateArtistPersonalDetailsDto updateArtistDto)
         {
             try

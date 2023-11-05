@@ -2,8 +2,6 @@
 using localsound.backend.Domain.Model.Dto.Submission;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
-using localsound.backend.Persistence.DbContext;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
@@ -63,6 +61,35 @@ namespace localsound.backend.Infrastructure.Services
                 _logger.LogError(e, message);
 
                 return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your details, please try again.");
+            }
+        }
+
+        public async Task<ServiceResponse> FollowArtist(Guid userId, string followerId, string artistId)
+        {
+            try
+            {
+                var accountResult = await _accountRepository.GetAppUserFromDbAsync(userId, followerId);
+
+                if (!accountResult.IsSuccessStatusCode || accountResult.ReturnData == null)
+                {
+                    return new ServiceResponse(accountResult.StatusCode);
+                }
+
+                var followResult = await _artistRepository.FollowArtistAsync(accountResult.ReturnData, artistId);
+
+                if (!followResult.IsSuccessStatusCode)
+                {
+                    return new ServiceResponse(accountResult.StatusCode);
+                }
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(ArtistService)} - {nameof(FollowArtist)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError);
             }
         }
     }

@@ -4,12 +4,12 @@ namespace localsound.backend.Domain.Model.Entity
 {
     public class ArtistFollower
     {
-        //[ForeignKey("FollowerEntity")]
-        //public Guid Follower { get; set; }
-        //[ForeignKey("FolloweeEntity")]
-        //public Guid Followee { get; set; }
+        [ForeignKey("Artist")]
+        public Guid ArtistId { get; set; }
+        [ForeignKey("Follower")]
+        public Guid FollowerId { get; set; }
 
-        //public virtual AppUser FollowerEntity { get; set; }
-        //public virtual AppUser FolloweeEntity { get; set; }
+        public virtual Artist Artist { get; set; }
+        public virtual AppUser Follower { get; set; }
     }
 }

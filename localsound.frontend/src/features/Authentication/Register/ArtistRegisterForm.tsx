@@ -80,22 +80,6 @@ const ArtistRegisterForm = (props: Props) => {
         <MyTextInput name="name" placeholder="" disabled={disabled} />
         <Divider />
         <div className="mb-2">
-          Your mobile number will be used for account verification and other
-          methods of contact.
-        </div>
-        <div className="d-flex">
-          <p className="form-label">MOBILE NUMBER</p>
-        </div>
-        <MyTextInput
-          name="phoneNumber"
-          placeholder=""
-          className="mb-2"
-          disabled={disabled}
-          onChange={(e) => handleMobileNumberChange(e)}
-          onBlur={(e) => handleMobileNumberChange(e)}
-        />
-        <Divider />
-        <div className="mb-2">
           Your address can be used to help you be found easier by music lovers
           who are close to you.
         </div>
@@ -109,6 +93,22 @@ const ArtistRegisterForm = (props: Props) => {
           setFieldTouched={setFieldTouched}
           setAddressError={setAddressError}
           disabled={disabled}
+        />
+        <Divider />
+        <div className="mb-2">
+          Your mobile number will be used for account verification and other
+          methods of contact.
+        </div>
+        <div className="d-flex">
+          <p className="form-label">MOBILE NUMBER</p>
+        </div>
+        <MyTextInput
+          name="phoneNumber"
+          placeholder=""
+          className="mb-2"
+          disabled={disabled}
+          onChange={(e) => handleMobileNumberChange(e)}
+          onBlur={(e) => handleMobileNumberChange(e)}
         />
         <Divider />
         <div className="mb-2">Adding your profiles is optional.</div>

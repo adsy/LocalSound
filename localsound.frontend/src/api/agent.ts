@@ -126,6 +126,11 @@ const Artist = {
     memberId: string,
     editArtist: UpdateArtistProfileDetailsModel
   ) => requests.put(`artist/member/${memberId}/profile-details`, editArtist),
+  followArtist: (userId: string, artistId: string) =>
+    requests.post<null>(
+      `artist/follow-artist/member/${userId}/artist/${artistId}`,
+      null
+    ),
 };
 
 const Genre = {

@@ -14,13 +14,19 @@ import { Icon } from "semantic-ui-react";
 import ArtistUploadTrackForm from "./ArtistUploads/ArtistUploadTrackForm";
 import ArtistUploadsList from "./ArtistUploads/ArtistUploadsList";
 import { ArtistTrackUploadModel } from "../../../app/model/dto/artist-track-upload.model";
+import agent from "../../../api/agent";
 
 interface Props {
-  userDetails: UserModel;
+  loggedInUser: UserModel;
+  artistDetails: UserModel;
   viewingOwnProfile: boolean;
 }
 
-const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
+const ArtistProfile = ({
+  loggedInUser,
+  artistDetails,
+  viewingOwnProfile,
+}: Props) => {
   const [updatingCoverPhoto, setUpdatingCoverPhoto] = useState(false);
   const [submittingRequest, setSubmittingRequest] = useState(false);
   const [photoUpdateError, setPhotoUpdateError] = useState<string | null>(null);
@@ -44,11 +50,11 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
   };
 
   useEffect(() => {
-    if (userDetails?.images?.length > 0) {
-      const IMAGES = [...userDetails.images];
+    if (artistDetails?.images?.length > 0) {
+      const IMAGES = [...artistDetails.images];
       Promise.all(IMAGES.map((image) => loadImage(image)))
         .then(() => {
-          const coverImage = userDetails?.images?.find(
+          const coverImage = artistDetails?.images?.find(
             (x) => x.accountImageTypeId == AccountImageTypes.CoverImage
           );
 
@@ -61,7 +67,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
           setImgsLoaded(true);
         });
     }
-  }, [userDetails.memberId]);
+  }, [artistDetails.memberId]);
 
   const editArtistProfile = () => {
     dispatch(
@@ -69,7 +75,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
         open: true,
         body: (
           <EditArtist
-            userDetails={userDetails}
+            userDetails={artistDetails}
             setSubmittingRequest={setSubmittingRequest}
           />
         ),
@@ -84,7 +90,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
         open: true,
         body: (
           <ArtistUploadTrackForm
-            userDetails={userDetails}
+            userDetails={artistDetails}
             tracks={tracks}
             setTracks={setTracks}
           />
@@ -94,6 +100,19 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
     );
     setKey("uploads");
     setUploading(true);
+  };
+
+  const followArtist = async () => {
+    try {
+      var result = await agent.Artist.followArtist(
+        loggedInUser.memberId,
+        artistDetails.memberId
+      );
+
+      //TODO: Update followers
+    } catch (err) {
+      //TODO: do something with error
+    }
   };
 
   const bannerStyle = {
@@ -170,9 +189,25 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                           </a>
                         </div>
                       </>
-                    ) : null}
+                    ) : (
+                      <div className="w-100 d-flex flex-row justify-content-end">
+                        <a
+                          onClick={() => followArtist()}
+                          target="_blank"
+                          className="btn black-button edit-profile-button w-fit-content d-flex flex-row"
+                        >
+                          <h4>
+                            <span className="mr-1">Follow artist </span>
+                            <Icon
+                              name="heart"
+                              className="mt-0 mb-0 mr-0 ml-1"
+                            />
+                          </h4>
+                        </a>
+                      </div>
+                    )}
                   </div>
-                  <ArtistBannerSummary userDetails={userDetails} />
+                  <ArtistBannerSummary userDetails={artistDetails} />
                 </div>
               </div>
             ) : (
@@ -185,7 +220,7 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
                   setPhotoUpdateError={setPhotoUpdateError}
                 />
                 <div className="details-container flex-wrap">
-                  <ArtistBannerSummary userDetails={userDetails} />
+                  <ArtistBannerSummary userDetails={artistDetails} />
                 </div>
               </div>
             )}
@@ -209,13 +244,13 @@ const ArtistProfile = ({ userDetails, viewingOwnProfile }: Props) => {
             >
               <Tab eventKey="artistDetails" title="Artist details" className="">
                 <ArtistDetails
-                  userDetails={userDetails}
+                  userDetails={artistDetails}
                   photoUpdateError={photoUpdateError}
                 />
               </Tab>
               <Tab eventKey="uploads" title="Uploads" className="">
                 <ArtistUploadsList
-                  userDetails={userDetails}
+                  userDetails={artistDetails}
                   onUploads={onUploads}
                   tracks={tracks}
                   setTracks={setTracks}
