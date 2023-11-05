@@ -657,17 +657,28 @@ i.large.icon {
 }
 
 #track {
+  .action-row {
+    display: flex;
+    flex-direction: row;
+    height: 27px;
+  }
+
   .track-button {
     padding-top: 1px;
     padding-bottom: 2px;
     padding-left: 5px;
     padding-right: 6px;
-    color: $offWhite !important;
+    // color: $offWhite !important;
 
     .small {
       margin-right: 0px;
       padding-left: 1px;
     }
+  }
+
+  .track-button:disabled {
+    background-color: $headingColor !important;
+    border: 1px solid $navbarColor !important;
   }
 
   .bin-button {
@@ -678,13 +689,18 @@ i.large.icon {
 
   .track-image {
     border-radius: 5px;
-    width: 150px;
+    width: 150px !important;
+    height: 150px !important;
   }
 
   .track-genre-list {
     margin-top: 5px;
     text-align: right;
     // width: 50%;
+
+    .black-badge:last-child {
+      margin-right: 0px;
+    }
   }
 
   .playbutton-container {

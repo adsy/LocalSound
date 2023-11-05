@@ -10,7 +10,7 @@ import {
 } from "../../../app/redux/actions/playerSlice";
 import { State } from "../../../app/model/redux/state";
 import { UserModel } from "../../../app/model/dto/user.model";
-import { Icon, Image } from "semantic-ui-react";
+import { Icon, Image as ImageComponent, Placeholder } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 import {
   SingletonClass,
@@ -21,6 +21,8 @@ import { Button } from "react-bootstrap";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import ArtistEditTrackForm from "../../../features/UserProfile/Artist/ArtistUploads/ArtistEditTrackForm";
 import agent from "../../../api/agent";
+import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
+import { handleSetIsDeleting } from "../../../app/redux/actions/actionSlice";
 
 interface Props {
   track: ArtistTrackUploadModel;
@@ -31,12 +33,42 @@ interface Props {
 
 const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
   const player = useSelector((state: State) => state.player);
+  const actions = useSelector((state: State) => state.action);
   const loggedInUser = useSelector((state: State) => state.user.userDetails);
   const dispatch = useDispatch();
   const [singleton, setSingleton] = useState<SingletonClass>(
     SingletonFactory.getInstance()
   );
   const [analyzerData, setAnalyzerData] = useState<any>(null);
+  const [deletingTrack, setDeletingTrack] = useState(false);
+  const [trackImageLoaded, setTrackImageLoaded] = useState(false);
+  const [trackImage, setTrackImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (track.trackImageUrl) {
+      const IMAGES = [track.trackImageUrl];
+      Promise.all(IMAGES.map((image) => loadImage(image)))
+        .then(() => {
+          setTimeout(() => {
+            setTrackImage(track.trackImageUrl);
+          }, 10000);
+        })
+        .catch((err) => console.log("Failed to load images", err))
+        .finally(() => {
+          setTrackImageLoaded(true);
+        });
+    }
+  }, [track.artistTrackUploadId]);
+
+  const loadImage = (image: string) => {
+    if (trackImageLoaded) setTrackImageLoaded(false);
+    return new Promise((resolve, reject) => {
+      const loadImg = new Image();
+      loadImg.src = image;
+      loadImg.onload = () => resolve(image);
+      loadImg.onerror = (err) => reject(err);
+    });
+  };
 
   useEffect(() => {
     if (player.trackId === track.artistTrackUploadId && player.playing) {
@@ -93,6 +125,8 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
   const deleteTrack = async () => {
     try {
       if (loggedInUser?.memberId && track.artistTrackUploadId) {
+        dispatch(handleSetIsDeleting(true));
+        setDeletingTrack(true);
         await agent.Tracks.deleteTrack(
           loggedInUser?.memberId,
           track.artistTrackUploadId
@@ -106,17 +140,27 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
     } catch (err) {
       //TODO: Do something with error
     }
+    dispatch(handleSetIsDeleting(false));
+    setDeletingTrack(false);
   };
 
   return (
     <div id="track" className="mb-4">
       <div className="d-flex flex-row w-100">
-        <Image
-          size="small"
-          src={track.trackImageUrl}
-          className="mr-3 track-image"
-        />
-        <div className="d-flex flex-column w-100">
+        {!trackImage ? (
+          <div className="mr-3 fade-in">
+            <Placeholder className="track-image">
+              <Placeholder.Image />
+            </Placeholder>
+          </div>
+        ) : (
+          <ImageComponent
+            size="small"
+            src={trackImage}
+            className="mr-3 track-image fade-in"
+          />
+        )}
+        <div className="d-flex flex-column w-100 fade-in">
           <div className="d-flex flex-row justify-content-between">
             <div className="d-flex flex-row">
               <TrackContainer>
@@ -134,7 +178,7 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
               </div>
             </div>
 
-            <div className="my-1">
+            <div className="my-1 action-row">
               {artistDetails.memberId === loggedInUser?.memberId ? (
                 <Button
                   className="white-button track-button mr-1"
@@ -145,15 +189,20 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
                   </h4>
                 </Button>
               ) : null}
-              {artistDetails.memberId === loggedInUser?.memberId ? (
+              {artistDetails.memberId === loggedInUser?.memberId &&
+              !deletingTrack ? (
                 <Button
                   className="white-button track-button bin-button"
                   onClick={async () => await deleteTrack()}
+                  disabled={actions.isDeleting}
                 >
                   <h4>
                     <Icon name="trash" size="small" className="mr-0" />
                   </h4>
                 </Button>
+              ) : artistDetails.memberId === loggedInUser?.memberId &&
+                deletingTrack ? (
+                <InPageLoadingComponent height={27} width={27} />
               ) : null}
             </div>
           </div>
@@ -173,7 +222,7 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
         </div>
       </div>
 
-      <div className="d-flex flex-row justify-content-end gray-line">
+      <div className="d-flex flex-row justify-content-end gray-line fade-in">
         <div className="track-genre-list">
           {track.genres.map((genre, index) => (
             <Label key={index} id={genre.genreId} label={genre.genreName} />

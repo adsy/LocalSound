@@ -12,6 +12,7 @@ import ApplicationReducer, {
 import ModalReducer from "../actions/modalSlice";
 import PlayerReducer from "../actions/playerSlice";
 import UserReducer, { handleResetUserState } from "../actions/userSlice";
+import ActionReducer from "../actions/actionSlice";
 
 const middleware = [];
 
@@ -24,6 +25,7 @@ var rootReducer = combineReducers({
   modal: ModalReducer,
   user: UserReducer,
   player: PlayerReducer,
+  action: ActionReducer,
 });
 
 const persistConfig = {

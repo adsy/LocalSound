@@ -1,3 +1,4 @@
+import { ActionState } from "./actionState";
 import { AppState } from "./appState";
 import { ModalState } from "./modalState";
 import { PlayerState } from "./playerState";
@@ -8,6 +9,7 @@ interface State {
   modal: ModalState;
   user: UserState;
   player: PlayerState;
+  action: ActionState;
 }
 
 export type { State };

@@ -771,27 +771,39 @@ i.large.icon {
   width: 1rem;
 }
 
+#track .action-row {
+  display: flex;
+  flex-direction: row;
+  height: 27px;
+}
 #track .track-button {
   padding-top: 1px;
   padding-bottom: 2px;
   padding-left: 5px;
   padding-right: 6px;
-  color: #ececec !important;
 }
 #track .track-button .small {
   margin-right: 0px;
   padding-left: 1px;
+}
+#track .track-button:disabled {
+  background-color: #f1f1f1 !important;
+  border: 1px solid #001514 !important;
 }
 #track .bin-button .small {
   padding-left: 2px;
 }
 #track .track-image {
   border-radius: 5px;
-  width: 150px;
+  width: 150px !important;
+  height: 150px !important;
 }
 #track .track-genre-list {
   margin-top: 5px;
   text-align: right;
+}
+#track .track-genre-list .black-badge:last-child {
+  margin-right: 0px;
 }
 #track .artist-name {
   color: gray;
