@@ -131,6 +131,11 @@ const Artist = {
       `artist/follow-artist/member/${userId}/artist/${artistId}`,
       null
     ),
+  unfollowArtist: (userId: string, artistId: string) =>
+    requests.post<null>(
+      `artist/unfollow-artist/member/${userId}/artist/${artistId}`,
+      null
+    ),
 };
 
 const Genre = {

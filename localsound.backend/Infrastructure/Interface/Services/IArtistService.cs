@@ -7,6 +7,6 @@ namespace localsound.backend.Infrastructure.Interface.Services
     {
         Task<ServiceResponse> UpdateArtistPersonalDetails(Guid userId, string memberId, UpdateArtistPersonalDetailsDto updateArtistDto);
         Task<ServiceResponse> UpdateArtistProfileDetails(Guid userId, string memberId, UpdateArtistProfileDetailsDto updateArtistDto);
-        Task<ServiceResponse> FollowArtist(Guid userId, string followerId, string artistId);
+        Task<ServiceResponse> UpdateArtistFollower(Guid userId, string followerId, string artistId, bool startFollowing);
     }
 }

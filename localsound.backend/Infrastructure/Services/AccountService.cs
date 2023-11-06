@@ -11,10 +11,12 @@ using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Azure.Amqp.Framing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Security.Claims;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace localsound.backend.Infrastructure.Services
 {
@@ -84,8 +86,7 @@ namespace localsound.backend.Infrastructure.Services
 
                     if (artist.IsSuccessStatusCode && artist.ReturnData != null)
                     {
-                        returnDto = _mapper.Map<ArtistDto>(artist.ReturnData);
-                        returnDto.Images = _mapper.Map<List<AccountImageDto>>(artist.ReturnData.User.Images);
+                        returnDto = CreateArtistDto(artist.ReturnData);
                     }
                     else
                     {
@@ -101,18 +102,8 @@ namespace localsound.backend.Infrastructure.Services
 
                     if (nonArtist.IsSuccessStatusCode && nonArtist.ReturnData != null)
                     {
-                        returnDto = _mapper.Map<NonArtistDto>(nonArtist.ReturnData);
-                        returnDto.Images = _mapper.Map<List<AccountImageDto>>(nonArtist.ReturnData.User.Images);
 
-                        foreach (var artistFollowing in nonArtist.ReturnData.User.Following)
-                        {
-                            returnDto.Following.Add(new ArtistSummaryDto
-                            {
-                                Name = artistFollowing.Artist.Name,
-                                ProfileUrl = artistFollowing.Artist.ProfileUrl,
-                                Images = _mapper.Map<List<AccountImageDto>>(artistFollowing.Artist.User.Images)
-                            });
-                        }
+                        returnDto = CreateNonArtistDto(nonArtist.ReturnData);
                     }
                     else
                     {
@@ -333,14 +324,13 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
+                var returnDto = null as IAppUserDto;
                 //Check if its an artist first
                 var artistResponse = await _accountRepository.GetArtistFromDbAsync(profileUrl);
-                if (artistResponse != null && artistResponse.IsSuccessStatusCode)
+                if (artistResponse?.ReturnData != null && artistResponse.IsSuccessStatusCode)
                 {
+                    returnDto = CreateArtistDto(artistResponse.ReturnData);
 
-                    var returnDto = _mapper.Map<ArtistDto>(artistResponse.ReturnData);
-                    returnDto.Images = _mapper.Map<List<AccountImageDto>>(artistResponse.ReturnData?.User.Images);
-                    
                     return new ServiceResponse<IAppUserDto>(HttpStatusCode.OK)
                     {
                         ReturnData = returnDto
@@ -349,15 +339,13 @@ namespace localsound.backend.Infrastructure.Services
 
                 // Check if it matches non artist if no artist matched
                 var nonArtistResponse = await _accountRepository.GetNonArtistFromDbAsync(profileUrl);
-                if (nonArtistResponse != null && nonArtistResponse.IsSuccessStatusCode)
+                if (nonArtistResponse?.ReturnData != null && nonArtistResponse.IsSuccessStatusCode)
                 {
-
-                    var returnDto = _mapper.Map<NonArtistDto>(artistResponse.ReturnData);
-                    returnDto.Images = _mapper.Map<List<AccountImageDto>>(nonArtistResponse.ReturnData?.User.Images);
+                    returnDto = CreateNonArtistDto(nonArtistResponse.ReturnData);
 
                     return new ServiceResponse<IAppUserDto>(HttpStatusCode.OK)
                     {
-                        ReturnData = _mapper.Map<NonArtistDto>(nonArtistResponse.ReturnData)
+                        ReturnData = returnDto
                     };
                 }
 
@@ -458,10 +446,9 @@ namespace localsound.backend.Infrastructure.Services
                         {
                             var artist = await _accountRepository.GetArtistFromDbAsync(user.Id);
 
-                            if (artist.IsSuccessStatusCode && artist.ReturnData != null)
+                            if (artist.IsSuccessStatusCode && artist?.ReturnData != null)
                             {
-                                returnDto = _mapper.Map<ArtistDto>(artist.ReturnData);
-                                returnDto.Images = _mapper.Map<List<AccountImageDto>>(artist.ReturnData.User.Images);
+                                returnDto = CreateArtistDto(artist.ReturnData);
                             }
                             else
                             {
@@ -475,20 +462,9 @@ namespace localsound.backend.Infrastructure.Services
                         {
                             var nonArtist = await _accountRepository.GetNonArtistFromDbAsync(user.Id);
 
-                            if (nonArtist.IsSuccessStatusCode && nonArtist.ReturnData != null)
+                            if (nonArtist.IsSuccessStatusCode && nonArtist?.ReturnData != null)
                             {
-                                returnDto = _mapper.Map<NonArtistDto>(nonArtist.ReturnData);
-                                returnDto.Images = _mapper.Map<List<AccountImageDto>>(nonArtist.ReturnData.User.Images);
-
-                                foreach(var artistFollowing in nonArtist.ReturnData.User.Following)
-                                {
-                                    returnDto.Following.Add(new ArtistSummaryDto
-                                    {
-                                        Name = artistFollowing.Artist.Name,
-                                        ProfileUrl = artistFollowing.Artist.ProfileUrl,
-                                        Images = _mapper.Map<List<AccountImageDto>>(artistFollowing.Artist.User.Images)
-                                    });
-                                }
+                                returnDto = CreateNonArtistDto(nonArtist.ReturnData);
                             }
                             else
                             {
@@ -524,6 +500,57 @@ namespace localsound.backend.Infrastructure.Services
 
                 return new ServiceResponse<IAppUserDto>(HttpStatusCode.InternalServerError);
             }
+        }
+
+        private IAppUserDto CreateArtistDto(Artist artist)
+        {
+            var returnDto = _mapper.Map<ArtistDto>(artist);
+            returnDto.Images = _mapper.Map<List<AccountImageDto>>(artist.User.Images);
+
+            foreach (var artistFollower in artist.Followers)
+            {
+                if (artistFollower.Follower.Artist != null)
+                {
+                    returnDto.Followers.Add(new UserSummaryDto
+                    {
+                        MemberId = artistFollower.Follower.MemberId,
+                        Name = artistFollower.Follower.Artist.Name,
+                        ProfileUrl = artistFollower.Follower.Artist.ProfileUrl,
+                        Images = _mapper.Map<List<AccountImageDto>>(artistFollower.Follower.Images)
+                    });
+                }
+                else
+                {
+                    returnDto.Followers.Add(new UserSummaryDto
+                    {
+                        MemberId = artistFollower.Follower.MemberId,
+                        Name = $"{artistFollower.Follower.NonArtist.FirstName} {artistFollower.Follower.NonArtist.LastName}",
+                        ProfileUrl = artistFollower.Follower.NonArtist.ProfileUrl,
+                        Images = _mapper.Map<List<AccountImageDto>>(artistFollower.Follower.Images)
+                    });
+                }
+            }
+
+            return returnDto;
+        }
+
+        private IAppUserDto CreateNonArtistDto(NonArtist nonArtist)
+        {
+            var returnDto = _mapper.Map<NonArtistDto>(nonArtist);
+            returnDto.Images = _mapper.Map<List<AccountImageDto>>(nonArtist.User.Images);
+
+            foreach (var artistFollowing in nonArtist.User.Following)
+            {
+                returnDto.Following.Add(new UserSummaryDto
+                {
+                    MemberId = artistFollowing.Artist.User.MemberId,
+                    Name = artistFollowing.Artist.Name,
+                    ProfileUrl = artistFollowing.Artist.ProfileUrl,
+                    Images = _mapper.Map<List<AccountImageDto>>(artistFollowing.Artist.User.Images)
+                });
+            }
+
+            return returnDto;
         }
     }
 }

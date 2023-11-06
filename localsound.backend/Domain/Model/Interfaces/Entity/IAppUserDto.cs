@@ -15,7 +15,7 @@ namespace localsound.backend.Domain.Model.Interfaces.Entity
         //public bool EmailConfirmed { get; set; }
 
         public List<AccountImageDto> Images { get; set; }
-        public List<ArtistSummaryDto> Following { get; set; }
-        public List<IAppUserDto> Followers { get; set; }
+        public List<UserSummaryDto> Following { get; set; }
+        public List<UserSummaryDto> Followers { get; set; }
     }
 }

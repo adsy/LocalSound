@@ -36,8 +36,12 @@ const ArtistDetails = ({ photoUpdateError, userDetails }: Props) => {
               <h4 className="section-title inverse">Followers</h4>
             </div>
             <div className="d-flex flex-row">
-              <span className="about-text m-0 pr-3">0 followers</span>
-              <span className="about-text m-0">0 following</span>
+              <span className="about-text m-0 pr-3">
+                {userDetails.followers.length} followers
+              </span>
+              <span className="about-text m-0">
+                {userDetails.following.length} following
+              </span>
             </div>
           </div>
           <div className="d-flex flex-column pb-4 genre-mobile">

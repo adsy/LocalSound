@@ -48,7 +48,7 @@ const UserProfileSummary = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [userDetail]);
+  }, []);
 
   return (
     <div id="user-profile">
@@ -65,6 +65,7 @@ const UserProfileSummary = () => {
         <ArtistProfile
           loggedInUser={userDetail!}
           artistDetails={profile}
+          setProfile={setProfile}
           viewingOwnProfile={viewingOwnProfile}
         />
       ) : null}

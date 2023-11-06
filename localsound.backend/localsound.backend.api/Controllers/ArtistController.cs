@@ -51,11 +51,32 @@ namespace localsound.backend.api.Controllers
         [Route("follow-artist/member/{followerId}/artist/{artistId}")]
         public async Task<ActionResult> FollowArtist(string followerId, string artistId)
         {
-            var result = await Mediator.Send(new FollowArtistCommand
+            var result = await Mediator.Send(new UpdateArtistFollowerCommand
             {
                 UserId = CurrentUser.AppUserId,
                 ArtistId = artistId,
-                MemberId = followerId
+                MemberId = followerId,
+                StartFollowing = true
+            });
+
+            if (result.IsSuccessStatusCode)
+            {
+                return Ok();
+            }
+
+            return StatusCode((int)result.StatusCode, result);
+        }
+
+        [HttpPost]
+        [Route("unfollow-artist/member/{followerId}/artist/{artistId}")]
+        public async Task<ActionResult> UnfollowArtist(string followerId, string artistId)
+        {
+            var result = await Mediator.Send(new UpdateArtistFollowerCommand
+            {
+                UserId = CurrentUser.AppUserId,
+                ArtistId = artistId,
+                MemberId = followerId,
+                StartFollowing = false
             });
 
             if (result.IsSuccessStatusCode)

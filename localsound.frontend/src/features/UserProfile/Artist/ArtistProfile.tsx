@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Tab, Tabs } from "react-bootstrap";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
@@ -20,12 +20,14 @@ interface Props {
   loggedInUser: UserModel;
   artistDetails: UserModel;
   viewingOwnProfile: boolean;
+  setProfile: (artistDetails: UserModel) => void;
 }
 
 const ArtistProfile = ({
   loggedInUser,
   artistDetails,
   viewingOwnProfile,
+  setProfile,
 }: Props) => {
   const [updatingCoverPhoto, setUpdatingCoverPhoto] = useState(false);
   const [submittingRequest, setSubmittingRequest] = useState(false);
@@ -37,6 +39,7 @@ const ArtistProfile = ({
   const [onUploads, setOnUploads] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [tracks, setTracks] = useState<ArtistTrackUploadModel[]>([]);
+  const [isFollowing, setIsFollowing] = useState(false);
   const dispatch = useDispatch();
 
   const loadImage = (image: AccountImageModel) => {
@@ -49,7 +52,13 @@ const ArtistProfile = ({
     });
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    var following = artistDetails.followers.findIndex(
+      (x) => x.memberId === loggedInUser.memberId
+    );
+
+    if (following !== -1) setIsFollowing(true);
+
     if (artistDetails?.images?.length > 0) {
       const IMAGES = [...artistDetails.images];
       Promise.all(IMAGES.map((image) => loadImage(image)))
@@ -102,14 +111,40 @@ const ArtistProfile = ({
     setUploading(true);
   };
 
-  const followArtist = async () => {
+  const updateArtistFollow = async (follow: boolean) => {
     try {
-      var result = await agent.Artist.followArtist(
-        loggedInUser.memberId,
-        artistDetails.memberId
-      );
+      if (follow) {
+        await agent.Artist.followArtist(
+          loggedInUser.memberId,
+          artistDetails.memberId
+        );
+        setIsFollowing(true);
 
-      //TODO: Update followers
+        var localArtist = artistDetails;
+
+        localArtist.followers.push({
+          memberId: loggedInUser.memberId,
+          name: loggedInUser.name!,
+          profileUrl: loggedInUser.profileUrl,
+          images: loggedInUser.images,
+        });
+
+        setProfile(localArtist);
+      } else {
+        await agent.Artist.unfollowArtist(
+          loggedInUser.memberId,
+          artistDetails.memberId
+        );
+        setIsFollowing(false);
+
+        var localArtist = artistDetails;
+
+        localArtist.followers = localArtist.followers.filter(
+          (x) => x.memberId !== loggedInUser.memberId
+        );
+
+        setProfile(localArtist);
+      }
     } catch (err) {
       //TODO: do something with error
     }
@@ -192,12 +227,20 @@ const ArtistProfile = ({
                     ) : (
                       <div className="w-100 d-flex flex-row justify-content-end">
                         <a
-                          onClick={() => followArtist()}
+                          onClick={async () => {
+                            if (isFollowing) {
+                              await updateArtistFollow(false);
+                            } else {
+                              await updateArtistFollow(true);
+                            }
+                          }}
                           target="_blank"
                           className="btn black-button edit-profile-button w-fit-content d-flex flex-row"
                         >
                           <h4>
-                            <span className="mr-1">Follow artist </span>
+                            <span className="mr-1">
+                              {isFollowing ? "Unfollow" : "Follow"} artist{" "}
+                            </span>
                             <Icon
                               name="heart"
                               className="mt-0 mb-0 mr-0 ml-1"

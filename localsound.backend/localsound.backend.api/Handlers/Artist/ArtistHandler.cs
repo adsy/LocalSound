@@ -1,14 +1,13 @@
 ﻿using localsound.backend.api.Commands.Artist;
 using localsound.backend.Domain.Model;
 using localsound.backend.Infrastructure.Interface.Services;
-using localsound.backend.Infrastructure.Services;
 using MediatR;
 
 namespace localsound.backend.api.Handlers.Artist
 {
     public class ArtistHandler : IRequestHandler<UpdateArtistPersonalDetailsCommand, ServiceResponse>,
         IRequestHandler<UpdateArtistProfileDetailsCommand, ServiceResponse>,
-        IRequestHandler<FollowArtistCommand, ServiceResponse>
+        IRequestHandler<UpdateArtistFollowerCommand, ServiceResponse>
     {
         private readonly IArtistService _artistService;
 
@@ -27,9 +26,9 @@ namespace localsound.backend.api.Handlers.Artist
             return await _artistService.UpdateArtistProfileDetails(request.UserId, request.MemberId, request.UpdateArtistDto);
         }
 
-        public async Task<ServiceResponse> Handle(FollowArtistCommand request, CancellationToken cancellationToken)
+        public async Task<ServiceResponse> Handle(UpdateArtistFollowerCommand request, CancellationToken cancellationToken)
         {
-            return await _artistService.FollowArtist(request.UserId, request.MemberId, request.ArtistId);
+            return await _artistService.UpdateArtistFollower(request.UserId, request.MemberId, request.ArtistId, request.StartFollowing);
         }
     }
 }

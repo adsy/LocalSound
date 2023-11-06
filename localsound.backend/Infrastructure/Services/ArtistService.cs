@@ -64,7 +64,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse> FollowArtist(Guid userId, string followerId, string artistId)
+        public async Task<ServiceResponse> UpdateArtistFollower(Guid userId, string followerId, string artistId, bool startFollowing)
         {
             try
             {
@@ -72,21 +72,21 @@ namespace localsound.backend.Infrastructure.Services
 
                 if (!accountResult.IsSuccessStatusCode || accountResult.ReturnData == null)
                 {
-                    return new ServiceResponse(accountResult.StatusCode);
+                    return accountResult;
                 }
 
-                var followResult = await _artistRepository.FollowArtistAsync(accountResult.ReturnData, artistId);
+                var followResult = await _artistRepository.UpdateArtistFollowerAsync(accountResult.ReturnData, artistId, startFollowing);
 
                 if (!followResult.IsSuccessStatusCode)
                 {
-                    return new ServiceResponse(accountResult.StatusCode);
+                    return followResult;
                 }
 
                 return new ServiceResponse(HttpStatusCode.OK);
             }
             catch (Exception e)
             {
-                var message = $"{nameof(ArtistService)} - {nameof(FollowArtist)} - {e.Message}";
+                var message = $"{nameof(ArtistService)} - {nameof(UpdateArtistFollower)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse(HttpStatusCode.InternalServerError);

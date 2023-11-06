@@ -22,7 +22,7 @@ namespace localsound.backend.Domain.Model.Dto.Entity
         public List<EquipmentDto> Equipment { get; set; }
         public List<EventTypeDto> EventTypes { get; set; }
         public List<AccountImageDto> Images { get; set; }
-        public List<ArtistSummaryDto> Following { get; set; } = new List<ArtistSummaryDto>();
-        public List<IAppUserDto> Followers { get; set; } = new List<IAppUserDto>();
+        public List<UserSummaryDto> Following { get; set; } = new List<UserSummaryDto>();
+        public List<UserSummaryDto> Followers { get; set; } = new List<UserSummaryDto>();
     }
 }

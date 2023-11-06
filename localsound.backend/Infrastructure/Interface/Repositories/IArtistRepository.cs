@@ -6,7 +6,7 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
 {
     public interface IArtistRepository
     {
-        Task<ServiceResponse> FollowArtistAsync(AppUser follower, string artistId);
+        Task<ServiceResponse> UpdateArtistFollowerAsync(AppUser follower, string artistId, bool startFollowing);
         Task<ServiceResponse> UpdateArtistPersonalDetails(Guid userId, UpdateArtistPersonalDetailsDto updateArtistDto);
         Task<ServiceResponse> UpdateArtistProfileDetails(Guid userId, UpdateArtistProfileDetailsDto updateArtistDto);
     }

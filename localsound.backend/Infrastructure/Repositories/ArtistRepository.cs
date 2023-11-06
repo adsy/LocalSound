@@ -20,8 +20,9 @@ namespace localsound.backend.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public async Task<ServiceResponse> FollowArtistAsync(AppUser follower, string artistId)
+        public async Task<ServiceResponse> UpdateArtistFollowerAsync(AppUser follower, string artistId, bool startFollowing)
         {
+            var followString = startFollowing ? "following" : "unfollowing";
             try
             {
                 var artist = await _dbContext.Artist
@@ -30,14 +31,35 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 if (artist == null)
                 {
-                    return new ServiceResponse(HttpStatusCode.NotFound);
+                    return new ServiceResponse(HttpStatusCode.NotFound, $"There was an error while {followString} the artist, please try again.");
                 }
 
-                await _dbContext.ArtistFollower.AddAsync(new ArtistFollower
+                if (startFollowing)
                 {
-                    ArtistId = artist.AppUserId,
-                    FollowerId = follower.Id
-                });
+                    var artistFollower = await _dbContext.ArtistFollower.FirstOrDefaultAsync(x => x.ArtistId == artist.AppUserId && x.FollowerId == follower.Id);
+
+                    if (artistFollower != null)
+                    {
+                        return new ServiceResponse(HttpStatusCode.InternalServerError, $"There was an error while {followString} the artist, please try again.");
+                    }
+
+                    await _dbContext.ArtistFollower.AddAsync(new ArtistFollower
+                    {
+                        ArtistId = artist.AppUserId,
+                        FollowerId = follower.Id
+                    });
+                }
+                else
+                {
+                    var artistFollower = await _dbContext.ArtistFollower.FirstOrDefaultAsync(x => x.ArtistId == artist.AppUserId && x.FollowerId == follower.Id);
+
+                    if (artistFollower == null)
+                    {
+                        return new ServiceResponse(HttpStatusCode.NotFound, $"There was an error while {followString} the artist, please try again.");
+                    }
+
+                    _dbContext.ArtistFollower.Remove(artistFollower);
+                }
 
                 await _dbContext.SaveChangesAsync();
 
@@ -45,10 +67,10 @@ namespace localsound.backend.Infrastructure.Repositories
             }
             catch(Exception e)
             {
-                var message = $"{nameof(AccountRepository)} - {nameof(FollowArtistAsync)} - {e.Message}";
+                var message = $"{nameof(AccountRepository)} - {nameof(UpdateArtistFollowerAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while following the artist, please try again.");
+                return new ServiceResponse(HttpStatusCode.InternalServerError, $"There was an error while {followString} the artist, please try again.");
             }
         }
 
