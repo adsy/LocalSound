@@ -78,7 +78,7 @@ const ArtistUploadsList = ({
           <InPageLoadingComponent height={80} width={80} />
         </div>
       ) : null}
-      {tracks.length < 1 ? (
+      {!loading && tracks.length < 1 ? (
         <div className="d-flex flex-row justify-content-center mt-5">
           <h5>
             {viewingOwnProfile ? (

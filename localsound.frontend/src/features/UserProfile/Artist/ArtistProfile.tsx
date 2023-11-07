@@ -51,19 +51,20 @@ const ArtistProfile = ({
       loadImg.onerror = (err) => reject(err);
     });
   };
-
   useLayoutEffect(() => {
     var following = artistDetails.followers.findIndex(
       (x) => x.memberId === loggedInUser.memberId
     );
 
     if (following !== -1) setIsFollowing(true);
+  }, [artistDetails.memberId]);
 
-    if (artistDetails?.images?.length > 0) {
-      const IMAGES = [...artistDetails.images];
+  useLayoutEffect(() => {
+    if (loggedInUser.memberId === artistDetails.memberId) {
+      const IMAGES = [...loggedInUser.images];
       Promise.all(IMAGES.map((image) => loadImage(image)))
         .then(() => {
-          const coverImage = artistDetails?.images?.find(
+          const coverImage = loggedInUser?.images?.find(
             (x) => x.accountImageTypeId == AccountImageTypes.CoverImage
           );
 
@@ -75,8 +76,26 @@ const ArtistProfile = ({
         .finally(() => {
           setImgsLoaded(true);
         });
+    } else {
+      if (artistDetails?.images?.length > 0) {
+        const IMAGES = [...artistDetails.images];
+        Promise.all(IMAGES.map((image) => loadImage(image)))
+          .then(() => {
+            const coverImage = artistDetails?.images?.find(
+              (x) => x.accountImageTypeId == AccountImageTypes.CoverImage
+            );
+
+            if (coverImage) {
+              setCoverImage(coverImage);
+            }
+          })
+          .catch((err) => console.log("Failed to load images", err))
+          .finally(() => {
+            setImgsLoaded(true);
+          });
+      }
     }
-  }, [artistDetails.memberId]);
+  }, [artistDetails.memberId, loggedInUser.images]);
 
   const editArtistProfile = () => {
     dispatch(
@@ -261,6 +280,7 @@ const ArtistProfile = ({
                   setUpdatingCoverPhoto={setUpdatingCoverPhoto}
                   setSubmittingRequest={setSubmittingRequest}
                   setPhotoUpdateError={setPhotoUpdateError}
+                  setImgsLoaded={setImgsLoaded}
                 />
                 <div className="details-container flex-wrap">
                   <ArtistSummary userDetails={artistDetails} />

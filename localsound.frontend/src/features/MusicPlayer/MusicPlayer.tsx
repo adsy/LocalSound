@@ -46,8 +46,10 @@ const MusicPlayer = () => {
         audioAnalyzer();
 
         // play the song
-        waveformRef!.current!.play();
-        dispatch(handlePlaySong());
+        setTimeout(() => {
+          waveformRef!.current!.play();
+          dispatch(handlePlaySong());
+        }, 0);
       } else if (player.playing) {
         // create audio analyzer
         audioAnalyzer();

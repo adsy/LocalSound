@@ -12,6 +12,7 @@ interface Props {
   setFile: (file: File | null) => void;
   setSubmittingRequest: (submittingRequest: boolean) => void;
   setPhotoUpdateError: (photoUpdateError: string) => void;
+  setImgsLoaded: (imgsLoaded: boolean) => void;
 }
 
 const EditCoverPhoto = ({
@@ -20,6 +21,7 @@ const EditCoverPhoto = ({
   setFile,
   setSubmittingRequest,
   setPhotoUpdateError,
+  setImgsLoaded,
 }: Props) => {
   const userDetail = useSelector((state: State) => state.user.userDetails);
   const dispatch = useDispatch();
