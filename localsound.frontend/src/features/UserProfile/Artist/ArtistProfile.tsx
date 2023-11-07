@@ -9,7 +9,7 @@ import EditArtist from "./Edit/EditArtist";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import EditCoverPhoto from "./Edit/EditCoverPhoto";
 import ArtistDetails from "./ArtistDetails";
-import ArtistBannerSummary from "./ArtistBannerSummary";
+import ArtistSummary from "./ArtistSummary";
 import { Icon } from "semantic-ui-react";
 import ArtistUploadTrackForm from "./ArtistUploads/ArtistUploadTrackForm";
 import ArtistUploadsList from "./ArtistUploads/ArtistUploadsList";
@@ -250,7 +250,7 @@ const ArtistProfile = ({
                       </div>
                     )}
                   </div>
-                  <ArtistBannerSummary userDetails={artistDetails} />
+                  <ArtistSummary userDetails={artistDetails} />
                 </div>
               </div>
             ) : (
@@ -263,7 +263,7 @@ const ArtistProfile = ({
                   setPhotoUpdateError={setPhotoUpdateError}
                 />
                 <div className="details-container flex-wrap">
-                  <ArtistBannerSummary userDetails={artistDetails} />
+                  <ArtistSummary userDetails={artistDetails} />
                 </div>
               </div>
             )}

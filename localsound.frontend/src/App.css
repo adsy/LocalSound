@@ -324,6 +324,14 @@ h6 {
   height: 100%;
 }
 
+.text-right {
+  text-align: right !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
 /** LOGOS **/
 .landing-page-logo {
   background-image: url("./assets/logo4.png");
@@ -1077,6 +1085,87 @@ i.large.icon {
   font-weight: 800;
   border-left: 4px #232323 solid;
 }
+#modal-popup .followers,
+#edit-artist .followers,
+#artist-profile .followers {
+  width: 130px;
+}
+#modal-popup #follower-image,
+#edit-artist #follower-image,
+#artist-profile #follower-image {
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+#modal-popup .follow-text,
+#edit-artist .follow-text,
+#artist-profile .follow-text {
+  font-weight: 600;
+  letter-spacing: 3px !important;
+  font-size: 16px;
+  padding-bottom: 3px;
+  color: #232323 !important;
+}
+#modal-popup .follow-text:hover,
+#edit-artist .follow-text:hover,
+#artist-profile .follow-text:hover {
+  border-bottom: 4px solid #6d69fa !important;
+  cursor: pointer;
+}
+#modal-popup #follower-container:nth-child(1),
+#edit-artist #follower-container:nth-child(1),
+#artist-profile #follower-container:nth-child(1) {
+  left: 0px;
+}
+#modal-popup #follower-container:nth-child(2),
+#edit-artist #follower-container:nth-child(2),
+#artist-profile #follower-container:nth-child(2) {
+  left: 27px;
+}
+#modal-popup #follower-container:nth-child(3),
+#edit-artist #follower-container:nth-child(3),
+#artist-profile #follower-container:nth-child(3) {
+  left: 54px;
+}
+#modal-popup #follower-container:nth-child(4),
+#edit-artist #follower-container:nth-child(4),
+#artist-profile #follower-container:nth-child(4) {
+  left: 81px;
+}
+#modal-popup #follower-container:nth-child(5),
+#edit-artist #follower-container:nth-child(5),
+#artist-profile #follower-container:nth-child(5) {
+  left: 108px;
+}
+#modal-popup #follower-container:nth-child(6),
+#edit-artist #follower-container:nth-child(6),
+#artist-profile #follower-container:nth-child(6) {
+  left: 135px;
+}
+#modal-popup #follower-container:nth-child(7),
+#edit-artist #follower-container:nth-child(7),
+#artist-profile #follower-container:nth-child(7) {
+  left: 162px;
+}
+#modal-popup #follower-container:nth-child(8),
+#edit-artist #follower-container:nth-child(8),
+#artist-profile #follower-container:nth-child(8) {
+  left: 189px;
+}
+#modal-popup #follower-container:nth-child(9),
+#edit-artist #follower-container:nth-child(9),
+#artist-profile #follower-container:nth-child(9) {
+  left: 216px;
+}
+#modal-popup #follower-container:nth-child(10),
+#edit-artist #follower-container:nth-child(10),
+#artist-profile #follower-container:nth-child(10) {
+  left: 243px;
+}
+#modal-popup #follower-container:nth-child(11),
+#edit-artist #follower-container:nth-child(11),
+#artist-profile #follower-container:nth-child(11) {
+  left: 270px;
+}
 
 /** MODAL STYLES **/
 .modal .content {
@@ -1350,11 +1439,11 @@ i.large.icon {
     padding-left: 0px;
     padding-right: 0px;
   }
-  .profile-photo.summary-photo {
-    display: none !important;
-  }
   .profile-photo.banner-photo {
     display: block !important;
+  }
+  #user-profile .left-col {
+    border-right: unset !important;
   }
 }
 @media only screen and (max-width: 767px) {

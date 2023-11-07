@@ -507,27 +507,30 @@ namespace localsound.backend.Infrastructure.Services
             var returnDto = _mapper.Map<ArtistDto>(artist);
             returnDto.Images = _mapper.Map<List<AccountImageDto>>(artist.User.Images);
 
-            foreach (var artistFollower in artist.Followers)
+            if (artist.Followers != null)
             {
-                if (artistFollower.Follower.Artist != null)
+                foreach (var artistFollower in artist.Followers)
                 {
-                    returnDto.Followers.Add(new UserSummaryDto
+                    if (artistFollower.Follower.Artist != null)
                     {
-                        MemberId = artistFollower.Follower.MemberId,
-                        Name = artistFollower.Follower.Artist.Name,
-                        ProfileUrl = artistFollower.Follower.Artist.ProfileUrl,
-                        Images = _mapper.Map<List<AccountImageDto>>(artistFollower.Follower.Images)
-                    });
-                }
-                else
-                {
-                    returnDto.Followers.Add(new UserSummaryDto
+                        returnDto.Followers.Add(new UserSummaryDto
+                        {
+                            MemberId = artistFollower.Follower.MemberId,
+                            Name = artistFollower.Follower.Artist.Name,
+                            ProfileUrl = artistFollower.Follower.Artist.ProfileUrl,
+                            Images = _mapper.Map<List<AccountImageDto>>(artistFollower.Follower.Images)
+                        });
+                    }
+                    else
                     {
-                        MemberId = artistFollower.Follower.MemberId,
-                        Name = $"{artistFollower.Follower.NonArtist.FirstName} {artistFollower.Follower.NonArtist.LastName}",
-                        ProfileUrl = artistFollower.Follower.NonArtist.ProfileUrl,
-                        Images = _mapper.Map<List<AccountImageDto>>(artistFollower.Follower.Images)
-                    });
+                        returnDto.Followers.Add(new UserSummaryDto
+                        {
+                            MemberId = artistFollower.Follower.MemberId,
+                            Name = $"{artistFollower.Follower.NonArtist.FirstName} {artistFollower.Follower.NonArtist.LastName}",
+                            ProfileUrl = artistFollower.Follower.NonArtist.ProfileUrl,
+                            Images = _mapper.Map<List<AccountImageDto>>(artistFollower.Follower.Images)
+                        });
+                    }
                 }
             }
 
@@ -539,15 +542,18 @@ namespace localsound.backend.Infrastructure.Services
             var returnDto = _mapper.Map<NonArtistDto>(nonArtist);
             returnDto.Images = _mapper.Map<List<AccountImageDto>>(nonArtist.User.Images);
 
-            foreach (var artistFollowing in nonArtist.User.Following)
+            if (nonArtist.User.Following != null)
             {
-                returnDto.Following.Add(new UserSummaryDto
+                foreach (var artistFollowing in nonArtist.User.Following)
                 {
-                    MemberId = artistFollowing.Artist.User.MemberId,
-                    Name = artistFollowing.Artist.Name,
-                    ProfileUrl = artistFollowing.Artist.ProfileUrl,
-                    Images = _mapper.Map<List<AccountImageDto>>(artistFollowing.Artist.User.Images)
-                });
+                    returnDto.Following.Add(new UserSummaryDto
+                    {
+                        MemberId = artistFollowing.Artist.User.MemberId,
+                        Name = artistFollowing.Artist.Name,
+                        ProfileUrl = artistFollowing.Artist.ProfileUrl,
+                        Images = _mapper.Map<List<AccountImageDto>>(artistFollowing.Artist.User.Images)
+                    });
+                }
             }
 
             return returnDto;

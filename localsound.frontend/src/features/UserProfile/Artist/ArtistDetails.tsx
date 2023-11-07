@@ -5,6 +5,9 @@ import Label from "../../../common/components/Label/Label";
 import { Image } from "semantic-ui-react";
 import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
 import userImg from "../../../assets/icons/user.svg";
+import { UserSummaryModel } from "../../../app/model/dto/user-summary.model";
+import FollowerCircle from "../../../common/components/Follower/FollowerCircle";
+import ArtistSummary from "./ArtistSummary";
 
 interface Props {
   photoUpdateError: string | null;
@@ -29,26 +32,32 @@ const ArtistDetails = ({ photoUpdateError, userDetails }: Props) => {
             src={userPhoto ? userPhoto.accountImageUrl : userImg}
             size="small"
             circular
-            className={`profile-photo mb-4 summary-photo`}
+            className={`profile-photo mb-4 summary-photo align-self-center`}
           />
           <div className="d-flex flex-column pb-4">
-            <div className="d-flex">
-              <h4 className="section-title inverse">Followers</h4>
-            </div>
             <div className="d-flex flex-row">
-              <span className="about-text m-0 pr-3">
-                {userDetails.followers.length} followers
-              </span>
-              <span className="about-text m-0">
-                {userDetails.following.length} following
-              </span>
+              <div className="d-flex flex-column col-6">
+                <div className="about-text m-0 px-3 left-col text-right">
+                  <a className="follow-text">
+                    {userDetails.followers.length} follower
+                    {userDetails.followers.length !== 1 ? "s" : ""}
+                  </a>
+                </div>
+              </div>
+              <div className="d-flex flex-column col-6">
+                <div className="about-text m-0 px-3 text-left">
+                  <a className="follow-text">
+                    {userDetails.following.length} following
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
           <div className="d-flex flex-column pb-4 genre-mobile">
-            <div className="d-flex">
+            <div className="d-flex flex-row flex-wrap justify-content-center">
               <h4 className="section-title inverse">Genres</h4>
             </div>
-            <div className="about-text">
+            <div className="about-text d-flex flex-row flex-wrap justify-content-center">
               {userDetails.genres.map((genre, index) => (
                 <span key={index}>
                   <Label label={genre.genreName} id={genre.genreId} />
@@ -57,10 +66,10 @@ const ArtistDetails = ({ photoUpdateError, userDetails }: Props) => {
             </div>
           </div>
           <div className="d-flex flex-column pb-4">
-            <div className="d-flex">
+            <div className="d-flex flex-row flex-wrap justify-content-center">
               <h4 className="section-title inverse">Event types</h4>
             </div>
-            <div className="about-text">
+            <div className="about-text d-flex flex-row flex-wrap justify-content-center">
               {userDetails.eventTypes.map((eventType, index) => (
                 <span key={index}>
                   <Label
@@ -72,10 +81,10 @@ const ArtistDetails = ({ photoUpdateError, userDetails }: Props) => {
             </div>
           </div>
           <div className="d-flex flex-column pb-4">
-            <div className="d-flex">
+            <div className="d-flex flex-row flex-wrap justify-content-center">
               <h4 className="section-title inverse">Equipment</h4>
             </div>
-            <div className="about-text">
+            <div className="about-text d-flex flex-row flex-wrap justify-content-center">
               {userDetails.equipment.map((equipment, index) => (
                 <span key={index}>
                   <Label
@@ -95,6 +104,41 @@ const ArtistDetails = ({ photoUpdateError, userDetails }: Props) => {
               <h4 className="section-title inverse">About</h4>
             </div>
             <span className="about-text">{userDetails.aboutSection}</span>
+            <div className=" d-flex flex-row flex-wrap mt-5">
+              {userDetails?.soundcloudUrl ? (
+                <>
+                  <a
+                    href={userDetails.soundcloudUrl}
+                    target="_blank"
+                    className="btn soundcloud-button w-fit-content d-flex flex-row mb-1 mr-1"
+                  >
+                    <div className="soundcloud-icon align-self-center"></div>
+                  </a>
+                </>
+              ) : null}
+              {userDetails?.spotifyUrl ? (
+                <>
+                  <a
+                    href={userDetails.spotifyUrl}
+                    target="_blank"
+                    className="btn spotify-button w-fit-content d-flex flex-row mb-1 mr-1"
+                  >
+                    <div className="spotify-icon align-self-center"></div>
+                  </a>
+                </>
+              ) : null}
+              {userDetails?.youtubeUrl ? (
+                <>
+                  <a
+                    href={userDetails.youtubeUrl}
+                    target="_blank"
+                    className="btn youtube-button w-fit-content d-flex flex-row mb-3"
+                  >
+                    <div className="soundcloud-icon align-self-center"></div>
+                  </a>
+                </>
+              ) : null}
+            </div>
           </div>
         </div>
       </Col>

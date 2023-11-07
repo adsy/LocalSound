@@ -216,6 +216,14 @@ $end: 10;
   height: 100%;
 }
 
+.text-right {
+  text-align: right !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
 /** LOGOS **/
 .landing-page-logo {
   @include logo;
@@ -917,6 +925,35 @@ i.large.icon {
       }
     }
   }
+
+  .followers {
+    width: 130px;
+  }
+
+  #follower-image {
+    margin-bottom: 5px;
+    cursor: pointer;
+  }
+
+  .follow-text {
+    font-weight: 600;
+    letter-spacing: 3px !important;
+    font-size: 16px;
+    padding-bottom: 3px;
+    color: $richBlack !important;
+  }
+
+  .follow-text:hover {
+    border-bottom: 4px solid $purple !important;
+    cursor: pointer;
+  }
+
+  $n: 10;
+  @for $i from 0 through $n {
+    #follower-container:nth-child(#{$i + 1}) {
+      left: 27px * $i;
+    }
+  }
 }
 
 /** MODAL STYLES **/
@@ -1224,12 +1261,14 @@ i.large.icon {
     padding-right: 0px;
   }
 
-  .profile-photo.summary-photo {
-    display: none !important;
-  }
-
   .profile-photo.banner-photo {
     display: block !important;
+  }
+
+  #user-profile {
+    .left-col {
+      border-right: unset !important;
+    }
   }
 }
 

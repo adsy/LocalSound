@@ -48,7 +48,7 @@ const UserProfileSummary = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [history.location]);
 
   return (
     <div id="user-profile">
