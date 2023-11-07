@@ -34,7 +34,7 @@ const WaveForm = ({ analyzerData, trackId }: Props) => {
     const HEIGHT = canvas.height / 1;
 
     // Calculate the width of each bar in the waveform based on the canvas width and the buffer length.
-    var barWidth = Math.ceil(canvas.width / bufferLength) * 2.5;
+    var barWidth = Math.ceil(canvas.width / bufferLength) * 1.5;
 
     // Initialize variables for the bar height and x-position.
     let barHeight;
@@ -69,8 +69,8 @@ const WaveForm = ({ analyzerData, trackId }: Props) => {
       if (!canvas || !analyzer) return;
 
       requestAnimationFrame(animate);
-      canvas.width = canvas.width;
-      canvas.height = 100;
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
       const canvasCtx = canvas.getContext("2d");
 
       if (player.playing) {

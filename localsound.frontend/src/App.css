@@ -591,7 +591,7 @@ i.large.icon {
   letter-spacing: 2px;
   transition: border-color 0.5s ease;
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-  transition: background-color 0.5s ease;
+  transition: background-color border 0.5s ease;
   background-color: #ff6100;
   border: black 1px solid;
 }
@@ -602,8 +602,8 @@ i.large.icon {
 .soundcloud-button:hover,
 .soundcloud-button:active,
 .soundcloud-button:focus {
-  background-color: rgb(246, 124, 48);
-  border: rgb(0, 0, 0) 1px solid;
+  background-color: #ff6100;
+  border: white 1px solid;
 }
 
 .spotify-button {
@@ -612,7 +612,7 @@ i.large.icon {
   font-size: 16px;
   letter-spacing: 2px;
   transition: border-color 0.5s ease;
-  transition: background-color 0.5s ease;
+  transition: background-color border 0.5s ease;
   background-color: #1ed75d;
   border: black 1px solid;
 }
@@ -623,8 +623,8 @@ i.large.icon {
 .spotify-button:hover,
 .spotify-button:active,
 .spotify-button:focus {
-  background-color: #00ff55;
-  border: rgb(0, 0, 0) 1px solid;
+  background-color: #1ed75d;
+  border: white 1px solid;
 }
 
 .youtube-button {
