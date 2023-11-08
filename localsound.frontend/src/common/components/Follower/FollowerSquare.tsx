@@ -9,7 +9,7 @@ interface Props {
   follower: UserSummaryModel;
 }
 
-const FollowerCircle = ({ follower }: Props) => {
+const FollowerSquare = ({ follower }: Props) => {
   const history = useHistory();
   const [profileImage, setProfileImage] = useState<string>();
 
@@ -26,13 +26,10 @@ const FollowerCircle = ({ follower }: Props) => {
 
   return (
     <div id="follower-image" onClick={() => goProfile()}>
-      <Image
-        circular
-        size={"mini"}
-        src={profileImage ? profileImage : userImg}
-      />
+      <Image size={"small"} src={profileImage ? profileImage : userImg} />
+      <p>{follower.name}</p>
     </div>
   );
 };
 
-export default FollowerCircle;
+export default FollowerSquare;

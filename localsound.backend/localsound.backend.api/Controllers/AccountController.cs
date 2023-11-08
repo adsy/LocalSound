@@ -65,6 +65,7 @@ namespace localsound.backend.api.Controllers
         {
             var result = await Mediator.Send(new GetProfileDataQuery
             {
+                CurrentUser = CurrentUser.AppUserId,
                 ProfileUrl = profileUrl
             }, cancellationToken);
 

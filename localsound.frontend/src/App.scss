@@ -1154,12 +1154,13 @@ i.large.icon {
     padding-left: 0px;
   }
   .section-title {
-    font-size: 16px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    // border-bottom: 1px $offWhite solid;
     padding-right: 10px;
     margin-bottom: 8px;
+    font-weight: 600;
+    letter-spacing: 3px !important;
+    font-size: 16px;
+    padding-bottom: 3px;
+    color: #232323 !important;
   }
 
   .followers {

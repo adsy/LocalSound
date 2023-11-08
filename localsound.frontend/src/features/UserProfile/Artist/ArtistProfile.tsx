@@ -15,6 +15,7 @@ import ArtistUploadTrackForm from "./ArtistUploads/ArtistUploadTrackForm";
 import ArtistUploadsList from "./ArtistUploads/ArtistUploadsList";
 import { ArtistTrackUploadModel } from "../../../app/model/dto/artist-track-upload.model";
 import agent from "../../../api/agent";
+import Followers from "../Followers/Followers";
 
 interface Props {
   loggedInUser: UserModel;
@@ -40,6 +41,7 @@ const ArtistProfile = ({
   const [uploading, setUploading] = useState(false);
   const [tracks, setTracks] = useState<ArtistTrackUploadModel[]>([]);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [canLoadMore, setCanLoadMore] = useState(true);
   const dispatch = useDispatch();
 
   const loadImage = (image: AccountImageModel) => {
@@ -52,11 +54,9 @@ const ArtistProfile = ({
     });
   };
   useLayoutEffect(() => {
-    var following = artistDetails.followers.findIndex(
-      (x) => x.memberId === loggedInUser.memberId
-    );
-
-    if (following !== -1) setIsFollowing(true);
+    if (artistDetails.isFollowing) {
+      setIsFollowing(true);
+    }
   }, [artistDetails.memberId]);
 
   useLayoutEffect(() => {
@@ -138,16 +138,8 @@ const ArtistProfile = ({
           artistDetails.memberId
         );
         setIsFollowing(true);
-
         var localArtist = artistDetails;
-
-        localArtist.followers.push({
-          memberId: loggedInUser.memberId,
-          name: loggedInUser.name!,
-          profileUrl: loggedInUser.profileUrl,
-          images: loggedInUser.images,
-        });
-
+        localArtist.followerCount += 1;
         setProfile(localArtist);
       } else {
         await agent.Artist.unfollowArtist(
@@ -155,13 +147,8 @@ const ArtistProfile = ({
           artistDetails.memberId
         );
         setIsFollowing(false);
-
         var localArtist = artistDetails;
-
-        localArtist.followers = localArtist.followers.filter(
-          (x) => x.memberId !== loggedInUser.memberId
-        );
-
+        localArtist.followerCount -= 1;
         setProfile(localArtist);
       }
     } catch (err) {
@@ -318,7 +305,15 @@ const ArtistProfile = ({
                   tracks={tracks}
                   setTracks={setTracks}
                   viewingOwnProfile={viewingOwnProfile}
+                  canLoadMore={canLoadMore}
+                  setCanLoadMore={setCanLoadMore}
                 />
+              </Tab>
+              <Tab eventKey="followers" title="Followers" className="">
+                <Followers artistDetails={artistDetails} />
+              </Tab>
+              <Tab eventKey="packages" title="Booking" className="">
+                <></>
               </Tab>
             </Tabs>
           </div>

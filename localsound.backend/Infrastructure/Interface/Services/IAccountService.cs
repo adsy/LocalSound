@@ -11,7 +11,7 @@ namespace localsound.backend.Infrastructure.Interface.Services
 {
     public interface IAccountService
     {
-        Task<ServiceResponse<IAppUserDto>> GetProfileDataAsync(string profileUrl, CancellationToken cancellationToken);
+        Task<ServiceResponse<IAppUserDto>> GetProfileDataAsync(string profileUrl, Guid? currentUser, CancellationToken cancellationToken);
         Task<ServiceResponse<LoginResponseDto>> LoginAsync(LoginSubmissionDto loginData);
         Task<ServiceResponse<LoginResponseDto>> RegisterAsync(RegisterSubmissionDto registrationDetails);
         Task<ServiceResponse> UpdateAccountImage(Guid userId, string memberId, IFormFile photo, AccountImageTypeEnum imageType);

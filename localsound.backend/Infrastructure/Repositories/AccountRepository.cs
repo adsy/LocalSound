@@ -180,11 +180,6 @@ namespace localsound.backend.Infrastructure.Repositories
                     .ThenInclude(x => x.EventType)
                     .Include(x => x.Equipment)
                     .Include(x => x.Followers)
-                    .ThenInclude(x => x.Follower)
-                    .ThenInclude(x => x.NonArtist)
-                    .Include(x => x.Followers)
-                    .ThenInclude(x => x.Follower)
-                    .ThenInclude(x => x.Artist)
                     .Include(x => x.User)
                     .ThenInclude(x => x.Following)
                     .FirstOrDefaultAsync(x => x.AppUserId == id);
@@ -223,11 +218,8 @@ namespace localsound.backend.Infrastructure.Repositories
                     .ThenInclude(x => x.EventType)
                     .Include(x => x.Equipment)
                     .Include(x => x.Followers)
-                    .ThenInclude(x => x.Follower)
-                    .ThenInclude(x => x.NonArtist)
-                    .Include(x => x.Followers)
-                    .ThenInclude(x => x.Follower)
-                    .ThenInclude(x => x.Artist)
+                    .Include(x => x.User)
+                    .ThenInclude(x => x.Following)
                     .FirstOrDefaultAsync(x => x.ProfileUrl == profileUrl);
 
                 if (artist == null)

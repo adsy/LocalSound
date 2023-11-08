@@ -36,7 +36,7 @@ namespace localsound.backend.api.Handlers.Account
 
         public async Task<ServiceResponse<IAppUserDto>> Handle(GetProfileDataQuery request, CancellationToken cancellationToken)
         {
-            return await _accountService.GetProfileDataAsync(request.ProfileUrl, cancellationToken);
+            return await _accountService.GetProfileDataAsync(request.ProfileUrl, request.CurrentUser, cancellationToken);
         }
 
         public async Task<ServiceResponse> Handle(UpdateAccountImageCommand request, CancellationToken cancellationToken)

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.Execution;
 using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
@@ -11,12 +10,10 @@ using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Azure.Amqp.Framing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Security.Claims;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace localsound.backend.Infrastructure.Services
 {
@@ -320,7 +317,7 @@ namespace localsound.backend.Infrastructure.Services
             };
         }
 
-        public async Task<ServiceResponse<IAppUserDto>> GetProfileDataAsync(string profileUrl, CancellationToken cancellationToken)
+        public async Task<ServiceResponse<IAppUserDto>> GetProfileDataAsync(string profileUrl, Guid? currentUser, CancellationToken cancellationToken)
         {
             try
             {
@@ -330,8 +327,16 @@ namespace localsound.backend.Infrastructure.Services
                 if (artistResponse?.ReturnData != null && artistResponse.IsSuccessStatusCode)
                 {
                     returnDto = CreateArtistDto(artistResponse.ReturnData);
+                    if (artistResponse.ReturnData.Followers.Any(x => x.FollowerId == currentUser))
+                    {
+                        returnDto.IsFollowing = true;
+                    }
+                    else
+                    {
+                        returnDto.IsFollowing = false;
+                    }
 
-                    return new ServiceResponse<IAppUserDto>(HttpStatusCode.OK)
+                        return new ServiceResponse<IAppUserDto>(HttpStatusCode.OK)
                     {
                         ReturnData = returnDto
                     };
@@ -509,30 +514,22 @@ namespace localsound.backend.Infrastructure.Services
 
             if (artist.Followers != null)
             {
-                foreach (var artistFollower in artist.Followers)
-                {
-                    if (artistFollower.Follower.Artist != null)
-                    {
-                        returnDto.Followers.Add(new UserSummaryDto
-                        {
-                            MemberId = artistFollower.Follower.MemberId,
-                            Name = artistFollower.Follower.Artist.Name,
-                            ProfileUrl = artistFollower.Follower.Artist.ProfileUrl,
-                            Images = _mapper.Map<List<AccountImageDto>>(artistFollower.Follower.Images)
-                        });
-                    }
-                    else
-                    {
-                        returnDto.Followers.Add(new UserSummaryDto
-                        {
-                            MemberId = artistFollower.Follower.MemberId,
-                            Name = $"{artistFollower.Follower.NonArtist.FirstName} {artistFollower.Follower.NonArtist.LastName}",
-                            ProfileUrl = artistFollower.Follower.NonArtist.ProfileUrl,
-                            Images = _mapper.Map<List<AccountImageDto>>(artistFollower.Follower.Images)
-                        });
-                    }
-                }
+                returnDto.FollowerCount = artist.Followers.Count;
             }
+            else
+            {
+                returnDto.FollowerCount = 0;
+            }
+
+            if (artist.User.Following != null)
+            {
+                returnDto.FollowingCount = artist.User.Following.Count;
+            }
+            else
+            {
+                returnDto.FollowingCount = 0;
+            }
+
 
             return returnDto;
         }
@@ -544,16 +541,11 @@ namespace localsound.backend.Infrastructure.Services
 
             if (nonArtist.User.Following != null)
             {
-                foreach (var artistFollowing in nonArtist.User.Following)
-                {
-                    returnDto.Following.Add(new UserSummaryDto
-                    {
-                        MemberId = artistFollowing.Artist.User.MemberId,
-                        Name = artistFollowing.Artist.Name,
-                        ProfileUrl = artistFollowing.Artist.ProfileUrl,
-                        Images = _mapper.Map<List<AccountImageDto>>(artistFollowing.Artist.User.Images)
-                    });
-                }
+                returnDto.FollowingCount = nonArtist.User.Following.Count;
+            }
+            else
+            {
+                returnDto.FollowingCount = 0;
             }
 
             return returnDto;

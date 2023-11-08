@@ -6,6 +6,7 @@ namespace localsound.backend.api.Queries.Account
 {
     public class GetProfileDataQuery : IRequest<ServiceResponse<IAppUserDto>>
     {
+        public Guid? CurrentUser { get; set; }
         public string ProfileUrl { get; set; }
     }
 }

@@ -12,6 +12,8 @@ interface Props {
   tracks: ArtistTrackUploadModel[];
   setTracks: (tracks: ArtistTrackUploadModel[]) => void;
   viewingOwnProfile: boolean;
+  canLoadMore: boolean;
+  setCanLoadMore: (loadMore: boolean) => void;
 }
 
 const ArtistUploadsList = ({
@@ -20,11 +22,12 @@ const ArtistUploadsList = ({
   tracks,
   setTracks,
   viewingOwnProfile,
+  setCanLoadMore,
+  canLoadMore,
 }: Props) => {
   const [page, setPage] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
-  const [canLoadMore, setCanLoadMore] = useState(true);
 
   window.onscroll = debounce(() => {
     if (listRef?.current) {

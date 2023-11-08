@@ -6,7 +6,7 @@ import { Image } from "semantic-ui-react";
 import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
 import userImg from "../../../assets/icons/user.svg";
 import { UserSummaryModel } from "../../../app/model/dto/user-summary.model";
-import FollowerCircle from "../../../common/components/Follower/FollowerCircle";
+import FollowerSquare from "../../../common/components/Follower/FollowerSquare";
 import ArtistSummary from "./ArtistSummary";
 
 interface Props {
@@ -39,15 +39,15 @@ const ArtistDetails = ({ photoUpdateError, userDetails }: Props) => {
               <div className="d-flex flex-column col-6">
                 <div className="about-text m-0 px-3 left-col text-right">
                   <a className="follow-text">
-                    {userDetails.followers.length} follower
-                    {userDetails.followers.length !== 1 ? "s" : ""}
+                    {userDetails.followerCount} follower
+                    {userDetails.followerCount !== 1 ? "s" : ""}
                   </a>
                 </div>
               </div>
               <div className="d-flex flex-column col-6">
                 <div className="about-text m-0 px-3 text-left">
                   <a className="follow-text">
-                    {userDetails.following.length} following
+                    {userDetails.followingCount} following
                   </a>
                 </div>
               </div>

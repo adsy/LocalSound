@@ -1348,11 +1348,13 @@ i.large.icon {
   padding-left: 0px;
 }
 #user-profile .section-title {
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: 1px;
   padding-right: 10px;
   margin-bottom: 8px;
+  font-weight: 600;
+  letter-spacing: 3px !important;
+  font-size: 16px;
+  padding-bottom: 3px;
+  color: #232323 !important;
 }
 #user-profile .followers {
   color: black !important;

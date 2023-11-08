@@ -1,6 +1,6 @@
 ﻿using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model.Dto.Entity;
-using localsound.backend.Domain.Model.Entity;
+using System.Text.Json.Serialization;
 
 namespace localsound.backend.Domain.Model.Interfaces.Entity
 {
@@ -15,7 +15,8 @@ namespace localsound.backend.Domain.Model.Interfaces.Entity
         //public bool EmailConfirmed { get; set; }
 
         public List<AccountImageDto> Images { get; set; }
-        public List<UserSummaryDto> Following { get; set; }
-        public List<UserSummaryDto> Followers { get; set; }
+        public int FollowingCount { get; set; }
+        public int FollowerCount { get; set; }
+        public bool? IsFollowing { get; set; }
     }
 }

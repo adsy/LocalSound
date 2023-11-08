@@ -24,6 +24,7 @@ export interface UserModel {
   equipment: EquipmentModel[];
   eventTypes: EventTypeModel[];
   images: AccountImageModel[];
-  followers: UserSummaryModel[];
-  following: UserSummaryModel[];
+  followerCount: number;
+  followingCount: number;
+  isFollowing?: boolean;
 }
