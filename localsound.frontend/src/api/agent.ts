@@ -117,6 +117,10 @@ const Profile = {
     requests.get<FollowerListResponse>(
       `account/get-profile-followers/member/${memberId}?page=${page}`
     ),
+  getProfileFollowing: (memberId: string, page: number) =>
+    requests.get<FollowerListResponse>(
+      `account/get-profile-following/member/${memberId}?page=${page}`
+    ),
 };
 
 const Artist = {

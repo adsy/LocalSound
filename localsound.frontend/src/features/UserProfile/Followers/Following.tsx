@@ -11,7 +11,7 @@ interface Props {
   currentTab: ArtistProfileTabs;
 }
 
-const Followers = ({ artistDetails, currentTab }: Props) => {
+const Following = ({ artistDetails, currentTab }: Props) => {
   const [followers, setFollowers] = useState<UserSummaryModel[]>([]);
   const [page, setPage] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
@@ -21,7 +21,7 @@ const Followers = ({ artistDetails, currentTab }: Props) => {
   window.onscroll = debounce(() => {
     if (listRef?.current) {
       if (
-        currentTab === ArtistProfileTabs.Followers &&
+        currentTab === ArtistProfileTabs.Following &&
         !loading &&
         canLoadMore &&
         window.innerHeight +
@@ -36,11 +36,11 @@ const Followers = ({ artistDetails, currentTab }: Props) => {
 
   useLayoutEffect(() => {
     (async () => {
-      if (currentTab === ArtistProfileTabs.Followers && canLoadMore) {
+      if (currentTab === ArtistProfileTabs.Following && canLoadMore) {
         try {
           setLoading(true);
 
-          var result = await agent.Profile.getProfileFollowers(
+          var result = await agent.Profile.getProfileFollowing(
             artistDetails.memberId,
             page
           );
@@ -56,8 +56,8 @@ const Followers = ({ artistDetails, currentTab }: Props) => {
   }, [page, currentTab]);
 
   return (
-    <FollowerList followers={followers} listRef={listRef} isFollowers={true} />
+    <FollowerList followers={followers} listRef={listRef} isFollowers={false} />
   );
 };
 
-export default Followers;
+export default Following;

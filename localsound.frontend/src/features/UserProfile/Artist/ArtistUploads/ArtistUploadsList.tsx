@@ -5,10 +5,11 @@ import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-u
 import Track from "../../../../common/components/Track/Track";
 import { debounce } from "lodash";
 import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
+import { ArtistProfileTabs } from "../../../../app/model/enums/artistProfileTabTypes";
 
 interface Props {
   userDetails: UserModel;
-  onUploads: boolean;
+  currentTab: ArtistProfileTabs;
   tracks: ArtistTrackUploadModel[];
   setTracks: (tracks: ArtistTrackUploadModel[]) => void;
   viewingOwnProfile: boolean;
@@ -18,7 +19,7 @@ interface Props {
 
 const ArtistUploadsList = ({
   userDetails,
-  onUploads,
+  currentTab,
   tracks,
   setTracks,
   viewingOwnProfile,
@@ -32,7 +33,7 @@ const ArtistUploadsList = ({
   window.onscroll = debounce(() => {
     if (listRef?.current) {
       if (
-        onUploads &&
+        currentTab === ArtistProfileTabs.Uploads &&
         !loading &&
         canLoadMore &&
         window.innerHeight +
@@ -47,7 +48,7 @@ const ArtistUploadsList = ({
 
   useEffect(() => {
     (async () => {
-      if (onUploads && canLoadMore) {
+      if (currentTab === ArtistProfileTabs.Uploads && canLoadMore) {
         try {
           setLoading(true);
           var result = await agent.Tracks.getArtistUploads(
@@ -62,7 +63,7 @@ const ArtistUploadsList = ({
         }
       }
     })();
-  }, [page, onUploads]);
+  }, [page, currentTab]);
 
   return (
     <div ref={listRef}>

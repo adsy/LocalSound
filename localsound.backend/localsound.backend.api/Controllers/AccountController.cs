@@ -81,10 +81,30 @@ namespace localsound.backend.api.Controllers
         [HttpGet("get-profile-followers/member/{memberId}")]
         public async Task<ActionResult<IAppUserDto>> GetUserProfileFollowers([FromQuery] int page, string memberId, CancellationToken cancellationToken)
         {
-            var result = await Mediator.Send(new GetProfileFollowersQuery
+            var result = await Mediator.Send(new GetProfileFollowerDataQuery
             {
                 MemberId = memberId,
-                Page = page
+                Page = page,
+                RetrieveFollowing = false
+            }, cancellationToken);
+
+            if (result.IsSuccessStatusCode)
+            {
+                return Ok(result.ReturnData);
+            }
+
+            return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("get-profile-following/member/{memberId}")]
+        public async Task<ActionResult<IAppUserDto>> GetUserProfileFollowing([FromQuery] int page, string memberId, CancellationToken cancellationToken)
+        {
+            var result = await Mediator.Send(new GetProfileFollowerDataQuery
+            {
+                MemberId = memberId,
+                Page = page,
+                RetrieveFollowing = true
             }, cancellationToken);
 
             if (result.IsSuccessStatusCode)

@@ -4,9 +4,10 @@ using MediatR;
 
 namespace localsound.backend.api.Queries.Account
 {
-    public class GetProfileFollowersQuery : IRequest<ServiceResponse<FollowerListResponseDto>>
+    public class GetProfileFollowerDataQuery : IRequest<ServiceResponse<FollowerListResponseDto>>
     {
         public string MemberId { get; set; }
         public int Page { get; set; }
+        public bool RetrieveFollowing { get; set; }
     }
 }

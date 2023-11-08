@@ -16,6 +16,8 @@ import ArtistUploadsList from "./ArtistUploads/ArtistUploadsList";
 import { ArtistTrackUploadModel } from "../../../app/model/dto/artist-track-upload.model";
 import agent from "../../../api/agent";
 import Followers from "../Followers/Followers";
+import { ArtistProfileTabs } from "../../../app/model/enums/artistProfileTabTypes";
+import Following from "../Followers/Following";
 
 interface Props {
   loggedInUser: UserModel;
@@ -37,8 +39,7 @@ const ArtistProfile = ({
   const [imgsLoaded, setImgsLoaded] = useState(false);
   const [coverImage, setCoverImage] = useState<AccountImageModel | null>(null);
   const [key, setKey] = useState<string | null>("artistDetails");
-  const [onUploads, setOnUploads] = useState(false);
-  const [onFollowers, setOnFollowers] = useState(false);
+  const [currentTab, setCurrentTab] = useState(ArtistProfileTabs.ArtistDetails);
   const [uploading, setUploading] = useState(false);
   const [tracks, setTracks] = useState<ArtistTrackUploadModel[]>([]);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -292,15 +293,27 @@ const ArtistProfile = ({
                   setUploading(!uploading);
                 }
                 setKey(k);
-                if (k === "uploads") {
-                  setOnUploads(true);
-                } else {
-                  setOnUploads(false);
-                }
-                if (k === "followers") {
-                  setOnFollowers(true);
-                } else {
-                  setOnFollowers(false);
+                switch (k) {
+                  case "artistDetails": {
+                    setCurrentTab(ArtistProfileTabs.ArtistDetails);
+                    break;
+                  }
+                  case "uploads": {
+                    setCurrentTab(ArtistProfileTabs.Uploads);
+                    break;
+                  }
+                  case "followers": {
+                    setCurrentTab(ArtistProfileTabs.Followers);
+                    break;
+                  }
+                  case "following": {
+                    setCurrentTab(ArtistProfileTabs.Following);
+                    break;
+                  }
+                  case "bookings": {
+                    setCurrentTab(ArtistProfileTabs.Bookings);
+                    break;
+                  }
                 }
               }}
               className="mb-4"
@@ -314,7 +327,7 @@ const ArtistProfile = ({
               <Tab eventKey="uploads" title="Uploads" className="">
                 <ArtistUploadsList
                   userDetails={artistDetails}
-                  onUploads={onUploads}
+                  currentTab={currentTab}
                   tracks={tracks}
                   setTracks={setTracks}
                   viewingOwnProfile={viewingOwnProfile}
@@ -325,7 +338,13 @@ const ArtistProfile = ({
               <Tab eventKey="followers" title="Followers" className="">
                 <Followers
                   artistDetails={artistDetails}
-                  onFollowers={onFollowers}
+                  currentTab={currentTab}
+                />
+              </Tab>
+              <Tab eventKey="following" title="Following" className="">
+                <Following
+                  artistDetails={artistDetails}
+                  currentTab={currentTab}
                 />
               </Tab>
               <Tab eventKey="packages" title="Booking" className="">

@@ -5,9 +5,6 @@ import Label from "../../../common/components/Label/Label";
 import { Image } from "semantic-ui-react";
 import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
 import userImg from "../../../assets/icons/user.svg";
-import { UserSummaryModel } from "../../../app/model/dto/user-summary.model";
-import FollowerSquare from "../../../common/components/Follower/FollowerSquare";
-import ArtistSummary from "./ArtistSummary";
 
 interface Props {
   photoUpdateError: string | null;

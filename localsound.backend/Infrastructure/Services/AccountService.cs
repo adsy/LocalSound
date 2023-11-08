@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Net;
 using System.Security.Claims;
 
@@ -369,11 +370,20 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<FollowerListResponseDto>> GetProfileFollowersAsync(string memberId, int page, CancellationToken cancellationToken)
+        public async Task<ServiceResponse<FollowerListResponseDto>> GetProfileFollowerDataAsync(string memberId, int page, bool retrieveFollowing, CancellationToken cancellationToken)
         {
             try
             {
-                var result = await _accountRepository.GetArtistFollowersFromDbAsync(memberId, page, cancellationToken);
+                ServiceResponse<List<ArtistFollower>> result = null;
+
+                if (retrieveFollowing)
+                {
+                    result = await _accountRepository.GetArtistFollowingFromDbAsync(memberId, page, cancellationToken);
+                }
+                else
+                {
+                    result = await _accountRepository.GetArtistFollowersFromDbAsync(memberId, page, cancellationToken);
+                }
 
                 if (result.ReturnData == null || !result.IsSuccessStatusCode)
                 {
@@ -397,7 +407,7 @@ namespace localsound.backend.Infrastructure.Services
             }
             catch (Exception e)
             {
-                var message = $"{nameof(AccountService)} - {nameof(GetProfileFollowersAsync)} - {e.Message}";
+                var message = $"{nameof(AccountService)} - {nameof(GetProfileFollowerDataAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<FollowerListResponseDto>(HttpStatusCode.InternalServerError)

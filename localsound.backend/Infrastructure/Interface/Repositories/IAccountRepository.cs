@@ -16,5 +16,6 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
         Task<ServiceResponse<AppUser>> GetAppUserFromDbAsync(Guid id, string memberId);
         Task<ServiceResponse<AccountImage>> GetAccountImageFromDbAsync(Guid id, AccountImageTypeEnum imageType);
         Task<ServiceResponse<List<ArtistFollower>>> GetArtistFollowersFromDbAsync(string memberId, int page, CancellationToken cancellationToken);
+        Task<ServiceResponse<List<ArtistFollower>>> GetArtistFollowingFromDbAsync(string memberId, int page, CancellationToken cancellationToken);
     }
 }

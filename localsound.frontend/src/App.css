@@ -919,7 +919,7 @@ i.large.icon {
 #modal-popup .profile-photo,
 #edit-artist .profile-photo,
 #artist-profile .profile-photo {
-  border: 2px solid #232323;
+  border: 1px solid #232323;
 }
 #modal-popup .profile-photo.summary-photo,
 #edit-artist .profile-photo.summary-photo,
@@ -993,17 +993,18 @@ i.large.icon {
   padding-left: 0;
   padding-right: 14px;
   padding-top: 7px;
-  border-bottom: 4px solid rgb(199, 199, 199);
+  font-size: 14px !important;
+  border-bottom: 2px solid rgb(199, 199, 199);
 }
 #modal-popup .nav-link:hover,
 #edit-artist .nav-link:hover,
 #artist-profile .nav-link:hover {
-  border-bottom: 4px solid #6d69fa;
+  border-bottom: 2px solid #6d69fa;
 }
 #modal-popup .nav-link.active,
 #edit-artist .nav-link.active,
 #artist-profile .nav-link.active {
-  border-bottom: 4px solid #232323;
+  border-bottom: 2px solid #232323;
 }
 #modal-popup #search-label-component .box,
 #edit-artist #search-label-component .box,
@@ -1084,28 +1085,6 @@ i.large.icon {
   padding: 8px;
   font-weight: 800;
   border-left: 4px #232323 solid;
-}
-#modal-popup .followers,
-#edit-artist .followers,
-#artist-profile .followers {
-  width: 130px;
-}
-#modal-popup #follower-image,
-#edit-artist #follower-image,
-#artist-profile #follower-image {
-  margin-bottom: 5px;
-  cursor: pointer;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-#modal-popup .follow-text,
-#edit-artist .follow-text,
-#artist-profile .follow-text {
-  font-weight: 600;
-  letter-spacing: 3px !important;
-  font-size: 16px;
-  padding-bottom: 3px;
-  color: #232323 !important;
 }
 #modal-popup .follow-text:hover,
 #edit-artist .follow-text:hover,
@@ -1382,12 +1361,34 @@ i.large.icon {
 #user-profile .left-col {
   border-right: 1px solid #ececec;
 }
+#user-profile .follow-text {
+  font-weight: 600;
+  letter-spacing: 3px !important;
+  font-size: 16px;
+  padding-bottom: 3px;
+  color: #232323 !important;
+}
+#user-profile #follower-list .section-title {
+  font-size: 14px;
+}
+#user-profile #follower-list .followers {
+  width: 130px;
+}
+#user-profile #follower-list #follower-image {
+  margin-bottom: 5px;
+  cursor: pointer;
+  padding-left: 5px;
+  padding-right: 5px;
+}
 @media only screen and (max-width: 991px) {
   #user-profile .genre-desktop {
     display: none !important;
   }
   #user-profile .genre-mobile {
     display: flex !important;
+  }
+  #user-profile #follower-list .section-title {
+    font-size: 12px;
   }
 }
 

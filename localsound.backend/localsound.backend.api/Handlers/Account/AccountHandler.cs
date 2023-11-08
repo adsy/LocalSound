@@ -15,7 +15,7 @@ namespace localsound.backend.api.Handlers.Account
         IRequestHandler<UpdateAccountImageCommand, ServiceResponse>,
         IRequestHandler<GetAccountImageQuery, ServiceResponse<AccountImageDto>>,
         IRequestHandler<CheckCurrentUserTokenQuery, ServiceResponse<IAppUserDto>>,
-        IRequestHandler<GetProfileFollowersQuery, ServiceResponse<FollowerListResponseDto>>
+        IRequestHandler<GetProfileFollowerDataQuery, ServiceResponse<FollowerListResponseDto>>
     {
         private readonly IAccountService _accountService;
 
@@ -54,9 +54,9 @@ namespace localsound.backend.api.Handlers.Account
             return await _accountService.CheckCurrentUserToken(request.ClaimsPrincipal);
         }
 
-        public async Task<ServiceResponse<FollowerListResponseDto>> Handle(GetProfileFollowersQuery request, CancellationToken cancellationToken)
+        public async Task<ServiceResponse<FollowerListResponseDto>> Handle(GetProfileFollowerDataQuery request, CancellationToken cancellationToken)
         {
-            return await _accountService.GetProfileFollowersAsync(request.MemberId, request.Page, cancellationToken);
+            return await _accountService.GetProfileFollowerDataAsync(request.MemberId, request.Page, request.RetrieveFollowing, cancellationToken);
         }
     }
 }
