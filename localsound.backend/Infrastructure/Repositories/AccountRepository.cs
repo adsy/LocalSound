@@ -167,6 +167,44 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
+        public async Task<ServiceResponse<List<ArtistFollower>>> GetArtistFollowersFromDbAsync(string memberId, int page, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var artist = await _dbContext.Artist
+                    .Include(x => x.User)
+                    .Include(x => x.Followers)
+                    .ThenInclude(x => x.Follower)
+                    .ThenInclude(x => x.NonArtist)
+                    .Include(x => x.Followers)
+                    .ThenInclude(x => x.Follower)
+                    .ThenInclude(x => x.Artist)
+                    .Include(x => x.Followers)
+                    .ThenInclude(x => x.Follower)
+                    .ThenInclude(x => x.Images)
+                    .Skip(page*30)
+                    .Take(30)
+                    .FirstOrDefaultAsync(x => x.User.MemberId == memberId);
+
+                if (artist == null)
+                {
+                    return new ServiceResponse<List<ArtistFollower>>(HttpStatusCode.NotFound);
+                }
+
+                return new ServiceResponse<List<ArtistFollower>>(HttpStatusCode.OK)
+                {
+                    ReturnData = artist.Followers?.Any() == true ? artist.Followers.Select(x => x).ToList() : new List<ArtistFollower>()
+                };
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(AccountRepository)} - {nameof(GetAppUserFromDbAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<List<ArtistFollower>>(HttpStatusCode.InternalServerError);
+            }
+        }
+
         public async Task<ServiceResponse<Artist>> GetArtistFromDbAsync(Guid id)
         {
             try

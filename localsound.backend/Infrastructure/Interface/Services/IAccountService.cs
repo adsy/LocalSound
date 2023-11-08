@@ -17,5 +17,6 @@ namespace localsound.backend.Infrastructure.Interface.Services
         Task<ServiceResponse> UpdateAccountImage(Guid userId, string memberId, IFormFile photo, AccountImageTypeEnum imageType);
         Task<ServiceResponse<AccountImageDto>> GetAccountImage(Guid userId, string memberId, AccountImageTypeEnum imageType);
         Task<ServiceResponse<IAppUserDto>> CheckCurrentUserToken(ClaimsPrincipal claimsPrincipal);
+        Task<ServiceResponse<FollowerListResponseDto>> GetProfileFollowersAsync(string memberId, int page, CancellationToken cancellationToken);
     }
 }

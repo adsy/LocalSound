@@ -1,5 +1,4 @@
 ﻿using localsound.backend.api.Commands.Account;
-using localsound.backend.api.Commands.Artist;
 using localsound.backend.api.Queries.Account;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
@@ -15,7 +14,8 @@ namespace localsound.backend.api.Handlers.Account
         IRequestHandler<GetProfileDataQuery, ServiceResponse<IAppUserDto>>,
         IRequestHandler<UpdateAccountImageCommand, ServiceResponse>,
         IRequestHandler<GetAccountImageQuery, ServiceResponse<AccountImageDto>>,
-        IRequestHandler<CheckCurrentUserTokenQuery, ServiceResponse<IAppUserDto>>
+        IRequestHandler<CheckCurrentUserTokenQuery, ServiceResponse<IAppUserDto>>,
+        IRequestHandler<GetProfileFollowersQuery, ServiceResponse<FollowerListResponseDto>>
     {
         private readonly IAccountService _accountService;
 
@@ -52,6 +52,11 @@ namespace localsound.backend.api.Handlers.Account
         public async Task<ServiceResponse<IAppUserDto>> Handle(CheckCurrentUserTokenQuery request, CancellationToken cancellationToken)
         {
             return await _accountService.CheckCurrentUserToken(request.ClaimsPrincipal);
+        }
+
+        public async Task<ServiceResponse<FollowerListResponseDto>> Handle(GetProfileFollowersQuery request, CancellationToken cancellationToken)
+        {
+            return await _accountService.GetProfileFollowersAsync(request.MemberId, request.Page, cancellationToken);
         }
     }
 }

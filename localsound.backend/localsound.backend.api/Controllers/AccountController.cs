@@ -77,6 +77,24 @@ namespace localsound.backend.api.Controllers
             return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
         }
 
+        [AllowAnonymous]
+        [HttpGet("get-profile-followers/member/{memberId}")]
+        public async Task<ActionResult<IAppUserDto>> GetUserProfileFollowers([FromQuery] int page, string memberId, CancellationToken cancellationToken)
+        {
+            var result = await Mediator.Send(new GetProfileFollowersQuery
+            {
+                MemberId = memberId,
+                Page = page
+            }, cancellationToken);
+
+            if (result.IsSuccessStatusCode)
+            {
+                return Ok(result.ReturnData);
+            }
+
+            return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
+        }
+
         [HttpPut]
         [Route("update-account-image/{memberId}/image-type/{imageType}")]
         public async Task<ActionResult> UpdateAccountImage([FromForm] FileUploadDto formData, string memberId, AccountImageTypeEnum imageType)

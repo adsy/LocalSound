@@ -369,6 +369,44 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
+        public async Task<ServiceResponse<FollowerListResponseDto>> GetProfileFollowersAsync(string memberId, int page, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var result = await _accountRepository.GetArtistFollowersFromDbAsync(memberId, page, cancellationToken);
+
+                if (result.ReturnData == null || !result.IsSuccessStatusCode)
+                {
+                    return new ServiceResponse<FollowerListResponseDto>(result.StatusCode);
+                }
+
+                return new ServiceResponse<FollowerListResponseDto>(HttpStatusCode.OK)
+                {
+                    ReturnData = new FollowerListResponseDto
+                    {
+                        Followers = result.ReturnData.Select(x => new UserSummaryDto
+                        {
+                            MemberId = x.Follower.MemberId,
+                            ProfileUrl = x.Follower.NonArtist != null ? x.Follower.NonArtist.ProfileUrl : x.Follower.Artist.ProfileUrl,
+                            Name = x.Follower.NonArtist != null ? $"{x.Follower.NonArtist.FirstName} {x.Follower.NonArtist.LastName}" : x.Follower.Artist.Name,
+                            Images = _mapper.Map<List<AccountImageDto>>(x.Follower.Images)
+                        }).ToList(),
+                        CanLoadMore = result.ReturnData.Count == 30
+                    }
+                }; ;
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(AccountService)} - {nameof(GetProfileFollowersAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<FollowerListResponseDto>(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured while getting the profile's followers, please try again..."
+                };
+            }
+        }
+
         public async Task<ServiceResponse> UpdateAccountImage(Guid userId, string memberId, IFormFile photo, AccountImageTypeEnum imageType)
         {
             try

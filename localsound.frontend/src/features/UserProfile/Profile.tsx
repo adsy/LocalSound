@@ -48,7 +48,7 @@ const UserProfileSummary = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [history.location]);
+  }, [history.location, userDetail?.memberId]);
 
   return (
     <div id="user-profile">

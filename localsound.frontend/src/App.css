@@ -1095,6 +1095,8 @@ i.large.icon {
 #artist-profile #follower-image {
   margin-bottom: 5px;
   cursor: pointer;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 #modal-popup .follow-text,
 #edit-artist .follow-text,

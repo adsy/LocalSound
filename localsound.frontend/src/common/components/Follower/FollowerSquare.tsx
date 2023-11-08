@@ -25,9 +25,13 @@ const FollowerSquare = ({ follower }: Props) => {
   };
 
   return (
-    <div id="follower-image" onClick={() => goProfile()}>
+    <div
+      id="follower-image"
+      className=" d-flex flex-column align-items-center"
+      onClick={() => goProfile()}
+    >
       <Image size={"small"} src={profileImage ? profileImage : userImg} />
-      <p>{follower.name}</p>
+      <p className="section-title text-center">{follower.name}</p>
     </div>
   );
 };

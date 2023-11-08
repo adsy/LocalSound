@@ -38,6 +38,7 @@ const ArtistProfile = ({
   const [coverImage, setCoverImage] = useState<AccountImageModel | null>(null);
   const [key, setKey] = useState<string | null>("artistDetails");
   const [onUploads, setOnUploads] = useState(false);
+  const [onFollowers, setOnFollowers] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [tracks, setTracks] = useState<ArtistTrackUploadModel[]>([]);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -54,13 +55,14 @@ const ArtistProfile = ({
     });
   };
   useLayoutEffect(() => {
+    console.log("here");
     if (artistDetails.isFollowing) {
       setIsFollowing(true);
     }
-  }, [artistDetails.memberId]);
+  }, [artistDetails.memberId, artistDetails?.isFollowing]);
 
   useLayoutEffect(() => {
-    if (loggedInUser.memberId === artistDetails.memberId) {
+    if (loggedInUser?.memberId === artistDetails.memberId) {
       const IMAGES = [...loggedInUser.images];
       Promise.all(IMAGES.map((image) => loadImage(image)))
         .then(() => {
@@ -95,7 +97,7 @@ const ArtistProfile = ({
           });
       }
     }
-  }, [artistDetails.memberId, loggedInUser.images]);
+  }, [artistDetails.memberId, loggedInUser?.images]);
 
   const editArtistProfile = () => {
     dispatch(
@@ -244,9 +246,15 @@ const ArtistProfile = ({
                           className="btn black-button edit-profile-button w-fit-content d-flex flex-row"
                         >
                           <h4>
-                            <span className="mr-1">
-                              {isFollowing ? "Unfollow" : "Follow"} artist{" "}
-                            </span>
+                            {isFollowing ? (
+                              <span className="mr-1 fade-in">
+                                Unfollow artist
+                              </span>
+                            ) : (
+                              <span className="mr-1 fade-in">
+                                Follow artist
+                              </span>
+                            )}
                             <Icon
                               name="heart"
                               className="mt-0 mb-0 mr-0 ml-1"
@@ -289,6 +297,11 @@ const ArtistProfile = ({
                 } else {
                   setOnUploads(false);
                 }
+                if (k === "followers") {
+                  setOnFollowers(true);
+                } else {
+                  setOnFollowers(false);
+                }
               }}
               className="mb-4"
             >
@@ -310,7 +323,10 @@ const ArtistProfile = ({
                 />
               </Tab>
               <Tab eventKey="followers" title="Followers" className="">
-                <Followers artistDetails={artistDetails} />
+                <Followers
+                  artistDetails={artistDetails}
+                  onFollowers={onFollowers}
+                />
               </Tab>
               <Tab eventKey="packages" title="Booking" className="">
                 <></>

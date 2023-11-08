@@ -18,6 +18,8 @@ import { EventTypeModel } from "../app/model/dto/eventType.model";
 import { TrackUploadSASModel } from "../app/model/dto/track-upload-sas.model";
 import { ArtistTrackUploadModel } from "../app/model/dto/artist-track-upload.model";
 import { TrackListResponse } from "../app/model/dto/track-list-response.model";
+import { UserSummaryModel } from "../app/model/dto/user-summary.model";
+import { FollowerListResponse } from "../app/model/dto/follower-list-response.model";
 
 const axiosApiInstance = axios.create();
 
@@ -110,6 +112,10 @@ const Profile = {
     requests.put<AccountImageModel>(
       `account/update-account-image/${memberId}/image-type/${accountImageType}`,
       formData
+    ),
+  getProfileFollowers: (memberId: string, page: number) =>
+    requests.get<FollowerListResponse>(
+      `account/get-profile-followers/member/${memberId}?page=${page}`
     ),
 };
 
