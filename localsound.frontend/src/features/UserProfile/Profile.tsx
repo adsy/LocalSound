@@ -50,6 +50,10 @@ const UserProfileSummary = () => {
       });
   }, [history.location, userDetail?.memberId]);
 
+  useLayoutEffect(() => {
+    setProfile(userDetail);
+  }, [userDetail]);
+
   return (
     <div id="user-profile">
       {loading ? (

@@ -5,13 +5,19 @@ import Label from "../../../common/components/Label/Label";
 import { Image } from "semantic-ui-react";
 import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
 import userImg from "../../../assets/icons/user.svg";
+import { ArtistProfileTabs } from "../../../app/model/enums/artistProfileTabTypes";
 
 interface Props {
   photoUpdateError: string | null;
   userDetails: UserModel;
+  setCurrentTab: (tab: ArtistProfileTabs) => void;
 }
 
-const ArtistDetails = ({ photoUpdateError, userDetails }: Props) => {
+const ArtistDetails = ({
+  photoUpdateError,
+  userDetails,
+  setCurrentTab,
+}: Props) => {
   const userPhoto = userDetails.images.find(
     (x) => x.accountImageTypeId == AccountImageTypes.ProfileImage
   );
@@ -34,7 +40,12 @@ const ArtistDetails = ({ photoUpdateError, userDetails }: Props) => {
           <div className="d-flex flex-column pb-4">
             <div className="d-flex flex-row">
               <div className="d-flex flex-column col-6">
-                <div className="about-text m-0 px-3 left-col text-right">
+                <div
+                  className="about-text m-0 px-3 left-col text-right"
+                  onClick={() => {
+                    setCurrentTab(ArtistProfileTabs.Followers);
+                  }}
+                >
                   <a className="follow-text">
                     {userDetails.followerCount} follower
                     {userDetails.followerCount !== 1 ? "s" : ""}
@@ -42,7 +53,12 @@ const ArtistDetails = ({ photoUpdateError, userDetails }: Props) => {
                 </div>
               </div>
               <div className="d-flex flex-column col-6">
-                <div className="about-text m-0 px-3 text-left">
+                <div
+                  className="about-text m-0 px-3 text-left "
+                  onClick={() => {
+                    setCurrentTab(ArtistProfileTabs.Following);
+                  }}
+                >
                   <a className="follow-text">
                     {userDetails.followingCount} following
                   </a>

@@ -1,5 +1,5 @@
 import { UserModel } from "../../../../app/model/dto/user.model";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import agent from "../../../../api/agent";
 import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-upload.model";
 import Track from "../../../../common/components/Track/Track";
@@ -46,7 +46,7 @@ const ArtistUploadsList = ({
     }
   }, 100);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     (async () => {
       if (currentTab === ArtistProfileTabs.Uploads && canLoadMore) {
         try {

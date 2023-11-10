@@ -12,6 +12,7 @@ import { handleUpdateUserProfilePhoto } from "../../../../../app/redux/actions/u
 import { State } from "../../../../../app/model/redux/state";
 import { CropTypes } from "../../../../../app/model/enums/cropTypes";
 import ImageCropper from "../../../../../common/components/Cropper/ImageCropper";
+import { handleResetModal } from "../../../../../app/redux/actions/modalSlice";
 
 interface Props {
   disabled?: boolean;
@@ -36,6 +37,7 @@ const EditArtistDetailsForm = ({
   const [updatingProfilePhoto, setUpdatingProfilePhoto] = useState(false);
   const dispatch = useDispatch();
   const userDetails = useSelector((state: State) => state.user.userDetails);
+  const [submittingPhotoUpdate, setSubmittingPhotoUpdate] = useState(false);
   const userPhoto = userDetails!.images.find(
     (x) => x.accountImageTypeId == AccountImageTypes.ProfileImage
   );
@@ -79,16 +81,15 @@ const EditArtistDetailsForm = ({
       formData.append("formFile", file, "profilePhoto.jpg");
 
       try {
-        // setSubmittingRequest(true);
+        setSubmittingPhotoUpdate(true);
         var result = await agent.Profile.uploadProfileImage(
           userDetails?.memberId!,
           formData,
           AccountImageTypes.ProfileImage
         );
 
+        dispatch(handleResetModal());
         dispatch(handleUpdateUserProfilePhoto(result));
-        setUpdatingProfilePhoto(false);
-        setFile(null);
       } catch (err) {
         // TODO: Handle error
         // setPhotoUpdateError(
@@ -212,6 +213,7 @@ const EditArtistDetailsForm = ({
                 onFileUpload={onFileUpload}
                 cancelCrop={cancelCrop}
                 cropType={CropTypes.Circle}
+                submittingPhoto={submittingPhotoUpdate}
               />
             ) : null}
           </div>

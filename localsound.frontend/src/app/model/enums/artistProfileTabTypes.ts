@@ -3,5 +3,5 @@ export enum ArtistProfileTabs {
   Uploads,
   Followers,
   Following,
-  Bookings,
+  Packages,
 }

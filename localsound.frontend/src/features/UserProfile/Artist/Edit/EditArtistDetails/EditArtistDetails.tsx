@@ -11,16 +11,17 @@ import { handleSetUserDetails } from "../../../../../app/redux/actions/userSlice
 import { UserModel } from "../../../../../app/model/dto/user.model";
 import ErrorBanner from "../../../../../common/banner/ErrorBanner";
 import SuccessBanner from "../../../../../common/banner/SuccessBanner";
+import { handleToggleModal } from "../../../../../app/redux/actions/modalSlice";
 
 interface Props {
   userDetails: UserModel;
-  setSubmittingRequest: (submittingRequest: boolean) => void;
 }
 
-const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
+const EditArtistDetails = ({ userDetails }: Props) => {
   const [addressError, setAddressError] = useState(false);
-  const dispatch = useDispatch();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [submittingUpdate, setSubmittingUpdate] = useState(false);
+  const dispatch = useDispatch();
 
   const formValuesUntouched = (values: UpdateArtistPersonalDetailsModel) => {
     if (values.name !== userDetails.name) {
@@ -80,7 +81,13 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
                   ...submissionData,
                 })
               );
-              setShowSuccessMessage(true);
+
+              dispatch(
+                handleToggleModal({
+                  open: false,
+                })
+              );
+              setSubmittingUpdate(false);
             } catch (err) {
               setStatus({
                 error:
@@ -128,11 +135,14 @@ const EditArtistDetails = ({ userDetails, setSubmittingRequest }: Props) => {
                   </SuccessBanner>
                 ) : null}
                 <div className="px-3 mt-3">
-                  {!isSubmitting ? (
+                  {!submittingUpdate ? (
                     <Button
                       className={`black-button w-100 align-self-center`}
                       disabled={disabled || addressError}
-                      onClick={() => submitForm()}
+                      onClick={() => {
+                        setSubmittingUpdate(true);
+                        submitForm();
+                      }}
                     >
                       <h4>Update personal details</h4>
                     </Button>

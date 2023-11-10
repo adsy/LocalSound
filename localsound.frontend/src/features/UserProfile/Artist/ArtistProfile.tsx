@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Tab, Tabs } from "react-bootstrap";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
@@ -38,9 +38,7 @@ const ArtistProfile = ({
   const [file, setFile] = useState<File | null>(null);
   const [imgsLoaded, setImgsLoaded] = useState(false);
   const [coverImage, setCoverImage] = useState<AccountImageModel | null>(null);
-  const [key, setKey] = useState<string | null>("artistDetails");
   const [currentTab, setCurrentTab] = useState(ArtistProfileTabs.ArtistDetails);
-  const [uploading, setUploading] = useState(false);
   const [tracks, setTracks] = useState<ArtistTrackUploadModel[]>([]);
   const [isFollowing, setIsFollowing] = useState(false);
   const [canLoadMore, setCanLoadMore] = useState(true);
@@ -56,7 +54,6 @@ const ArtistProfile = ({
     });
   };
   useLayoutEffect(() => {
-    console.log("here");
     if (artistDetails.isFollowing) {
       setIsFollowing(true);
     }
@@ -65,6 +62,7 @@ const ArtistProfile = ({
   useLayoutEffect(() => {
     if (loggedInUser?.memberId === artistDetails.memberId) {
       const IMAGES = [...loggedInUser.images];
+      console.log(IMAGES);
       Promise.all(IMAGES.map((image) => loadImage(image)))
         .then(() => {
           const coverImage = loggedInUser?.images?.find(
@@ -104,12 +102,7 @@ const ArtistProfile = ({
     dispatch(
       handleToggleModal({
         open: true,
-        body: (
-          <EditArtist
-            userDetails={artistDetails}
-            setSubmittingRequest={setSubmittingRequest}
-          />
-        ),
+        body: <EditArtist userDetails={artistDetails} />,
         size: "large",
       })
     );
@@ -129,8 +122,7 @@ const ArtistProfile = ({
         size: "large",
       })
     );
-    setKey("uploads");
-    setUploading(true);
+    setCurrentTab(ArtistProfileTabs.Uploads);
   };
 
   const updateArtistFollow = async (follow: boolean) => {
@@ -287,44 +279,49 @@ const ArtistProfile = ({
           <div className="p-3">
             <Tabs
               id="controlled-tab-example"
-              activeKey={key!}
+              activeKey={currentTab}
               onSelect={(k) => {
-                if (uploading) {
-                  setUploading(!uploading);
-                }
-                setKey(k);
                 switch (k) {
-                  case "artistDetails": {
+                  case "0": {
                     setCurrentTab(ArtistProfileTabs.ArtistDetails);
                     break;
                   }
-                  case "uploads": {
+                  case "1": {
                     setCurrentTab(ArtistProfileTabs.Uploads);
                     break;
                   }
-                  case "followers": {
+                  case "2": {
                     setCurrentTab(ArtistProfileTabs.Followers);
                     break;
                   }
-                  case "following": {
+                  case "3": {
                     setCurrentTab(ArtistProfileTabs.Following);
                     break;
                   }
-                  case "bookings": {
-                    setCurrentTab(ArtistProfileTabs.Bookings);
+                  case "4": {
+                    setCurrentTab(ArtistProfileTabs.Packages);
                     break;
                   }
                 }
               }}
               className="mb-4"
             >
-              <Tab eventKey="artistDetails" title="Artist details" className="">
+              <Tab
+                eventKey={ArtistProfileTabs.ArtistDetails}
+                title="Artist details"
+                className=""
+              >
                 <ArtistDetails
                   userDetails={artistDetails}
                   photoUpdateError={photoUpdateError}
+                  setCurrentTab={setCurrentTab}
                 />
               </Tab>
-              <Tab eventKey="uploads" title="Uploads" className="">
+              <Tab
+                eventKey={ArtistProfileTabs.Uploads}
+                title="Uploads"
+                className=""
+              >
                 <ArtistUploadsList
                   userDetails={artistDetails}
                   currentTab={currentTab}
@@ -335,19 +332,31 @@ const ArtistProfile = ({
                   setCanLoadMore={setCanLoadMore}
                 />
               </Tab>
-              <Tab eventKey="followers" title="Followers" className="">
+              <Tab
+                eventKey={ArtistProfileTabs.Followers}
+                title="Followers"
+                className=""
+              >
                 <Followers
                   artistDetails={artistDetails}
                   currentTab={currentTab}
                 />
               </Tab>
-              <Tab eventKey="following" title="Following" className="">
+              <Tab
+                eventKey={ArtistProfileTabs.Following}
+                title="Following"
+                className=""
+              >
                 <Following
                   artistDetails={artistDetails}
                   currentTab={currentTab}
                 />
               </Tab>
-              <Tab eventKey="packages" title="Booking" className="">
+              <Tab
+                eventKey={ArtistProfileTabs.Packages}
+                title="Booking"
+                className=""
+              >
                 <></>
               </Tab>
             </Tabs>

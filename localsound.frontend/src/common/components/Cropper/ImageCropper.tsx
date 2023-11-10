@@ -1,16 +1,24 @@
-import React, { useState, createRef } from "react";
+import { createRef } from "react";
 import Cropper, { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { CropTypes } from "../../../app/model/enums/cropTypes";
+import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 
 interface Props {
   file: File;
   onFileUpload: (file: Blob) => void;
   cancelCrop: () => void;
   cropType: CropTypes;
+  submittingPhoto: boolean;
 }
 
-const ImageCropper = ({ file, onFileUpload, cancelCrop, cropType }: Props) => {
+const ImageCropper = ({
+  file,
+  onFileUpload,
+  cancelCrop,
+  cropType,
+  submittingPhoto,
+}: Props) => {
   const cropperRef = createRef<ReactCropperElement>();
 
   const getCropData = async () => {
@@ -108,24 +116,27 @@ const ImageCropper = ({ file, onFileUpload, cancelCrop, cropType }: Props) => {
           />
         )}
 
-        <div className="crop-action-row d-flex flex-row mt-2 justify-content-center">
-          <a
-            onClick={async () => await getCropData()}
-            target="_blank"
-            className="btn black-button save-crop-btn"
-          >
-            <h4>Save</h4>
-          </a>
-          <a
-            onClick={() => cancelCrop()}
-            target="_blank"
-            className="ml-1 btn white-button save-crop-btn"
-          >
-            <h4>Cancel</h4>
-          </a>
-        </div>
+        {!submittingPhoto ? (
+          <div className="crop-action-row d-flex flex-row mt-2 justify-content-center">
+            <a
+              onClick={async () => await getCropData()}
+              target="_blank"
+              className="btn black-button save-crop-btn"
+            >
+              <h4>Save</h4>
+            </a>
+            <a
+              onClick={() => cancelCrop()}
+              target="_blank"
+              className="ml-1 btn white-button save-crop-btn"
+            >
+              <h4>Cancel</h4>
+            </a>
+          </div>
+        ) : (
+          <InPageLoadingComponent />
+        )}
       </div>
-      {/* <Button>Cancel</Button> */}
     </div>
   );
 };

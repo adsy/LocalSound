@@ -1,12 +1,18 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Modal, TransitionablePortal } from "semantic-ui-react";
+import { Modal, TransitionablePortal } from "semantic-ui-react";
 import { handleToggleModal } from "../../app/redux/actions/modalSlice";
 import { State } from "../../app/model/redux/state";
+import { useEffect } from "react";
 
 const ModalContainer = () => {
   const dispatch = useDispatch();
   const modal = useSelector((state: State) => state.modal);
-  const size = modal.size === undefined ? "mini" : modal.size;
+
+  useEffect(() => {
+    if (!modal.open) {
+      document.body.classList.remove("modal-fade-in");
+    }
+  }, [modal.open]);
 
   return (
     <div>
@@ -21,7 +27,6 @@ const ModalContainer = () => {
           closeOnDimmerClick={false}
           open={true}
           onClose={() => {
-            document.body.classList.remove("modal-fade-in");
             dispatch(handleToggleModal({ open: false }));
           }}
           style={{ top: "unset", left: "unset", height: "unset" }}
