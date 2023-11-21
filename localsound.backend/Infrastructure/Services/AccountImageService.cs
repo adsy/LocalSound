@@ -60,7 +60,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<string>> UploadAccountImage(AccountImageTypeEnum imageType, Guid appUserId, IFormFile photo)
+        public async Task<ServiceResponse<string>> UploadAccountImage(AccountImageTypeEnum imageType, Guid appUserId, IFormFile photo, string fileExt)
         {
             try
             {
@@ -69,17 +69,15 @@ namespace localsound.backend.Infrastructure.Services
                 var fileLocation = $"[{appUserId}]/photos/imageType/{(int)imageType}";
 
                 // create database entries
-                var accountImageResult = await _accountImageRepository.UploadAccountImageAsync(imageType, appUserId, fileLocation);
+                var accountImageResult = await _accountImageRepository.UploadAccountImageAsync(imageType, appUserId, fileLocation, fileExt);
 
                 if (!accountImageResult.IsSuccessStatusCode || accountImageResult.ReturnData == null) 
                 {
                     return new ServiceResponse<string>(accountImageResult.StatusCode, accountImageResult.ServiceResponseMessage);
                 }
 
-                var fileExt = photo.FileName.Split(".")[^1];
-
                 // upload to azure
-                var blobUploadResult = await _blobRepository.UploadBlobAsync(accountImageResult.ReturnData.FileContent.FileLocation+$".{fileExt}", photo);
+                var blobUploadResult = await _blobRepository.UploadBlobAsync(accountImageResult.ReturnData.FileContent.FileLocation+$"{fileExt}", photo);
 
                 if (!blobUploadResult.IsSuccessStatusCode || blobUploadResult.ReturnData == null)
                 {

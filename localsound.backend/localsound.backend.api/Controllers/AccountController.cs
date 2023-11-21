@@ -125,6 +125,7 @@ namespace localsound.backend.api.Controllers
                 MemberId = memberId,
                 Photo = formData.FormFile,
                 ImageType = imageType,
+                FileExt = formData.FileExt
             });
 
             if (updateResult.IsSuccessStatusCode)

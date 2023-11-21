@@ -53,6 +53,7 @@ const ArtistProfile = ({
       loadImg.onerror = (err) => reject(err);
     });
   };
+
   useLayoutEffect(() => {
     if (artistDetails.isFollowing) {
       setIsFollowing(true);
@@ -62,7 +63,7 @@ const ArtistProfile = ({
   useLayoutEffect(() => {
     if (loggedInUser?.memberId === artistDetails.memberId) {
       const IMAGES = [...loggedInUser.images];
-      console.log(IMAGES);
+
       Promise.all(IMAGES.map((image) => loadImage(image)))
         .then(() => {
           const coverImage = loggedInUser?.images?.find(
@@ -268,7 +269,6 @@ const ArtistProfile = ({
                   setUpdatingCoverPhoto={setUpdatingCoverPhoto}
                   setSubmittingRequest={setSubmittingRequest}
                   setPhotoUpdateError={setPhotoUpdateError}
-                  setImgsLoaded={setImgsLoaded}
                 />
                 <div className="details-container flex-wrap">
                   <ArtistSummary userDetails={artistDetails} />

@@ -10,5 +10,6 @@ namespace localsound.backend.api.Commands.Account
         public string MemberId { get; set; }
         public IFormFile Photo { get; set; }
         public AccountImageTypeEnum ImageType { get; set; }
+        public string FileExt { get; set; }
     }
 }

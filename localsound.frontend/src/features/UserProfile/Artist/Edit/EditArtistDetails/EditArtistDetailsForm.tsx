@@ -77,8 +77,9 @@ const EditArtistDetailsForm = ({
     const formData = new FormData();
 
     if (file) {
-      formData.append("fileName", "profilePhoto.jpg");
-      formData.append("formFile", file, "profilePhoto.jpg");
+      formData.append("fileName", file.name);
+      formData.append("formFile", file);
+      formData.append("fileExt", ".jpg");
 
       try {
         setSubmittingPhotoUpdate(true);

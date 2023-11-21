@@ -9,7 +9,7 @@ interface Props {
   onFileUpload: (file: Blob) => void;
   cancelCrop: () => void;
   cropType: CropTypes;
-  submittingPhoto: boolean;
+  submittingPhoto?: boolean;
 }
 
 const ImageCropper = ({

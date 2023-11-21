@@ -107,7 +107,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 BlobContainerClient container = new (_blobStorageSettings.ConnectionString, userId.ToString());
 
-                if (! await container.ExistsAsync())
+                if (!await container.ExistsAsync())
                 {
                     await container.CreateIfNotExistsAsync();
                     await container.SetAccessPolicyAsync(PublicAccessType.Blob);

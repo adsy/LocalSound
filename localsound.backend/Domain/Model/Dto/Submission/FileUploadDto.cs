@@ -6,5 +6,6 @@ namespace localsound.backend.Domain.Model.Dto.Submission
     {
         public string FileName { get; set; }
         public IFormFile FormFile { get; set; }
+        public string FileExt { get; set; }
     }
 }

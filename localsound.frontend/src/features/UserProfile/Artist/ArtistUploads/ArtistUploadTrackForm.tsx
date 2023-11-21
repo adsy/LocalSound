@@ -3,7 +3,11 @@ import { UserModel } from "../../../../app/model/dto/user.model";
 import agent from "../../../../api/agent";
 import { Button, Form, ProgressBar } from "react-bootstrap";
 import { TrackUploadSASModel } from "../../../../app/model/dto/track-upload-sas.model";
-import { BlockBlobUploadOptions, BlobClient } from "@azure/storage-blob";
+import {
+  BlockBlobUploadOptions,
+  BlobClient,
+  BlobHTTPHeaders,
+} from "@azure/storage-blob";
 import ErrorBanner from "../../../../common/banner/ErrorBanner";
 import { Formik } from "formik";
 import SuccessBanner from "../../../../common/banner/SuccessBanner";
@@ -55,8 +59,6 @@ const ArtistUploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
     var url = `${trackUrl}?${uploadData?.sasToken}`;
 
     const blobClient = new BlobClient(url);
-
-    blobClient.getProperties();
 
     var client = blobClient.getBlockBlobClient();
 
@@ -128,8 +130,6 @@ const ArtistUploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
 
                       var duration = await getDuration(file);
 
-                      var trackImageExt = ".jpg";
-
                       var formData = new FormData();
                       formData.append("trackName", values.trackName);
                       formData.append(
@@ -142,11 +142,11 @@ const ArtistUploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                         croppedImage!,
                         trackImage?.name
                       );
-                      formData.append("trackImageExt", `.${trackImageExt}`);
-                      formData.append("trackFileExt", `.${trackExt}`);
+                      formData.append("trackImageExt", `.jpg`);
+                      formData.append("trackFileExt", `${trackExt}`);
                       formData.append(
                         "fileLocation",
-                        uploadData!.uploadLocation + `.${trackExt}`
+                        uploadData!.uploadLocation + `${trackExt}`
                       );
                       formData.append(
                         "trackUrl",

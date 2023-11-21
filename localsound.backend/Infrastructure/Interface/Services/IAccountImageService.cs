@@ -7,6 +7,6 @@ namespace localsound.backend.Infrastructure.Interface.Services
     public interface IAccountImageService
     {
         Task<ServiceResponse> DeleteAccountImageIfExists(AccountImageTypeEnum imageType, Guid appUserId);
-        Task<ServiceResponse<string>> UploadAccountImage(AccountImageTypeEnum imageType, Guid appUserId, IFormFile photo);
+        Task<ServiceResponse<string>> UploadAccountImage(AccountImageTypeEnum imageType, Guid appUserId, IFormFile photo, string fileExt);
     }
 }

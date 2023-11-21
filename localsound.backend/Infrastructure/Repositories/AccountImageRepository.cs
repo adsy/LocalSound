@@ -53,7 +53,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<AccountImage>> UploadAccountImageAsync(AccountImageTypeEnum imageType, Guid appUserId, string fileLocation)
+        public async Task<ServiceResponse<AccountImage>> UploadAccountImageAsync(AccountImageTypeEnum imageType, Guid appUserId, string fileLocation, string fileExt)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     var fileContent = new FileContent
                     {
                         FileContentId = fileContentId,
-                        FileExtensionType = ".jpg",
+                        FileExtensionType = fileExt,
                         FileLocation = fileLocation+$"/{fileContentId}"
                     };
                     accountImage = new AccountImage

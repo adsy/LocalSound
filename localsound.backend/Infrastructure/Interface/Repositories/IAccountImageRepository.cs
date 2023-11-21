@@ -7,6 +7,6 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
     public interface IAccountImageRepository
     {
         Task<ServiceResponse<string>> DeleteAccountImageAsync(AccountImageTypeEnum imageType, Guid appUserId);
-        Task<ServiceResponse<AccountImage>> UploadAccountImageAsync(AccountImageTypeEnum imageType, Guid appUserId, string fileLocation);
+        Task<ServiceResponse<AccountImage>> UploadAccountImageAsync(AccountImageTypeEnum imageType, Guid appUserId, string fileLocation, string fileExt);
     }
 }

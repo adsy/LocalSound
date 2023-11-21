@@ -417,7 +417,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse> UpdateAccountImage(Guid userId, string memberId, IFormFile photo, AccountImageTypeEnum imageType)
+        public async Task<ServiceResponse> UpdateAccountImage(Guid userId, string memberId, IFormFile photo, AccountImageTypeEnum imageType, string fileExt)
         {
             try
             {
@@ -435,7 +435,7 @@ namespace localsound.backend.Infrastructure.Services
                     return new ServiceResponse(deleteResult.StatusCode);
                 }
 
-                var result = await _accountImageService.UploadAccountImage(imageType, userId, photo);
+                var result = await _accountImageService.UploadAccountImage(imageType, userId, photo, fileExt);
 
                 if (!result.IsSuccessStatusCode)
                 {

@@ -41,7 +41,7 @@ namespace localsound.backend.api.Handlers.Account
 
         public async Task<ServiceResponse> Handle(UpdateAccountImageCommand request, CancellationToken cancellationToken)
         {
-            return await _accountService.UpdateAccountImage(request.UserId, request.MemberId, request.Photo, request.ImageType);
+            return await _accountService.UpdateAccountImage(request.UserId, request.MemberId, request.Photo, request.ImageType, request.FileExt);
         }
 
         public async Task<ServiceResponse<AccountImageDto>> Handle(GetAccountImageQuery request, CancellationToken cancellationToken)

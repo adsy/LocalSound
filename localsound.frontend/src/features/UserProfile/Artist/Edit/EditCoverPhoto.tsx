@@ -12,7 +12,6 @@ interface Props {
   setFile: (file: File | null) => void;
   setSubmittingRequest: (submittingRequest: boolean) => void;
   setPhotoUpdateError: (photoUpdateError: string) => void;
-  setImgsLoaded: (imgsLoaded: boolean) => void;
 }
 
 const EditCoverPhoto = ({
@@ -21,7 +20,6 @@ const EditCoverPhoto = ({
   setFile,
   setSubmittingRequest,
   setPhotoUpdateError,
-  setImgsLoaded,
 }: Props) => {
   const userDetail = useSelector((state: State) => state.user.userDetails);
   const dispatch = useDispatch();
@@ -30,8 +28,9 @@ const EditCoverPhoto = ({
     const formData = new FormData();
 
     if (file) {
-      formData.append("fileName", "coverPhoto.jpg");
-      formData.append("formFile", file, "coverPhoto.jpg");
+      formData.append("fileName", file.name);
+      formData.append("formFile", file);
+      formData.append("fileExt", ".jpg");
 
       try {
         setSubmittingRequest(true);
