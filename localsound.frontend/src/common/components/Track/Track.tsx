@@ -19,10 +19,9 @@ import {
 import WaveForm from "../../../features/MusicPlayer/Waveform";
 import { Button } from "react-bootstrap";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
-import ArtistEditTrackForm from "../../../features/UserProfile/Artist/ArtistUploads/ArtistEditTrackForm";
-import agent from "../../../api/agent";
+import EditTrackForm from "../../../features/UserProfile/Artist/Uploads/EditTrackForm";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
-import { handleSetIsDeleting } from "../../../app/redux/actions/actionSlice";
+import DeleteTrackConfirmation from "../../../features/UserProfile/Artist/Uploads/DeleteTrackConfirmation";
 
 interface Props {
   track: ArtistTrackUploadModel;
@@ -40,7 +39,6 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
     SingletonFactory.getInstance()
   );
   const [analyzerData, setAnalyzerData] = useState<any>(null);
-  const [deletingTrack, setDeletingTrack] = useState(false);
   const [trackImageLoaded, setTrackImageLoaded] = useState(false);
   const [trackImage, setTrackImage] = useState<string | null>(null);
 
@@ -108,7 +106,7 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
       handleToggleModal({
         open: true,
         body: (
-          <ArtistEditTrackForm
+          <EditTrackForm
             userDetails={loggedInUser!}
             trackDetails={track}
             tracks={tracks}
@@ -120,26 +118,21 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
     );
   };
 
-  const deleteTrack = async () => {
-    try {
-      if (loggedInUser?.memberId && track.artistTrackUploadId) {
-        dispatch(handleSetIsDeleting(true));
-        setDeletingTrack(true);
-        await agent.Tracks.deleteTrack(
-          loggedInUser?.memberId,
-          track.artistTrackUploadId
-        );
-
-        var tracksFiltered = tracks.filter(
-          (x) => x.artistTrackUploadId !== track.artistTrackUploadId
-        );
-        setTracks(tracksFiltered);
-      }
-    } catch (err) {
-      //TODO: Do something with error
-    }
-    dispatch(handleSetIsDeleting(false));
-    setDeletingTrack(false);
+  const openDeleteModal = () => {
+    dispatch(
+      handleToggleModal({
+        open: true,
+        body: (
+          <DeleteTrackConfirmation
+            loggedInUser={loggedInUser!}
+            track={track}
+            tracks={tracks}
+            setTracks={setTracks}
+          />
+        ),
+        size: "tiny",
+      })
+    );
   };
 
   return (
@@ -187,20 +180,16 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
                   </h4>
                 </Button>
               ) : null}
-              {artistDetails.memberId === loggedInUser?.memberId &&
-              !deletingTrack ? (
+              {artistDetails.memberId === loggedInUser?.memberId ? (
                 <Button
                   className="white-button track-button bin-button"
-                  onClick={async () => await deleteTrack()}
+                  onClick={async () => await openDeleteModal()}
                   disabled={actions.isDeleting}
                 >
                   <h4>
                     <Icon name="trash" size="small" className="mr-0" />
                   </h4>
                 </Button>
-              ) : artistDetails.memberId === loggedInUser?.memberId &&
-                deletingTrack ? (
-                <InPageLoadingComponent height={27} width={27} />
               ) : null}
             </div>
           </div>

@@ -7,7 +7,7 @@ interface Props {
   setTrackExt: (ext: string) => void;
 }
 
-const ArtistUploadsTrackSelection = ({ setFile, setTrackExt }: Props) => {
+const UploadTrackSelection = ({ setFile, setTrackExt }: Props) => {
   const onDrop = useCallback(async (acceptedFile: File[]) => {
     if (acceptedFile[0]) {
       var trackExt = acceptedFile[0].name.split(/[.]+/).pop();
@@ -58,4 +58,4 @@ const ArtistUploadsTrackSelection = ({ setFile, setTrackExt }: Props) => {
   );
 };
 
-export default ArtistUploadsTrackSelection;
+export default UploadTrackSelection;

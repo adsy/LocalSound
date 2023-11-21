@@ -20,6 +20,7 @@ import { ArtistTrackUploadModel } from "../app/model/dto/artist-track-upload.mod
 import { TrackListResponse } from "../app/model/dto/track-list-response.model";
 import { UserSummaryModel } from "../app/model/dto/user-summary.model";
 import { FollowerListResponse } from "../app/model/dto/follower-list-response.model";
+import { Error } from "../app/model/dto/error.model";
 
 const axiosApiInstance = axios.create();
 

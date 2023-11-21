@@ -17,7 +17,7 @@ interface Props {
   setCanLoadMore: (loadMore: boolean) => void;
 }
 
-const ArtistUploadsList = ({
+const UploadList = ({
   userDetails,
   currentTab,
   tracks,
@@ -100,4 +100,4 @@ const ArtistUploadsList = ({
   );
 };
 
-export default ArtistUploadsList;
+export default UploadList;

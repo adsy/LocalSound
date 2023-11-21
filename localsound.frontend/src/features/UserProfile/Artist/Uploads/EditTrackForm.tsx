@@ -21,7 +21,7 @@ interface Props {
   userDetails: UserModel;
 }
 
-const ArtistEditTrackForm = ({
+const EditTrackForm = ({
   trackDetails,
   userDetails,
   tracks,
@@ -289,4 +289,4 @@ const ArtistEditTrackForm = ({
   );
 };
 
-export default ArtistEditTrackForm;
+export default EditTrackForm;

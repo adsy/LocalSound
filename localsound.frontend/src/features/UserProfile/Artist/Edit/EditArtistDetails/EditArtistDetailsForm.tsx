@@ -77,9 +77,10 @@ const EditArtistDetailsForm = ({
     const formData = new FormData();
 
     if (file) {
+      var fileExt = file.name.split(/[.]+/).pop();
       formData.append("fileName", file.name);
       formData.append("formFile", file);
-      formData.append("fileExt", ".jpg");
+      formData.append("fileExt", `.${fileExt}`);
 
       try {
         setSubmittingPhotoUpdate(true);

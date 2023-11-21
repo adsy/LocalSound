@@ -128,7 +128,7 @@ namespace localsound.backend.api.Controllers
 
             if (!result.IsSuccessStatusCode)
             {
-                return StatusCode((int)result.StatusCode);
+                return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
             }
 
             return Ok();

@@ -8,7 +8,7 @@ interface Props {
 
 const ErrorBanner = ({ className, children }: Props) => {
   return (
-    <Alert variant="danger" className={className + " text-center"}>
+    <Alert variant="danger" className={className + " text-center fade-in"}>
       <Icon name="warning sign" /> {children}
     </Alert>
   );

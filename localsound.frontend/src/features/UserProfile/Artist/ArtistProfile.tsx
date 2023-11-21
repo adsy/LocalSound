@@ -11,8 +11,8 @@ import EditCoverPhoto from "./Edit/EditCoverPhoto";
 import ArtistDetails from "./ArtistDetails";
 import ArtistSummary from "./ArtistSummary";
 import { Icon } from "semantic-ui-react";
-import ArtistUploadTrackForm from "./ArtistUploads/ArtistUploadTrackForm";
-import ArtistUploadsList from "./ArtistUploads/ArtistUploadsList";
+import UploadTrackForm from "./Uploads/UploadTrackForm";
+import UploadList from "./Uploads/UploadList";
 import { ArtistTrackUploadModel } from "../../../app/model/dto/artist-track-upload.model";
 import agent from "../../../api/agent";
 import Followers from "../Followers/Followers";
@@ -114,7 +114,7 @@ const ArtistProfile = ({
       handleToggleModal({
         open: true,
         body: (
-          <ArtistUploadTrackForm
+          <UploadTrackForm
             userDetails={artistDetails}
             tracks={tracks}
             setTracks={setTracks}
@@ -322,7 +322,7 @@ const ArtistProfile = ({
                 title="Uploads"
                 className=""
               >
-                <ArtistUploadsList
+                <UploadList
                   userDetails={artistDetails}
                   currentTab={currentTab}
                   tracks={tracks}

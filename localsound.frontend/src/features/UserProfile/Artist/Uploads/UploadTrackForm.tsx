@@ -11,7 +11,7 @@ import {
 import ErrorBanner from "../../../../common/banner/ErrorBanner";
 import { Formik } from "formik";
 import SuccessBanner from "../../../../common/banner/SuccessBanner";
-import ArtistUploadsTrackSelection from "./ArtistUploadsTrackSelection";
+import UploadTrackSelection from "./UploadTrackSelection";
 import MyTextInput from "../../../../common/form/MyTextInput";
 import MyTextArea from "../../../../common/form/MyTextArea";
 import SearchGenreTypes from "../Edit/Search/SearchGenreTypes";
@@ -28,7 +28,7 @@ interface Props {
   setTracks: (tracks: ArtistTrackUploadModel[]) => void;
 }
 
-const ArtistUploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
+const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
   const [file, setFile] = useState<File | null>(null);
   const [trackExt, setTrackExt] = useState<string | null>(null);
   const [trackImage, setTrackImage] = useState<File | null>(null);
@@ -111,10 +111,7 @@ const ArtistUploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
         ) : null}
 
         {!file ? (
-          <ArtistUploadsTrackSelection
-            setFile={setFile}
-            setTrackExt={setTrackExt}
-          />
+          <UploadTrackSelection setFile={setFile} setTrackExt={setTrackExt} />
         ) : !uploadTrackSuccess ? (
           <div className="fade-in pb-4 mt-4">
             <div className="w-100 fade-in">
@@ -143,10 +140,10 @@ const ArtistUploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                         trackImage?.name
                       );
                       formData.append("trackImageExt", `.jpg`);
-                      formData.append("trackFileExt", `${trackExt}`);
+                      formData.append("trackFileExt", `.${trackExt}`);
                       formData.append(
                         "fileLocation",
-                        uploadData!.uploadLocation + `${trackExt}`
+                        uploadData!.uploadLocation + `.${trackExt}`
                       );
                       formData.append(
                         "trackUrl",
@@ -350,4 +347,4 @@ const ArtistUploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
   );
 };
 
-export default ArtistUploadTrackForm;
+export default UploadTrackForm;
