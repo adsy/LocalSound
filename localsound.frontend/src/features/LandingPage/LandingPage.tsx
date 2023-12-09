@@ -8,6 +8,7 @@ import Register from "../../features/Authentication/Register/Register";
 import { Button } from "react-bootstrap";
 import { handleToggleModal } from "../../app/redux/actions/modalSlice";
 import ConfirmEmailPopUp from "../Authentication/ConfirmEmail/ConfirmEmailPopUp";
+import { Placeholder } from "semantic-ui-react";
 
 const LandingPage = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
@@ -52,48 +53,85 @@ const LandingPage = () => {
   return (
     <div id="landing-page" className="fade-in">
       <LandingPageBanner />
-      <div className="d-flex flex-row justify-content-center">
-        <Button
-          className="black-button mr-2 auth-button"
-          onClick={() => handleAuthenticationRequest(true)}
+      <div className="landing-page-container p-3">
+        <div className="d-flex flex-row justify-content-center mt-2">
+          <Button
+            className="white-button mr-4 auth-button"
+            onClick={() => handleAuthenticationRequest(true)}
+          >
+            <h1>
+              <span className="button-highlight">Login</span>
+            </h1>
+          </Button>
+          <Button
+            className="white-button  ml-4 auth-button"
+            onClick={() => handleAuthenticationRequest(false)}
+          >
+            <h1>
+              <span className="button-highlight">Register</span>
+            </h1>
+          </Button>
+        </div>
+        <div
+          id="landing-page-search"
+          className="d-flex flex-column justify-content-start mt-3 ,b=2"
         >
-          <h4>Login</h4>
-        </Button>
-        <Button
-          className="black-button auth-button"
-          onClick={() => handleAuthenticationRequest(false)}
-        >
-          <h4>Create account</h4>
-        </Button>
+          <h4 className="text-center search-text ">
+            Dont rely on your friends "heaters🔥🔥" playlist.
+          </h4>
+        </div>
       </div>
-      <div className="p-2 text-align-justify">
-        <p className="mt-4">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at
-          scelerisque sapien. Mauris vehicula felis dolor. Curabitur orci justo,
-          dapibus eget dui ac, efficitur tincidunt lorem. Suspendisse in felis
-          eget turpis fringilla faucibus quis quis elit. Vestibulum et aliquet
-          metus, vitae auctor enim. Sed convallis turpis elit. Sed gravida neque
-          sit amet diam facilisis, eu tristique est placerat. Maecenas bibendum
-          vel massa ac rutrum. Proin facilisis mauris et tellus elementum
-          viverra id ut urna. Donec ut feugiat ex. Morbi pellentesque, est ut
-          pulvinar tempus, massa justo consectetur risus, non lacinia tellus mi
-          et velit. Vivamus ut ipsum sapien. Maecenas congue velit lorem, sed
-          tempus ipsum faucibus nec.
-        </p>
-        <p className="mt-4">
-          Integer ac egestas elit. Nullam aliquam, ante ut varius vulputate,
-          mauris urna sodales ligula, non aliquam orci tortor vel eros. Aliquam
-          bibendum, ante at convallis consectetur, sem purus aliquam orci, vitae
-          faucibus risus velit eget mauris. Nullam lobortis magna ut rutrum
-          porta. Vestibulum aliquet massa ut leo fermentum commodo. Nam sit amet
-          quam varius, varius ante vitae, sollicitudin lacus. Ut scelerisque,
-          felis eu dignissim pretium, lacus erat posuere est, et commodo mauris
-          eros nec tortor. Fusce aliquam, felis pharetra sodales ullamcorper,
-          tellus ex semper ipsum, in molestie nisi nulla elementum arcu.
-          Interdum et malesuada fames ac ante ipsum primis in faucibus.
-        </p>
+      <div className="text-align-justify landing-page-container mb-5">
+        <div>
+          <div className="d-flex flex-row">
+            <div className=" pr-5">
+              <h4 className="search-text">GET YOUR PROFILE OUT THERE</h4>
+              <p>
+                Welcome to your artist's playground! Creating your profile is
+                the first step to unleashing your musical magic. Customize it by
+                choosing the genres that define your vibe and the types of gigs
+                you own – from intimate acoustic sets to electrifying stadium
+                performances. Showcase your sonic mastery by uploading tracks
+                that will have fans hitting the repeat button. With a profile
+                that's as unique as your sound, attracting followers is a
+                breeze. Soon enough, you'll not only be setting the beats but
+                also getting booked for gigs that match your musical journey.
+                Let the profile building commence – it's time to amplify your
+                presence in the music scene!
+              </p>
+            </div>
+            <div>
+              <Placeholder style={{ height: 150, width: 250 }}>
+                <Placeholder.Image />
+              </Placeholder>
+            </div>
+          </div>
+        </div>
+        <div className="mt-5">
+          <div className="d-flex flex-row">
+            <div>
+              <Placeholder style={{ height: 150, width: 250 }}>
+                <Placeholder.Image />
+              </Placeholder>
+            </div>
+            <div className="pl-5">
+              <h4 className="search-text text-right">
+                SEARCH FOR AN ARTIST OR DJ FOR YOUR NEXT PARTY
+              </h4>
+              <p>
+                Discover the heartbeat of your local music scene effortlessly on
+                our platform. Whether you're into indie vibes or electronic
+                beats, our search features allow you to find artists in your
+                area or explore by genre. Dive into a sonic adventure, sample
+                tracks, and when you find the artist that resonates with your
+                party vibe, it's just a click away from booking them for your
+                next event. Elevate your gatherings with the perfect soundtrack
+                – your dream artist is just a search away
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="landing-page-container"></div>
       {/* <LandingPageFunctionality /> */}
     </div>
   );

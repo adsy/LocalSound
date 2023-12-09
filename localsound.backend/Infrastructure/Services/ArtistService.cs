@@ -68,6 +68,7 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
+                throw new Exception("test");
                 var accountResult = await _accountRepository.GetAppUserFromDbAsync(userId, followerId);
 
                 if (!accountResult.IsSuccessStatusCode || accountResult.ReturnData == null)
@@ -89,7 +90,7 @@ namespace localsound.backend.Infrastructure.Services
                 var message = $"{nameof(ArtistService)} - {nameof(UpdateArtistFollower)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse(HttpStatusCode.InternalServerError);
+                return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your following status, please try again.");
             }
         }
     }

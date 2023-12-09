@@ -64,7 +64,7 @@ namespace localsound.backend.api.Controllers
                 return Ok();
             }
 
-            return StatusCode((int)result.StatusCode, result);
+            return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
         }
 
         [HttpPost]
@@ -84,7 +84,7 @@ namespace localsound.backend.api.Controllers
                 return Ok();
             }
 
-            return StatusCode((int)result.StatusCode, result);
+            return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
         }
 
         // Search artists by genre

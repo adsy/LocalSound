@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using System.Net;
 using System.Security.Claims;
 
@@ -421,6 +420,7 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
+                throw new Exception("test");
                 var accountResult = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
 
                 if (!accountResult.IsSuccessStatusCode)

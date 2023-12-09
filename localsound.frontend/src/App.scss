@@ -1,9 +1,9 @@
-$navbarColor: #001514;
-$borderColor: #232323;
-$headingColor: #f1f1f1;
-$offWhite: #ececec;
-$richBlack: #232323;
-$purple: #6d69fa;
+$black100: #232323;
+$black200: #001514;
+$white100: #f1f1f1;
+$white200: #fcfcfd;
+$white300: #e2e8f0;
+$purple100: #6d69fa;
 
 /** MIX-INS **/
 @mixin container {
@@ -13,11 +13,11 @@ $purple: #6d69fa;
   min-height: 150px;
   margin-bottom: 20px;
   background-color: white;
-  color: $borderColor;
+  color: $black100;
 }
 
 @mixin logo {
-  background-image: url("./assets/logo4.png");
+  background-image: url("./assets/updated-logo4.png");
   background-size: contain !important;
   background-attachment: inherit !important;
   background-position: center center;
@@ -25,7 +25,7 @@ $purple: #6d69fa;
 }
 
 @mixin logo-black {
-  background-image: url("./assets/logo-black.png");
+  background-image: url("./assets/updated-logo4.png");
   background-size: contain !important;
   background-attachment: inherit !important;
   background-position: center center;
@@ -37,16 +37,17 @@ $purple: #6d69fa;
 }
 
 @mixin inverse-text-shadow {
-  text-shadow: -1px 0 $richBlack, 0 1px $richBlack, 1px 0 $richBlack,
-    0 -1px $richBlack;
+  text-shadow: -1px 0 $black100, 0 1px $black100, 1px 0 $black100,
+    0 -1px $black100;
 }
 
 @mixin button-style {
-  color: $richBlack;
+  color: $black100;
   font-size: 16px;
   letter-spacing: 2px;
-  // @include text-shadow;
   transition: border-color 0.5s ease;
+  transition: background-color 0.5s ease;
+  border-radius: 10px 10px;
 }
 
 @mixin small-icon {
@@ -66,14 +67,14 @@ $purple: #6d69fa;
 }
 
 @mixin header-style {
-  border-bottom: 4px solid $richBlack;
+  border-bottom: 4px solid $black100;
   color: #001514 !important;
   font-size: 18px !important;
-  @include text-shadow;
+  // @include text-shadow;
   font-weight: 800;
   letter-spacing: 1.5px;
   padding-bottom: 5px;
-  font-family: "Barlow", serif !important;
+  font-family: "Afacad", serif !important;
   background: unset;
   border-left: unset;
   border-right: unset;
@@ -85,16 +86,20 @@ $purple: #6d69fa;
   padding-top: 7px;
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Barlow");
+@import url("https://fonts.googleapis.com/css2?family=Afacad");
+@import url("https://fonts.googleapis.com/css2?family=Roboto");
 html {
   height: 100%;
 }
 html,
 body {
   height: 100%;
-  font-family: "Barlow", serif !important;
+  font-family: "Afacad", serif !important;
   overflow: auto;
-  background-color: $offWhite !important;
+  background-color: $white200 !important;
+}
+
+h1 {
 }
 
 h1,
@@ -103,11 +108,42 @@ h3,
 h4,
 h5,
 h6 {
+  font-family: "Roboto", serif !important;
   color: black;
+  transform: translateZ(5px);
+  letter-spacing: 0.6px;
+
+  .button-highlight {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    color: $white100;
+    font-weight: 100;
+    transition: background-color 0.3s ease !important;
+    // padding: 2px;
+  }
+  .button-highlight:before {
+    content: "";
+    position: absolute;
+    bottom: 10%;
+    left: -0.1rem;
+    top: -0.2rem;
+    transform: rotate(-2deg) !important;
+    width: calc(100% + 1rem);
+    height: 100%;
+    --tw-bg-opacity: 1;
+    background-color: $black100;
+    z-index: -1;
+    transform: translateZ(-1px);
+    border-radius: 2px;
+  }
+  .button-highlight:hover {
+    background-color: $purple100;
+  }
 }
 
 .btn h4 {
-  color: $offWhite;
+  color: $white200;
 }
 
 $start: 0;
@@ -129,7 +165,6 @@ $end: 10;
   .mr-#{$i} {
     margin-right: #{0.5 * $i}rem;
   }
-
   .br-#{$i} {
     border-radius: #{$i}px;
   }
@@ -153,7 +188,7 @@ $end: 10;
   background: rgb(88, 207, 88);
   border: 1px solid black;
   letter-spacing: 1px;
-  color: $richBlack;
+  color: $black100;
   font-size: 12px;
   font-weight: 800;
 }
@@ -180,18 +215,24 @@ $end: 10;
   color: white !important;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .landing-page-container {
-  height: 400px;
+  // height: 400px;
   margin-top: 30px;
   background: white;
-  border-radius: 5px;
+  border: 1px solid rgb(226, 232, 240);
+  border-radius: 0.75rem;
+  padding: 15px;
 }
 
 .app-container {
   height: 100%;
   transition: width 0.3s ease, margin-left 0.3s ease, margin-right 0.3s ease,
     padding 0.3s ease !important;
-  background-color: white;
+  background-color: #fcfcfd;
   min-height: calc(100vh - 79px);
   height: 1px;
   padding: 0px;
@@ -200,12 +241,12 @@ $end: 10;
 }
 
 .app-holder {
-  top: 78px;
+  top: 30px;
   position: absolute;
 }
 
 .black-border {
-  border: 1px solid $borderColor;
+  border: 1px solid $black100;
 }
 
 .w-fit-content {
@@ -270,10 +311,10 @@ $end: 10;
 /** LANDING PAGE **/
 #landing-page {
   .auth-button {
-    width: 45%;
+    // width: 45%;
   }
   .banner {
-    height: 30rem;
+    height: 25rem;
     background-image: url("./assets/landing-page-banner/banner1.jpg");
     background-size: cover !important;
     background-attachment: inherit !important;
@@ -281,15 +322,16 @@ $end: 10;
     border-top: unset !important;
     -webkit-transition: background-image 1s ease;
     transition: background-image 1s ease;
-    border: 1px solid $borderColor;
+    border: 1px solid $white300;
     width: 100%;
     margin: 0;
-    border-radius: 0px 0px 10px 10px;
+    border-radius: 15px;
+    // padding: 50px;
 
-    .page-title {
+    .banner-title {
       letter-spacing: 3.5px;
-      font-size: 50px;
-      @include text-shadow;
+      font-size: 44px;
+      // @include text-shadow;
     }
   }
 
@@ -298,8 +340,8 @@ $end: 10;
       letter-spacing: 1px;
       font-weight: 600;
       font-size: 20px;
-      color: $richBlack;
-      @include text-shadow;
+      color: $black100;
+      // @include text-shadow;
     }
   }
 
@@ -317,13 +359,15 @@ i.large.icon {
 
 /** NAVBAR **/
 #navbar {
-  background-color: $borderColor;
+  background: $white200;
+  border-bottom: 1px solid rgb(226, 232, 240);
   background-size: cover !important;
   background-repeat: no-repeat !important;
-  border-bottom: 8px solid $navbarColor;
   position: fixed;
   top: 0;
   z-index: 2;
+  padding-right: 10px;
+  padding-left: 10px;
 
   .ui.ui-container {
     padding: 0;
@@ -331,13 +375,14 @@ i.large.icon {
 
   .navbar-logo {
     cursor: pointer;
-    border-right: 3px solid $navbarColor;
+    border-right: 3px solid $black200;
+    border-radius: 15px;
   }
 
   .navbar-title {
     font-size: 32px !important;
     @include inverse-text-shadow;
-    color: $offWhite;
+    color: $white200;
     letter-spacing: 3.5px;
   }
 
@@ -363,7 +408,7 @@ i.large.icon {
 }
 
 #offcanvasNavbar-expand-false {
-  background-color: $borderColor;
+  background-color: $black100;
   .navbar-title {
     font-size: 32px !important;
     @include text-shadow;
@@ -391,7 +436,7 @@ i.large.icon {
     padding-top: 13px;
     padding-bottom: 13px;
     transition: background-color 0.2s ease-in, border-radius 0.2s ease-in;
-    background-color: $borderColor;
+    background-color: $black100;
   }
 
   .sidebar-text {
@@ -400,12 +445,12 @@ i.large.icon {
   }
 
   .sidebar-item.active {
-    background-color: $purple !important;
+    background-color: $purple100 !important;
     border-radius: 10px;
   }
 
   .sidebar-item:hover {
-    background-color: $navbarColor;
+    background-color: $black200;
     border-radius: 10px;
   }
 
@@ -417,54 +462,50 @@ i.large.icon {
 /** BUTTONS **/
 .white-button {
   @include button-style;
-  // background-color: $purple !important;
-  border: 1px solid black;
-  padding: 8px;
+  // background-color: $purple100 !important;
+  border: unset;
+  padding: 5px;
   color: black !important;
-  background-color: $offWhite;
+  background-color: unset;
+  text-transform: uppercase !important;
 }
 
 .white-button:hover,
 .white-button:active,
 .white-button:focus {
-  background-color: $navbarColor !important;
-  border: 1px solid white;
+  background-color: unset;
 }
 
 .white-button h4 {
-  color: $navbarColor;
-}
-
-.white-button:hover h4 {
-  color: $offWhite !important;
+  color: $black200;
 }
 
 .black-button {
   @include button-style;
-  transition: background-color 0.5s ease;
-  background-color: $richBlack;
-  border: 1px solid $borderColor;
-  padding: 8px;
+  background-color: $black100;
+  border: 1px solid $black100;
+  padding: 5px;
+  background-image: linear-gradient($black100, $black200);
 }
 
 .black-button:hover,
 .black-button:active,
 .black-button:focus {
-  background-color: $navbarColor;
+  background-color: $black200 !important;
   border: 1px solid white;
-  color: $richBlack;
+  color: $black100;
 }
 
 .black-button:disabled {
   opacity: 0.5;
-  background-color: $richBlack;
-  border: 1px solid $borderColor;
+  background-color: $black100;
+  border: 1px solid $black100;
   color: white;
 }
 
 .soundcloud-button {
   h4 {
-    color: $richBlack;
+    color: $black100;
   }
   @include button-style;
   @include text-shadow;
@@ -482,7 +523,7 @@ i.large.icon {
 
 .spotify-button {
   h4 {
-    color: $richBlack;
+    color: $black100;
   }
   @include text-shadow;
   @include button-style;
@@ -514,8 +555,8 @@ i.large.icon {
 
 /** BADGES **/
 .black-badge {
-  color: $offWhite !important;
-  background-color: $richBlack !important;
+  color: $white200 !important;
+  background-color: $black100 !important;
   border: 1px solid black;
   margin-bottom: 5px;
   padding: 0;
@@ -527,20 +568,20 @@ i.large.icon {
     padding-right: 6.825px;
     padding-top: 3.675px;
     padding-left: 5.825px;
-    color: $richBlack;
+    color: $black100;
     font-weight: 800;
     cursor: pointer;
     border-radius: 0px 0.275rem 0.275rem 0px;
-    background-color: $offWhite;
+    background-color: $white200;
   }
 }
 
 .purple-badge {
-  background-color: $purple !important;
+  background-color: $purple100 !important;
   margin-bottom: 5px;
   padding: 0;
   font-size: 12px;
-  color: $offWhite;
+  color: $white200;
 
   .badge-delete-btn {
     padding-right: 6.825px;
@@ -550,7 +591,7 @@ i.large.icon {
     font-weight: 800;
     cursor: pointer;
     border-radius: 0px 0.375rem 0.375rem 0px;
-    background-color: $richBlack;
+    background-color: $black100;
   }
 }
 
@@ -571,11 +612,11 @@ i.large.icon {
 #music-player {
   position: fixed;
   bottom: 0;
-  background-color: $richBlack;
-  border-top: 3px solid $navbarColor;
+  background-color: $black100;
+  border-top: 3px solid $black200;
   height: 60px;
   width: 100%;
-  color: $offWhite;
+  color: $white200;
   z-index: 999;
 
   .player-container {
@@ -630,7 +671,7 @@ i.large.icon {
   /***** Chrome, Safari, Opera and Edge Chromium styles *****/
   /* slider track */
   input[type="range"]::-webkit-slider-runnable-track {
-    background-color: $purple;
+    background-color: $purple100;
     border-radius: 0.5rem;
     height: 0.5rem;
   }
@@ -642,7 +683,7 @@ i.large.icon {
     margin-top: -3px; /* Centers thumb on the track */
 
     /*custom styles*/
-    background-color: $offWhite;
+    background-color: $white200;
     border-radius: 200px;
     height: 1rem;
     width: 1rem;
@@ -651,7 +692,7 @@ i.large.icon {
   /******** Firefox styles ********/
   /* slider track */
   input[type="range"]::-moz-range-track {
-    background-color: $purple;
+    background-color: $purple100;
     border-radius: 0.5rem;
     height: 0.5rem;
   }
@@ -662,7 +703,7 @@ i.large.icon {
     border-radius: 0; /*Removes default border-radius that FF applies*/
 
     /*custom styles*/
-    background-color: $offWhite;
+    background-color: $white200;
     border-radius: 200px;
     height: 1rem;
     width: 1rem;
@@ -681,7 +722,7 @@ i.large.icon {
     padding-bottom: 2px;
     padding-left: 5px;
     padding-right: 6px;
-    // color: $offWhite !important;
+    // color: $white200 !important;
 
     .small {
       margin-right: 0px;
@@ -690,8 +731,8 @@ i.large.icon {
   }
 
   .track-button:disabled {
-    background-color: $headingColor !important;
-    border: 1px solid $navbarColor !important;
+    background-color: $white100 !important;
+    border: 1px solid $black200 !important;
   }
 
   .bin-button {
@@ -729,7 +770,7 @@ i.large.icon {
   }
 
   .black-line {
-    border-bottom: 1px solid $navbarColor;
+    border-bottom: 1px solid $black200;
   }
 
   .track-name {
@@ -749,16 +790,16 @@ i.large.icon {
     outline: none;
     cursor: pointer;
     padding-bottom: 3px;
-    // background-color: $richBlack;
+    // background-color: $black100;
     transition: border 0.1s ease-in-out !important;
 
     &:hover {
-      border: 2px solid $richBlack;
+      border: 2px solid $black100;
     }
 
     i.icon {
       margin: 0 !important;
-      color: $richBlack !important;
+      color: $black100 !important;
       margin-left: 3px !important;
     }
   }
@@ -780,11 +821,11 @@ i.large.icon {
   }
 
   .waveform-progress {
-    background-color: $richBlack !important;
+    background-color: $black100 !important;
   }
 
   .track-progress {
-    background-color: $navbarColor !important;
+    background-color: $black200 !important;
   }
 }
 
@@ -813,7 +854,7 @@ i.large.icon {
   }
 
   .profile-photo {
-    border: 1px solid $richBlack;
+    border: 1px solid $black100;
   }
 
   .profile-photo.summary-photo {
@@ -849,11 +890,11 @@ i.large.icon {
   }
 
   .nav-link:hover {
-    border-bottom: 2px solid $purple;
+    border-bottom: 2px solid $purple100;
   }
 
   .nav-link.active {
-    border-bottom: 2px solid $richBlack;
+    border-bottom: 2px solid $black100;
   }
 
   #search-label-component {
@@ -877,15 +918,15 @@ i.large.icon {
         border-radius: 0;
         border-right: unset;
         border-bottom: unset;
-        border-top: 1px solid $offWhite;
+        border-top: 1px solid $white200;
         border-radius: 0px 0px 0.28571429rem 0.28571429rem;
       }
     }
 
     .dropdown {
       border-radius: 2px;
-      border-left: 1px solid $richBlack;
-      border-right: 1px solid $richBlack;
+      border-left: 1px solid $black100;
+      border-right: 1px solid $black100;
       position: fixed;
       z-index: 999;
       min-width: 200px;
@@ -894,11 +935,11 @@ i.large.icon {
       border-radius: 0.28571429rem;
 
       .dropdown-option:first-of-type {
-        border-top: 1px solid $richBlack;
+        border-top: 1px solid $black100;
       }
       .dropdown-option {
-        border-left: 4px solid $navbarColor;
-        border-bottom: 1px solid $richBlack;
+        border-left: 4px solid $black200;
+        border-bottom: 1px solid $black100;
         letter-spacing: 1px;
         font-size: 14px;
         background-color: white !important;
@@ -922,13 +963,13 @@ i.large.icon {
         align-self: center;
         padding: 8px;
         font-weight: 800;
-        border-left: 4px $richBlack solid;
+        border-left: 4px $black100 solid;
       }
     }
   }
 
   .follow-text:hover {
-    border-bottom: 4px solid $purple !important;
+    border-bottom: 4px solid $purple100 !important;
     cursor: pointer;
   }
 
@@ -943,9 +984,9 @@ i.large.icon {
 /** MODAL STYLES **/
 .modal {
   .content {
-    border: 1px solid $navbarColor;
+    border: 1px solid $black200;
     padding-top: 5px !important;
-    background-color: $offWhite !important;
+    background-color: $white200 !important;
     height: fit-content;
   }
 }
@@ -954,16 +995,16 @@ i.large.icon {
 .form {
   .api-error {
     letter-spacing: 1px;
-    color: $navbarColor;
+    color: $black200;
     font-size: 12px;
     font-weight: 800;
   }
 
   .form-label {
-    color: $navbarColor;
+    color: $black200;
     font-size: 14px;
     font-weight: 800;
-    border-bottom: 2px solid $purple;
+    border-bottom: 2px solid $purple100;
     padding-right: 0.5rem;
   }
 
@@ -972,24 +1013,24 @@ i.large.icon {
 
     input,
     textarea {
-      border-left: 5px solid $richBlack !important;
+      border-left: 5px solid $black100 !important;
       transition: border-left 0.2s ease-in-out !important;
     }
 
     input:focus,
     textarea:focus {
-      border-left: 8px solid $navbarColor !important;
+      border-left: 8px solid $black200 !important;
     }
 
     .ui.basic.red.label {
       background: none #db2828 !important;
-      color: $headingColor !important;
+      color: $white100 !important;
       border-color: #db2828 !important;
       margin-left: 0;
     }
 
     .autocomplete-dropdown-container {
-      border: 1px $navbarColor solid;
+      border: 1px $black200 solid;
       position: absolute;
       z-index: 2;
       position: absolute;
@@ -1003,7 +1044,7 @@ i.large.icon {
     .suggestion-item {
       letter-spacing: 1px;
       font-size: 14px;
-      background-color: $headingColor !important;
+      background-color: $white100 !important;
       cursor: pointer;
       align-self: center;
       padding: 8px;
@@ -1021,7 +1062,7 @@ i.large.icon {
       align-self: center;
       padding: 8px;
       font-weight: 800;
-      border-left: 4px $richBlack solid;
+      border-left: 4px $black100 solid;
     }
 
     .suggestion-item--active:not(:last-child) {
@@ -1069,7 +1110,7 @@ i.large.icon {
     }
     .cropper-line,
     .cropper-point {
-      background-color: $purple !important;
+      background-color: $purple100 !important;
     }
     .crop-action-row {
       position: absolute;
@@ -1174,7 +1215,7 @@ i.large.icon {
   }
 
   .left-col {
-    border-right: 1px solid $offWhite;
+    border-right: 1px solid $white200;
   }
 
   .follow-text {
@@ -1182,7 +1223,7 @@ i.large.icon {
     letter-spacing: 3px !important;
     font-size: 16px;
     padding-bottom: 3px;
-    color: $richBlack !important;
+    color: $black100 !important;
   }
 
   #follower-list {
@@ -1284,6 +1325,11 @@ i.large.icon {
     .left-col {
       border-right: unset !important;
     }
+  }
+
+  .app-holder {
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }
 

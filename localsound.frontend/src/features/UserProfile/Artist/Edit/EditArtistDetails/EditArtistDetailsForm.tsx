@@ -13,6 +13,7 @@ import { State } from "../../../../../app/model/redux/state";
 import { CropTypes } from "../../../../../app/model/enums/cropTypes";
 import ImageCropper from "../../../../../common/components/Cropper/ImageCropper";
 import { handleResetModal } from "../../../../../app/redux/actions/modalSlice";
+import ErrorBanner from "../../../../../common/banner/ErrorBanner";
 
 interface Props {
   disabled?: boolean;
@@ -35,6 +36,7 @@ const EditArtistDetailsForm = ({
 }: Props) => {
   const [file, setFile] = useState<File | null>(null);
   const [updatingProfilePhoto, setUpdatingProfilePhoto] = useState(false);
+  const [photoUpdateError, setPhotoUpdateError] = useState<string | null>();
   const dispatch = useDispatch();
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const [submittingPhotoUpdate, setSubmittingPhotoUpdate] = useState(false);
@@ -77,13 +79,13 @@ const EditArtistDetailsForm = ({
     const formData = new FormData();
 
     if (file) {
-      var fileExt = file.name.split(/[.]+/).pop();
       formData.append("fileName", file.name);
       formData.append("formFile", file);
-      formData.append("fileExt", `.${fileExt}`);
+      formData.append("fileExt", `.png`);
 
       try {
         setSubmittingPhotoUpdate(true);
+        setPhotoUpdateError(null);
         var result = await agent.Profile.uploadProfileImage(
           userDetails?.memberId!,
           formData,
@@ -92,11 +94,9 @@ const EditArtistDetailsForm = ({
 
         dispatch(handleResetModal());
         dispatch(handleUpdateUserProfilePhoto(result));
-      } catch (err) {
-        // TODO: Handle error
-        // setPhotoUpdateError(
-        //   "There was an error updating your cover photo, please try again.."
-        // );
+      } catch (err: any) {
+        setPhotoUpdateError(err);
+        setSubmittingPhotoUpdate(false);
       }
     }
   };
@@ -219,6 +219,9 @@ const EditArtistDetailsForm = ({
               />
             ) : null}
           </div>
+          {photoUpdateError ? (
+            <ErrorBanner children={photoUpdateError} />
+          ) : null}
           <div className="d-flex">
             <p className="form-label">ABOUT</p>
           </div>

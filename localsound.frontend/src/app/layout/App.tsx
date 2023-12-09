@@ -59,7 +59,6 @@ const App = () => {
         id="app-layout"
         className="d-flex flex-column w-100 justify-content-center"
       >
-        <TopNavbar />
         <div className="d-flex flex-row w-100 justify-content-center app-holder">
           <Route
             exact
@@ -73,19 +72,22 @@ const App = () => {
           <Route
             path={"/(.+)"}
             render={() => (
-              <Container className="app-container">
-                <div className="masthead">
-                  <Switch>
-                    <PrivateRoute exact path="/home" component={HomePage} />
-                    <PrivateRoute
-                      exact
-                      path="/account-settings"
-                      component={AccountSettings}
-                    />
-                    <Route exact path="/(.+)" component={UserProfile} />
-                  </Switch>
-                </div>
-              </Container>
+              <>
+                <TopNavbar />
+                <Container className="app-container">
+                  <div className="masthead">
+                    <Switch>
+                      <PrivateRoute exact path="/home" component={HomePage} />
+                      <PrivateRoute
+                        exact
+                        path="/account-settings"
+                        component={AccountSettings}
+                      />
+                      <Route exact path="/(.+)" component={UserProfile} />
+                    </Switch>
+                  </div>
+                </Container>
+              </>
             )}
           />
         </div>

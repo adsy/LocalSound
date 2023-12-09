@@ -18,6 +18,7 @@ import agent from "../../../api/agent";
 import Followers from "../Followers/Followers";
 import { ArtistProfileTabs } from "../../../app/model/enums/artistProfileTabTypes";
 import Following from "../Followers/Following";
+import ErrorBanner from "../../../common/banner/ErrorBanner";
 
 interface Props {
   loggedInUser: UserModel;
@@ -34,6 +35,9 @@ const ArtistProfile = ({
 }: Props) => {
   const [updatingCoverPhoto, setUpdatingCoverPhoto] = useState(false);
   const [submittingRequest, setSubmittingRequest] = useState(false);
+  const [updateFollowerError, setUpdateFollowerError] = useState<string | null>(
+    null
+  );
   const [photoUpdateError, setPhotoUpdateError] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [imgsLoaded, setImgsLoaded] = useState(false);
@@ -127,6 +131,7 @@ const ArtistProfile = ({
   };
 
   const updateArtistFollow = async (follow: boolean) => {
+    setUpdateFollowerError(null);
     try {
       if (follow) {
         await agent.Artist.followArtist(
@@ -147,8 +152,8 @@ const ArtistProfile = ({
         localArtist.followerCount -= 1;
         setProfile(localArtist);
       }
-    } catch (err) {
-      //TODO: do something with error
+    } catch (err: any) {
+      setUpdateFollowerError(err);
     }
   };
 
@@ -227,7 +232,15 @@ const ArtistProfile = ({
                         </div>
                       </>
                     ) : (
-                      <div className="w-100 d-flex flex-row justify-content-end">
+                      <div className="w-100 d-flex flex-row justify-content-between">
+                        <div>
+                          {updateFollowerError ? (
+                            <ErrorBanner
+                              children={updateFollowerError}
+                              className="w-100 mb-0"
+                            />
+                          ) : null}
+                        </div>
                         <a
                           onClick={async () => {
                             if (isFollowing) {

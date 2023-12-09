@@ -5,6 +5,7 @@ import agent from "../../../api/agent";
 import { debounce } from "lodash";
 import { ArtistProfileTabs } from "../../../app/model/enums/artistProfileTabTypes";
 import FollowerList from "./FollowerList";
+import ErrorBanner from "./../../../common/banner/ErrorBanner";
 
 interface Props {
   artistDetails: UserModel;
@@ -13,6 +14,7 @@ interface Props {
 
 const Following = ({ artistDetails, currentTab }: Props) => {
   const [followers, setFollowers] = useState<UserSummaryModel[]>([]);
+  const [loadError, setLoadError] = useState<string | null>();
   const [page, setPage] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
@@ -35,6 +37,7 @@ const Following = ({ artistDetails, currentTab }: Props) => {
   }, 100);
 
   useLayoutEffect(() => {
+    setLoadError(null);
     (async () => {
       if (currentTab === ArtistProfileTabs.Following && canLoadMore) {
         try {
@@ -48,15 +51,25 @@ const Following = ({ artistDetails, currentTab }: Props) => {
           setLoading(false);
           setFollowers([...followers, ...result.followers]);
           setCanLoadMore(result.canLoadMore);
-        } catch (err) {
-          //TODO: handle error
+        } catch (err: any) {
+          setLoadError(err);
         }
       }
     })();
   }, [page, currentTab]);
 
   return (
-    <FollowerList followers={followers} listRef={listRef} isFollowers={false} />
+    <>
+      {loadError ? (
+        <ErrorBanner children={loadError} />
+      ) : (
+        <FollowerList
+          followers={followers}
+          listRef={listRef}
+          isFollowers={false}
+        />
+      )}
+    </>
   );
 };
 
