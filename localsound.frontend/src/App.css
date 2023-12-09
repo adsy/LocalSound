@@ -358,7 +358,7 @@ h6 .button-highlight:hover {
 }
 
 .app-holder {
-  top: 30px;
+  top: 71px;
   position: absolute;
 }
 
@@ -450,6 +450,9 @@ h6 .button-highlight:hover {
 }
 
 /** LANDING PAGE **/
+#landing-page {
+  margin-top: -40px;
+}
 #landing-page .banner {
   height: 25rem;
   background-image: url("./assets/landing-page-banner/banner1.jpg");
@@ -467,12 +470,13 @@ h6 .button-highlight:hover {
 #landing-page .banner .banner-title {
   letter-spacing: 3.5px;
   font-size: 44px;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 #landing-page #landing-page-search .search-text {
   letter-spacing: 1px;
   font-weight: 600;
   font-size: 20px;
-  color: #232323;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 #landing-page .search-box {
   width: 400px;

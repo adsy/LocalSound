@@ -3,7 +3,7 @@ import logo from "../../assets/updated-logo4.png";
 
 const LandingPageBanner = () => {
   return (
-    <div className="banner mb-4 d-flex flex-column justify-content-between">
+    <div className="banner mb-4 d-flex flex-column justify-content-center">
       <div className="d-flex flex-column justify-content-between w-100 mt-5">
         <div className="d-flex flex-row justify-content-center align-content-center pr-2 pt-1 pb-1">
           <img
@@ -17,11 +17,14 @@ const LandingPageBanner = () => {
             LocalSound
           </h1>
         </div>
-      </div>
-      <div className="d-flex justify-content-center mb-3">
-        <Button className="black-button w-50">
-          <h4>Search for your next performer</h4>
-        </Button>
+        <div
+          id="landing-page-search"
+          className="d-flex flex-column justify-content-start"
+        >
+          <h4 className="text-center search-text">
+            Dont rely on your friends "heaters🔥🔥" playlist.
+          </h4>
+        </div>
       </div>
     </div>
   );

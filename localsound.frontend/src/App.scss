@@ -241,7 +241,7 @@ $end: 10;
 }
 
 .app-holder {
-  top: 30px;
+  top: 71px;
   position: absolute;
 }
 
@@ -310,6 +310,7 @@ $end: 10;
 
 /** LANDING PAGE **/
 #landing-page {
+  margin-top: -40px;
   .auth-button {
     // width: 45%;
   }
@@ -331,7 +332,7 @@ $end: 10;
     .banner-title {
       letter-spacing: 3.5px;
       font-size: 44px;
-      // @include text-shadow;
+      @include text-shadow;
     }
   }
 
@@ -340,8 +341,8 @@ $end: 10;
       letter-spacing: 1px;
       font-weight: 600;
       font-size: 20px;
-      color: $black100;
-      // @include text-shadow;
+      // color: $black100;
+      @include text-shadow;
     }
   }
 

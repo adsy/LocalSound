@@ -54,7 +54,7 @@ const LandingPage = () => {
     <div id="landing-page" className="fade-in">
       <LandingPageBanner />
       <div className="landing-page-container p-3">
-        <div className="d-flex flex-row justify-content-center mt-2">
+        <div className="d-flex flex-row justify-content-center mt-2 mb-2">
           <Button
             className="white-button mr-4 auth-button"
             onClick={() => handleAuthenticationRequest(true)}
@@ -72,13 +72,12 @@ const LandingPage = () => {
             </h1>
           </Button>
         </div>
-        <div
-          id="landing-page-search"
-          className="d-flex flex-column justify-content-start mt-3 ,b=2"
-        >
-          <h4 className="text-center search-text ">
-            Dont rely on your friends "heaters🔥🔥" playlist.
-          </h4>
+        <div className="d-flex justify-content-center mb-2">
+          <Button className="white-button auth-button">
+            <h1>
+              <span className="button-highlight">FIND AN ARTIST</span>
+            </h1>
+          </Button>
         </div>
       </div>
       <div className="text-align-justify landing-page-container mb-5">
