@@ -119,7 +119,7 @@ h6 {
     display: inline-block;
     color: $white100;
     font-weight: 100;
-    transition: background-color 0.3s ease !important;
+    transition: background-color 0.3s ease;
     // padding: 2px;
   }
   .button-highlight:before {
@@ -474,7 +474,7 @@ i.large.icon {
 .white-button:hover,
 .white-button:active,
 .white-button:focus {
-  background-color: unset;
+  background-color: unset !important;
 }
 
 .white-button h4 {

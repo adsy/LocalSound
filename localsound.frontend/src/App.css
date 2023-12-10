@@ -35,7 +35,7 @@ h6 .button-highlight {
   display: inline-block;
   color: #f1f1f1;
   font-weight: 100;
-  transition: background-color 0.3s ease !important;
+  transition: background-color 0.3s ease;
 }
 h1 .button-highlight:before,
 h2 .button-highlight:before,
@@ -602,7 +602,7 @@ i.large.icon {
 .white-button:hover,
 .white-button:active,
 .white-button:focus {
-  background-color: unset;
+  background-color: unset !important;
 }
 
 .white-button h4 {
