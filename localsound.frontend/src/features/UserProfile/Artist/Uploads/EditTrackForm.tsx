@@ -27,7 +27,7 @@ const EditTrackForm = ({
   tracks,
   setTracks,
 }: Props) => {
-  const [editTrackError, setEditTrackError] = useState(false);
+  const [editTrackError, setEditTrackError] = useState<string | null>();
   const [selectedGenres, setSelectedGenres] = useState([
     ...trackDetails.genres,
   ]);
@@ -128,10 +128,8 @@ const EditTrackForm = ({
 
                   setTracks(trackList);
                   setUpdateTrackSuccess(true);
-                } catch (err) {
-                  //TODO: Do something with error
-
-                  setEditTrackError(true);
+                } catch (err: any) {
+                  setEditTrackError(err);
                 }
               }}
             >
@@ -237,10 +235,11 @@ const EditTrackForm = ({
                         </div>
                       </div>
                     </div>
-                    {status?.error ? (
-                      <ErrorBanner className="fade-in mb-0 mx-3">
-                        {status.error}
-                      </ErrorBanner>
+                    {editTrackError ? (
+                      <ErrorBanner
+                        children={editTrackError}
+                        className="fade-in mb-0 mx-3"
+                      ></ErrorBanner>
                     ) : null}
 
                     <div className="px-3 mt-3">

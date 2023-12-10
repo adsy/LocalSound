@@ -5,6 +5,7 @@ interface Props {
   content?: string;
   height?: number;
   width?: number;
+  withContainer?: boolean;
 }
 
 const InPageLoadingComponent = ({
@@ -12,9 +13,15 @@ const InPageLoadingComponent = ({
   content,
   height = 50,
   width = 50,
+  withContainer = false,
 }: Props) => {
   return (
-    <span className="fade-in d-flex flex-column justify-content-center">
+    <div
+      id="loading-component"
+      className={`fade-in d-flex flex-column justify-content-center ${
+        withContainer ? "component-container" : null
+      }`}
+    >
       <img
         src={spinner}
         style={{ height: height, width: width }}
@@ -22,11 +29,11 @@ const InPageLoadingComponent = ({
         alt="loading-icon"
       />
       {content && (
-        <div className="text-center mt-2">
+        <div className="text-center mt-2 loading-text">
           <h3>{content}</h3>
         </div>
       )}
-    </span>
+    </div>
   );
 };
 

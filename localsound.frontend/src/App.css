@@ -1004,6 +1004,7 @@ i.large.icon {
 #edit-artist,
 #artist-profile {
   width: 100%;
+  background-color: #fcfcfd;
 }
 #modal-popup .banner-holder,
 #edit-artist .banner-holder,
@@ -1021,11 +1022,6 @@ i.large.icon {
 #edit-artist .photo-icon,
 #artist-profile .photo-icon {
   padding-left: 2px;
-}
-#modal-popup .profile-photo,
-#edit-artist .profile-photo,
-#artist-profile .profile-photo {
-  border: 1px solid #232323;
 }
 #modal-popup .profile-photo.summary-photo,
 #edit-artist .profile-photo.summary-photo,
@@ -1135,8 +1131,9 @@ i.large.icon {
   border-radius: 0;
   border-right: unset;
   border-bottom: unset;
-  border-top: 1px solid #fcfcfd;
+  border-top: 1px solid #e2e8f0;
   border-radius: 0px 0px 0.28571429rem 0.28571429rem;
+  margin-left: -1px;
 }
 #modal-popup #search-label-component .dropdown,
 #edit-artist #search-label-component .dropdown,
@@ -1260,6 +1257,10 @@ i.large.icon {
   height: fit-content;
 }
 
+#loading-component .loading-text {
+  text-transform: uppercase;
+}
+
 /** FORM **/
 .form .api-error {
   letter-spacing: 1px;
@@ -1279,12 +1280,7 @@ i.large.icon {
 }
 .form .form-body input,
 .form .form-body textarea {
-  border-left: 5px solid #232323 !important;
-  transition: border-left 0.2s ease-in-out !important;
-}
-.form .form-body input:focus,
-.form .form-body textarea:focus {
-  border-left: 8px solid #001514 !important;
+  background-color: #fcfcfd;
 }
 .form .form-body .ui.basic.red.label {
   background: none #db2828 !important;

@@ -38,6 +38,7 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
+                throw new Exception("test");
                 var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
 
                 if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
@@ -221,6 +222,7 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
+                throw new Exception("test");
                 var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
 
                 if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
@@ -303,6 +305,7 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
+                throw new Exception("test");
                 var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
 
                 if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)

@@ -420,7 +420,6 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                throw new Exception("test");
                 var accountResult = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
 
                 if (!accountResult.IsSuccessStatusCode)

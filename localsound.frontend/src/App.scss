@@ -879,7 +879,7 @@ i.large.icon {
 #edit-artist,
 #artist-profile {
   width: 100%;
-
+  background-color: $white200;
   .banner-holder {
     border: 1px solid #e2e8f0;
     border-radius: 15px;
@@ -892,10 +892,6 @@ i.large.icon {
 
   .photo-icon {
     padding-left: 2px;
-  }
-
-  .profile-photo {
-    border: 1px solid $black100;
   }
 
   .profile-photo.summary-photo {
@@ -959,8 +955,9 @@ i.large.icon {
         border-radius: 0;
         border-right: unset;
         border-bottom: unset;
-        border-top: 1px solid $white200;
+        border-top: 1px solid $white300;
         border-radius: 0px 0px 0.28571429rem 0.28571429rem;
+        margin-left: -1px;
       }
     }
 
@@ -1032,6 +1029,12 @@ i.large.icon {
   }
 }
 
+#loading-component {
+  .loading-text {
+    text-transform: uppercase;
+  }
+}
+
 /** FORM **/
 .form {
   .api-error {
@@ -1054,13 +1057,7 @@ i.large.icon {
 
     input,
     textarea {
-      border-left: 5px solid $black100 !important;
-      transition: border-left 0.2s ease-in-out !important;
-    }
-
-    input:focus,
-    textarea:focus {
-      border-left: 8px solid $black200 !important;
+      background-color: $white200;
     }
 
     .ui.basic.red.label {

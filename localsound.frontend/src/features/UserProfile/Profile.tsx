@@ -13,7 +13,7 @@ const UserProfileSummary = () => {
   const userDetail = useSelector((state: State) => state.user.userDetails);
   const [profile, setProfile] = useState<UserModel | null>(null);
   const [noMatch, setNoMatch] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [viewingOwnProfile, setViewingOwnProfile] = useState(false);
   const history = useHistory();
   const abortControllerRef = useRef<AbortController>(new AbortController());
@@ -26,6 +26,7 @@ const UserProfileSummary = () => {
   }, [controller]);
 
   useLayoutEffect(() => {
+    setLoading(true);
     const getProfile = async () => {
       var profileUrl = history.location.pathname.slice(1);
 
@@ -59,9 +60,10 @@ const UserProfileSummary = () => {
       {loading ? (
         <div className="h-100 align-self-center d-flex justify-content-center">
           <InPageLoadingComponent
-            height={150}
-            width={150}
+            height={100}
+            width={100}
             content="Loading profile..."
+            withContainer={true}
           />
         </div>
       ) : null}
