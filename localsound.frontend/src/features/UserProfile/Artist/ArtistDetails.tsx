@@ -68,7 +68,9 @@ const ArtistDetails = ({
           </div>
           <div className="d-flex flex-column pb-4 genre-mobile">
             <div className="d-flex flex-row flex-wrap justify-content-center">
-              <h4 className="section-title inverse">Genres</h4>
+              <h4 className="section-title inverse">
+                <span className="purple-highlight">Genres</span>
+              </h4>
             </div>
             <div className="about-text d-flex flex-row flex-wrap justify-content-center">
               {userDetails.genres.map((genre, index) => (
@@ -80,7 +82,9 @@ const ArtistDetails = ({
           </div>
           <div className="d-flex flex-column pb-4">
             <div className="d-flex flex-row flex-wrap justify-content-center">
-              <h4 className="section-title inverse">Event types</h4>
+              <h4 className="section-title mb-3 mt-4">
+                <span className="purple-highlight">Event Types</span>
+              </h4>
             </div>
             <div className="about-text d-flex flex-row flex-wrap justify-content-center">
               {userDetails.eventTypes.map((eventType, index) => (
@@ -95,7 +99,9 @@ const ArtistDetails = ({
           </div>
           <div className="d-flex flex-column pb-4">
             <div className="d-flex flex-row flex-wrap justify-content-center">
-              <h4 className="section-title inverse">Equipment</h4>
+              <h4 className="section-title mb-3 mt-4">
+                <span className="purple-highlight">Equipment</span>
+              </h4>
             </div>
             <div className="about-text d-flex flex-row flex-wrap justify-content-center">
               {userDetails.equipment.map((equipment, index) => (
@@ -114,7 +120,9 @@ const ArtistDetails = ({
         <div className="p-2 py-0">
           <div className="d-flex flex-column pb-4">
             <div className="d-flex">
-              <h4 className="section-title inverse">About</h4>
+              <h4 className="section-title inverse">
+                <span className="purple-highlight">About</span>
+              </h4>
             </div>
             <span className="about-text">{userDetails.aboutSection}</span>
             <div className=" d-flex flex-row flex-wrap mt-5">

@@ -68,7 +68,6 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                throw new Exception("test");
                 var accountResult = await _accountRepository.GetAppUserFromDbAsync(userId, followerId);
 
                 if (!accountResult.IsSuccessStatusCode || accountResult.ReturnData == null)

@@ -53,7 +53,7 @@ const LandingPage = () => {
   return (
     <div id="landing-page" className="fade-in">
       <LandingPageBanner />
-      <div className="landing-page-container p-3">
+      <div className="component-container p-3">
         <div className="d-flex flex-row justify-content-center mt-2 mb-2">
           <Button
             className="white-button mr-4 auth-button"
@@ -80,7 +80,7 @@ const LandingPage = () => {
           </Button>
         </div>
       </div>
-      <div className="text-align-justify landing-page-container mb-5">
+      <div className="text-align-justify component-container mb-5">
         <div>
           <div className="d-flex flex-row">
             <div className=" pr-5">

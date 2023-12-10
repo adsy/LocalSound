@@ -170,7 +170,7 @@ const ArtistProfile = ({
     <div id="artist-profile">
       {imgsLoaded && !submittingRequest ? (
         <div className="d-flex flex-column flex-wrap p-0 fade-in w-100">
-          <div className="d-flex flex-row">
+          <div className="d-flex flex-row banner-holder">
             {!updatingCoverPhoto && !file ? (
               <div
                 style={{
@@ -289,7 +289,7 @@ const ArtistProfile = ({
               </div>
             )}
           </div>
-          <div className="p-3">
+          <div className="p-3 component-container">
             <Tabs
               id="controlled-tab-example"
               activeKey={currentTab}

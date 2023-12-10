@@ -136,7 +136,7 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
   };
 
   return (
-    <div id="track" className="mb-4">
+    <div id="track" className="mt-3">
       <div className="d-flex flex-row w-100">
         {!trackImage ? (
           <div className="mr-3 fade-in">
@@ -209,7 +209,7 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
         </div>
       </div>
 
-      <div className="d-flex flex-row justify-content-end gray-line fade-in">
+      <div className="d-flex flex-row justify-content-end fade-in">
         <div className="track-genre-list">
           {track.genres.map((genre, index) => (
             <Label key={index} id={genre.genreId} label={genre.genreName} />

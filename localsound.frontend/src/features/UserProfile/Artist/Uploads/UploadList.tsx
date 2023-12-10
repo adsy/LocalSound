@@ -66,9 +66,9 @@ const UploadList = ({
   }, [page, currentTab]);
 
   return (
-    <div ref={listRef}>
+    <div ref={listRef} id="upload-list">
       {tracks.map((track, index) => (
-        <div key={index} className="fade-in">
+        <div key={index} className="fade-in p-2 track-container">
           <Track
             track={track}
             artistDetails={userDetails}

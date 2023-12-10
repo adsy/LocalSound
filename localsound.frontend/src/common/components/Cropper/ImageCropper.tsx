@@ -128,7 +128,7 @@ const ImageCropper = ({
             <a
               onClick={() => cancelCrop()}
               target="_blank"
-              className="ml-1 btn white-button save-crop-btn"
+              className="ml-1 btn black-button save-crop-btn"
             >
               <h4>Cancel</h4>
             </a>

@@ -65,6 +65,40 @@ h5 .button-highlight:hover,
 h6 .button-highlight:hover {
   background-color: #6d69fa;
 }
+h1 .purple-highlight,
+h2 .purple-highlight,
+h3 .purple-highlight,
+h4 .purple-highlight,
+h5 .purple-highlight,
+h6 .purple-highlight {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  color: #f1f1f1;
+  font-weight: 800;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+}
+h1 .purple-highlight:before,
+h2 .purple-highlight:before,
+h3 .purple-highlight:before,
+h4 .purple-highlight:before,
+h5 .purple-highlight:before,
+h6 .purple-highlight:before {
+  content: "";
+  position: absolute;
+  bottom: 10%;
+  left: -0.5rem;
+  top: -0.4rem;
+  transform: rotate(-3deg) !important;
+  width: calc(100% + 1rem);
+  height: 140%;
+  --tw-bg-opacity: 1;
+  background-color: #232323;
+  z-index: -1;
+  transform: translateZ(-1px);
+  border-radius: 2px;
+}
 
 .btn h4 {
   color: #fcfcfd;
@@ -339,7 +373,7 @@ h6 .button-highlight:hover {
   cursor: pointer;
 }
 
-.landing-page-container {
+.component-container {
   margin-top: 30px;
   background: white;
   border: 1px solid rgb(226, 232, 240);
@@ -350,11 +384,9 @@ h6 .button-highlight:hover {
 .app-container {
   height: 100%;
   transition: width 0.3s ease, margin-left 0.3s ease, margin-right 0.3s ease, padding 0.3s ease !important;
-  background-color: #fcfcfd;
   min-height: calc(100vh - 79px);
   height: 1px;
   padding: 0px;
-  box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
 }
 
 .app-holder {
@@ -364,6 +396,14 @@ h6 .button-highlight:hover {
 
 .black-border {
   border: 1px solid #232323;
+}
+
+.gray-line {
+  border-bottom: 1px solid rgb(219, 219, 219);
+}
+
+.black-line {
+  border-bottom: 1px solid #001514;
 }
 
 .w-fit-content {
@@ -452,6 +492,7 @@ h6 .button-highlight:hover {
 /** LANDING PAGE **/
 #landing-page {
   margin-top: -40px;
+  padding-bottom: 40px;
 }
 #landing-page .banner {
   height: 25rem;
@@ -754,6 +795,13 @@ i.large.icon {
   padding-right: 6.825px;
 }
 
+#upload-list .track-container {
+  border-bottom: 1px solid #e2e8f0;
+}
+#upload-list .track-container:last-of-type {
+  border-bottom: unset !important;
+}
+
 #music-player {
   position: fixed;
   bottom: 0;
@@ -879,12 +927,6 @@ i.large.icon {
   font-size: 20px;
   font-weight: 800;
 }
-#track .gray-line {
-  border-bottom: 1px solid rgb(219, 219, 219);
-}
-#track .black-line {
-  border-bottom: 1px solid #001514;
-}
 #track .track-name {
   font-size: 20px;
   font-weight: 800;
@@ -962,6 +1004,13 @@ i.large.icon {
 #edit-artist,
 #artist-profile {
   width: 100%;
+}
+#modal-popup .banner-holder,
+#edit-artist .banner-holder,
+#artist-profile .banner-holder {
+  border: 1px solid #e2e8f0;
+  border-radius: 15px;
+  margin-top: 20px;
 }
 #modal-popup .ui.medium.image,
 #edit-artist .ui.medium.image,
@@ -1300,12 +1349,11 @@ i.large.icon {
 /** USER PROFILE **/
 #user-profile {
   min-height: 100%;
-  background: white;
   display: flex;
   justify-content: center;
   align-content: stretch;
   flex-wrap: wrap;
-  padding-bottom: 30px;
+  padding-bottom: 70px;
   /** CROPPER **/
 }
 #user-profile #cropper {
@@ -1313,6 +1361,7 @@ i.large.icon {
   position: absolute;
   height: 100%;
   width: 100%;
+  border-radius: 15px;
 }
 #user-profile #cropper .cropper-crop-box {
   z-index: 9;
@@ -1330,8 +1379,19 @@ i.large.icon {
 #user-profile #cropper .cropper-container {
   width: unset !important;
   height: 30rem !important;
+  border-radius: 15px;
+}
+#user-profile #cropper .cropper-modal {
+  border-radius: 15px;
+}
+#user-profile #cropper .cropper-view-box {
+  border-radius: 15px;
+}
+#user-profile #cropper .cropper-wrap-box {
+  border-radius: 15px;
 }
 #user-profile .cropping {
+  border-radius: 15px;
   height: 30rem;
 }
 #user-profile .cropping .details-container {
@@ -1339,6 +1399,9 @@ i.large.icon {
 }
 #user-profile .cropping .details-container .action-row {
   visibility: hidden !important;
+}
+#user-profile .profile-banner {
+  border-radius: 15px;
 }
 #user-profile .profile-banner:hover .edit-cover-button {
   display: inline;
@@ -1517,6 +1580,9 @@ i.large.icon {
   }
   #navbar .navbar-title {
     display: none;
+  }
+  #navbar .navbar-toggler {
+    border: unset !important;
   }
   .ui.container {
     width: unset !important;
