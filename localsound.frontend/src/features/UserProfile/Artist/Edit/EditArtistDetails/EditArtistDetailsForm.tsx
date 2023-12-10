@@ -4,7 +4,7 @@ import { UpdateArtistPersonalDetailsModel } from "../../../../../app/model/dto/u
 import MyTextArea from "../../../../../common/form/MyTextArea";
 import { Image } from "semantic-ui-react";
 import { AccountImageTypes } from "../../../../../app/model/enums/accountImageTypes";
-import userImg from "../../../../../assets/icons/user.svg";
+import userImg from "../../../../../assets/placeholder.png";
 import { useState } from "react";
 import agent from "../../../../../api/agent";
 import { useDispatch, useSelector } from "react-redux";

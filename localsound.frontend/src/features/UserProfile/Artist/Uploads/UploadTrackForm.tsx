@@ -16,11 +16,12 @@ import MyTextInput from "../../../../common/form/MyTextInput";
 import MyTextArea from "../../../../common/form/MyTextArea";
 import SearchGenreTypes from "../Edit/Search/SearchGenreTypes";
 import { GenreModel } from "../../../../app/model/dto/genre.model";
-import userImg from "../../../../assets/icons/user.svg";
+import userImg from "../../../../assets/placeholder.png";
 import { Image } from "semantic-ui-react";
 import ImageCropper from "../../../../common/components/Cropper/ImageCropper";
 import { CropTypes } from "../../../../app/model/enums/cropTypes";
 import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-upload.model";
+import { AccountImageTypes } from "../../../../app/model/enums/accountImageTypes";
 
 interface Props {
   userDetails: UserModel;
@@ -53,6 +54,20 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
       }
     })();
   }, []);
+
+  const getDisplayImage = () => {
+    if (!croppedImage) {
+      var profileImg = userDetails.images?.find(
+        (x) => x.accountImageTypeId == AccountImageTypes.ProfileImage
+      );
+      if (profileImg != null) {
+        return profileImg.accountImageUrl;
+      }
+      return userImg;
+    }
+
+    return URL.createObjectURL(croppedImage);
+  };
 
   const uploadBlob = async () => {
     var trackUrl = `${uploadData?.accountUrl}/${uploadData?.containerName}/${uploadData?.uploadLocation}.${trackExt}`;
@@ -209,6 +224,11 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                       autoComplete="off"
                     >
                       <div className="form-body">
+                        <p className="text-justify">
+                          Now fill out the rest of your tracks details before
+                          clicking upload - add a track image, attach genres to
+                          your track and give it a description.
+                        </p>
                         <div id="edit-form" className="d-flex flex-column">
                           <div className="d-flex flex-row flex-wrap justify-content-between">
                             <div className="d-flex flex-column col-12 col-md-6 px-3">
@@ -226,6 +246,12 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                                 <div className="d-flex">
                                   <p className="form-label">GENRES</p>
                                 </div>
+                                <p className="text-justify">
+                                  Start typing a genre you play to attach to
+                                  your profile. Attaching genres to your tracks
+                                  allow people to find you specifically for
+                                  their next event.
+                                </p>
                                 <SearchGenreTypes
                                   selectedGenres={selectedGenres}
                                   setSelectedGenres={setSelectedGenres}
@@ -248,17 +274,13 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                               </div>
                             </div>
                             <div className="d-flex flex-column col-12 col-md-6 px-3">
-                              <div className="d-flex mb-1">
+                              <div className="d-flex mb-3">
                                 <p className="form-label">TRACK PHOTO</p>
                               </div>
                               {!updatingTrackPhoto ? (
                                 <>
                                   <Image
-                                    src={
-                                      !croppedImage
-                                        ? userImg
-                                        : URL.createObjectURL(croppedImage!)
-                                    }
+                                    src={getDisplayImage()}
                                     size="medium"
                                     className="align-self-center mb-2"
                                     style={{ borderRadius: "5px" }}

@@ -82,7 +82,6 @@ const MyAddressInput = (props: Props) => {
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => {
           return (
             <Form.Field className="position-relative">
-              <label></label>
               <input
                 {...field}
                 {...getInputProps({

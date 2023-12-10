@@ -19,6 +19,7 @@ import Followers from "../Followers/Followers";
 import { ArtistProfileTabs } from "../../../app/model/enums/artistProfileTabTypes";
 import Following from "../Followers/Following";
 import ErrorBanner from "../../../common/banner/ErrorBanner";
+import Login from "../../Authentication/Login/Login";
 
 interface Props {
   loggedInUser: UserModel;
@@ -131,29 +132,39 @@ const ArtistProfile = ({
   };
 
   const updateArtistFollow = async (follow: boolean) => {
-    setUpdateFollowerError(null);
-    try {
-      if (follow) {
-        await agent.Artist.followArtist(
-          loggedInUser.memberId,
-          artistDetails.memberId
-        );
-        setIsFollowing(true);
-        var localArtist = artistDetails;
-        localArtist.followerCount += 1;
-        setProfile(localArtist);
-      } else {
-        await agent.Artist.unfollowArtist(
-          loggedInUser.memberId,
-          artistDetails.memberId
-        );
-        setIsFollowing(false);
-        var localArtist = artistDetails;
-        localArtist.followerCount -= 1;
-        setProfile(localArtist);
+    if (loggedInUser) {
+      setUpdateFollowerError(null);
+      try {
+        if (follow) {
+          await agent.Artist.followArtist(
+            loggedInUser.memberId,
+            artistDetails.memberId
+          );
+          setIsFollowing(true);
+          var localArtist = artistDetails;
+          localArtist.followerCount += 1;
+          setProfile(localArtist);
+        } else {
+          await agent.Artist.unfollowArtist(
+            loggedInUser.memberId,
+            artistDetails.memberId
+          );
+          setIsFollowing(false);
+          var localArtist = artistDetails;
+          localArtist.followerCount -= 1;
+          setProfile(localArtist);
+        }
+      } catch (err: any) {
+        setUpdateFollowerError(err);
       }
-    } catch (err: any) {
-      setUpdateFollowerError(err);
+    } else {
+      dispatch(
+        handleToggleModal({
+          open: true,
+          body: <Login />,
+          size: "tiny",
+        })
+      );
     }
   };
 
@@ -163,7 +174,6 @@ const ArtistProfile = ({
     backgroundPosition: "center center",
     backgroundRepeat: "no-repeat",
     height: "30rem",
-    boxShadow: "rgba(0, 0, 0, 1) 0px -1px 4px 0px inset",
   };
 
   return (

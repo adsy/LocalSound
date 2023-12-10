@@ -6,6 +6,8 @@ import Track from "../../../../common/components/Track/Track";
 import { debounce } from "lodash";
 import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
 import { ArtistProfileTabs } from "../../../../app/model/enums/artistProfileTabTypes";
+import { Image } from "react-bootstrap";
+import wavePulse from "../../../../assets/wave-pulse-1-svgrepo-com.svg";
 
 interface Props {
   userDetails: UserModel;
@@ -84,16 +86,28 @@ const UploadList = ({
       ) : null}
       {!loading && tracks.length < 1 ? (
         <div className="d-flex flex-row justify-content-center mt-5">
-          <h5>
+          <div className="d-flex flex-column text-center align-items-center black-alert">
             {viewingOwnProfile ? (
-              <span>
-                There are no tracks available. Click on the upload icon within
-                your profile banner to start uploading a track.
-              </span>
+              <div className="ml-2">
+                <p className="mb-0">
+                  <Image src={wavePulse} height={30} width={30} />
+                  <span className="ml-1">
+                    There are no tracks available.
+                  </span>{" "}
+                  Click on the upload icon within your profile banner to start
+                  uploading a track.
+                </p>
+                <p></p>
+              </div>
             ) : (
-              <span>This artist has no tracks uploaded yet.</span>
+              <p>
+                <Image src={wavePulse} height={30} width={30} />
+                <span className="ml-1">
+                  This artist has no tracks uploaded yet.
+                </span>
+              </p>
             )}
-          </h5>
+          </div>
         </div>
       ) : null}
     </div>

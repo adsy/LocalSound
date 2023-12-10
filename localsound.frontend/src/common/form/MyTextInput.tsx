@@ -40,7 +40,6 @@ const MyTextInput = (props: Props) => {
 
   return (
     <Form.Field error={meta.touched && !!meta.error} className={fieldClassName}>
-      {hideLabel ? null : <label>{props.label}</label>}
       {onBlur && onChange ? (
         <input
           {...field}

@@ -18,7 +18,6 @@ const MyTextArea = (props: Props) => {
       error={meta.touched && !!meta.error}
       className={props.fieldClassName}
     >
-      <label>{props.label}</label>
       <textarea {...field} {...props} disabled={props.disabled} />
       {meta.touched && meta.error ? (
         <Label basic color="red">

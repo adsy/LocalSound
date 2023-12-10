@@ -208,6 +208,17 @@ $end: 10;
   font-weight: 800;
 }
 
+.black-alert {
+  border: 1px solid $black200;
+  background-color: $black100 !important;
+  padding: 10px;
+  color: $white200;
+  letter-spacing: 1px;
+  font-size: 12px;
+  border-radius: 5px;
+  font-weight: 800;
+}
+
 .alert.alert-success {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -424,7 +435,8 @@ i.large.icon {
     width: 2em;
     height: 2em;
     vertical-align: middle;
-    background: url(./assets/icons/drop-down-menu.svg) 50% 50% no-repeat;
+    background: url(./assets/icons/drop-down-menu-inverted.svg) 50% 50%
+      no-repeat;
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100%;
@@ -1048,7 +1060,7 @@ i.large.icon {
     color: $black200;
     font-size: 14px;
     font-weight: 800;
-    border-bottom: 2px solid $purple100;
+    border-bottom: 2px solid $black200;
     padding-right: 0.5rem;
   }
 

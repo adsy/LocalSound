@@ -3,7 +3,7 @@ import { UserSummaryModel } from "../../../app/model/dto/user-summary.model";
 import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
 import { useHistory } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
-import userImg from "../../../assets/icons/user.svg";
+import userImg from "../../../assets/placeholder.png";
 
 interface Props {
   follower: UserSummaryModel;

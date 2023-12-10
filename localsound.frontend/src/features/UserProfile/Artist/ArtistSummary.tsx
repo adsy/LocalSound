@@ -2,7 +2,7 @@ import { Image } from "semantic-ui-react";
 import { UserModel } from "../../../app/model/dto/user.model";
 import Label from "../../../common/components/Label/Label";
 import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
-import userImg from "../../../assets/icons/user.svg";
+import userImg from "../../../assets/placeholder.png";
 
 interface Props {
   userDetails: UserModel;

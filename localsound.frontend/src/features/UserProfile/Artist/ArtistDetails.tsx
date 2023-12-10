@@ -4,7 +4,7 @@ import { UserModel } from "../../../app/model/dto/user.model";
 import Label from "../../../common/components/Label/Label";
 import { Image } from "semantic-ui-react";
 import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
-import userImg from "../../../assets/icons/user.svg";
+import userImg from "../../../assets/placeholder.png";
 import { ArtistProfileTabs } from "../../../app/model/enums/artistProfileTabTypes";
 
 interface Props {
