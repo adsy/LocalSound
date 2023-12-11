@@ -20,8 +20,9 @@ import WaveForm from "../../../features/MusicPlayer/Waveform";
 import { Button } from "react-bootstrap";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import EditTrackForm from "../../../features/UserProfile/Artist/Uploads/EditTrackForm";
-import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import DeleteTrackConfirmation from "../../../features/UserProfile/Artist/Uploads/DeleteTrackConfirmation";
+import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
+import PlaceholderImg from "../../../assets/placeholder.png";
 
 interface Props {
   track: ArtistTrackUploadModel;
@@ -53,6 +54,15 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
         .finally(() => {
           setTrackImageLoaded(true);
         });
+    } else {
+      var profileImg = artistDetails.images.find(
+        (x) => x.accountImageTypeId == AccountImageTypes.ProfileImage
+      );
+      if (profileImg) {
+        setTrackImage(profileImg.accountImageUrl);
+      } else {
+        setTrackImage(PlaceholderImg);
+      }
     }
   }, [track.artistTrackUploadId]);
 

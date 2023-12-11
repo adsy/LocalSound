@@ -222,7 +222,6 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                throw new Exception("test");
                 var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
 
                 if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
@@ -261,7 +260,10 @@ namespace localsound.backend.Infrastructure.Services
                         };
                     }
 
-                    deleteResponse = await _blobRepository.DeleteBlobAsync(track.ReturnData.TrackImage.FileLocation);
+                    if (track.ReturnData?.TrackImage != null)
+                    {
+                        deleteResponse = await _blobRepository.DeleteBlobAsync(track.ReturnData.TrackImage.FileLocation);
+                    }
 
                     newTrackImageUrl = uploadResponse.ReturnData;
                     newTrackImage = new FileContent
@@ -305,7 +307,6 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                throw new Exception("test");
                 var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
 
                 if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
@@ -313,18 +314,7 @@ namespace localsound.backend.Infrastructure.Services
                     return new ServiceResponse<TrackUploadSASDto>(HttpStatusCode.InternalServerError);
                 }
 
-                var imageId = Guid.NewGuid();
-                var imageFilePath = $"[{userId}]/uploads/{trackId}/image/{imageId}{trackUploadDto.TrackImageExt}";
-
-                var result = await _blobRepository.UploadBlobAsync(imageFilePath, trackUploadDto.TrackImage);
-
-                if (!result.IsSuccessStatusCode || result.ReturnData == null)
-                {
-                    return new ServiceResponse(HttpStatusCode.InternalServerError);
-                }
-
-                //var genres = JsonSerializer.Deserialize<List<GenreDto>>(trackUploadDto.Genres);
-
+                
                 var track = new ArtistTrackUpload
                 {
                     AppUserId = userId,
@@ -342,19 +332,35 @@ namespace localsound.backend.Infrastructure.Services
                         FileLocation = $"[{userId}]/"+trackUploadDto.FileLocation,
                         FileExtensionType = trackUploadDto.TrackFileExt
                     },
-                    TrackImage = new FileContent
-                    {
-                        FileContentId = imageId,
-                        FileLocation = imageFilePath,
-                        FileExtensionType = trackUploadDto.TrackImageExt
-                    },
-                    TrackImageUrl = result.ReturnData,
                     TrackUrl = trackUploadDto.TrackUrl,
                     WaveformUrl = trackUploadDto.WaveformUrl,
                     Duration = double.TryParse(trackUploadDto.Duration, out var duration) ? duration : 0,
                     UploadDate = DateTime.Now.ToLocalTime(),
                     FileSizeInBytes = int.Parse(trackUploadDto.FileSize)
                 };
+
+                // If they have uploaded a custom image against a track, add it to container and db
+                if (trackUploadDto.TrackImage != null)
+                {
+                    var imageId = Guid.NewGuid();
+                    var imageFilePath = $"[{userId}]/uploads/{trackId}/image/{imageId}{trackUploadDto.TrackImageExt}";
+
+                    var result = await _blobRepository.UploadBlobAsync(imageFilePath, trackUploadDto.TrackImage);
+
+                    if (!result.IsSuccessStatusCode || result.ReturnData == null)
+                    {
+                        return new ServiceResponse(HttpStatusCode.InternalServerError);
+                    }
+
+                    track.TrackImage = new FileContent
+                    {
+                        FileContentId = imageId,
+                        FileLocation = imageFilePath,
+                        FileExtensionType = trackUploadDto.TrackImageExt
+                    };
+
+                    track.TrackImageUrl = result.ReturnData;
+                }
 
                 var addTrackResult = await _trackRepository.AddArtistTrackUploadAsync(track);
 

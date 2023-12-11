@@ -119,7 +119,7 @@ const ArtistDetails = ({
       <Col md={12} lg={8} className="p-0 right-col">
         <div className="p-2 py-0">
           <div className="d-flex flex-column pb-4">
-            <div className="d-flex">
+            <div className="d-flex mt-4">
               <h4 className="section-title inverse">
                 <span className="purple-highlight">About</span>
               </h4>

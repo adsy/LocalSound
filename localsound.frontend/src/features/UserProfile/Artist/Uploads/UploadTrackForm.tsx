@@ -16,7 +16,7 @@ import MyTextInput from "../../../../common/form/MyTextInput";
 import MyTextArea from "../../../../common/form/MyTextArea";
 import SearchGenreTypes from "../Edit/Search/SearchGenreTypes";
 import { GenreModel } from "../../../../app/model/dto/genre.model";
-import userImg from "../../../../assets/placeholder.png";
+import PlaceholderImg from "../../../../assets/placeholder.png";
 import { Image } from "semantic-ui-react";
 import ImageCropper from "../../../../common/components/Cropper/ImageCropper";
 import { CropTypes } from "../../../../app/model/enums/cropTypes";
@@ -63,7 +63,7 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
       if (profileImg != null) {
         return profileImg.accountImageUrl;
       }
-      return userImg;
+      return PlaceholderImg;
     }
 
     return URL.createObjectURL(croppedImage);
@@ -137,7 +137,7 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                 }}
                 onSubmit={async (values, { setStatus }) => {
                   try {
-                    if (file && croppedImage) {
+                    if (file) {
                       await uploadBlob();
 
                       var duration = await getDuration(file);
@@ -149,11 +149,14 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                         values.trackDescription
                       );
 
-                      formData.append(
-                        "trackImage",
-                        croppedImage!,
-                        trackImage?.name
-                      );
+                      if (croppedImage) {
+                        formData.append(
+                          "trackImage",
+                          croppedImage!,
+                          trackImage?.name
+                        );
+                      }
+
                       formData.append("trackImageExt", `.jpg`);
                       formData.append("trackFileExt", `.${trackExt}`);
                       formData.append(
@@ -331,7 +334,6 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                               disabled ||
                               uploadDataError ||
                               !file ||
-                              !croppedImage ||
                               !values.trackName ||
                               !values.trackDescription ||
                               selectedGenres.length == 0

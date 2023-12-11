@@ -339,12 +339,13 @@ h6 .purple-highlight:before {
 .black-alert {
   border: 1px solid #001514;
   background-color: #232323 !important;
-  padding: 10px;
+  padding: 5px;
   color: #fcfcfd;
   letter-spacing: 1px;
   font-size: 12px;
   border-radius: 5px;
   font-weight: 800;
+  margin-bottom: 20px;
 }
 
 .alert.alert-success {
@@ -672,6 +673,9 @@ i.large.icon {
   border: 1px solid #232323;
   padding: 5px;
   background-image: linear-gradient(#232323, #001514);
+}
+.black-button h4 {
+  font-weight: 100 !important;
 }
 
 .black-button:hover,

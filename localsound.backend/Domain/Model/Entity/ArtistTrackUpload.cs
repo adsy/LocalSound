@@ -13,7 +13,7 @@ namespace localsound.backend.Domain.Model.Entity
         public Guid? TrackImageId { get; set; }
         public string TrackName { get; set; }
         public string TrackDescription { get; set; }
-        public string TrackImageUrl { get; set; }
+        public string? TrackImageUrl { get; set; }
         public string TrackUrl { get; set; }
         public string WaveformUrl { get; set; }
         public double Duration { get; set; }
@@ -23,6 +23,6 @@ namespace localsound.backend.Domain.Model.Entity
         public virtual Artist Artist {get;set;}
         public virtual ICollection<ArtistTrackGenre>  Genres { get; set;}
         public virtual FileContent TrackData { get;set;} 
-        public virtual FileContent TrackImage { get;set; }
+        public virtual FileContent? TrackImage { get;set; }
     }
 }

@@ -13,6 +13,8 @@ import ErrorBanner from "../../../../common/banner/ErrorBanner";
 import agent from "../../../../api/agent";
 import { GenreModel } from "../../../../app/model/dto/genre.model";
 import SuccessBanner from "../../../../common/banner/SuccessBanner";
+import { AccountImageTypes } from "../../../../app/model/enums/accountImageTypes";
+import PlaceholderImg from "../../../../assets/placeholder.png";
 
 interface Props {
   trackDetails: ArtistTrackUploadModel;
@@ -61,6 +63,20 @@ const EditTrackForm = ({
   const onFileUpload = async (file: Blob) => {
     setCroppedImage(file);
     setUpdatingTrackPhoto(false);
+  };
+
+  const getDisplayImage = () => {
+    if (!croppedImage) {
+      var profileImg = userDetails.images?.find(
+        (x) => x.accountImageTypeId == AccountImageTypes.ProfileImage
+      );
+      if (profileImg != null) {
+        return profileImg.accountImageUrl;
+      }
+      return PlaceholderImg;
+    }
+
+    return URL.createObjectURL(croppedImage);
   };
 
   const cancelCrop = () => {
@@ -194,11 +210,7 @@ const EditTrackForm = ({
                             {!updatingTrackPhoto ? (
                               <>
                                 <Image
-                                  src={
-                                    !croppedImage
-                                      ? trackDetails.trackImageUrl
-                                      : URL.createObjectURL(croppedImage!)
-                                  }
+                                  src={getDisplayImage()}
                                   size="medium"
                                   className="align-self-center mb-2"
                                   style={{ borderRadius: "5px" }}
@@ -248,9 +260,6 @@ const EditTrackForm = ({
                           className={`black-button w-100 align-self-center`}
                           disabled={
                             disabled ||
-                            //   uploadDataError ||
-                            //   !file ||
-                            //   !croppedImage ||
                             !values.trackName ||
                             !values.trackDescription ||
                             selectedGenres.length == 0

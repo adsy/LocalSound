@@ -168,12 +168,25 @@ const ArtistProfile = ({
     }
   };
 
-  const bannerStyle = {
-    backgroundSize: "cover",
-    backgroundAttachment: "inherit",
-    backgroundPosition: "center center",
-    backgroundRepeat: "no-repeat",
-    height: "30rem",
+  const generateCoverImage = () => {
+    if (coverImage?.accountImageUrl) {
+      return {
+        backgroundSize: "cover",
+        backgroundAttachment: "inherit",
+        backgroundPosition: "center center",
+        backgroundRepeat: "no-repeat",
+        height: "30rem",
+        backgroundImage: `url(${coverImage?.accountImageUrl!})`,
+      };
+    }
+    return {
+      backgroundSize: "cover",
+      backgroundAttachment: "inherit",
+      backgroundPosition: "center center",
+      backgroundRepeat: "no-repeat",
+      height: "30rem",
+      background: "linear-gradient(45deg, black, transparent)",
+    };
   };
 
   return (
@@ -184,10 +197,7 @@ const ArtistProfile = ({
             <div className="d-flex flex-row banner-holder">
               {!updatingCoverPhoto && !file ? (
                 <div
-                  style={{
-                    ...bannerStyle,
-                    backgroundImage: `url(${coverImage?.accountImageUrl!})`,
-                  }}
+                  style={{ ...generateCoverImage() }}
                   className="profile-banner position-relative w-100"
                 >
                   <div className="details-container flex-wrap">

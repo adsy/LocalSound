@@ -159,7 +159,12 @@ namespace localsound.backend.Infrastructure.Repositories
                 if (newTrackImage != null)
                 {
                     await _dbContext.FileContent.AddAsync(newTrackImage);
-                    _dbContext.FileContent.Remove(track.TrackImage);
+
+                    if (track.TrackImage != null)
+                    {
+                        _dbContext.FileContent.Remove(track.TrackImage);
+                    }
+
                     track.TrackImage = newTrackImage;
                     track.TrackImageUrl = newTrackImageUrl;
                 }
