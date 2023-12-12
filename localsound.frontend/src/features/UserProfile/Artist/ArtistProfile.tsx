@@ -100,6 +100,8 @@ const ArtistProfile = ({
           .finally(() => {
             setImgsLoaded(true);
           });
+      } else {
+        setImgsLoaded(true);
       }
     }
   }, [artistDetails.memberId, loggedInUser?.images]);
@@ -185,7 +187,7 @@ const ArtistProfile = ({
       backgroundPosition: "center center",
       backgroundRepeat: "no-repeat",
       height: "30rem",
-      background: "linear-gradient(45deg, black, transparent)",
+      background: "linear-gradient(20deg, #232323, #001514, #232323)",
     };
   };
 
@@ -313,7 +315,7 @@ const ArtistProfile = ({
                 </div>
               )}
             </div>
-            <div className="p-3 component-container">
+            <div className="component-container">
               <Tabs
                 id="controlled-tab-example"
                 activeKey={currentTab}

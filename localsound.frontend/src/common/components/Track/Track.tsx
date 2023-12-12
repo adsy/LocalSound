@@ -33,15 +33,14 @@ interface Props {
 
 const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
   const player = useSelector((state: State) => state.player);
-  const actions = useSelector((state: State) => state.action);
   const loggedInUser = useSelector((state: State) => state.user.userDetails);
-  const dispatch = useDispatch();
   const [singleton, setSingleton] = useState<SingletonClass>(
     SingletonFactory.getInstance()
   );
   const [analyzerData, setAnalyzerData] = useState<any>(null);
   const [trackImageLoaded, setTrackImageLoaded] = useState(false);
   const [trackImage, setTrackImage] = useState<string | null>(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (track.trackImageUrl) {
@@ -194,7 +193,6 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
                 <Button
                   className="white-button track-button bin-button"
                   onClick={async () => await openDeleteModal()}
-                  disabled={actions.isDeleting}
                 >
                   <h4>
                     <Icon name="trash" size="small" className="mr-0" />

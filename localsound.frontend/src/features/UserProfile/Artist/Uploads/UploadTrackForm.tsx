@@ -22,6 +22,12 @@ import ImageCropper from "../../../../common/components/Cropper/ImageCropper";
 import { CropTypes } from "../../../../app/model/enums/cropTypes";
 import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-upload.model";
 import { AccountImageTypes } from "../../../../app/model/enums/accountImageTypes";
+import { useDispatch } from "react-redux";
+import { handleResetModal } from "../../../../app/redux/actions/modalSlice";
+import {
+  handleTrackUpdated,
+  handleTrackUploaded,
+} from "../../../../app/redux/actions/pageOperationSlice";
 
 interface Props {
   userDetails: UserModel;
@@ -37,12 +43,12 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
   const [uploadData, setUploadData] = useState<TrackUploadSASModel | null>(
     null
   );
-  const [uploadTrackSuccess, setUploadTrackSuccess] = useState(false);
   const [uploadTrackError, setUploadTrackError] = useState(false);
   const [uploadDataError, setUploadDataError] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<GenreModel[]>([]);
   const [trackProgress, setTrackProgress] = useState(0);
   const [updatingTrackPhoto, setUpdatingTrackPhoto] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
@@ -127,7 +133,7 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
 
         {!file ? (
           <UploadTrackSelection setFile={setFile} setTrackExt={setTrackExt} />
-        ) : !uploadTrackSuccess ? (
+        ) : (
           <div className="fade-in pb-4 mt-4">
             <div className="w-100 fade-in">
               <Formik
@@ -136,6 +142,7 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                   trackDescription: "",
                 }}
                 onSubmit={async (values, { setStatus }) => {
+                  dispatch(handleTrackUploaded(false));
                   try {
                     if (file) {
                       await uploadBlob();
@@ -201,12 +208,11 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                       );
 
                       setTracks([uploadedTrack, ...tracks]);
-
-                      setUploadTrackSuccess(true);
+                      dispatch(handleTrackUploaded(true));
+                      dispatch(handleResetModal());
                     }
                   } catch (err) {
-                    //TODO: Do something with error
-
+                    //TODO: Fix error
                     setUploadTrackError(true);
                   }
                 }}
@@ -358,13 +364,6 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
               </Formik>
             </div>
           </div>
-        ) : (
-          <>
-            <SuccessBanner className="fade-in mb-0 mx-3">
-              Your track has been successfully uploaded. Go back to your track
-              list to check it out.
-            </SuccessBanner>
-          </>
         )}
       </div>
     </div>

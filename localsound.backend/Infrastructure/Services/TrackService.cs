@@ -38,7 +38,6 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                throw new Exception("test");
                 var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
 
                 if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
@@ -59,11 +58,14 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var imageDeleteResult = await _blobRepository.DeleteBlobAsync(track.ReturnData.TrackImage.FileLocation);
-
-                if (imageDeleteResult == null || !imageDeleteResult.IsSuccessStatusCode)
+                if (track.ReturnData.TrackImage != null)
                 {
-                    // Push delete operation to a queue so it can be done at a different time
+                    var imageDeleteResult = await _blobRepository.DeleteBlobAsync(track.ReturnData.TrackImage.FileLocation);
+
+                    if (imageDeleteResult == null || !imageDeleteResult.IsSuccessStatusCode)
+                    {
+                        // Push delete operation to a queue so it can be done at a different time
+                    }
                 }
 
                 var trackDeleteResult = await _blobRepository.DeleteBlobAsync(track.ReturnData.TrackData.FileLocation);

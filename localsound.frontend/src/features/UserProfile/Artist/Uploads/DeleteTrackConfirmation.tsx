@@ -6,6 +6,7 @@ import agent from "../../../../api/agent";
 import { UserModel } from "../../../../app/model/dto/user.model";
 import ErrorBanner from "../../../../common/banner/ErrorBanner";
 import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
+import { handleTrackDeleted } from "../../../../app/redux/actions/pageOperationSlice";
 
 interface Props {
   track: ArtistTrackUploadModel;
@@ -29,6 +30,7 @@ const DeleteTrackConfirmation = ({
   };
 
   const deleteTrack = async () => {
+    dispatch(handleTrackDeleted(false));
     setDeleteError(null);
     try {
       if (loggedInUser?.memberId && track.artistTrackUploadId) {
@@ -42,6 +44,7 @@ const DeleteTrackConfirmation = ({
           (x) => x.artistTrackUploadId !== track.artistTrackUploadId
         );
         setTracks(tracksFiltered);
+        dispatch(handleTrackDeleted(true));
         dispatch(handleResetModal());
       }
     } catch (err: any) {

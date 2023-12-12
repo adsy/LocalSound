@@ -26,15 +26,15 @@ const FollowerSquare = ({ follower }: Props) => {
 
   return (
     <div
-      id="follower-image"
-      className=" d-flex flex-column align-items-center"
+      id="follower-square"
+      className="d-flex flex-column align-items-center p-2"
       onClick={() => goProfile()}
     >
       <Image
         src={profileImage ? profileImage : userImg}
-        size="medium"
         circular
-        className={`${profileImage ? "profile-photo " : ""}align-self-center`}
+        // size="small"
+        className="align-self-center"
       />
       <p className="section-title text-center">{follower.name}</p>
     </div>

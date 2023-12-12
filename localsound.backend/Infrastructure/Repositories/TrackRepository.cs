@@ -46,7 +46,12 @@ namespace localsound.backend.Infrastructure.Repositories
             try
             {
                 _dbContext.FileContent.Remove(track.TrackData);
-                _dbContext.FileContent.Remove(track.TrackImage);
+
+                if (track.TrackImage != null)
+                {
+                    _dbContext.FileContent.Remove(track.TrackImage);
+                }
+
                 _dbContext.ArtistTrackUpload.Remove(track);
 
                 await _dbContext.SaveChangesAsync();

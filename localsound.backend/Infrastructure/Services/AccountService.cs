@@ -411,7 +411,9 @@ namespace localsound.backend.Infrastructure.Services
 
                 return new ServiceResponse<FollowerListResponseDto>(HttpStatusCode.InternalServerError)
                 {
-                    ServiceResponseMessage = "An error occured while getting the profile's followers, please try again..."
+                    ServiceResponseMessage = !retrieveFollowing ? 
+                        "An error occured while getting the profile's followers, please try again..." :
+                        "An error occured while getting the profile's followings, please try again.."
                 };
             }
         }

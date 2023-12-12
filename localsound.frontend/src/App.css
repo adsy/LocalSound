@@ -1503,12 +1503,6 @@ i.large.icon {
 #user-profile #follower-list .followers {
   width: 130px;
 }
-#user-profile #follower-list #follower-image {
-  margin-bottom: 5px;
-  cursor: pointer;
-  padding-left: 5px;
-  padding-right: 5px;
-}
 @media only screen and (max-width: 991px) {
   #user-profile .genre-desktop {
     display: none !important;
