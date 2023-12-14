@@ -8,13 +8,20 @@ import { useState } from "react";
 import MyTextArea from "../../../../common/form/MyTextArea";
 import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
 import { EquipmentModel } from "../../../../app/model/dto/equipment.model";
+import MultiImageCropper from "../../../../common/components/MultiImageCropper/MultiImageCropper";
+import agent from "../../../../api/agent";
+import { ArtistPackageModel } from "../../../../app/model/dto/artist-package.model";
+import { handleUpdateUserPackages } from "../../../../app/redux/actions/userSlice";
 
 interface Props {
   userDetails: UserModel;
 }
 
 const AddArtistPackage = ({ userDetails }: Props) => {
+  const [submitting, setSubmitting] = useState(false);
+  const [submittingError, setSubmittingError] = useState<string | null>();
   const [equipment, setEquipment] = useState<EquipmentModel[]>([]);
+  const [images, setImages] = useState<PhotoUploadModel[]>([]);
   const dispatch = useDispatch();
 
   return (
@@ -30,7 +37,30 @@ const AddArtistPackage = ({ userDetails }: Props) => {
               packageDescription: "",
               packagePrice: "",
             }}
-            onSubmit={async (values, { setStatus }) => {}}
+            onSubmit={async (values, { setStatus }) => {
+              setSubmitting(true);
+              try {
+                await agent.Packages.createPackage(
+                  userDetails.memberId!,
+                  {
+                    packageName: values.packageName,
+                    packageDescription: values.packageDescription,
+                    packagePrice: `${values.packagePrice}`,
+                    equipment,
+                  },
+                  images
+                );
+
+                var packages = await agent.Packages.getPackages(
+                  userDetails.memberId!
+                );
+
+                dispatch(handleUpdateUserPackages(packages));
+              } catch (err: any) {
+                setSubmittingError(err);
+              }
+              setSubmitting(false);
+            }}
           >
             {({
               values,
@@ -56,7 +86,7 @@ const AddArtistPackage = ({ userDetails }: Props) => {
                               <p className="form-label">PACKAGE NAME</p>
                             </div>
                             <MyTextInput
-                              name="trackName"
+                              name="packageName"
                               placeholder=""
                               disabled={disabled}
                             />
@@ -92,6 +122,7 @@ const AddArtistPackage = ({ userDetails }: Props) => {
                               name="packagePrice"
                               placeholder=""
                               disabled={disabled}
+                              type="number"
                             />
                           </div>
                         </div>
@@ -100,45 +131,13 @@ const AddArtistPackage = ({ userDetails }: Props) => {
                             <p className="form-label">PACKAGE PHOTO</p>
                           </div>
                           <p className="mb-3">
-                            Provide some photos of your equipment all setup to
-                            help sell your package.
+                            Provide up to 3 photos of your equipment all setup
+                            to help sell your package.
                           </p>
-                          {/* {!updatingTrackPhoto ? (
-                            <>
-                              <Image
-                                src={getDisplayImage()}
-                                size="medium"
-                                className="align-self-center mb-2"
-                                style={{ borderRadius: "5px" }}
-                              />
-
-                              <label
-                                htmlFor="trackUpload"
-                                className="btn white-button fade-in-out w-fit-content align-self-center px-5"
-                              >
-                                <h4>Select photo</h4>
-                              </label>
-                              <input
-                                type="file"
-                                accept=".jpg,.png,.jpeg"
-                                id="trackUpload"
-                                style={{ display: "none" }}
-                                onChange={async (event) => {
-                                  if (event?.target?.files) {
-                                    setTrackImage(event.target.files[0]);
-                                    setUpdatingTrackPhoto(true);
-                                  }
-                                }}
-                              />
-                            </>
-                          ) : trackImage ? (
-                            <ImageCropper
-                              file={trackImage}
-                              onFileUpload={onFileUpload}
-                              cancelCrop={cancelCrop}
-                              cropType={CropTypes.Square}
-                            />
-                          ) : null} */}
+                          <MultiImageCropper
+                            images={images}
+                            setImages={setImages}
+                          />
                         </div>
                       </div>
                     </div>
@@ -148,13 +147,11 @@ const AddArtistPackage = ({ userDetails }: Props) => {
                       <Button
                         className={`black-button w-100 align-self-center`}
                         disabled={
-                          disabled ||
-                          // uploadDataError ||
-                          // !file ||
+                          images.length === 0 ||
                           !values.packageName ||
                           !values.packageDescription ||
                           !values.packagePrice ||
-                          equipment.length == 0
+                          equipment.length === 0
                         }
                         onClick={() => submitForm()}
                       >

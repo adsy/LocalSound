@@ -901,6 +901,31 @@ i.large.icon {
   }
 }
 
+#multi-cropper {
+  .multi-image-placeholder {
+    height: 315px;
+    width: 315px;
+    background: linear-gradient(20deg, $white100, $white300);
+    border: 1px solid $white100;
+    border-radius: 5px;
+  }
+
+  .image-display {
+    border-radius: 5px;
+  }
+
+  .bin-icon {
+    position: absolute;
+    z-index: 9;
+    right: 5px;
+    top: -5px;
+    cursor: pointer;
+    color: $white100 !important;
+    padding-left: 5px;
+    padding-right: 3px;
+  }
+}
+
 /** AUTH MODAL **/
 #modal-popup,
 #edit-artist,

@@ -1,5 +1,4 @@
-﻿using localsound.backend.api.Commands.Account;
-using localsound.backend.api.Commands.Artist;
+﻿using localsound.backend.api.Commands.Artist;
 using localsound.backend.Domain.Model.Dto.Submission;
 using Microsoft.AspNetCore.Mvc;
 

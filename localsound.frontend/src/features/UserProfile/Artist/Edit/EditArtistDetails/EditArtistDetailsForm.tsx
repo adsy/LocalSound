@@ -193,7 +193,7 @@ const EditArtistDetailsForm = ({
                 />
                 <label
                   htmlFor="profilePhotoInput"
-                  className="btn white-button align-self-center w-fit-content align-self-center px-5"
+                  className="btn mt-2 white-button align-self-center w-fit-content align-self-center px-5"
                 >
                   <h4>Update profile photo</h4>
                 </label>

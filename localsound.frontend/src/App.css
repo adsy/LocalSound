@@ -1020,6 +1020,27 @@ i.large.icon {
   font-size: 15px;
 }
 
+#multi-cropper .multi-image-placeholder {
+  height: 315px;
+  width: 315px;
+  background: linear-gradient(20deg, #f1f1f1, #e2e8f0);
+  border: 1px solid #f1f1f1;
+  border-radius: 5px;
+}
+#multi-cropper .image-display {
+  border-radius: 5px;
+}
+#multi-cropper .bin-icon {
+  position: absolute;
+  z-index: 9;
+  right: 5px;
+  top: -5px;
+  cursor: pointer;
+  color: #f1f1f1 !important;
+  padding-left: 5px;
+  padding-right: 3px;
+}
+
 /** AUTH MODAL **/
 #modal-popup,
 #edit-artist,

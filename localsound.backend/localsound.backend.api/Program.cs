@@ -83,6 +83,8 @@ builder.Services.AddTransient<IEmailRepository, EmailRepository>();
 builder.Services.AddTransient<ITrackService,  TrackService>();
 builder.Services.AddTransient<ITrackRepository,  TrackRepository>();
 builder.Services.AddTransient<IServiceBusRepository, ServiceBusRepository>();
+builder.Services.AddTransient<IPackageRepository, PackageRepository>();
+builder.Services.AddTransient<IPackageService,  PackageService>();
 
 builder.Services.AddHttpContextAccessor();
 

@@ -117,18 +117,18 @@ const ImageCropper = ({
         )}
 
         {!submittingPhoto ? (
-          <div className="crop-action-row d-flex flex-row mt-2 justify-content-center">
+          <div className="crop-action-row d-flex flex-row mt-2 justify-content-center mb-2">
             <a
               onClick={async () => await getCropData()}
               target="_blank"
-              className="btn black-button save-crop-btn"
+              className="btn white-button save-crop-btn"
             >
               <h4>Save</h4>
             </a>
             <a
               onClick={() => cancelCrop()}
               target="_blank"
-              className="ml-1 btn black-button save-crop-btn"
+              className="ml-1 btn white-button save-crop-btn"
             >
               <h4>Cancel</h4>
             </a>

@@ -42,6 +42,14 @@ export const userSlice = createSlice({
 
       state.userDetails = user;
     },
+    handleUpdateUserPackages: (state, { payload }) => {
+      var user = {
+        ...state.userDetails!,
+        packages: payload,
+      };
+
+      state.userDetails = user;
+    },
   },
 });
 
@@ -50,6 +58,7 @@ export const {
   handleSetUserDetails,
   handleUpdateUserCoverPhoto,
   handleUpdateUserProfilePhoto,
+  handleUpdateUserPackages,
 } = userSlice.actions;
 
 export default userSlice.reducer;

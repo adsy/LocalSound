@@ -183,7 +183,25 @@ const Tracks = {
 
 const Packages = {
   getPackages: (memberId: string) =>
-    requests.get<ArtistPackageModel[]>(`packages/member/${memberId}`),
+    requests.get<ArtistPackageModel[]>(`package/member/${memberId}`),
+  createPackage: (
+    memberId: string,
+    createPackageDto: ArtistPackageModel,
+    photos: PhotoUploadModel[]
+  ) => {
+    var formData = new FormData();
+    photos.forEach((x) => {
+      formData.append("Photos", x.image);
+    });
+    formData.append("PackageName", createPackageDto.packageName);
+    formData.append("PackageDescription", createPackageDto.packageDescription);
+    formData.append("PackagePrice", createPackageDto.packagePrice);
+    formData.append(
+      "PackageEquipment",
+      JSON.stringify(createPackageDto.equipment)
+    );
+    return requests.post(`package/member/${memberId}`, formData);
+  },
 };
 
 const agent = {

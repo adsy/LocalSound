@@ -228,7 +228,7 @@ const EditTrackForm = ({
 
                               <label
                                 htmlFor="trackUpload"
-                                className="btn white-button fade-in-out w-fit-content align-self-center px-5"
+                                className="btn mt-2 white-button fade-in-out w-fit-content align-self-center px-5"
                               >
                                 <h4>Select photo</h4>
                               </label>
