@@ -215,7 +215,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 return new ServiceResponse<TrackListResponseDto>(HttpStatusCode.InternalServerError)
                 {
-                    ServiceResponseMessage = "An error occured uploading your track, please try again..."
+                    ServiceResponseMessage = "An error occured retrieving artist uploads, please try again..."
                 };
             }
         }

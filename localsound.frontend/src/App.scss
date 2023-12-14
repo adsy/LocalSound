@@ -208,16 +208,15 @@ $end: 10;
   font-weight: 800;
 }
 
-.black-alert {
+.alert.alert-info {
+  padding-top: 10px;
+  padding-bottom: 10px;
   border: 1px solid $black200;
   background-color: $black100 !important;
-  padding: 5px;
-  color: $white200;
   letter-spacing: 1px;
+  color: $white200;
   font-size: 12px;
-  border-radius: 5px;
   font-weight: 800;
-  margin-bottom: 20px;
 }
 
 .alert.alert-success {
@@ -529,6 +528,7 @@ i.large.icon {
 }
 
 .black-button {
+  text-transform: uppercase;
   @include button-style;
   background-color: $black100;
   border: 1px solid $black100;
@@ -893,12 +893,21 @@ i.large.icon {
   }
 }
 
+#artist-packages {
+  .box-icon {
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+  }
+}
+
 /** AUTH MODAL **/
 #modal-popup,
 #edit-artist,
 #artist-profile {
   width: 100%;
   background-color: $white200;
+
   .banner-holder {
     border: 1px solid #e2e8f0;
     border-radius: 15px;
@@ -1309,7 +1318,10 @@ i.large.icon {
       width: 130px;
     }
 
-    #follower-square {
+    .follower-icon {
+      width: 25px;
+      height: 25px;
+      font-size: 15px;
     }
   }
 

@@ -16,6 +16,8 @@ import {
   handleTrackUpdated,
   handleTrackUploaded,
 } from "../../../../app/redux/actions/pageOperationSlice";
+import ErrorBanner from "../../../../common/banner/ErrorBanner";
+import InfoBanner from "../../../../common/banner/InfoBanner";
 
 interface Props {
   userDetails: UserModel;
@@ -39,6 +41,7 @@ const UploadList = ({
   const [page, setPage] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
+  const [loadTracksError, setLoadTracksError] = useState<string | null>();
   const uploadState = useSelector(
     (state: State) => state.pageOperation.uploadTracks
   );
@@ -47,6 +50,7 @@ const UploadList = ({
   window.onscroll = debounce(() => {
     if (listRef?.current) {
       if (
+        loadTracksError === null &&
         currentTab === ArtistProfileTabs.Uploads &&
         !loading &&
         canLoadMore &&
@@ -69,12 +73,12 @@ const UploadList = ({
             userDetails!.memberId,
             page
           );
-          setLoading(false);
           setTracks([...tracks, ...result.trackList]);
           setCanLoadMore(result.canLoadMore);
-        } catch (err) {
-          //TODO: Do something with error
+        } catch (err: any) {
+          setLoadTracksError(err);
         }
+        setLoading(false);
       }
     })();
 
@@ -86,6 +90,7 @@ const UploadList = ({
       ) {
         dispatch(handleResetUploadTrackState());
       }
+      setLoadTracksError(null);
     };
   }, [page, currentTab]);
 
@@ -93,24 +98,52 @@ const UploadList = ({
     <div ref={listRef} id="upload-list">
       {uploadState.trackUploaded ? (
         <>
-          <SuccessBanner className="fade-in mb-0 mx-3">
+          <SuccessBanner className="fade-in mb-2 mx-3">
             Your track has been successfully uploaded.
           </SuccessBanner>
         </>
       ) : null}
       {uploadState.trackUpdated ? (
         <>
-          <SuccessBanner className="fade-in mb-0 mx-3">
+          <SuccessBanner className="fade-in mb-2 mx-3">
             Your track has been successfully updated.
           </SuccessBanner>
         </>
       ) : null}
       {uploadState.trackDeleted ? (
         <>
-          <SuccessBanner className="fade-in mb-0 mx-3">
+          <SuccessBanner className="fade-in mb-2 mx-3">
             Your track has been successfully deleted.
           </SuccessBanner>
         </>
+      ) : null}
+      {loadTracksError ? (
+        <ErrorBanner className="fade-in mb-2 mx-3">
+          {loadTracksError}
+        </ErrorBanner>
+      ) : null}
+      {loadTracksError === null && !loading && tracks.length < 1 ? (
+        <InfoBanner className="fade-in mb-2 mx-3">
+          {viewingOwnProfile ? (
+            <div className="d-flex flex-row align-items-center justify-content-center">
+              <Image src={wavePulse} height={25} width={25} />
+              <div className="ml-2">
+                <p className="mb-0">
+                  <span className="ml-1">There are no tracks available.</span>{" "}
+                  Click on the upload icon within your profile banner to start
+                  uploading a track.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <p>
+              <Image src={wavePulse} height={30} width={30} />
+              <span className="ml-1">
+                This artist has no tracks uploaded yet.
+              </span>
+            </p>
+          )}
+        </InfoBanner>
       ) : null}
       {tracks.map((track, index) => (
         <div key={index} className="fade-in p-2 track-container">
@@ -125,32 +158,6 @@ const UploadList = ({
       {loading ? (
         <div className="h-100 mt-5 d-flex justify-content-center align-self-center">
           <InPageLoadingComponent height={80} width={80} />
-        </div>
-      ) : null}
-      {!loading && tracks.length < 1 ? (
-        <div className="d-flex flex-row justify-content-center mt-4">
-          <div className="d-flex flex-column text-center align-items-center black-alert">
-            {viewingOwnProfile ? (
-              <div className="ml-2">
-                <p className="mb-0">
-                  <Image src={wavePulse} height={25} width={25} />
-                  <span className="ml-1">
-                    There are no tracks available.
-                  </span>{" "}
-                  Click on the upload icon within your profile banner to start
-                  uploading a track.
-                </p>
-                <p></p>
-              </div>
-            ) : (
-              <p>
-                <Image src={wavePulse} height={30} width={30} />
-                <span className="ml-1">
-                  This artist has no tracks uploaded yet.
-                </span>
-              </p>
-            )}
-          </div>
         </div>
       ) : null}
     </div>

@@ -20,6 +20,8 @@ import { ArtistProfileTabs } from "../../../app/model/enums/artistProfileTabType
 import Following from "../Followers/Following";
 import ErrorBanner from "../../../common/banner/ErrorBanner";
 import Login from "../../Authentication/Login/Login";
+import AddArtistPackage from "./ArtistPackages/AddArtistPackage";
+import ArtistPackages from "./ArtistPackages/ArtistPackages";
 
 interface Props {
   loggedInUser: UserModel;
@@ -131,6 +133,17 @@ const ArtistProfile = ({
       })
     );
     setCurrentTab(ArtistProfileTabs.Uploads);
+  };
+
+  const createPackage = () => {
+    dispatch(
+      handleToggleModal({
+        open: true,
+        body: <AddArtistPackage userDetails={artistDetails} />,
+        size: "large",
+      })
+    );
+    setCurrentTab(ArtistProfileTabs.Packages);
   };
 
   const updateArtistFollow = async (follow: boolean) => {
@@ -249,10 +262,19 @@ const ArtistProfile = ({
                             <a
                               onClick={() => uploadTrack()}
                               target="_blank"
-                              className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3"
+                              className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3 mr-1"
                             >
                               <h4>
                                 <Icon name="upload" className="m-0" />
+                              </h4>
+                            </a>
+                            <a
+                              onClick={() => createPackage()}
+                              target="_blank"
+                              className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3"
+                            >
+                              <h4>
+                                <Icon name="box" className="m-0" />
                               </h4>
                             </a>
                           </div>
@@ -393,10 +415,14 @@ const ArtistProfile = ({
                 </Tab>
                 <Tab
                   eventKey={ArtistProfileTabs.Packages}
-                  title="BOOKING"
+                  title="PACKAGES"
                   className=""
                 >
-                  <></>
+                  <ArtistPackages
+                    artistDetails={artistDetails}
+                    currentTab={currentTab}
+                    viewingOwnProfile={viewingOwnProfile}
+                  />
                 </Tab>
               </Tabs>
             </div>

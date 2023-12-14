@@ -29,10 +29,13 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<Artist> Artist { get; set; }
         public DbSet<ArtistEquipment> ArtistEquipment { get; set; }
         public DbSet<ArtistEventType> ArtistEventType { get; set; }
+        public DbSet<ArtistFollower> ArtistFollower { get; set; }
         public DbSet<ArtistGenre> ArtistGenre { get; set; }
+        public DbSet<ArtistPackage> ArtistPackage { get; set; }
+        public DbSet<ArtistPackageEquipment> ArtistPackageEquipment { get; set; }
+        public DbSet<ArtistPackagePhoto> ArtistPackagePhoto { get; set; }
         public DbSet<ArtistTrackGenre> ArtistTrackGenre { get; set; }
         public DbSet<ArtistTrackUpload> ArtistTrackUpload { get; set; }
-        public DbSet<ArtistFollower> ArtistFollower { get; set; }
         public DbSet<EventType> EventType { get; set; }
         public DbSet<FileContent> FileContent { get; set; }
         public DbSet<Genre> Genres { get; set; }
@@ -100,6 +103,8 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<Artist>().HasMany(x => x.Genres);
             builder.Entity<Artist>().HasIndex(x => x.ProfileUrl).IsUnique();
 
+            builder.Entity<Artist>().HasMany(x => x.Packages).WithOne(x => x.Artist).OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<ArtistTrackGenre>().HasKey(x => new { x.ArtistTrackUploadId, x.GenreId });
             builder.Entity<ArtistTrackGenre>().HasOne(x => x.Genre);
             builder.Entity<ArtistTrackGenre>().HasOne(x => x.ArtistTrackUpload);
@@ -115,12 +120,25 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<ArtistEventType>().HasKey(x => new { x.AppUserId, x.EventTypeId });
             builder.Entity<ArtistEventType>().HasOne(x => x.EventType);
             builder.Entity<ArtistEventType>().HasOne(x => x.Artist);
+
             builder.Entity<ArtistGenre>().HasKey(x => new { x.AppUserId, x.GenreId });
             builder.Entity<ArtistGenre>().HasOne(x => x.Genre);
             builder.Entity<ArtistGenre>().HasOne(x => x.Artist);
+
             builder.Entity<ArtistEquipment>().HasKey(x => new { x.AppUserId, x.EquipmentId }).IsClustered(false);
             builder.Entity<ArtistEquipment>().HasOne(x => x.Artist);
             builder.Entity<ArtistEquipment>().HasIndex(x => x.AppUserId).IsClustered();
+
+            builder.Entity<ArtistPackage>().HasKey(x => x.ArtistPackageId).IsClustered(false);
+            builder.Entity<ArtistPackage>().HasIndex(x => x.AppUserId).IsClustered(true);
+            builder.Entity<ArtistPackage>().HasMany(x => x.Equipment).WithOne(x => x.ArtistPackage).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<ArtistPackage>().HasMany(x => x.PackagePhotos).WithOne(x => x.ArtistPackage).OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<ArtistPackageEquipment>().HasKey(x => x.ArtistPackageEquipmentId).IsClustered(false);
+            builder.Entity<ArtistPackageEquipment>().HasIndex(x => x.ArtistPackageId).IsClustered(true);
+
+            builder.Entity<ArtistPackagePhoto>().HasKey(x => x.ArtistPackagePhotoId).IsClustered(false);
+            builder.Entity<ArtistPackagePhoto>().HasIndex(x => x.ArtistPackageId).IsClustered(true);
 
             builder.Entity<NonArtist>().HasKey(x => x.AppUserId);
             builder.Entity<NonArtist>().HasIndex(x => x.ProfileUrl).IsUnique();

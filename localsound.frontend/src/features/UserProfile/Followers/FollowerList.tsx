@@ -1,4 +1,6 @@
+import { Icon } from "semantic-ui-react";
 import { UserSummaryModel } from "../../../app/model/dto/user-summary.model";
+import InfoBanner from "../../../common/banner/InfoBanner";
 import FollowerSquare from "../../../common/components/Follower/FollowerSquare";
 
 interface Props {
@@ -19,8 +21,13 @@ const FollowingList = ({ followers, listRef, isFollowers }: Props) => {
           ))}
         </div>
       ) : (
-        <div className="d-flex flex-row justify-content-center">
-          <div className="d-flex flex-column text-center align-items-center black-alert">
+        <InfoBanner className="fade-in mb-2 mx-3">
+          <div className="d-flex flex-row justify-content-center align-items-center">
+            <Icon
+              name="user"
+              size="small"
+              className="follower-icon d-flex align-items-center justify-content-center"
+            />
             <div className="ml-2">
               <p className="mb-0">
                 {isFollowers
@@ -29,7 +36,7 @@ const FollowingList = ({ followers, listRef, isFollowers }: Props) => {
               </p>
             </div>
           </div>
-        </div>
+        </InfoBanner>
       )}
     </div>
   );

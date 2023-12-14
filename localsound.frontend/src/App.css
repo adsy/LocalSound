@@ -336,16 +336,15 @@ h6 .purple-highlight:before {
   font-weight: 800;
 }
 
-.black-alert {
+.alert.alert-info {
+  padding-top: 10px;
+  padding-bottom: 10px;
   border: 1px solid #001514;
   background-color: #232323 !important;
-  padding: 5px;
-  color: #fcfcfd;
   letter-spacing: 1px;
+  color: #fcfcfd;
   font-size: 12px;
-  border-radius: 5px;
   font-weight: 800;
-  margin-bottom: 20px;
 }
 
 .alert.alert-success {
@@ -663,6 +662,7 @@ i.large.icon {
 }
 
 .black-button {
+  text-transform: uppercase;
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
@@ -1012,6 +1012,12 @@ i.large.icon {
 #waveform-container canvas {
   width: 100%;
   height: 80px;
+}
+
+#artist-packages .box-icon {
+  width: 25px;
+  height: 25px;
+  font-size: 15px;
 }
 
 /** AUTH MODAL **/
@@ -1502,6 +1508,11 @@ i.large.icon {
 }
 #user-profile #follower-list .followers {
   width: 130px;
+}
+#user-profile #follower-list .follower-icon {
+  width: 25px;
+  height: 25px;
+  font-size: 15px;
 }
 @media only screen and (max-width: 991px) {
   #user-profile .genre-desktop {

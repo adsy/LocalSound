@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using localsound.backend.Persistence.DbContext;
 
@@ -11,9 +12,11 @@ using localsound.backend.Persistence.DbContext;
 namespace localsound.backend.Persistence.Migrations
 {
     [DbContext(typeof(LocalSoundDbContext))]
-    partial class LocalSoundDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231214044634_addedArtistPackages")]
+    partial class addedArtistPackages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

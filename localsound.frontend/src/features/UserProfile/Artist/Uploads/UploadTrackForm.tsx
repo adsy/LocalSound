@@ -43,7 +43,7 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
   const [uploadData, setUploadData] = useState<TrackUploadSASModel | null>(
     null
   );
-  const [uploadTrackError, setUploadTrackError] = useState(false);
+  const [uploadTrackError, setUploadTrackError] = useState<string | null>();
   const [uploadDataError, setUploadDataError] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<GenreModel[]>([]);
   const [trackProgress, setTrackProgress] = useState(0);
@@ -212,8 +212,9 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                       dispatch(handleResetModal());
                     }
                   } catch (err) {
-                    //TODO: Fix error
-                    setUploadTrackError(true);
+                    setUploadTrackError(
+                      "An error occured uploading your track, please try again.."
+                    );
                   }
                 }}
               >
@@ -326,12 +327,6 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                           </div>
                         </div>
                       </div>
-                      {status?.error ? (
-                        <ErrorBanner className="fade-in mb-0 mx-3">
-                          {status.error}
-                        </ErrorBanner>
-                      ) : null}
-
                       <div className="px-3 mt-3">
                         {!isSubmitting ? (
                           <Button

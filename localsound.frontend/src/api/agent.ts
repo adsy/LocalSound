@@ -18,9 +18,8 @@ import { EventTypeModel } from "../app/model/dto/eventType.model";
 import { TrackUploadSASModel } from "../app/model/dto/track-upload-sas.model";
 import { ArtistTrackUploadModel } from "../app/model/dto/artist-track-upload.model";
 import { TrackListResponse } from "../app/model/dto/track-list-response.model";
-import { UserSummaryModel } from "../app/model/dto/user-summary.model";
 import { FollowerListResponse } from "../app/model/dto/follower-list-response.model";
-import { Error } from "../app/model/dto/error.model";
+import { ArtistPackageModel } from "../app/model/dto/artist-package.model";
 
 const axiosApiInstance = axios.create();
 
@@ -182,6 +181,11 @@ const Tracks = {
     requests.delete(`track/member/${memberId}/track/${trackId}`),
 };
 
+const Packages = {
+  getPackages: (memberId: string) =>
+    requests.get<ArtistPackageModel[]>(`packages/member/${memberId}`),
+};
+
 const agent = {
   Authentication,
   Profile,
@@ -189,6 +193,7 @@ const agent = {
   Genre,
   EventType,
   Tracks,
+  Packages,
 };
 
 export default agent;
