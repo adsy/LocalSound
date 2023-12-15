@@ -134,7 +134,8 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<ArtistPackage>().HasMany(x => x.Equipment).WithOne(x => x.ArtistPackage).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ArtistPackage>().HasMany(x => x.PackagePhotos).WithOne(x => x.ArtistPackage).OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<ArtistPackageEquipment>().HasKey(x => x.ArtistPackageEquipmentId).IsClustered(false);
+            builder.Entity<ArtistPackageEquipment>().HasKey(x => new { x.ArtistPackageId, x.ArtistPackageEquipmentId }).IsClustered(false);
+            builder.Entity<ArtistPackageEquipment>().HasOne(x => x.ArtistPackage);
             builder.Entity<ArtistPackageEquipment>().HasIndex(x => x.ArtistPackageId).IsClustered(true);
 
             builder.Entity<ArtistPackagePhoto>().HasKey(x => x.ArtistPackagePhotoId).IsClustered(false);

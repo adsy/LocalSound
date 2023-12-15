@@ -60,7 +60,8 @@ namespace localsound.backend.Infrastructure.Services
                     PackageName = packageDto.PackageName,
                     PackageDescription = packageDto.PackageDescription,
                     PackagePrice = packageDto.PackagePrice,
-                    Equipment = artistPackageEquipment
+                    Equipment = artistPackageEquipment,
+                    PackagePhotos = new List<ArtistPackagePhoto>()
                 };
 
                 var photoIds = JsonConvert.DeserializeObject<List<Guid>>(packageDto.PhotoIds);
@@ -239,6 +240,21 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
+                var equipmentList = JsonConvert.DeserializeObject<List<EquipmentDto>>(packageDto.PackageEquipment);
+                var artistPackageEquipment = new List<ArtistPackageEquipment>();
+
+                if (equipmentList != null && equipmentList.Any())
+                {
+                    artistPackageEquipment = equipmentList.Select(x => new ArtistPackageEquipment
+                    {
+                        ArtistPackageId = packageId,
+                        ArtistPackageEquipmentId = x.EquipmentId,
+                        EquipmentName = x.EquipmentName,
+                    }).ToList();
+                }
+
+                var equipmentUpdate = await _packageRepository.UpdateArtistPackageEquipmentAsync(appUserId, packageId, artistPackageEquipment);
+
                 var package = await _packageRepository.GetArtistPackageAsync(appUserId, packageId);
 
                 if (!package.IsSuccessStatusCode || package.ReturnData == null)
@@ -314,21 +330,6 @@ namespace localsound.backend.Infrastructure.Services
                         newPhotos.Add(packagePhoto);
                     }
                 }
-
-                var equipmentList = JsonConvert.DeserializeObject<List<EquipmentDto>>(packageDto.PackageEquipment);
-                var artistPackageEquipment = new List<ArtistPackageEquipment>();
-
-                if (equipmentList != null && equipmentList.Any())
-                {
-                    artistPackageEquipment = equipmentList.Select(x => new ArtistPackageEquipment
-                    {
-                        ArtistPackageId = package.ReturnData.ArtistPackageId,
-                        ArtistPackageEquipmentId = x.EquipmentId,
-                        EquipmentName = x.EquipmentName,
-                    }).ToList();
-                }
-
-                var equipmentUpdate = await _packageRepository.UpdateArtistPackageEquipmentAsync(package.ReturnData.ArtistPackageId, artistPackageEquipment);
 
                 var updateResult = await _packageRepository.UpdateArtistPackageAsync(package.ReturnData.ArtistPackageId, packageDto.PackageName, packageDto.PackageDescription, packageDto.PackagePrice, newPhotos, deletedPhotos);
 

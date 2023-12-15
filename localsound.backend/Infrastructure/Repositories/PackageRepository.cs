@@ -159,13 +159,13 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> UpdateArtistPackageEquipmentAsync(Guid PackageId, List<ArtistPackageEquipment> equipment)
+        public async Task<ServiceResponse> UpdateArtistPackageEquipmentAsync(Guid AppUserId, Guid PackageId, List<ArtistPackageEquipment> equipment)
         {
             try
             {
                 var package = await _dbContext.ArtistPackage
                     .Include(x => x.Equipment)
-                    .FirstOrDefaultAsync(x => x.ArtistPackageId == PackageId);
+                    .FirstOrDefaultAsync(x => x.ArtistPackageId == PackageId && x.AppUserId == AppUserId);
 
                 if (package == null)
                 {
