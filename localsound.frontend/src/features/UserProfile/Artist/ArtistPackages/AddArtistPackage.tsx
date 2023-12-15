@@ -12,6 +12,7 @@ import MultiImageCropper from "../../../../common/components/MultiImageCropper/M
 import agent from "../../../../api/agent";
 import { ArtistPackageModel } from "../../../../app/model/dto/artist-package.model";
 import { handleUpdateUserPackages } from "../../../../app/redux/actions/userSlice";
+import { handleResetModal } from "../../../../app/redux/actions/modalSlice";
 
 interface Props {
   userDetails: UserModel;
@@ -43,9 +44,9 @@ const AddArtistPackage = ({ userDetails }: Props) => {
                 await agent.Packages.createPackage(
                   userDetails.memberId!,
                   {
-                    packageName: values.packageName,
-                    packageDescription: values.packageDescription,
-                    packagePrice: `${values.packagePrice}`,
+                    artistPackageName: values.packageName,
+                    artistPackageDescription: values.packageDescription,
+                    artistPackagePrice: `${values.packagePrice}`,
                     equipment,
                   },
                   images
@@ -56,6 +57,7 @@ const AddArtistPackage = ({ userDetails }: Props) => {
                 );
 
                 dispatch(handleUpdateUserPackages(packages));
+                dispatch(handleResetModal());
               } catch (err: any) {
                 setSubmittingError(err);
               }

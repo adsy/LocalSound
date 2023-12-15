@@ -9,6 +9,7 @@ namespace localsound.backend.Domain.Model.Entity
         public Guid ArtistPackageId { get; set; }
         [ForeignKey("FileContent")]
         public Guid FileContentId { get; set; }
+        public string PhotoUrl { get; set; }
 
         public virtual ArtistPackage ArtistPackage { get; set; }
         public virtual FileContent FileContent { get; set; }

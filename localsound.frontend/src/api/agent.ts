@@ -183,7 +183,7 @@ const Tracks = {
 
 const Packages = {
   getPackages: (memberId: string) =>
-    requests.get<ArtistPackageModel[]>(`package/member/${memberId}`),
+    requests.get<ArtistPackageModel[]>(`packages/member/${memberId}`),
   createPackage: (
     memberId: string,
     createPackageDto: ArtistPackageModel,
@@ -193,15 +193,20 @@ const Packages = {
     photos.forEach((x) => {
       formData.append("Photos", x.image);
     });
-    formData.append("PackageName", createPackageDto.packageName);
-    formData.append("PackageDescription", createPackageDto.packageDescription);
-    formData.append("PackagePrice", createPackageDto.packagePrice);
+    formData.append("PackageName", createPackageDto.artistPackageName);
+    formData.append(
+      "PackageDescription",
+      createPackageDto.artistPackageDescription
+    );
+    formData.append("PackagePrice", createPackageDto.artistPackagePrice);
     formData.append(
       "PackageEquipment",
       JSON.stringify(createPackageDto.equipment)
     );
-    return requests.post(`package/member/${memberId}`, formData);
+    return requests.post(`packages/member/${memberId}`, formData);
   },
+  deletePackage: (memberId: string, packageId: string) =>
+    requests.delete(`packages/member/${memberId}/package/${packageId}`),
 };
 
 const agent = {

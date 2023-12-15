@@ -156,7 +156,7 @@ const UploadList = ({
         </div>
       ))}
       {loading ? (
-        <div className="h-100 mt-5 d-flex justify-content-center align-self-center">
+        <div className="h-100 d-flex justify-content-center align-self-center">
           <InPageLoadingComponent height={80} width={80} />
         </div>
       ) : null}
