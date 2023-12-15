@@ -9,7 +9,8 @@ namespace localsound.backend.api.Handlers.Package
 {
     public class PackageHandler : IRequestHandler<CreateArtistPackageCommand, ServiceResponse>,
         IRequestHandler<GetArtistPackagesQuery, ServiceResponse<List<ArtistPackageDto>>>,
-        IRequestHandler<DeleteArtistPackageCommand, ServiceResponse>
+        IRequestHandler<DeleteArtistPackageCommand, ServiceResponse>,
+        IRequestHandler<UpdateArtistPackageCommand, ServiceResponse>
     {
         private readonly IPackageService _packageService;
 
@@ -31,6 +32,11 @@ namespace localsound.backend.api.Handlers.Package
         public async Task<ServiceResponse> Handle(DeleteArtistPackageCommand request, CancellationToken cancellationToken)
         {
             return await _packageService.DeleteArtistPackage(request.AppUserId, request.MemberId, request.PackageId);
+        }
+
+        public async Task<ServiceResponse> Handle(UpdateArtistPackageCommand request, CancellationToken cancellationToken)
+        {
+            return await _packageService.UpdateArtistPackage(request.AppUserId, request.MemberId, request.PackageId, request.PackageDto);
         }
     }
 }

@@ -13,15 +13,18 @@ interface Props {
   currentTab: ArtistProfileTabs;
   artistDetails: UserModel;
   viewingOwnProfile: boolean;
+  packages: ArtistPackageModel[];
+  setPackages: (packages: ArtistPackageModel[]) => void;
 }
 
 const ArtistPackages = ({
   currentTab,
   artistDetails,
   viewingOwnProfile,
+  packages,
+  setPackages,
 }: Props) => {
   const [loading, setLoading] = useState(true);
-  const [packages, setPackages] = useState<ArtistPackageModel[]>([]);
   const [loadPackagesError, setLoadPackagesError] = useState<string | null>();
 
   useLayoutEffect(() => {

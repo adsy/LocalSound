@@ -5,6 +5,7 @@ import { UserModel } from "../../../../app/model/dto/user.model";
 import { handleToggleModal } from "../../../../app/redux/actions/modalSlice";
 import DeletePackageConfirmation from "./DeletePackageConfirmation";
 import { Button } from "react-bootstrap";
+import EditArtistPackage from "./EditArtistPackage";
 
 interface Props {
   artistPackage: ArtistPackageModel;
@@ -38,6 +39,22 @@ const ArtistPackageDisplay = ({
     );
   };
 
+  const openEditModal = () => {
+    dispatch(
+      handleToggleModal({
+        open: true,
+        body: (
+          <EditArtistPackage
+            artistDetails={artistDetails}
+            artistPackage={artistPackage}
+            setPackages={setPackages}
+          />
+        ),
+        size: "large",
+      })
+    );
+  };
+
   return (
     <div id="artist-package-display" className="col-12 col-lg-4 px-2">
       <div className="component-container mt-0 ">
@@ -62,6 +79,9 @@ const ArtistPackageDisplay = ({
       </div>
       <Button className="white-button" onClick={() => openDeleteModal()}>
         Delete
+      </Button>
+      <Button className="white-button" onClick={() => openEditModal()}>
+        Update
       </Button>
     </div>
   );

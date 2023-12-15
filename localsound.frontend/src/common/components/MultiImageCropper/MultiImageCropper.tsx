@@ -28,8 +28,8 @@ const MultiImageCropper = ({ maxImages = 3, images, setImages }: Props) => {
 
       var fileUpload = {
         image: file,
-        uploadId: uuidv4(),
-      };
+        photoId: uuidv4(),
+      } as PhotoUploadModel;
 
       setImages([...images, fileUpload]);
       setCroppingPhoto(false);
@@ -42,7 +42,7 @@ const MultiImageCropper = ({ maxImages = 3, images, setImages }: Props) => {
   };
 
   const deletePhoto = (image: PhotoUploadModel) => {
-    setImages(images.filter((x) => x.uploadId !== image.uploadId));
+    setImages(images.filter((x) => x.photoId !== image.photoId));
   };
 
   return (

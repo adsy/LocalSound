@@ -7,7 +7,7 @@ export interface ArtistPackageModel {
   artistPackagePrice: string;
 
   equipment: EquipmentModel[];
-  photos?: ArtistPackagePhotoModel[];
+  photos: ArtistPackagePhotoModel[];
 }
 
 export interface ArtistPackagePhotoModel {

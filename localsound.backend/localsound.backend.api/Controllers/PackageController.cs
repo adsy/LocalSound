@@ -28,7 +28,7 @@ namespace localsound.backend.api.Controllers
 
         [HttpPost]
         [Route("member/{memberId}")]
-        public async Task<ActionResult> CreateArtistPackage([FromForm] CreatePackageDto createPackageDto, string memberId)
+        public async Task<ActionResult> CreateArtistPackage([FromForm] ArtistPackageSubmissionDto createPackageDto, string memberId)
         {
             var result = await Mediator.Send(new CreateArtistPackageCommand
             {
@@ -64,9 +64,24 @@ namespace localsound.backend.api.Controllers
             return Ok();
         }
 
-        //[HttpPut]
-        //[Route("member/{memberId/package/{packageId}")]
-        //public async Task<ActionResult UpdateArtistPackage(){
-        //}
-    }
+        [HttpPut]
+        [Route("member/{memberId}/package/{packageId}")]
+        public async Task<ActionResult> UpdateArtistPackage([FromForm] ArtistPackageSubmissionDto createPackageDto, string memberId, Guid packageId)
+        {
+            var result = await Mediator.Send(new UpdateArtistPackageCommand
+            {
+                AppUserId = CurrentUser.AppUserId,
+                MemberId = memberId,
+                PackageDto = createPackageDto,
+                PackageId = packageId
+            });
+
+            if (!result.IsSuccessStatusCode)
+            {
+                return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
+            }
+
+            return Ok();
+        }
+}
 }

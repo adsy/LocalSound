@@ -1,54 +1,96 @@
-import { useDispatch } from "react-redux";
+import { useLayoutEffect, useState } from "react";
+import { ArtistPackageModel } from "../../../../app/model/dto/artist-package.model";
 import { UserModel } from "../../../../app/model/dto/user.model";
-import { Formik } from "formik";
-import { Button, Form } from "react-bootstrap";
+import { EquipmentModel } from "../../../../app/model/dto/equipment.model";
+import { useDispatch } from "react-redux";
+import { Form, Formik } from "formik";
+import { handleResetModal } from "../../../../app/redux/actions/modalSlice";
+import agent from "../../../../api/agent";
 import MyTextInput from "../../../../common/form/MyTextInput";
 import EquipmentEntry from "../Edit/EditArtistProfile/EquipmentEntry";
-import { useState } from "react";
 import MyTextArea from "../../../../common/form/MyTextArea";
-import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
-import { EquipmentModel } from "../../../../app/model/dto/equipment.model";
 import MultiImageCropper from "../../../../common/components/MultiImageCropper/MultiImageCropper";
-import agent from "../../../../api/agent";
-import { handleResetModal } from "../../../../app/redux/actions/modalSlice";
-import ErrorBanner from "../../../../common/banner/ErrorBanner";
-import { ArtistPackageModel } from "../../../../app/model/dto/artist-package.model";
+import { Button } from "react-bootstrap";
+import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
 
 interface Props {
-  userDetails: UserModel;
+  artistPackage: ArtistPackageModel;
+  artistDetails: UserModel;
   setPackages: (packages: ArtistPackageModel[]) => void;
 }
 
-const AddArtistPackage = ({ userDetails, setPackages }: Props) => {
+const EditArtistPackage = ({
+  artistPackage,
+  artistDetails,
+  setPackages,
+}: Props) => {
   const [submitting, setSubmitting] = useState(false);
   const [submittingError, setSubmittingError] = useState<string | null>();
   const [equipment, setEquipment] = useState<EquipmentModel[]>([]);
   const [images, setImages] = useState<PhotoUploadModel[]>([]);
   const dispatch = useDispatch();
 
+  useLayoutEffect(() => {
+    (async () => {
+      var photos = await Promise.all(
+        artistPackage.photos.map(async (photo) => {
+          var photoBlob = await fetch(photo.artistPackagePhotoUrl).then(
+            (response) => response.blob()
+          );
+          return {
+            photoId: photo.artistPackagePhotoId,
+            image: photoBlob,
+          } as PhotoUploadModel;
+        })
+      );
+
+      setImages(photos ?? []);
+      setEquipment(artistPackage.equipment);
+    })();
+  }, []);
+
   return (
     <div id="modal-popup">
       <div className="d-flex flex-row mb-4">
-        <h2 className="header-title">Create package</h2>
+        <h2 className="header-title">Update package</h2>
       </div>
       <div className="fade-in pb-4 mt-4">
         <div className="w-100 fade-in">
           <Formik
             initialValues={{
-              packageName: "",
-              packageDescription: "",
-              packagePrice: "",
+              packageName: artistPackage.artistPackageName,
+              packageDescription: artistPackage.artistPackageDescription,
+              packagePrice: artistPackage.artistPackagePrice,
             }}
             onSubmit={async (values, { setStatus }) => {
-              setSubmitting(true);
               try {
                 var formData = new FormData();
 
-                var photoIds = images.map((photo) => {
-                  formData.append("Photos", photo.image);
-                  return photo.photoId;
+                // get deleted photo ids
+                var deletedIds = [] as string[];
+                artistPackage.photos.forEach((photo) => {
+                  var existingPhoto = images.find(
+                    (x) => x.photoId == photo.artistPackagePhotoId
+                  );
+                  if (!existingPhoto) {
+                    deletedIds.push(photo.artistPackagePhotoId);
+                  }
                 });
-                formData.append("PhotoIds", JSON.stringify(photoIds));
+
+                formData.append("DeletedPhotoIds", JSON.stringify(deletedIds));
+
+                var newIds = [] as string[];
+                images.forEach((photo) => {
+                  var existingPhoto = artistPackage.photos.find(
+                    (x) => x.artistPackagePhotoId == photo.photoId
+                  );
+                  if (!existingPhoto) {
+                    formData.append("Photos", photo.image);
+                    newIds.push(photo.photoId);
+                  }
+                });
+
+                formData.append("PhotoIds", JSON.stringify(newIds));
                 formData.append("PackageName", values.packageName);
                 formData.append(
                   "PackageDescription",
@@ -57,13 +99,14 @@ const AddArtistPackage = ({ userDetails, setPackages }: Props) => {
                 formData.append("PackagePrice", values.packagePrice);
                 formData.append("PackageEquipment", JSON.stringify(equipment));
 
-                await agent.Packages.createPackage(
-                  userDetails.memberId!,
+                await agent.Packages.updatePackage(
+                  artistDetails.memberId!,
+                  artistPackage.artistPackageId!,
                   formData
                 );
 
                 var packages = await agent.Packages.getPackages(
-                  userDetails.memberId!
+                  artistDetails.memberId!
                 );
 
                 setPackages(packages);
@@ -155,13 +198,8 @@ const AddArtistPackage = ({ userDetails, setPackages }: Props) => {
                       </div>
                     </div>
                   </div>
-                  {submittingError ? (
-                    <div className="px-3 mt-3">
-                      <ErrorBanner children={submittingError} />
-                    </div>
-                  ) : null}
                   <div className="px-3 mt-3">
-                    {!submitting ? (
+                    {!isSubmitting ? (
                       <Button
                         className={`black-button w-100 align-self-center`}
                         disabled={
@@ -173,7 +211,7 @@ const AddArtistPackage = ({ userDetails, setPackages }: Props) => {
                         }
                         onClick={() => submitForm()}
                       >
-                        <h4>Add package</h4>
+                        <h4>Update package</h4>
                       </Button>
                     ) : (
                       <InPageLoadingComponent />
@@ -189,4 +227,4 @@ const AddArtistPackage = ({ userDetails, setPackages }: Props) => {
   );
 };
 
-export default AddArtistPackage;
+export default EditArtistPackage;

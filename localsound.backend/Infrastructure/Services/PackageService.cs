@@ -25,7 +25,7 @@ namespace localsound.backend.Infrastructure.Services
             _blobRepository = blobRepository;
         }
 
-        public async Task<ServiceResponse> CreateArtistPackage(Guid appUserId, string memberId, CreatePackageDto packageDto)
+        public async Task<ServiceResponse> CreateArtistPackage(Guid appUserId, string memberId, ArtistPackageSubmissionDto packageDto)
         {
             try
             {
@@ -63,36 +63,44 @@ namespace localsound.backend.Infrastructure.Services
                     Equipment = artistPackageEquipment
                 };
 
-                // upload photos if they exist
-                if (packageDto.Photos != null && packageDto.Photos.Any())
+                var photoIds = JsonConvert.DeserializeObject<List<Guid>>(packageDto.PhotoIds);
+                var photos = new List<PhotoUploadDto>();
+
+                for(int i = 0; i < packageDto.Photos?.Count; i++)
                 {
-                    foreach(var photo in packageDto.Photos)
+                    photos.Add(new PhotoUploadDto
                     {
-                        var photoId = Guid.NewGuid();
-                        var packagePhoto = new ArtistPackagePhoto();
-                        var ext = ".png";
-                        var fileLocation = $"[{appUserId}]/packages/{packageId}/photos/{photoId}{ext}";
-                        var photoUploadResult = await _blobRepository.UploadBlobAsync(fileLocation, photo);
-
-                        if (!photoUploadResult.IsSuccessStatusCode || photoUploadResult.ReturnData == null)
-                        {
-                            return new ServiceResponse(HttpStatusCode.InternalServerError)
-                            {
-                                ServiceResponseMessage = "An error occured creating your package, please try again..."
-                            };
-                        }
-
-                        packagePhoto.PhotoUrl = photoUploadResult.ReturnData;
-                        packagePhoto.FileContent = new FileContent
-                        {
-                            FileLocation = fileLocation,
-                            FileContentId = photoId,
-                            FileExtensionType = ext
-                        };
-
-                        artistPackage.PackagePhotos.Add(packagePhoto);
-                    }
+                        PhotoId = photoIds[i],
+                        Image = packageDto.Photos[i]
+                    });
                 }
+
+                foreach (var photo in photos)
+                {
+                    var packagePhoto = new ArtistPackagePhoto();
+                    var ext = ".png";
+                    var fileLocation = $"[{appUserId}]/packages/{packageId}/photos/{photo.PhotoId}{ext}";
+                    var photoUploadResult = await _blobRepository.UploadBlobAsync(fileLocation, photo.Image);
+
+                    if (!photoUploadResult.IsSuccessStatusCode || photoUploadResult.ReturnData == null)
+                    {
+                        return new ServiceResponse(HttpStatusCode.InternalServerError)
+                        {
+                            ServiceResponseMessage = "An error occured creating your package, please try again..."
+                        };
+                    }
+
+                    packagePhoto.PhotoUrl = photoUploadResult.ReturnData;
+                    packagePhoto.FileContent = new FileContent
+                    {
+                        FileLocation = fileLocation,
+                        FileContentId = photo.PhotoId,
+                        FileExtensionType = ext
+                    };
+
+                    artistPackage.PackagePhotos.Add(packagePhoto);
+                }
+
 
                 var result = await _packageRepository.CreateArtistPackageAsync(artistPackage);
 
@@ -213,6 +221,135 @@ namespace localsound.backend.Infrastructure.Services
                 return new ServiceResponse<List<ArtistPackageDto>>(HttpStatusCode.InternalServerError)
                 {
                     ServiceResponseMessage = "An error occured getting artist packages, please try again..."
+                };
+            }
+        }
+
+        public async Task<ServiceResponse> UpdateArtistPackage(Guid appUserId, string memberId, Guid packageId, ArtistPackageSubmissionDto packageDto)
+        {
+            try
+            {
+                var appUser = await _accountRepository.GetAppUserFromDbAsync(appUserId, memberId);
+
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured deleting your package, please try again..."
+                    };
+                }
+
+                var package = await _packageRepository.GetArtistPackageAsync(appUserId, packageId);
+
+                if (!package.IsSuccessStatusCode || package.ReturnData == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured deleting your package, please try again..."
+                    };
+                }
+
+                var deletedPhotos = new List<ArtistPackagePhoto>();
+                // deleted images
+                if (!string.IsNullOrWhiteSpace(packageDto.DeletedPhotoIds))
+                {
+                    var deletedIds = JsonConvert.DeserializeObject<List<Guid>>(packageDto.DeletedPhotoIds);
+                    if (deletedIds != null && deletedIds.Any())
+                    {
+                        foreach (var id in deletedIds)
+                        {
+                            var packagePhoto = package.ReturnData.PackagePhotos.FirstOrDefault(x => x.ArtistPackagePhotoId == id);
+
+                            var azureDeleteResult = await _blobRepository.DeleteBlobAsync(packagePhoto.FileContent.FileLocation);
+
+                            if (!azureDeleteResult.IsSuccessStatusCode)
+                            {
+                                //TODO: Push this to a queue so it can be done later
+                            }
+
+                            deletedPhotos.Add(packagePhoto);
+                        }
+                    }
+                }
+
+                // new images
+                var newPhotos = new List<ArtistPackagePhoto>();
+                if (!string.IsNullOrWhiteSpace(packageDto.PhotoIds))
+                {
+                    var photoIds = JsonConvert.DeserializeObject<List<Guid>>(packageDto.PhotoIds);
+                    var photos = new List<PhotoUploadDto>();
+
+                    for (int i = 0; i < packageDto.Photos?.Count; i++)
+                    {
+                        photos.Add(new PhotoUploadDto
+                        {
+                            PhotoId = photoIds[i],
+                            Image = packageDto.Photos[i]
+                        });
+                    }
+
+                    foreach (var photo in photos)
+                    {
+                        var packagePhoto = new ArtistPackagePhoto();
+                        var ext = ".png";
+                        var fileLocation = $"[{appUserId}]/packages/{packageId}/photos/{photo.PhotoId}{ext}";
+                        var photoUploadResult = await _blobRepository.UploadBlobAsync(fileLocation, photo.Image);
+
+                        if (!photoUploadResult.IsSuccessStatusCode || photoUploadResult.ReturnData == null)
+                        {
+                            return new ServiceResponse(HttpStatusCode.InternalServerError)
+                            {
+                                ServiceResponseMessage = "An error occured creating your package, please try again..."
+                            };
+                        }
+
+                        packagePhoto.PhotoUrl = photoUploadResult.ReturnData;
+                        packagePhoto.FileContentId = photo.PhotoId;
+                        packagePhoto.FileContent = new FileContent
+                        {
+                            FileLocation = fileLocation,
+                            FileContentId = photo.PhotoId,
+                            FileExtensionType = ext
+                        };
+                        newPhotos.Add(packagePhoto);
+                    }
+                }
+
+                var equipmentList = JsonConvert.DeserializeObject<List<EquipmentDto>>(packageDto.PackageEquipment);
+                var artistPackageEquipment = new List<ArtistPackageEquipment>();
+
+                if (equipmentList != null && equipmentList.Any())
+                {
+                    artistPackageEquipment = equipmentList.Select(x => new ArtistPackageEquipment
+                    {
+                        ArtistPackageId = package.ReturnData.ArtistPackageId,
+                        ArtistPackageEquipmentId = x.EquipmentId,
+                        EquipmentName = x.EquipmentName,
+                    }).ToList();
+                }
+
+                var equipmentUpdate = await _packageRepository.UpdateArtistPackageEquipmentAsync(package.ReturnData.ArtistPackageId, artistPackageEquipment);
+
+                var updateResult = await _packageRepository.UpdateArtistPackageAsync(package.ReturnData.ArtistPackageId, packageDto.PackageName, packageDto.PackageDescription, packageDto.PackagePrice, newPhotos, deletedPhotos);
+
+                if (!updateResult.IsSuccessStatusCode)
+                {
+                    return new ServiceResponse<List<ArtistPackageDto>>(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured updating your package, please try again..."
+                    };
+                }
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch(Exception e)
+            {
+                var message = $"{nameof(PackageService)} - {nameof(UpdateArtistPackage)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<List<ArtistPackageDto>>(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured updating your package, please try again..."
                 };
             }
         }

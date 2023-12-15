@@ -184,27 +184,10 @@ const Tracks = {
 const Packages = {
   getPackages: (memberId: string) =>
     requests.get<ArtistPackageModel[]>(`packages/member/${memberId}`),
-  createPackage: (
-    memberId: string,
-    createPackageDto: ArtistPackageModel,
-    photos: PhotoUploadModel[]
-  ) => {
-    var formData = new FormData();
-    photos.forEach((x) => {
-      formData.append("Photos", x.image);
-    });
-    formData.append("PackageName", createPackageDto.artistPackageName);
-    formData.append(
-      "PackageDescription",
-      createPackageDto.artistPackageDescription
-    );
-    formData.append("PackagePrice", createPackageDto.artistPackagePrice);
-    formData.append(
-      "PackageEquipment",
-      JSON.stringify(createPackageDto.equipment)
-    );
-    return requests.post(`packages/member/${memberId}`, formData);
-  },
+  createPackage: (memberId: string, formData: FormData) =>
+    requests.post(`packages/member/${memberId}`, formData),
+  updatePackage: (memberId: string, packageId: string, formData: FormData) =>
+    requests.put(`packages/member/${memberId}/package/${packageId}`, formData),
   deletePackage: (memberId: string, packageId: string) =>
     requests.delete(`packages/member/${memberId}/package/${packageId}`),
 };

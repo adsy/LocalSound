@@ -1,4 +1,4 @@
 interface PhotoUploadModel {
   image: Blob;
-  uploadId: string;
+  photoId: string;
 }

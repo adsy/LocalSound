@@ -22,6 +22,7 @@ import ErrorBanner from "../../../common/banner/ErrorBanner";
 import Login from "../../Authentication/Login/Login";
 import AddArtistPackage from "./ArtistPackages/AddArtistPackage";
 import ArtistPackages from "./ArtistPackages/ArtistPackages";
+import { ArtistPackageModel } from "../../../app/model/dto/artist-package.model";
 
 interface Props {
   loggedInUser: UserModel;
@@ -47,6 +48,7 @@ const ArtistProfile = ({
   const [coverImage, setCoverImage] = useState<AccountImageModel | null>(null);
   const [currentTab, setCurrentTab] = useState(ArtistProfileTabs.ArtistDetails);
   const [tracks, setTracks] = useState<ArtistTrackUploadModel[]>([]);
+  const [packages, setPackages] = useState<ArtistPackageModel[]>([]);
   const [isFollowing, setIsFollowing] = useState(false);
   const [canLoadMore, setCanLoadMore] = useState(true);
   const dispatch = useDispatch();
@@ -139,7 +141,12 @@ const ArtistProfile = ({
     dispatch(
       handleToggleModal({
         open: true,
-        body: <AddArtistPackage userDetails={artistDetails} />,
+        body: (
+          <AddArtistPackage
+            userDetails={artistDetails}
+            setPackages={setPackages}
+          />
+        ),
         size: "large",
       })
     );
@@ -422,6 +429,8 @@ const ArtistProfile = ({
                     artistDetails={artistDetails}
                     currentTab={currentTab}
                     viewingOwnProfile={viewingOwnProfile}
+                    packages={packages}
+                    setPackages={setPackages}
                   />
                 </Tab>
               </Tabs>

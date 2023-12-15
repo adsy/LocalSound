@@ -72,11 +72,31 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
+        public async Task<ServiceResponse> DeleteArtistPackagePhotoAsync(ArtistPackagePhoto photo)
+        {
+            try
+            {
+                _dbContext.FileContent.Remove(photo.FileContent);
+                _dbContext.ArtistPackagePhoto.Remove(photo);
+                await _dbContext.SaveChangesAsync();
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch(Exception e)
+            {
+                var message = $"{nameof(PackageRepository)} - {nameof(DeleteArtistPackagePhotoAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError);
+            }
+        }
+
         public async Task<ServiceResponse<ArtistPackage>> GetArtistPackageAsync(Guid appUserId, Guid packageId)
         {
             try
             {
                 var package = await _dbContext.ArtistPackage
+                    .Include(x => x.Equipment)
                     .Include(x => x.PackagePhotos)
                     .ThenInclude(x => x.FileContent)
                     .FirstOrDefaultAsync(x => x.ArtistPackageId == packageId && x.AppUserId == appUserId);
@@ -135,6 +155,86 @@ namespace localsound.backend.Infrastructure.Repositories
                 return new ServiceResponse<List<ArtistPackage>>(HttpStatusCode.InternalServerError)
                 {
                     ServiceResponseMessage = "An error occured getting artist packages, please try again..."
+                };
+            }
+        }
+
+        public async Task<ServiceResponse> UpdateArtistPackageEquipmentAsync(Guid PackageId, List<ArtistPackageEquipment> equipment)
+        {
+            try
+            {
+                var package = await _dbContext.ArtistPackage
+                    .Include(x => x.Equipment)
+                    .FirstOrDefaultAsync(x => x.ArtistPackageId == PackageId);
+
+                if (package == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured updating your package, please try again..."
+                    };
+                }
+
+                package.UpdateEquipment(equipment);
+
+                await _dbContext.SaveChangesAsync();
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(PackageRepository)} - {nameof(UpdateArtistPackageEquipmentAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured updating your package, please try again..."
+                };
+            }
+        }
+
+        public async Task<ServiceResponse> UpdateArtistPackageAsync(Guid PackageId, string name, string description, string price, List<ArtistPackagePhoto> newPhotos, List<ArtistPackagePhoto> deletedPhotos)
+        {
+            try
+            {
+                var package = await _dbContext.ArtistPackage
+                    .Include(x => x.PackagePhotos)
+                    .ThenInclude(x => x.FileContent)
+                    .FirstOrDefaultAsync(x => x.ArtistPackageId == PackageId);
+
+                if (package == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured updating your package, please try again..."
+                    };
+                }
+
+                // Add new FileContent entries for FK reference
+                if (newPhotos.Any())
+                {
+                    foreach(var photo in newPhotos)
+                    {
+                        await _dbContext.FileContent.AddAsync(photo.FileContent);
+                    }
+                }
+
+                package.UpdateDetails(name, description, price)
+                    .UpdatePhotos(newPhotos)
+                    .RemovePhotos(deletedPhotos);
+
+                await _dbContext.SaveChangesAsync();
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch(Exception e)
+            {
+                var message = $"{nameof(PackageRepository)} - {nameof(UpdateArtistPackageAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured updating your package, please try again..."
                 };
             }
         }

@@ -1,6 +1,5 @@
 import { CustomerTypes } from "../enums/customerTypes";
 import { AccountImageModel } from "./account-image.model";
-import { ArtistPackageModel } from "./artist-package.model";
 import { EquipmentModel } from "./equipment.model";
 import { EventTypeModel } from "./eventType.model";
 import { GenreModel } from "./genre.model";
@@ -24,7 +23,6 @@ export interface UserModel {
   equipment: EquipmentModel[];
   eventTypes: EventTypeModel[];
   images: AccountImageModel[];
-  packages: ArtistPackageModel[];
   followerCount: number;
   followingCount: number;
   isFollowing?: boolean;
