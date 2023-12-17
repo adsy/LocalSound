@@ -26,6 +26,9 @@ const ArtistPackages = ({
 }: Props) => {
   const [loading, setLoading] = useState(true);
   const [loadPackagesError, setLoadPackagesError] = useState<string | null>();
+  const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
+    null
+  );
 
   useLayoutEffect(() => {
     (async () => {
@@ -46,6 +49,7 @@ const ArtistPackages = ({
     return () => {
       setLoadPackagesError(null);
       setPackages([]);
+      setSelectedPackageId(null);
     };
   }, [currentTab]);
 
@@ -77,6 +81,9 @@ const ArtistPackages = ({
               packages={packages}
               setPackages={setPackages}
               artistDetails={artistDetails}
+              selectedPackageId={selectedPackageId}
+              setSelectedPackageId={setSelectedPackageId}
+              key={index}
             />
           ))}
         </div>

@@ -55,7 +55,7 @@ const MultiImageCropper = ({ maxImages = 3, images, setImages }: Props) => {
         }}
       >
         {croppingPhoto && photo ? (
-          <>
+          <div className=" d-flex flex-column justify-content-center fade-in">
             <Cropper
               ref={cropperRef}
               style={{
@@ -92,9 +92,9 @@ const MultiImageCropper = ({ maxImages = 3, images, setImages }: Props) => {
                 <h4>Cancel</h4>
               </a>
             </div>
-          </>
+          </div>
         ) : images.length < maxImages ? (
-          <div className="d-flex flex-column justify-content-center align-items-center">
+          <div className="d-flex flex-column justify-content-center align-items-center fade-in">
             <div className="multi-image-placeholder"></div>
             <label
               htmlFor="packageUpload"
@@ -119,7 +119,7 @@ const MultiImageCropper = ({ maxImages = 3, images, setImages }: Props) => {
         {images.length > 0 ? (
           <div className="d-flex flex-row justify-content-center">
             {images.map((image, index) => (
-              <div key={index} className="position-relative">
+              <div key={index} className="position-relative fade-in px-1">
                 <Button
                   className="black-button bin-icon"
                   onClick={() => deletePhoto(image)}
@@ -133,7 +133,9 @@ const MultiImageCropper = ({ maxImages = 3, images, setImages }: Props) => {
                 <Image
                   size="tiny"
                   src={URL.createObjectURL(image.image)}
-                  className="mr-2 image-display"
+                  className={`mr-2 image-display ${
+                    images.length === maxImages ? "enlarge" : ""
+                  }`}
                 />
               </div>
             ))}

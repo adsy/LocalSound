@@ -90,7 +90,7 @@ h6 .purple-highlight:before {
   bottom: 10%;
   left: -0.5rem;
   top: -0.4rem;
-  transform: rotate(-3deg) !important;
+  transform: rotate(-2deg) !important;
   width: calc(100% + 1rem);
   height: 140%;
   --tw-bg-opacity: 1;
@@ -644,17 +644,19 @@ i.large.icon {
   transition: border-color 0.5s ease;
   transition: background-color 0.5s ease;
   border-radius: 10px 10px;
-  border: unset;
+  border: 1px solid transparent;
   padding: 5px;
   color: black !important;
   background-color: unset;
   text-transform: uppercase !important;
+  transition: border 0.3s ease-in-out !important;
 }
 
 .white-button:hover,
 .white-button:active,
 .white-button:focus {
   background-color: unset !important;
+  border: 1px solid #232323;
 }
 
 .white-button h4 {
@@ -672,6 +674,7 @@ i.large.icon {
   background-color: #232323;
   border: 1px solid #232323;
   padding: 5px;
+  transition: border 0.3s ease-in-out !important;
   background-image: linear-gradient(#232323, #001514);
 }
 .black-button h4 {
@@ -1019,6 +1022,96 @@ i.large.icon {
   height: 25px;
   font-size: 15px;
 }
+#artist-packages .package-container {
+  gap: 10px 0px;
+}
+#artist-packages #artist-package-display .component-container:hover .images-container {
+  margin-left: 0px;
+}
+#artist-packages #artist-package-display .component-container:hover .images-container .package-image {
+  transform: rotate(0deg) translateY(0px) !important;
+  margin-right: 0px;
+}
+#artist-packages #artist-package-display .bin-icon {
+  position: absolute;
+  z-index: 9;
+  right: -5px;
+  top: -10px;
+  cursor: pointer;
+  color: #f1f1f1 !important;
+  padding-left: 5px;
+  padding-right: 3px;
+}
+#artist-packages #artist-package-display .pencil-icon {
+  position: absolute;
+  z-index: 9;
+  right: 25px;
+  top: -10px;
+  cursor: pointer;
+  color: #f1f1f1 !important;
+  padding-left: 5px;
+  padding-right: 3px;
+}
+#artist-packages #artist-package-display .close-icon {
+  position: absolute;
+  z-index: 9;
+  left: -10px;
+  top: -10px;
+  cursor: pointer;
+  color: #f1f1f1 !important;
+  padding-left: 5px;
+  padding-right: 3px;
+}
+#artist-packages #artist-package-display .description {
+  white-space: break-spaces;
+}
+#artist-packages #artist-package-display .images-container {
+  margin-top: 10px;
+  margin-bottom: 40px;
+  transition: margin-left 0.3s ease-in-out;
+}
+#artist-packages #artist-package-display .images-container .expanded-image {
+  width: 36%;
+  border-radius: 3px;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: border 0.3s ease-in-out;
+}
+#artist-packages #artist-package-display .images-container .expanded-image:hover {
+  border: 1px solid #232323;
+}
+#artist-packages #artist-package-display .images-container .package-image {
+  border-radius: 10px;
+  border: 2px #fcfcfd solid;
+  width: 33%;
+  transition: margin-right 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+#artist-packages #artist-package-display .images-container .package-image:nth-of-type(1) {
+  transform: rotate(-10deg) translateY(5px) translateX(-35px) !important;
+  margin-right: -65px;
+  z-index: 10;
+}
+#artist-packages #artist-package-display .images-container .package-image:nth-of-type(2) {
+  transform: rotate(0deg) translateY(0px) translateX(-35px) !important;
+  margin-right: -65px;
+  z-index: 9;
+}
+#artist-packages #artist-package-display .images-container .package-image:nth-of-type(3) {
+  transform: rotate(10deg) translateY(5px) translateX(-35px) !important;
+  margin-right: -65px;
+  z-index: 8;
+}
+#artist-packages #artist-package-display .images-container .package-image:nth-of-type(4) {
+  transform: rotate(20deg) translateY(20px) translateX(-35px) !important;
+  margin-right: -65px;
+  z-index: 7;
+}
+#artist-packages #artist-package-display.selected-package {
+  width: 100%;
+}
+
 #multi-cropper .multi-image-placeholder {
   height: 315px;
   width: 315px;
@@ -1028,6 +1121,10 @@ i.large.icon {
 }
 #multi-cropper .image-display {
   border-radius: 5px;
+  transition: width 0.2s ease-in-out !important;
+}
+#multi-cropper .image-display.enlarge {
+  width: 120px;
 }
 #multi-cropper .bin-icon {
   position: absolute;
@@ -1040,7 +1137,6 @@ i.large.icon {
   padding-right: 3px;
 }
 
-/** AUTH MODAL **/
 #modal-popup,
 #edit-artist,
 #artist-profile {

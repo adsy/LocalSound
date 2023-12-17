@@ -1,6 +1,7 @@
 ﻿using localsound.backend.api.Commands.Packages;
 using localsound.backend.api.Queries.Packages;
 using localsound.backend.Domain.Model.Dto.Submission;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace localsound.backend.api.Controllers
@@ -9,6 +10,7 @@ namespace localsound.backend.api.Controllers
     [ApiController]
     public class PackageController : BaseApiController
     {
+        [AllowAnonymous]
         [HttpGet]
         [Route("member/{memberId}")]
         public async Task<ActionResult> GetArtistPackages(string memberId, CancellationToken cancellationToken)
