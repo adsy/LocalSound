@@ -3,10 +3,10 @@ import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-u
 import { UserModel } from "../../../../app/model/dto/user.model";
 import { useState } from "react";
 import { Button, Form, ProgressBar } from "react-bootstrap";
-import MyTextInput from "../../../../common/form/MyTextInput";
+import TextInput from "../../../../common/form/TextInput";
 import SearchGenreTypes from "../Edit/Search/SearchGenreTypes";
 import { Image } from "semantic-ui-react";
-import MyTextArea from "../../../../common/form/MyTextArea";
+import TextArea from "../../../../common/form/TextArea";
 import ImageCropper from "../../../../common/components/Cropper/ImageCropper";
 import { CropTypes } from "../../../../app/model/enums/cropTypes";
 import ErrorBanner from "../../../../common/banner/ErrorBanner";
@@ -185,7 +185,7 @@ const EditTrackForm = ({
                             <div className="d-flex">
                               <p className="form-label">TRACK NAME</p>
                             </div>
-                            <MyTextInput
+                            <TextInput
                               name="trackName"
                               placeholder=""
                               disabled={isSubmitting}
@@ -205,7 +205,7 @@ const EditTrackForm = ({
                             <div className="d-flex">
                               <p className="form-label">TRACK DESCRIPTION</p>
                             </div>
-                            <MyTextArea
+                            <TextArea
                               name="trackDescription"
                               placeholder=""
                               rows={6}

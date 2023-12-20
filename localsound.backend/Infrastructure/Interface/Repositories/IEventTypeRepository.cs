@@ -5,6 +5,7 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
 {
     public interface IEventTypeRepository
     {
+        Task<ServiceResponse<List<EventType>>> GetEventTypesAsync(CancellationToken cancellationToken);
         Task<ServiceResponse<List<EventType>>> SearchEventTypeAsync(string name, CancellationToken cancellationToken);
     }
 }

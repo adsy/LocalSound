@@ -2,8 +2,8 @@ import { Button, Col } from "react-bootstrap";
 import { RegistrationModel } from "../../../app/model/dto/user-registration.model";
 import PasswordStrengthBar from "react-password-strength-bar";
 import { Divider } from "semantic-ui-react";
-import MyAddressInput from "../../../common/form/MyAddressInput";
-import MyTextInput from "../../../common/form/MyTextInput";
+import AddressInput from "../../../common/form/AddressInput";
+import TextInput from "../../../common/form/TextInput";
 import { useState } from "react";
 
 interface Props {
@@ -77,7 +77,7 @@ const ArtistRegisterForm = (props: Props) => {
         <div className="d-flex">
           <p className="form-label">ARTIST NAME</p>
         </div>
-        <MyTextInput name="name" placeholder="" disabled={disabled} />
+        <TextInput name="name" placeholder="" disabled={disabled} />
         <Divider />
         <div className="mb-2">
           Your address can be used to help you be found easier by music lovers
@@ -86,7 +86,7 @@ const ArtistRegisterForm = (props: Props) => {
         <div className="d-flex">
           <p className="form-label">ADDRESS</p>
         </div>
-        <MyAddressInput
+        <AddressInput
           name="address"
           placeholder=""
           setFieldValue={setFieldValue}
@@ -102,7 +102,7 @@ const ArtistRegisterForm = (props: Props) => {
         <div className="d-flex">
           <p className="form-label">MOBILE NUMBER</p>
         </div>
-        <MyTextInput
+        <TextInput
           name="phoneNumber"
           placeholder=""
           className="mb-2"
@@ -146,7 +146,7 @@ const ArtistRegisterForm = (props: Props) => {
             <div className="d-flex">
               <p className="form-label">SOUNDCLOUD PROFILE</p>
             </div>
-            <MyTextInput name="soundcloudUrl" placeholder="" />
+            <TextInput name="soundcloudUrl" placeholder="" />
           </>
         ) : null}
         {showSpotifyInput ? (
@@ -154,7 +154,7 @@ const ArtistRegisterForm = (props: Props) => {
             <div className="d-flex">
               <p className="form-label">SPOTIFY PROFILE</p>
             </div>
-            <MyTextInput name="spotifyUrl" placeholder="" />
+            <TextInput name="spotifyUrl" placeholder="" />
           </>
         ) : null}
         {showYoutubeInput ? (
@@ -162,7 +162,7 @@ const ArtistRegisterForm = (props: Props) => {
             <div className="d-flex">
               <p className="form-label">YOUTUBE PROFILE</p>
             </div>
-            <MyTextInput name="youtubeUrl" placeholder="" />
+            <TextInput name="youtubeUrl" placeholder="" />
           </>
         ) : null}
       </Col>
@@ -182,7 +182,7 @@ const ArtistRegisterForm = (props: Props) => {
         <div className="d-flex">
           <p className="form-label">PROFILE URL</p>
         </div>
-        <MyTextInput
+        <TextInput
           name="profileUrl"
           placeholder=""
           className=""
@@ -192,7 +192,7 @@ const ArtistRegisterForm = (props: Props) => {
         <div className="d-flex">
           <p className="form-label">EMAIL</p>
         </div>
-        <MyTextInput
+        <TextInput
           name="email"
           placeholder=""
           className=""
@@ -201,7 +201,7 @@ const ArtistRegisterForm = (props: Props) => {
         <div className="d-flex">
           <p className="form-label">PASSWORD</p>
         </div>
-        <MyTextInput
+        <TextInput
           name="password"
           placeholder=""
           type="password"
@@ -212,7 +212,7 @@ const ArtistRegisterForm = (props: Props) => {
         <div className="d-flex">
           <p className="form-label">RE-ENTER PASSWORD</p>
         </div>
-        <MyTextInput
+        <TextInput
           name="checkPassword"
           placeholder=""
           type="password"

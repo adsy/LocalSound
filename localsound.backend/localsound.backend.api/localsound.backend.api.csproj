@@ -36,8 +36,4 @@
     <ProjectReference Include="..\Persistence\localsound.backend.Persistence.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Queries\EventType\" />
-  </ItemGroup>
-
 </Project>

@@ -56,7 +56,7 @@ const LandingPage = () => {
       <div className="component-container p-3">
         <div className="d-flex flex-row justify-content-center mt-2 mb-2">
           <Button
-            className="white-button mr-4 auth-button"
+            className="transparent-button mr-4 auth-button"
             onClick={() => handleAuthenticationRequest(true)}
           >
             <h1>
@@ -64,7 +64,7 @@ const LandingPage = () => {
             </h1>
           </Button>
           <Button
-            className="white-button  ml-4 auth-button"
+            className="transparent-button  ml-4 auth-button"
             onClick={() => handleAuthenticationRequest(false)}
           >
             <h1>
@@ -73,7 +73,7 @@ const LandingPage = () => {
           </Button>
         </div>
         <div className="d-flex justify-content-center mb-2">
-          <Button className="white-button auth-button">
+          <Button className="transparent-button auth-button">
             <h1>
               <span className="button-highlight">FIND AN ARTIST</span>
             </h1>

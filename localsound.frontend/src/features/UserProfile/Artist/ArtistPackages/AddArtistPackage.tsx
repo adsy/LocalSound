@@ -2,10 +2,10 @@ import { useDispatch } from "react-redux";
 import { UserModel } from "../../../../app/model/dto/user.model";
 import { Formik } from "formik";
 import { Button, Form } from "react-bootstrap";
-import MyTextInput from "../../../../common/form/MyTextInput";
+import TextInput from "../../../../common/form/TextInput";
 import EquipmentEntry from "../Edit/EditArtistProfile/EquipmentEntry";
 import { useState } from "react";
-import MyTextArea from "../../../../common/form/MyTextArea";
+import TextArea from "../../../../common/form/TextArea";
 import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
 import { EquipmentModel } from "../../../../app/model/dto/equipment.model";
 import MultiImageCropper from "../../../../common/components/MultiImageCropper/MultiImageCropper";
@@ -98,7 +98,7 @@ const AddArtistPackage = ({ userDetails, setPackages }: Props) => {
                             <div className="d-flex">
                               <p className="form-label">PACKAGE NAME</p>
                             </div>
-                            <MyTextInput
+                            <TextInput
                               name="packageName"
                               placeholder=""
                               disabled={disabled}
@@ -121,7 +121,7 @@ const AddArtistPackage = ({ userDetails, setPackages }: Props) => {
                             <div className="d-flex">
                               <p className="form-label">PACKAGE DESCRIPTION</p>
                             </div>
-                            <MyTextArea
+                            <TextArea
                               name="packageDescription"
                               placeholder=""
                               rows={7}
@@ -131,7 +131,7 @@ const AddArtistPackage = ({ userDetails, setPackages }: Props) => {
                             <div className="d-flex">
                               <p className="form-label">PACKAGE PRICE PER HR</p>
                             </div>
-                            <MyTextInput
+                            <TextInput
                               name="packagePrice"
                               placeholder=""
                               disabled={disabled}

@@ -9,7 +9,7 @@ interface Props {
   label?: string;
 }
 
-const MySelectInput = (props: Props) => {
+const SelectInput = (props: Props) => {
   const [field, meta, helpers] = useField(props);
 
   return (
@@ -33,4 +33,4 @@ const MySelectInput = (props: Props) => {
   );
 };
 
-export default MySelectInput;
+export default SelectInput;

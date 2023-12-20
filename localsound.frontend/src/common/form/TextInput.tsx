@@ -15,7 +15,7 @@ interface Props {
   hideLabel?: boolean;
 }
 
-const MyTextInput = (props: Props) => {
+const TextInput = (props: Props) => {
   const {
     placeholder,
     name,
@@ -61,4 +61,4 @@ const MyTextInput = (props: Props) => {
   );
 };
 
-export default MyTextInput;
+export default TextInput;

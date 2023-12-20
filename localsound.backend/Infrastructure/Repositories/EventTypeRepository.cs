@@ -19,6 +19,26 @@ namespace localsound.backend.Infrastructure.Repositories
             _logger = logger;
         }
 
+        public async Task<ServiceResponse<List<EventType>>> GetEventTypesAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                var eventTypes = await _dbContext.EventType.ToListAsync(cancellationToken);
+
+                return new ServiceResponse<List<EventType>>(HttpStatusCode.OK)
+                {
+                    ReturnData = eventTypes
+                };
+            }
+            catch(Exception e)
+            {
+                var message = $"{nameof(EventTypeRepository)} - {nameof(GetEventTypesAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<List<EventType>>(HttpStatusCode.InternalServerError, "There was an error getting the event types.");
+            }
+        }
+
         public async Task<ServiceResponse<List<EventType>>> SearchEventTypeAsync(string name, CancellationToken cancellationToken)
         {
             try
@@ -35,7 +55,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 var message = $"{nameof(EventTypeRepository)} - {nameof(SearchEventTypeAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<List<EventType>>(HttpStatusCode.InternalServerError, "There was an error while searching for the genre.");
+                return new ServiceResponse<List<EventType>>(HttpStatusCode.InternalServerError, "There was an error while searching for the event type.");
             }
         }
     }

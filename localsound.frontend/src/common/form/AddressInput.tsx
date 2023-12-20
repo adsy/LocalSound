@@ -18,7 +18,7 @@ interface Props {
   preselectedAddress?: string;
 }
 
-const MyAddressInput = (props: Props) => {
+const AddressInput = (props: Props) => {
   const {
     setFieldValue,
     setFieldTouched,
@@ -93,11 +93,10 @@ const MyAddressInput = (props: Props) => {
                 onBlur={(e) => {
                   setFieldTouched("address", true);
                 }}
-                className="mb-2"
               />
               {meta.touched && !pickedAddress ? (
                 <Label basic color="red">
-                  You must select a valid address
+                  You must select a valid address.
                 </Label>
               ) : null}
               {suggestions.length ? (
@@ -133,4 +132,4 @@ const MyAddressInput = (props: Props) => {
   );
 };
 
-export default MyAddressInput;
+export default AddressInput;

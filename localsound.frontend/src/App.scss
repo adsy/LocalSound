@@ -141,7 +141,7 @@ h6 {
     background-color: $purple100;
   }
 
-  .purple-highlight {
+  .black-highlight {
     position: relative;
     z-index: 1;
     display: inline-block;
@@ -151,7 +151,7 @@ h6 {
     transition: background-color 0.3s ease;
     // padding: 2px;
   }
-  .purple-highlight:before {
+  .black-highlight:before {
     content: "";
     position: absolute;
     bottom: 10%;
@@ -165,6 +165,31 @@ h6 {
     z-index: -1;
     transform: translateZ(-1px);
     border-radius: 2px;
+  }
+
+  .purple-highlight {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    color: $black100;
+    font-weight: 800;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+  }
+  .purple-highlight:before {
+    content: "";
+    position: absolute;
+    bottom: 10%;
+    left: -0.5rem;
+    top: -0.4rem;
+    transform: rotate(-2deg) !important;
+    width: calc(100% + 1rem);
+    height: 140%;
+    --tw-bg-opacity: 1;
+    background-color: $purple100;
+    z-index: -1;
+    transform: translateZ(-1px);
+    border-radius: 3px;
   }
 }
 
@@ -524,6 +549,28 @@ i.large.icon {
 }
 
 .white-button {
+  h4 {
+    color: $black200;
+  }
+}
+.transparent-button {
+  @include button-style;
+  // background-color: $purple100 !important;
+  border: 1px solid transparent;
+  padding: 5px;
+  color: black !important;
+  background-color: unset;
+  text-transform: uppercase !important;
+}
+
+.transparent-button:hover,
+.transparent-button:active,
+.transparent-button:focus {
+  background-color: unset !important;
+  border: 1px solid transparent;
+}
+
+.transparent-button {
   h4 {
     color: $black200;
   }
@@ -1041,6 +1088,10 @@ i.large.icon {
 #artist-profile {
   width: 100%;
   background-color: $white200;
+
+  .react-datepicker-wrapper {
+    width: 100%;
+  }
 
   .banner-holder {
     border: 1px solid #e2e8f0;

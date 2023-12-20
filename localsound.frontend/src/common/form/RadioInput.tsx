@@ -14,7 +14,7 @@ interface Props {
   onChange: any;
 }
 
-const MyRadioInput = (props: Props) => {
+const RadioInput = (props: Props) => {
   const {
     placeholder,
     name,
@@ -57,4 +57,4 @@ const MyRadioInput = (props: Props) => {
   );
 };
 
-export default MyRadioInput;
+export default RadioInput;

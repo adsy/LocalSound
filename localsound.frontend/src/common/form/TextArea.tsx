@@ -10,7 +10,7 @@ interface Props {
   disabled?: boolean;
 }
 
-const MyTextArea = (props: Props) => {
+const TextArea = (props: Props) => {
   const [field, meta] = useField(props);
 
   return (
@@ -28,4 +28,4 @@ const MyTextArea = (props: Props) => {
   );
 };
 
-export default MyTextArea;
+export default TextArea;

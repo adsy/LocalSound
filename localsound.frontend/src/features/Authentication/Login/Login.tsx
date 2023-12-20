@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import { CustomerTypes } from "../../../app/model/enums/customerTypes";
 import { Formik } from "formik";
 import { Divider, Form } from "semantic-ui-react";
-import MyTextInput from "../../../common/form/MyTextInput";
+import TextInput from "../../../common/form/TextInput";
 import { UserLoginModel } from "../../../app/model/dto/user-login.model";
 import agent from "../../../api/agent";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
@@ -83,7 +83,7 @@ const Login = () => {
                   <div className="d-flex">
                     <p className="form-label">EMAIL</p>
                   </div>
-                  <MyTextInput
+                  <TextInput
                     name="email"
                     placeholder=""
                     fieldClassName="mt-2"
@@ -92,7 +92,7 @@ const Login = () => {
                   <div className="d-flex">
                     <p className="form-label">PASSWORD</p>
                   </div>
-                  <MyTextInput
+                  <TextInput
                     name="password"
                     placeholder=""
                     type="password"

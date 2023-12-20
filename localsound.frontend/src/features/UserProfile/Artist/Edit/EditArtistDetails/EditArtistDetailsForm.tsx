@@ -1,7 +1,7 @@
-import MyTextInput from "../../../../../common/form/MyTextInput";
-import MyAddressInput from "../../../../../common/form/MyAddressInput";
+import TextInput from "../../../../../common/form/TextInput";
+import AddressInput from "../../../../../common/form/AddressInput";
 import { UpdateArtistPersonalDetailsModel } from "../../../../../app/model/dto/update-artist-personal.model";
-import MyTextArea from "../../../../../common/form/MyTextArea";
+import TextArea from "../../../../../common/form/TextArea";
 import { Image } from "semantic-ui-react";
 import { AccountImageTypes } from "../../../../../app/model/enums/accountImageTypes";
 import userImg from "../../../../../assets/placeholder.png";
@@ -114,18 +114,18 @@ const EditArtistDetailsForm = ({
             <div className="d-flex">
               <p className="form-label">ARTIST NAME</p>
             </div>
-            <MyTextInput name="name" placeholder="" disabled={disabled} />
+            <TextInput name="name" placeholder="" disabled={disabled} />
           </div>
           <div className="mb-3">
             <div className="d-flex">
               <p className="form-label">PROFILE URL</p>
             </div>
-            <MyTextInput name="profileUrl" placeholder="" disabled={disabled} />
+            <TextInput name="profileUrl" placeholder="" disabled={disabled} />
           </div>
           <div className="d-flex">
             <p className="form-label">MOBILE NUMBER</p>
           </div>
-          <MyTextInput
+          <TextInput
             name="phoneNumber"
             placeholder=""
             className="mb-2"
@@ -137,7 +137,7 @@ const EditArtistDetailsForm = ({
           <div className="d-flex">
             <p className="form-label">ADDRESS</p>
           </div>
-          <MyAddressInput
+          <AddressInput
             name="address"
             placeholder=""
             setFieldValue={setFieldValue}
@@ -150,21 +150,21 @@ const EditArtistDetailsForm = ({
             <div className="d-flex">
               <p className="form-label">SOUNDCLOUD PROFILE</p>
             </div>
-            <MyTextInput name="soundcloudUrl" placeholder="" />
+            <TextInput name="soundcloudUrl" placeholder="" />
           </div>
 
           <div className="mb-3">
             <div className="d-flex">
               <p className="form-label">SPOTIFY PROFILE</p>
             </div>
-            <MyTextInput name="spotifyUrl" placeholder="" />
+            <TextInput name="spotifyUrl" placeholder="" />
           </div>
 
           <div className="mb-3">
             <div className="d-flex">
               <p className="form-label">YOUTUBE PROFILE</p>
             </div>
-            <MyTextInput name="youtubeUrl" placeholder="" />
+            <TextInput name="youtubeUrl" placeholder="" />
           </div>
         </div>
         <div className="col-12 col-md-6 px-3 mb-3">
@@ -225,7 +225,7 @@ const EditArtistDetailsForm = ({
           <div className="d-flex">
             <p className="form-label">ABOUT</p>
           </div>
-          <MyTextArea name="aboutSection" placeholder="" rows={5} />
+          <TextArea name="aboutSection" placeholder="" rows={5} />
         </div>
       </div>
     </div>

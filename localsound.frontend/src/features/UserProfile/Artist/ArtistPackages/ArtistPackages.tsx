@@ -76,15 +76,26 @@ const ArtistPackages = ({
       ) : (
         <div className="fade-in p-2 package-container d-flex flex-row flex-wrap justify-content-around">
           {packages.map((artistPackage, index) => (
-            <ArtistPackageDisplay
-              artistPackage={artistPackage}
-              packages={packages}
-              setPackages={setPackages}
-              artistDetails={artistDetails}
-              selectedPackageId={selectedPackageId}
-              setSelectedPackageId={setSelectedPackageId}
+            <div
               key={index}
-            />
+              id="artist-package-display"
+              className={`col-12 col-lg-4 px-2 ${
+                selectedPackageId === null
+                  ? ""
+                  : selectedPackageId === artistPackage.artistPackageId
+                  ? "selected-package"
+                  : "d-none"
+              }`}
+            >
+              <ArtistPackageDisplay
+                artistPackage={artistPackage}
+                packages={packages}
+                setPackages={setPackages}
+                artistDetails={artistDetails}
+                selectedPackageId={selectedPackageId}
+                setSelectedPackageId={setSelectedPackageId}
+              />
+            </div>
           ))}
         </div>
       )}

@@ -6,9 +6,9 @@ import { useDispatch } from "react-redux";
 import { Form, Formik } from "formik";
 import { handleResetModal } from "../../../../app/redux/actions/modalSlice";
 import agent from "../../../../api/agent";
-import MyTextInput from "../../../../common/form/MyTextInput";
+import TextInput from "../../../../common/form/TextInput";
 import EquipmentEntry from "../Edit/EditArtistProfile/EquipmentEntry";
-import MyTextArea from "../../../../common/form/MyTextArea";
+import TextArea from "../../../../common/form/TextArea";
 import MultiImageCropper from "../../../../common/components/MultiImageCropper/MultiImageCropper";
 import { Button } from "react-bootstrap";
 import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
@@ -155,7 +155,7 @@ const EditArtistPackage = ({
                                 <div className="d-flex">
                                   <p className="form-label">PACKAGE NAME</p>
                                 </div>
-                                <MyTextInput
+                                <TextInput
                                   name="packageName"
                                   placeholder=""
                                   disabled={disabled}
@@ -182,7 +182,7 @@ const EditArtistPackage = ({
                                     PACKAGE DESCRIPTION
                                   </p>
                                 </div>
-                                <MyTextArea
+                                <TextArea
                                   name="packageDescription"
                                   placeholder=""
                                   rows={7}
@@ -194,7 +194,7 @@ const EditArtistPackage = ({
                                     PACKAGE PRICE PER HR
                                   </p>
                                 </div>
-                                <MyTextInput
+                                <TextInput
                                   name="packagePrice"
                                   placeholder=""
                                   disabled={disabled}

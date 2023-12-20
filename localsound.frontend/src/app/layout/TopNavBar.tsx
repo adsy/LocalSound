@@ -81,7 +81,7 @@ const TopNavbar = () => {
             ) : (
               <div className="d-flex flex-row justify-content-center">
                 <Button
-                  className="white-button mr-2 auth-button"
+                  className="transparent-button mr-2 auth-button"
                   onClick={() => handleAuthenticationRequest(true)}
                 >
                   <h2>
@@ -89,7 +89,7 @@ const TopNavbar = () => {
                   </h2>
                 </Button>
                 <Button
-                  className="white-button auth-button"
+                  className="transparent-button auth-button"
                   onClick={() => handleAuthenticationRequest(false)}
                 >
                   <h2>

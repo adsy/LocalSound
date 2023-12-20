@@ -2,8 +2,8 @@ import { Col } from "react-bootstrap";
 import { RegistrationModel } from "../../../app/model/dto/user-registration.model";
 import PasswordStrengthBar from "react-password-strength-bar";
 import { Divider } from "semantic-ui-react";
-import MyAddressInput from "../../../common/form/MyAddressInput";
-import MyTextInput from "../../../common/form/MyTextInput";
+import AddressInput from "../../../common/form/AddressInput";
+import TextInput from "../../../common/form/TextInput";
 
 interface Props {
   disabled?: boolean;
@@ -72,7 +72,7 @@ const NonArtistRegisterForm = (props: Props) => {
         <div className="d-flex">
           <p className="form-label">FIRST NAME</p>
         </div>
-        <MyTextInput
+        <TextInput
           name="firstName"
           placeholder=""
           disabled={disabled}
@@ -81,7 +81,7 @@ const NonArtistRegisterForm = (props: Props) => {
         <div className="d-flex">
           <p className="form-label">SURNAME</p>
         </div>
-        <MyTextInput
+        <TextInput
           name="lastName"
           placeholder=""
           disabled={disabled}
@@ -95,7 +95,7 @@ const NonArtistRegisterForm = (props: Props) => {
         <div className="d-flex">
           <p className="form-label">ADDRESS</p>
         </div>
-        <MyAddressInput
+        <AddressInput
           name="address"
           placeholder=""
           setFieldValue={setFieldValue}
@@ -111,7 +111,7 @@ const NonArtistRegisterForm = (props: Props) => {
         <div className="d-flex">
           <p className="form-label">MOBILE NUMBER</p>
         </div>
-        <MyTextInput
+        <TextInput
           name="phoneNumber"
           placeholder=""
           className="mb-2"
@@ -136,7 +136,7 @@ const NonArtistRegisterForm = (props: Props) => {
         <div className="d-flex">
           <p className="form-label">PROFILE URL</p>
         </div>
-        <MyTextInput
+        <TextInput
           name="profileUrl"
           placeholder=""
           className=""
@@ -146,7 +146,7 @@ const NonArtistRegisterForm = (props: Props) => {
         <div className="d-flex">
           <p className="form-label">EMAIL</p>
         </div>
-        <MyTextInput
+        <TextInput
           name="email"
           placeholder=""
           className="mb-2"
@@ -155,7 +155,7 @@ const NonArtistRegisterForm = (props: Props) => {
         <div className="d-flex">
           <p className="form-label">PASSWORD</p>
         </div>
-        <MyTextInput
+        <TextInput
           name="password"
           placeholder=""
           type="password"
@@ -167,7 +167,7 @@ const NonArtistRegisterForm = (props: Props) => {
         <div className="d-flex">
           <p className="form-label">RE-ENTER PASSWORD</p>
         </div>
-        <MyTextInput
+        <TextInput
           name="checkPassword"
           placeholder=""
           type="password"

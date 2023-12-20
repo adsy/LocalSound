@@ -2,7 +2,7 @@
 using localsound.backend.Domain.Model.Dto.Entity;
 using MediatR;
 
-namespace localsound.backend.api.Queries
+namespace localsound.backend.api.Queries.EventType
 {
     public class SearchEventTypeQuery : IRequest<ServiceResponse<List<EventTypeDto>>>
     {

@@ -9,6 +9,7 @@ import EditArtistPackage from "./EditArtistPackage";
 import { Icon, Image } from "semantic-ui-react";
 import { State } from "../../../../app/model/redux/state";
 import ImageDisplay from "../../../../common/imageDisplay/ImageDisplay";
+import CreateBooking from "../../Booking/CreateBooking";
 
 interface Props {
   artistPackage: ArtistPackageModel;
@@ -17,7 +18,6 @@ interface Props {
   artistDetails: UserModel;
   selectedPackageId: string | null;
   setSelectedPackageId: (selectedPackageId: string | null) => void;
-  key: number;
 }
 
 const ArtistPackageDisplay = ({
@@ -27,7 +27,6 @@ const ArtistPackageDisplay = ({
   artistDetails,
   selectedPackageId,
   setSelectedPackageId,
-  key,
 }: Props) => {
   const loggedInUser = useSelector((state: State) => state.user.userDetails);
   const dispatch = useDispatch();
@@ -75,6 +74,16 @@ const ArtistPackageDisplay = ({
     );
   };
 
+  const openBookingModal = (selectedPackage: ArtistPackageModel) => {
+    dispatch(
+      handleToggleModal({
+        open: true,
+        body: <CreateBooking artistPackage={selectedPackage} />,
+        size: "tiny",
+      })
+    );
+  };
+
   const closePackageDetail = () => {
     setSelectedPackageId(null);
   };
@@ -85,135 +94,132 @@ const ArtistPackageDisplay = ({
 
   return (
     <>
-      {!selectedPackageId ||
-      selectedPackageId === artistPackage.artistPackageId ? (
+      <div className="component-container mt-0 position-relative h-100 d-flex flex-row flex-wrap justify-content-between">
         <div
-          key={key}
-          id="artist-package-display"
-          className={`col-12 col-lg-4 px-2 ${
-            selectedPackageId === artistPackage.artistPackageId
-              ? "selected-package"
-              : ""
-          }`}
+          className={`${
+            selectedPackageId !== artistPackage.artistPackageId
+              ? "col-12"
+              : "col-12 col-lg-5"
+          } d-flex flex-column justify-content-between`}
         >
-          <div className="component-container mt-0 position-relative h-100 d-flex flex-row flex-wrap justify-content-between">
-            <div
-              className={`${
-                selectedPackageId !== artistPackage.artistPackageId
-                  ? "col-12"
-                  : "col-12 col-lg-5"
-              } d-flex flex-column justify-content-between`}
-            >
-              <div className="d-flex flex-column">
-                <h2 className="text-center">
-                  <span className="purple-highlight">
-                    {artistPackage.artistPackageName}
-                  </span>
-                </h2>
-                <h3 className="text-center">
-                  ${artistPackage.artistPackagePrice} per hour
-                </h3>
-                {selectedPackageId !== artistPackage.artistPackageId ? (
-                  <div className="images-container d-flex flex-row justify-content-center fade-in">
-                    {artistPackage.photos
-                      ? artistPackage.photos.map((photo, index) => (
-                          <Image
-                            key={index}
-                            size="small"
-                            src={photo.artistPackagePhotoUrl}
-                            className="package-image"
-                          />
-                        ))
-                      : null}
-                  </div>
-                ) : null}
-                <div className="d-flex flex-row flex-wrap justify-content-center">
-                  {artistPackage.equipment.map((equipment, index) => (
-                    <span key={index}>
-                      <Label
-                        label={equipment.equipmentName}
-                        id={equipment.equipmentId}
-                      />
-                    </span>
-                  ))}
-                </div>
-                {artistDetails.memberId === loggedInUser?.memberId ? (
-                  <>
-                    <Button
-                      className="black-button bin-icon"
-                      onClick={() => openDeleteModal()}
-                    >
-                      <Icon
-                        name="trash"
+          <div className="d-flex flex-column">
+            <h2 className="text-center">
+              <span className="black-highlight">
+                {artistPackage.artistPackageName}
+              </span>
+            </h2>
+            <h4 className="text-center mb-4">
+              <span className="purple-highlight">
+                ${artistPackage.artistPackagePrice} per hour
+              </span>
+            </h4>
+            {selectedPackageId !== artistPackage.artistPackageId ? (
+              <div className="images-container d-flex flex-row justify-content-center fade-in">
+                {artistPackage.photos
+                  ? artistPackage.photos.map((photo, index) => (
+                      <Image
+                        key={index}
                         size="small"
-                        className="m-0 d-flex flex-row justify-content-center"
+                        src={photo.artistPackagePhotoUrl}
+                        className="package-image"
                       />
-                    </Button>
-
-                    <Button
-                      className="black-button pencil-icon"
-                      onClick={() => openEditModal()}
-                    >
-                      <Icon
-                        name="pencil"
-                        size="small"
-                        className="m-0 d-flex flex-row justify-content-center"
-                      />
-                    </Button>
-
-                    <Button
-                      className="black-button close-icon"
-                      onClick={() => closePackageDetail()}
-                    >
-                      <Icon
-                        name="close"
-                        size="small"
-                        className="m-0 d-flex flex-row justify-content-center"
-                      />
-                    </Button>
-                  </>
-                ) : null}
+                    ))
+                  : null}
               </div>
-              {selectedPackageId === artistPackage.artistPackageId ? (
-                <div className="images-container d-flex flex-row justify-content-center fade-in px-5 mb-3">
-                  {artistPackage.photos
-                    ? artistPackage.photos.map((photo, index) => (
-                        <Image
-                          key={index}
-                          size="small"
-                          src={photo.artistPackagePhotoUrl}
-                          className="expanded-image fade-in"
-                          onClick={() =>
-                            openImageModal(photo.artistPackagePhotoUrl)
-                          }
-                        />
-                      ))
-                    : null}
-                </div>
-              ) : null}
-              {selectedPackageId !== artistPackage.artistPackageId ? (
+            ) : null}
+            <div className="d-flex flex-row flex-wrap justify-content-center">
+              {artistPackage.equipment.map((equipment, index) => (
+                <span key={index}>
+                  <Label
+                    label={equipment.equipmentName}
+                    id={equipment.equipmentId}
+                  />
+                </span>
+              ))}
+            </div>
+            {artistDetails.memberId === loggedInUser?.memberId ? (
+              <>
                 <Button
-                  className="white-button mt-2"
-                  onClick={() => viewMoreInfo(artistPackage.artistPackageId!)}
+                  className="black-button bin-icon"
+                  onClick={() => openDeleteModal()}
                 >
-                  <h4>View more information</h4>
+                  <Icon
+                    name="trash"
+                    size="small"
+                    className="m-0 d-flex flex-row justify-content-center"
+                  />
+                </Button>
+
+                <Button
+                  className="black-button pencil-icon"
+                  onClick={() => openEditModal()}
+                >
+                  <Icon
+                    name="pencil"
+                    size="small"
+                    className="m-0 d-flex flex-row justify-content-center"
+                  />
+                </Button>
+              </>
+            ) : null}
+            <>
+              {selectedPackageId === artistPackage.artistPackageId ? (
+                <Button
+                  className="black-button close-icon fade-in"
+                  onClick={() => closePackageDetail()}
+                >
+                  <Icon
+                    name="close"
+                    size="small"
+                    className="m-0 d-flex flex-row justify-content-center"
+                  />
                 </Button>
               ) : null}
+            </>
+          </div>
+          {selectedPackageId === artistPackage.artistPackageId ? (
+            <div className="images-container d-flex flex-row justify-content-center fade-in px-5 mb-3">
+              {artistPackage.photos
+                ? artistPackage.photos.map((photo, index) => (
+                    <Image
+                      key={index}
+                      size="small"
+                      src={photo.artistPackagePhotoUrl}
+                      className="expanded-image fade-in"
+                      onClick={() =>
+                        openImageModal(photo.artistPackagePhotoUrl)
+                      }
+                    />
+                  ))
+                : null}
+            </div>
+          ) : null}
+          <div className="d-flex flex-column mt-2">
+            {loggedInUser &&
+            loggedInUser.memberId !== artistDetails.memberId ? (
               <Button
                 className="black-button mt-2"
-                onClick={() => viewMoreInfo(artistPackage.artistPackageId!)}
+                onClick={() => openBookingModal(artistPackage)}
               >
                 <h4>Make booking</h4>
               </Button>
-            </div>
-            {selectedPackageId === artistPackage.artistPackageId ? (
-              <div className="col-12 col-lg-6 description">
-                {artistPackage.artistPackageDescription}
-              </div>
+            ) : null}
+            {selectedPackageId !== artistPackage.artistPackageId ? (
+              <Button
+                className="white-button mt-2"
+                onClick={() => viewMoreInfo(artistPackage.artistPackageId!)}
+              >
+                <h4>View more information</h4>
+              </Button>
             ) : null}
           </div>
         </div>
-      ) : null}
+        {selectedPackageId === artistPackage.artistPackageId ? (
+          <div className="col-12 col-lg-6 description">
+            {artistPackage.artistPackageDescription}
+          </div>
+        ) : null}
+      </div>
     </>
   );
 };

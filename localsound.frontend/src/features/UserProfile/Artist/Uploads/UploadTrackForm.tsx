@@ -12,8 +12,8 @@ import ErrorBanner from "../../../../common/banner/ErrorBanner";
 import { Formik } from "formik";
 import SuccessBanner from "../../../../common/banner/SuccessBanner";
 import UploadTrackSelection from "./UploadTrackSelection";
-import MyTextInput from "../../../../common/form/MyTextInput";
-import MyTextArea from "../../../../common/form/MyTextArea";
+import TextInput from "../../../../common/form/TextInput";
+import TextArea from "../../../../common/form/TextArea";
 import SearchGenreTypes from "../Edit/Search/SearchGenreTypes";
 import { GenreModel } from "../../../../app/model/dto/genre.model";
 import PlaceholderImg from "../../../../assets/placeholder.png";
@@ -246,7 +246,7 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                                 <div className="d-flex">
                                   <p className="form-label">TRACK NAME</p>
                                 </div>
-                                <MyTextInput
+                                <TextInput
                                   name="trackName"
                                   placeholder=""
                                   disabled={disabled}
@@ -276,7 +276,7 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                                     TRACK DESCRIPTION
                                   </p>
                                 </div>
-                                <MyTextArea
+                                <TextArea
                                   name="trackDescription"
                                   placeholder=""
                                   rows={7}

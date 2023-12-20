@@ -2,7 +2,7 @@ import { Formik } from "formik";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import { Form } from "semantic-ui-react";
-import MyTextInput from "../../../common/form/MyTextInput";
+import TextInput from "../../../common/form/TextInput";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import agent from "../../../api/agent";
 import { useDispatch } from "react-redux";
@@ -73,7 +73,7 @@ const ConfirmEmailPopUp = () => {
                 autoComplete="off"
               >
                 <div className="form-body">
-                  <MyTextInput
+                  <TextInput
                     name="token"
                     placeholder=""
                     fieldClassName="mt-2"

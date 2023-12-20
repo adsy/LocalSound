@@ -38,7 +38,7 @@ namespace localsound.backend.Persistence.DbContext
                     new EventType
                     {
                         EventTypeId = Guid.NewGuid(),
-                        EventTypeName = "Weddings"
+                        EventTypeName = "Wedding"
                     },
                     new EventType
                     {
@@ -48,7 +48,7 @@ namespace localsound.backend.Persistence.DbContext
                     new EventType
                     {
                         EventTypeId = Guid.NewGuid(),
-                        EventTypeName = "Religious events"
+                        EventTypeName = "Religious event"
                     },
                     new EventType
                     {
@@ -58,7 +58,7 @@ namespace localsound.backend.Persistence.DbContext
                     new EventType
                     {
                         EventTypeId = Guid.NewGuid(),
-                        EventTypeName = "Festivals"
+                        EventTypeName = "Festival"
                     }
                 });
                 await context.SaveChangesAsync();

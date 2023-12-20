@@ -65,6 +65,40 @@ h5 .button-highlight:hover,
 h6 .button-highlight:hover {
   background-color: #6d69fa;
 }
+h1 .black-highlight,
+h2 .black-highlight,
+h3 .black-highlight,
+h4 .black-highlight,
+h5 .black-highlight,
+h6 .black-highlight {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  color: #f1f1f1;
+  font-weight: 800;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+}
+h1 .black-highlight:before,
+h2 .black-highlight:before,
+h3 .black-highlight:before,
+h4 .black-highlight:before,
+h5 .black-highlight:before,
+h6 .black-highlight:before {
+  content: "";
+  position: absolute;
+  bottom: 10%;
+  left: -0.5rem;
+  top: -0.4rem;
+  transform: rotate(-2deg) !important;
+  width: calc(100% + 1rem);
+  height: 140%;
+  --tw-bg-opacity: 1;
+  background-color: #232323;
+  z-index: -1;
+  transform: translateZ(-1px);
+  border-radius: 2px;
+}
 h1 .purple-highlight,
 h2 .purple-highlight,
 h3 .purple-highlight,
@@ -74,7 +108,7 @@ h6 .purple-highlight {
   position: relative;
   z-index: 1;
   display: inline-block;
-  color: #f1f1f1;
+  color: #232323;
   font-weight: 800;
   text-transform: uppercase;
   transition: background-color 0.3s ease;
@@ -94,10 +128,10 @@ h6 .purple-highlight:before {
   width: calc(100% + 1rem);
   height: 140%;
   --tw-bg-opacity: 1;
-  background-color: #232323;
+  background-color: #6d69fa;
   z-index: -1;
   transform: translateZ(-1px);
-  border-radius: 2px;
+  border-radius: 3px;
 }
 
 .btn h4 {
@@ -663,6 +697,31 @@ i.large.icon {
   color: #001514;
 }
 
+.transparent-button {
+  color: #232323;
+  font-size: 16px;
+  letter-spacing: 2px;
+  transition: border-color 0.5s ease;
+  transition: background-color 0.5s ease;
+  border-radius: 10px 10px;
+  border: 1px solid transparent;
+  padding: 5px;
+  color: black !important;
+  background-color: unset;
+  text-transform: uppercase !important;
+}
+
+.transparent-button:hover,
+.transparent-button:active,
+.transparent-button:focus {
+  background-color: unset !important;
+  border: 1px solid transparent;
+}
+
+.transparent-button h4 {
+  color: #001514;
+}
+
 .black-button {
   text-transform: uppercase;
   color: #232323;
@@ -1142,6 +1201,11 @@ i.large.icon {
 #artist-profile {
   width: 100%;
   background-color: #fcfcfd;
+}
+#modal-popup .react-datepicker-wrapper,
+#edit-artist .react-datepicker-wrapper,
+#artist-profile .react-datepicker-wrapper {
+  width: 100%;
 }
 #modal-popup .banner-holder,
 #edit-artist .banner-holder,

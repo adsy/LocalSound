@@ -69,7 +69,7 @@ const ArtistDetails = ({
           <div className="d-flex flex-column pb-4 genre-mobile">
             <div className="d-flex flex-row flex-wrap justify-content-center">
               <h4 className="section-title inverse">
-                <span className="purple-highlight">Genres</span>
+                <span className="black-highlight">Genres</span>
               </h4>
             </div>
             <div className="about-text d-flex flex-row flex-wrap justify-content-center">
@@ -83,7 +83,7 @@ const ArtistDetails = ({
           <div className="d-flex flex-column pb-4">
             <div className="d-flex flex-row flex-wrap justify-content-center">
               <h4 className="section-title mb-3 mt-4">
-                <span className="purple-highlight">Event Types</span>
+                <span className="black-highlight">Event Types</span>
               </h4>
             </div>
             <div className="about-text d-flex flex-row flex-wrap justify-content-center">
@@ -100,7 +100,7 @@ const ArtistDetails = ({
           <div className="d-flex flex-column pb-4">
             <div className="d-flex flex-row flex-wrap justify-content-center">
               <h4 className="section-title mb-3 mt-4">
-                <span className="purple-highlight">Equipment</span>
+                <span className="black-highlight">Equipment</span>
               </h4>
             </div>
             <div className="about-text d-flex flex-row flex-wrap justify-content-center">
@@ -121,7 +121,7 @@ const ArtistDetails = ({
           <div className="d-flex flex-column pb-4">
             <div className="d-flex mt-4">
               <h4 className="section-title inverse">
-                <span className="purple-highlight">About</span>
+                <span className="black-highlight">About</span>
               </h4>
             </div>
             <span className="about-text">{userDetails.aboutSection}</span>
