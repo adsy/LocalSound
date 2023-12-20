@@ -131,6 +131,7 @@ const CreateBooking = ({ artistPackage }: Props) => {
                               date={values.bookingDate}
                               setFieldValue={setFieldValue}
                               setFieldTouched={setFieldTouched}
+                              placeholder=""
                             />
                           </div>
                           <div className="mb-3 w-50 ml-2">

@@ -27,6 +27,7 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<AppUser> AppUser { get; set; }
         public DbSet<AppUserToken> AppUserToken { get; set; }
         public DbSet<Artist> Artist { get; set; }
+        public DbSet<ArtistBooking> ArtistBooking { get; set; }
         public DbSet<ArtistEquipment> ArtistEquipment { get; set; }
         public DbSet<ArtistEventType> ArtistEventType { get; set; }
         public DbSet<ArtistFollower> ArtistFollower { get; set; }
@@ -116,6 +117,13 @@ namespace localsound.backend.Persistence.DbContext
 
             builder.Entity<Genre>().HasKey(x => x.GenreId);
             builder.Entity<EventType>().HasKey(x => x.EventTypeId);
+
+            builder.Entity<ArtistBooking>().HasKey(x => x.BookingId).IsClustered(false);
+            builder.Entity<ArtistBooking>().HasOne(x => x.Artist).WithMany(x => x.Bookings).OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<ArtistBooking>().HasOne(x => x.Booker).WithMany(x => x.PartiesBooked).OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<ArtistBooking>().HasOne(x => x.Package).WithMany(x => x.RelatedBookings).OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<ArtistBooking>().HasOne(x => x.EventType).WithMany(x => x.RelatedBookings).OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<ArtistBooking>().HasIndex(x => x.ArtistId).IsClustered(true);
 
             builder.Entity<ArtistEventType>().HasKey(x => new { x.AppUserId, x.EventTypeId });
             builder.Entity<ArtistEventType>().HasOne(x => x.EventType);

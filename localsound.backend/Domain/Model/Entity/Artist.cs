@@ -23,6 +23,8 @@ namespace localsound.backend.Domain.Model.Entity
         public virtual ICollection<ArtistEquipment> Equipment { get; set; }
         public virtual ICollection<ArtistFollower> Followers { get; set; }
         public virtual ICollection<ArtistPackage> Packages { get; set; }
+        public virtual ICollection<ArtistBooking> Bookings { get; set; }
+
         public virtual AppUser User { get; set; }
 
         public Artist UpdateName(string name)
