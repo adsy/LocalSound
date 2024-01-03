@@ -85,6 +85,8 @@ builder.Services.AddTransient<ITrackRepository,  TrackRepository>();
 builder.Services.AddTransient<IServiceBusRepository, ServiceBusRepository>();
 builder.Services.AddTransient<IPackageRepository, PackageRepository>();
 builder.Services.AddTransient<IPackageService,  PackageService>();
+builder.Services.AddTransient<IBookingRepository, BookingRepository>();
+builder.Services.AddTransient<IBookingService, BookingService>();
 
 builder.Services.AddHttpContextAccessor();
 

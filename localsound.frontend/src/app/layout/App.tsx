@@ -19,6 +19,7 @@ import { UserModel } from "../model/dto/user.model";
 import { State } from "../model/redux/state";
 import AccountSettings from "../../features/AccountSettings/AccountSettings";
 import MusicPlayer from "../../features/MusicPlayer/MusicPlayer";
+import BookingsOverview from "../../features/UserProfile/Booking/BookingsOverview";
 
 const App = () => {
   const history = useHistory();
@@ -78,6 +79,11 @@ const App = () => {
                   <div className="masthead">
                     <Switch>
                       <PrivateRoute exact path="/home" component={HomePage} />
+                      <PrivateRoute
+                        exact
+                        path="/bookings"
+                        component={BookingsOverview}
+                      />
                       <PrivateRoute
                         exact
                         path="/account-settings"

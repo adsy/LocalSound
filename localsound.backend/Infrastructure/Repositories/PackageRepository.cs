@@ -54,7 +54,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     }
                 }
 
-                _dbContext.ArtistPackage.Remove(package);
+                package.IsAvailable = false;
 
                 await _dbContext.SaveChangesAsync();
 
@@ -137,7 +137,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 var packages = await _dbContext.ArtistPackage
                     .Include(x => x.Equipment)
                     .Include(x => x.PackagePhotos)
-                    .Where(x => x.AppUserId == artist.Id)
+                    .Where(x => x.AppUserId == artist.Id && x.IsAvailable)
                     .ToListAsync();
 
                 packages = packages.OrderBy(x => double.Parse(x.PackagePrice)).ToList();

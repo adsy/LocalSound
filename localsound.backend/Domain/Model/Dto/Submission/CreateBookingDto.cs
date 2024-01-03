@@ -7,7 +7,7 @@
         public string BookingDescription { get; set; }
         public string BookingAddress { get; set; }
         public decimal BookingLength { get; set; }
-        public Guid EventType { get; set; }
+        public Guid EventTypeId { get; set; }
         public DateTime BookingDate { get; set; }
     }
 }

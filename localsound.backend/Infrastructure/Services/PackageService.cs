@@ -61,6 +61,7 @@ namespace localsound.backend.Infrastructure.Services
                     PackageDescription = packageDto.PackageDescription,
                     PackagePrice = packageDto.PackagePrice,
                     Equipment = artistPackageEquipment,
+                    IsAvailable = true,
                     PackagePhotos = new List<ArtistPackagePhoto>()
                 };
 

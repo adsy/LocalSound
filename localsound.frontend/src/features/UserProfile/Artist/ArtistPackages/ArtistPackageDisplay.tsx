@@ -78,7 +78,12 @@ const ArtistPackageDisplay = ({
     dispatch(
       handleToggleModal({
         open: true,
-        body: <CreateBooking artistPackage={selectedPackage} />,
+        body: (
+          <CreateBooking
+            artistPackage={selectedPackage}
+            artistDetails={artistDetails}
+          />
+        ),
         size: "tiny",
       })
     );

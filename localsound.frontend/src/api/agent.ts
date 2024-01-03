@@ -20,6 +20,7 @@ import { ArtistTrackUploadModel } from "../app/model/dto/artist-track-upload.mod
 import { TrackListResponse } from "../app/model/dto/track-list-response.model";
 import { FollowerListResponse } from "../app/model/dto/follower-list-response.model";
 import { ArtistPackageModel } from "../app/model/dto/artist-package.model";
+import { BookingModel } from "../app/model/dto/booking.model";
 
 const axiosApiInstance = axios.create();
 
@@ -194,6 +195,19 @@ const Packages = {
     requests.delete(`packages/member/${memberId}/package/${packageId}`),
 };
 
+const Bookings = {
+  createBooking: (memberId: string, bookingData: BookingModel) =>
+    requests.post(`bookings/member/${memberId}/create-booking`, bookingData),
+  getFutureBookings: (
+    memberId: string,
+    page: number,
+    bookingConfirmed: boolean | null
+  ) =>
+    requests.get<BookingModel[]>(
+      `bookings/member/${memberId}/get-future-bookings?page=${page}&bookingConfirmed=${bookingConfirmed}`
+    ),
+};
+
 const agent = {
   Authentication,
   Profile,
@@ -202,6 +216,7 @@ const agent = {
   EventType,
   Tracks,
   Packages,
+  Bookings,
 };
 
 export default agent;

@@ -147,6 +147,16 @@ const TopNavbar = () => {
                             </h5>
                           </NavLink>
                           <NavLink
+                            to={`/bookings`}
+                            className={`sidebar-item mb-2`}
+                            onClick={() => setShow(false)}
+                          >
+                            <Icon name="calendar" size="large" />
+                            <h5 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
+                              Bookings
+                            </h5>
+                          </NavLink>
+                          <NavLink
                             to={`/account-settings`}
                             className={`sidebar-item mb-2`}
                             onClick={() => setShow(false)}
