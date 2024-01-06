@@ -1,7 +1,9 @@
-﻿using localsound.backend.Domain.Model;
+﻿using localsound.backend.Domain.Enum;
+using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Domain.Model.Dto.Response;
 using localsound.backend.Domain.Model.Dto.Submission;
+using localsound.backend.Domain.Model.Interfaces.Entity;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
 using Microsoft.Extensions.Logging;
@@ -87,7 +89,23 @@ namespace localsound.backend.Infrastructure.Services
                 // TODO: Convert repo result into summary dto
                 var returnData = userBookingsResult.ReturnData.Select(x => new BookingDto
                 {
-
+                    BookingId = x.BookingId,
+                    BookerId = x.Booker.MemberId,
+                    BookerName = $"{x.Booker.NonArtist.FirstName} {x.Booker.NonArtist.LastName}",
+                    ArtistId = appUser.ReturnData.CustomerType == CustomerTypeEnum.Artist ? memberId : x.Booker.MemberId,
+                    ArtistName = x.Artist.Name,
+                    PackageName = x.Package.PackageName,
+                    PackagePrice = x.Package.PackagePrice,
+                    BookingDate = x.BookingDate,
+                    BookingLength = x.BookingLength,
+                    EventType = x.EventType.EventTypeName,
+                    BookingDescription = x.BookingDescription,
+                    BookingAddress = x.BookingAddress,
+                    PackageEquipment = x.Package.Equipment.Select(equipment => new EquipmentDto
+                    {
+                        EquipmentId = equipment.ArtistPackageEquipmentId,
+                        EquipmentName = equipment.EquipmentName,
+                    }).ToList()
                 }).ToList();
 
                 return new ServiceResponse<List<BookingDto>>(HttpStatusCode.OK)

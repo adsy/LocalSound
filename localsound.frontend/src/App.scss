@@ -1526,6 +1526,46 @@ i.large.icon {
   }
 }
 
+#bookings {
+  .black-badge:first-of-type {
+    margin-left: 0px;
+  }
+
+  .booking-item {
+    background: $white200;
+    padding: 15px;
+    // border: 1px solid $white300;
+    border-radius: 10px;
+    cursor: pointer;
+
+    .name {
+      font-size: 18px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .date {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .purple-badge {
+      // color: $black200;
+      margin-bottom: 0px;
+      .badge-name {
+        margin-bottom: 0px;
+        font-size: 14px;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 991px) {
+    .booking-container {
+      padding: 0px;
+    }
+  }
+}
+
 @keyframes fadein {
   from {
     opacity: 0;

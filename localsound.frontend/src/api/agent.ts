@@ -20,6 +20,7 @@ import { ArtistTrackUploadModel } from "../app/model/dto/artist-track-upload.mod
 import { TrackListResponse } from "../app/model/dto/track-list-response.model";
 import { FollowerListResponse } from "../app/model/dto/follower-list-response.model";
 import { ArtistPackageModel } from "../app/model/dto/artist-package.model";
+import { BookingSubmissionModel } from "../app/model/dto/booking-submission.model";
 import { BookingModel } from "../app/model/dto/booking.model";
 
 const axiosApiInstance = axios.create();
@@ -196,16 +197,21 @@ const Packages = {
 };
 
 const Bookings = {
-  createBooking: (memberId: string, bookingData: BookingModel) =>
+  createBooking: (memberId: string, bookingData: BookingSubmissionModel) =>
     requests.post(`bookings/member/${memberId}/create-booking`, bookingData),
   getFutureBookings: (
     memberId: string,
     page: number,
     bookingConfirmed: boolean | null
-  ) =>
-    requests.get<BookingModel[]>(
-      `bookings/member/${memberId}/get-future-bookings?page=${page}&bookingConfirmed=${bookingConfirmed}`
-    ),
+  ) => {
+    let url = `bookings/member/${memberId}/get-future-bookings?page=${page}`;
+
+    if (bookingConfirmed !== null) {
+      url += "&bookingConfirmed=" + bookingConfirmed;
+    }
+
+    return requests.get<BookingModel[]>(url);
+  },
 };
 
 const agent = {

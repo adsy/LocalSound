@@ -78,27 +78,16 @@ namespace localsound.backend.Infrastructure.Repositories
                     };
                 }
 
-                List<ArtistBooking>? bookings = null;
-                if (user.CustomerType == CustomerTypeEnum.Artist)
-                {
-                    bookings = await _dbContext.ArtistBooking.Where(x => x.ArtistId == appUserId && x.BookingConfirmed == bookingConfirmed)
-                        .Include(x => x.Booker)
-                        .Include(x => x.Package)
-                        .Include(x => x.EventType)
-                        .Skip(page * 10)
-                        .Take(10)
-                        .ToListAsync();
-                }
-                else
-                {
-                    bookings = await _dbContext.ArtistBooking.Where(x => x.BookerId == appUserId && x.BookingConfirmed == bookingConfirmed)
+                var bookings =  await _dbContext.ArtistBooking.Where(x => x.BookerId == appUserId && x.BookingConfirmed == bookingConfirmed && x.BookingDate >= new DateTime())
                         .Include(x => x.Artist)
+                        .Include(x => x.Booker)
+                        .ThenInclude(x => x.NonArtist)
                         .Include(x => x.Package)
+                        .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
                         .Skip(page * 10)
                         .Take(10)
                         .ToListAsync();
-                }
 
                 return new ServiceResponse<List<ArtistBooking>>(HttpStatusCode.OK)
                 {

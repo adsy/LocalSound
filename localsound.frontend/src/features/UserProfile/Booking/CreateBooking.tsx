@@ -14,7 +14,7 @@ import SelectInput from "../../../common/form/SelectInput";
 import createBookingValidation from "../../../validation/CreateBookingValidation";
 import { State } from "../../../app/model/redux/state";
 import { UserModel } from "../../../app/model/dto/user.model";
-import { BookingModel } from "../../../app/model/dto/booking.model";
+import { BookingSubmissionModel } from "../../../app/model/dto/booking-submission.model";
 import { handleResetModal } from "../../../app/redux/actions/modalSlice";
 
 interface Props {
@@ -89,7 +89,7 @@ const CreateBooking = ({ artistPackage, artistDetails }: Props) => {
                     bookingAddress: values.address,
                     bookingLength: length,
                     bookingDate: values.bookingDate,
-                  } as BookingModel;
+                  } as BookingSubmissionModel;
 
                   await agent.Bookings.createBooking(memberId!, bookingModel);
 

@@ -1,9 +1,17 @@
+import { EquipmentModel } from "./equipment.model";
+
 export interface BookingModel {
+  bookingId: string;
+  bookerId: string;
+  bookerName: string;
   artistId: string;
-  packageId: string;
-  eventTypeId: string;
-  bookingDescription: string;
-  bookingAddress: string;
-  bookingLength: number;
+  artistName: string;
+  packageName: string;
+  packagePrice: string;
   bookingDate: Date;
+  bookingLength: number;
+  bookingAddress: string;
+  eventType: string;
+  bookingDescription: string;
+  packageEquipment: EquipmentModel[];
 }

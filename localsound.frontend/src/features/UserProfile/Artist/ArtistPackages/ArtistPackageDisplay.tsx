@@ -1,15 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
-import { ArtistPackageModel } from "../../../../app/model/dto/artist-package.model";
+import {
+  ArtistPackageModel,
+  ArtistPackagePhotoModel,
+} from "../../../../app/model/dto/artist-package.model";
 import Label from "../../../../common/components/Label/Label";
 import { UserModel } from "../../../../app/model/dto/user.model";
 import { handleToggleModal } from "../../../../app/redux/actions/modalSlice";
 import DeletePackageConfirmation from "./DeletePackageConfirmation";
 import { Button } from "react-bootstrap";
 import EditArtistPackage from "./EditArtistPackage";
-import { Icon, Image } from "semantic-ui-react";
+import { Icon, Image as ImageComponent } from "semantic-ui-react";
 import { State } from "../../../../app/model/redux/state";
 import ImageDisplay from "../../../../common/imageDisplay/ImageDisplay";
 import CreateBooking from "../../Booking/CreateBooking";
+import { useLayoutEffect, useState } from "react";
+import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
 
 interface Props {
   artistPackage: ArtistPackageModel;
@@ -28,8 +33,34 @@ const ArtistPackageDisplay = ({
   selectedPackageId,
   setSelectedPackageId,
 }: Props) => {
+  const [imgsLoaded, setImgsLoaded] = useState(false);
+  const [photos, setPhotos] = useState<string[]>([]);
   const loggedInUser = useSelector((state: State) => state.user.userDetails);
   const dispatch = useDispatch();
+
+  const loadImage = (image: ArtistPackagePhotoModel) => {
+    if (imgsLoaded) setImgsLoaded(false);
+    return new Promise<string>((resolve, reject) => {
+      const loadImg = new Image();
+      loadImg.src = image.artistPackagePhotoUrl;
+      loadImg.onload = () => resolve(image.artistPackagePhotoUrl);
+      loadImg.onerror = (err) => reject(err);
+      return loadImg;
+    });
+  };
+
+  useLayoutEffect(() => {
+    const IMAGES = [...artistPackage.photos];
+
+    Promise.all(IMAGES.map((image) => loadImage(image)))
+      .then((imgs: string[]) => {
+        setPhotos(imgs);
+      })
+      .catch((err) => console.log("Failed to load images", err))
+      .finally(() => {
+        setImgsLoaded(true);
+      });
+  }, [artistPackage.photos]);
 
   const openDeleteModal = () => {
     dispatch(
@@ -120,16 +151,18 @@ const ArtistPackageDisplay = ({
             </h4>
             {selectedPackageId !== artistPackage.artistPackageId ? (
               <div className="images-container d-flex flex-row justify-content-center fade-in">
-                {artistPackage.photos
-                  ? artistPackage.photos.map((photo, index) => (
-                      <Image
-                        key={index}
-                        size="small"
-                        src={photo.artistPackagePhotoUrl}
-                        className="package-image"
-                      />
-                    ))
-                  : null}
+                {!imgsLoaded ? (
+                  <InPageLoadingComponent />
+                ) : artistPackage.photos ? (
+                  artistPackage.photos.map((photo, index) => (
+                    <ImageComponent
+                      key={index}
+                      size="small"
+                      src={photo.artistPackagePhotoUrl}
+                      className="package-image"
+                    />
+                  ))
+                ) : null}
               </div>
             ) : null}
             <div className="d-flex flex-row flex-wrap justify-content-center">
@@ -186,7 +219,7 @@ const ArtistPackageDisplay = ({
             <div className="images-container d-flex flex-row justify-content-center fade-in px-5 mb-3">
               {artistPackage.photos
                 ? artistPackage.photos.map((photo, index) => (
-                    <Image
+                    <ImageComponent
                       key={index}
                       size="small"
                       src={photo.artistPackagePhotoUrl}

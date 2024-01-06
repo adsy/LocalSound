@@ -1,7 +1,7 @@
 import { Badge } from "react-bootstrap";
 
 interface Props {
-  label: string;
+  label: string | JSX.Element;
   id: string;
   deleteLabelItem?: (id: string) => void;
   showDeleteButton?: boolean;

@@ -11,6 +11,7 @@
         public string PackagePrice { get; set; }
         public DateTime BookingDate { get; set; }
         public decimal BookingLength { get; set; }
+        public string BookingAddress { get; set; }
         public string EventType { get; set; }
         public string BookingDescription { get; set; }
         public List<EquipmentDto> PackageEquipment { get; set; }
