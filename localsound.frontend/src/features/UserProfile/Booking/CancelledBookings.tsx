@@ -7,13 +7,18 @@ import { BookingModel } from "../../../app/model/dto/booking.model";
 import InfoBanner from "../../../common/banner/InfoBanner";
 import { Icon } from "semantic-ui-react";
 
-const CancelledBookings = () => {
+interface Props {
+  cancelledBookings: BookingModel[];
+  setCancelledBookings: (bookings: BookingModel[]) => void;
+}
+
+const CancelledBookings = ({
+  cancelledBookings,
+  setCancelledBookings,
+}: Props) => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [cancelledBookings, setCancelledBookings] = useState<BookingModel[]>(
-    []
-  );
 
   useLayoutEffect(() => {
     (async () => {
@@ -21,7 +26,7 @@ const CancelledBookings = () => {
         var bookings = await agent.Bookings.getFutureBookings(
           userDetails?.memberId!,
           0,
-          true
+          false
         );
 
         setCancelledBookings(bookings);

@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import {
   SingletonClass,
   SingletonFactory,
-} from "../../waveformGenerator/waveformGenerator";
+} from "../../appSingleton/appSingleton";
 import WaveForm from "../../../features/MusicPlayer/Waveform";
 import { Button } from "react-bootstrap";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";

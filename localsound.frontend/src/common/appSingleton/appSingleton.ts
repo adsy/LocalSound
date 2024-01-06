@@ -1,6 +1,7 @@
 class SingletonClass {
   audioElementRef: React.RefObject<HTMLAudioElement> | null = null;
   analyzerData: any = null;
+  refreshingToken: boolean = false;
 }
 
 var SingletonFactory = (function () {
@@ -12,6 +13,16 @@ var SingletonFactory = (function () {
         instance = new SingletonClass();
       }
       return instance;
+    },
+    setRefreshingTokenTrue: function () {
+      if (instance) {
+        instance.refreshingToken = true;
+      }
+    },
+    setRefreshingTokenFalse: function () {
+      if (instance) {
+        instance.refreshingToken = false;
+      }
     },
   };
 })();

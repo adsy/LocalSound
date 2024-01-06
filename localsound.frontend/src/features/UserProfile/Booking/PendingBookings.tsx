@@ -4,16 +4,21 @@ import { useSelector } from "react-redux";
 import { State } from "../../../app/model/redux/state";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import { BookingModel } from "../../../app/model/dto/booking.model";
-import BookingItem from "./BookingItem";
+import BookingSummary from "./BookingSummary";
 import { BookingsTypes } from "../../../app/model/enums/BookingTypes";
 import InfoBanner from "../../../common/banner/InfoBanner";
 import { Icon } from "semantic-ui-react";
+import ErrorBanner from "../../../common/banner/ErrorBanner";
 
-const PendingBookings = () => {
+interface Props {
+  pendingBookings: BookingModel[];
+  setPendingBookings: (bookings: BookingModel[]) => void;
+}
+
+const PendingBookings = ({ pendingBookings, setPendingBookings }: Props) => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [pendingBookings, setPendingBookings] = useState<BookingModel[]>([]);
 
   useLayoutEffect(() => {
     (async () => {
@@ -24,7 +29,9 @@ const PendingBookings = () => {
           null
         );
 
-        setPendingBookings(bookings);
+        if (bookings) {
+          setPendingBookings(bookings);
+        }
       } catch (err: any) {
         setError(err);
       }
@@ -45,7 +52,7 @@ const PendingBookings = () => {
             <div className="d-flex flex-column">
               {pendingBookings.map((booking, index) => (
                 <div key={index} className="px-3">
-                  <BookingItem
+                  <BookingSummary
                     booking={booking}
                     type={BookingsTypes.pending}
                     user={userDetails!}

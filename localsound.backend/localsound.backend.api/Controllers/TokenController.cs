@@ -83,7 +83,7 @@ namespace localsound.backend.api.Controllers
 
         private void AddCookies(string token, string refreshToken)
         {
-            // Needs to be changed to Strict when react app is moved into ASP.NET app
+            // Needs to be changed to Strict when react app is moved into ASP.NET appto
             Response.Cookies.Append("X-Access-Token", HttpUtility.UrlEncode(token), new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.None, Secure = true, Expires = DateTime.Now.AddDays(7) });
             Response.Cookies.Append("X-Refresh-Token", HttpUtility.UrlEncode(refreshToken), new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.None, Secure = true, Expires = DateTime.Now.AddDays(7) });
         }

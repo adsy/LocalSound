@@ -7,11 +7,15 @@ import { BookingModel } from "../../../app/model/dto/booking.model";
 import InfoBanner from "../../../common/banner/InfoBanner";
 import { Icon } from "semantic-ui-react";
 
-const PastBookings = () => {
+interface Props {
+  pastBookings: BookingModel[];
+  setPastBookings: (bookings: BookingModel[]) => void;
+}
+
+const PastBookings = ({ pastBookings, setPastBookings }: Props) => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [pastBookings, setPastBookings] = useState<BookingModel[]>([]);
 
   useLayoutEffect(() => {
     (async () => {

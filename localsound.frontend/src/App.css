@@ -1710,24 +1710,23 @@ i.large.icon {
   margin-left: 0px;
 }
 #bookings .booking-item {
-  background: #fcfcfd;
   padding: 15px;
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
   cursor: pointer;
 }
 #bookings .booking-item .name {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 800;
-  text-transform: uppercase;
 }
 #bookings .booking-item .date {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 800;
 }
-#bookings .booking-item .purple-badge {
+#bookings .booking-item .black-badge {
   margin-bottom: 0px;
 }
-#bookings .booking-item .purple-badge .badge-name {
+#bookings .booking-item .black-badge .badge-name {
   margin-bottom: 0px;
   font-size: 14px;
 }

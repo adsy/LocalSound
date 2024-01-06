@@ -7,7 +7,7 @@ import {
   handlePauseSong,
   handlePlaySong,
 } from "../../app/redux/actions/playerSlice";
-import { SingletonFactory } from "../../common/waveformGenerator/waveformGenerator";
+import { SingletonFactory } from "../../common/appSingleton/appSingleton";
 
 const MusicPlayer = () => {
   const player = useSelector((state: State) => state.player);

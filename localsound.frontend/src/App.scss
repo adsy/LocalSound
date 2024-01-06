@@ -1532,24 +1532,24 @@ i.large.icon {
   }
 
   .booking-item {
-    background: $white200;
+    // background: $white200;
     padding: 15px;
-    // border: 1px solid $white300;
+    border: 1px solid $white300;
     border-radius: 10px;
     cursor: pointer;
 
     .name {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 800;
-      text-transform: uppercase;
+      // text-transform: uppercase;
     }
 
     .date {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 800;
     }
 
-    .purple-badge {
+    .black-badge {
       // color: $black200;
       margin-bottom: 0px;
       .badge-name {

@@ -42,6 +42,18 @@ axiosApiInstance.interceptors.request.use((config: AdaptAxiosRequestConfig) => {
   return config;
 });
 
+let isRefreshing = false;
+let refreshSubscribers: any[] = [];
+
+const subscribeTokenRefresh = (cb: () => void) => {
+  refreshSubscribers.push(cb);
+};
+
+const onRefreshed = () => {
+  refreshSubscribers.map((cb) => cb());
+  refreshSubscribers = [];
+};
+
 axiosApiInstance.interceptors.response.use(
   async (response: AxiosResponse) => {
     if (import.meta.env.NODE_ENV === "development") {
@@ -49,22 +61,29 @@ axiosApiInstance.interceptors.response.use(
     }
     return response;
   },
-  async (error: AxiosError) => {
-    if (error && error.response) {
-      const { status, config, headers } = error.response;
+  async (err: AxiosError) => {
+    if (err && err.response) {
+      const { config, headers } = err.response;
       if (
-        status === 401 &&
+        err.response!.status === 401 &&
         headers["www-authenticate"]?.includes("invalid_token")
       ) {
-        try {
-          await Authentication.refreshToken();
-          return await requests.retry(config);
-        } catch (err) {
-          resetState();
-          history.push("/");
+        if (!isRefreshing) {
+          isRefreshing = true;
+          Authentication.refreshToken().then(async () => {
+            isRefreshing = false;
+            onRefreshed();
+          });
         }
+
+        const retryOrigReq = new Promise((resolve, reject) => {
+          subscribeTokenRefresh(async () => {
+            resolve(requests.retry(config));
+          });
+        });
+        return retryOrigReq;
       } else {
-        return Promise.reject(error.response.data);
+        return Promise.reject(err.response.data);
       }
     } else {
       return Promise.reject(
@@ -74,7 +93,7 @@ axiosApiInstance.interceptors.response.use(
   }
 );
 
-const responseBody = <T>(response: AxiosResponse<T>) => response.data;
+const responseBody = <T>(response: AxiosResponse<T>) => response?.data;
 
 const requests = {
   get: <T>(url: string, config?: AxiosRequestConfig) =>
