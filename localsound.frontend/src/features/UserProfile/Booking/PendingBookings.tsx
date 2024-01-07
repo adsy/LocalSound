@@ -12,13 +12,25 @@ import ErrorBanner from "../../../common/banner/ErrorBanner";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import BookingItem from "./BookingItem";
 import { Button } from "react-bootstrap";
+import { CustomerTypes } from "../../../app/model/enums/customerTypes";
 
 interface Props {
   pendingBookings: BookingModel[];
   setPendingBookings: (bookings: BookingModel[]) => void;
+  cancelledBookings: BookingModel[];
+  setCancelledBookings: (bookings: BookingModel[]) => void;
+  upcomingBookings: BookingModel[];
+  setUpcomingBookings: (bookings: BookingModel[]) => void;
 }
 
-const PendingBookings = ({ pendingBookings, setPendingBookings }: Props) => {
+const PendingBookings = ({
+  pendingBookings,
+  setPendingBookings,
+  upcomingBookings,
+  setUpcomingBookings,
+  cancelledBookings,
+  setCancelledBookings,
+}: Props) => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
@@ -66,20 +78,31 @@ const PendingBookings = ({ pendingBookings, setPendingBookings }: Props) => {
           </h3>
           <p className="px-3">
             Click on a pending booking to view more information.{" "}
+            {userDetails?.customerType === CustomerTypes.Artist
+              ? "You are able to accept or cancel whichever bookings you want directly from this page."
+              : "If you do not need this booking anymore, you are able to cancel the booking directly from this page."}
           </p>
-          {pendingBookings.length > 0 ? (
+          {error ? (
+            <ErrorBanner className="mx-3" children={error} />
+          ) : pendingBookings.length > 0 ? (
             <>
               <div className="d-flex flex-row flex-wrap">
                 {pendingBookings.map((booking, index) => (
                   <div
                     key={index}
-                    className="px-3 col-12 col-lg-6 mb-2"
+                    className="px-3 col-12 col-xl-6 mb-2"
                     onClick={() => OpenBookingInfo(booking)}
                   >
                     <BookingSummary
                       booking={booking}
                       type={BookingsTypes.pending}
                       user={userDetails!}
+                      pendingBookings={pendingBookings}
+                      setPendingBookings={setPendingBookings}
+                      upcomingBookings={upcomingBookings}
+                      setUpcomingBookings={setUpcomingBookings}
+                      cancelledBookings={cancelledBookings}
+                      setCancelledBookings={setCancelledBookings}
                     />
                   </div>
                 ))}

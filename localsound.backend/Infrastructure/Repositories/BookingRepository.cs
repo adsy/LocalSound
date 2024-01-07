@@ -133,7 +133,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<List<ArtistBooking>>> GetFutureBookingsAsync(Guid appUserId, bool? bookingConfirmed, int page)
+        public async Task<ServiceResponse<List<ArtistBooking>>> GetNonCompletedBookingsAsync(Guid appUserId, bool? bookingConfirmed, int page)
         {
             try
             {
@@ -184,7 +184,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
             catch(Exception e)
             {
-                var message = $"{nameof(BookingRepository)} - {nameof(GetFutureBookingsAsync)} - {e.Message}";
+                var message = $"{nameof(BookingRepository)} - {nameof(GetNonCompletedBookingsAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<List<ArtistBooking>>(HttpStatusCode.InternalServerError)

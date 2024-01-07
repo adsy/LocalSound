@@ -6,13 +6,17 @@ import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import { BookingModel } from "../../../app/model/dto/booking.model";
 import InfoBanner from "../../../common/banner/InfoBanner";
 import { Icon } from "semantic-ui-react";
+import ErrorBanner from "../../../common/banner/ErrorBanner";
 
 interface Props {
-  pastBookings: BookingModel[];
-  setPastBookings: (bookings: BookingModel[]) => void;
+  completedBookings: BookingModel[];
+  setCompletedBookings: (bookings: BookingModel[]) => void;
 }
 
-const PastBookings = ({ pastBookings, setPastBookings }: Props) => {
+const CompletedBookings = ({
+  completedBookings,
+  setCompletedBookings,
+}: Props) => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,9 +44,11 @@ const PastBookings = ({ pastBookings, setPastBookings }: Props) => {
       ) : (
         <>
           <h3>
-            <span className="black-highlight">Past</span>
+            <span className="black-highlight">Completed</span>
           </h3>
-          {pastBookings.length > 0 ? (
+          {error ? (
+            <ErrorBanner className="mx-3" children={error} />
+          ) : completedBookings.length > 0 ? (
             <div></div>
           ) : (
             <InfoBanner className="fade-in mb-2 mx-3">
@@ -52,7 +58,9 @@ const PastBookings = ({ pastBookings, setPastBookings }: Props) => {
                   size="small"
                   className="follower-icon d-flex align-items-center justify-content-center"
                 />
-                <div className="ml-2">You currently have no past bookings.</div>
+                <div className="ml-2">
+                  You currently have no completed bookings.
+                </div>
               </div>
             </InfoBanner>
           )}
@@ -62,4 +70,4 @@ const PastBookings = ({ pastBookings, setPastBookings }: Props) => {
   );
 };
 
-export default PastBookings;
+export default CompletedBookings;

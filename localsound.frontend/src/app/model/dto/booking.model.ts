@@ -11,6 +11,7 @@ export interface BookingModel {
   bookingDate: Date;
   bookingLength: number;
   bookingAddress: string;
+  bookingConfirmed?: boolean;
   eventType: string;
   bookingDescription: string;
   packageEquipment: EquipmentModel[];

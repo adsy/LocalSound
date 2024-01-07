@@ -27,7 +27,7 @@ namespace localsound.backend.api.Handlers.Booking
 
         public async Task<ServiceResponse<List<BookingDto>>> Handle(GetUserBookingsQuery request, CancellationToken cancellationToken)
         {
-            return await _bookingService.GetFutureBookings(request.AppUserId, request.MemberId, request.BookingConfirmed, request.Page);
+            return await _bookingService.GetNonCompletedBookings(request.AppUserId, request.MemberId, request.BookingConfirmed, request.Page);
         }
 
         public async Task<ServiceResponse> Handle(CancelBookingCommand request, CancellationToken cancellationToken)

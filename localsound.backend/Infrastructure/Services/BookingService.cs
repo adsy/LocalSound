@@ -132,7 +132,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<List<BookingDto>>> GetFutureBookings(Guid appUserId, string memberId, bool? bookingConfirmed, int page)
+        public async Task<ServiceResponse<List<BookingDto>>> GetNonCompletedBookings(Guid appUserId, string memberId, bool? bookingConfirmed, int page)
         {
             try
             {
@@ -146,7 +146,7 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var userBookingsResult = await _bookingRepository.GetFutureBookingsAsync(appUserId, bookingConfirmed, page);
+                var userBookingsResult = await _bookingRepository.GetNonCompletedBookingsAsync(appUserId, bookingConfirmed, page);
 
                 if (!userBookingsResult.IsSuccessStatusCode || userBookingsResult.ReturnData == null)
                 {
@@ -171,6 +171,7 @@ namespace localsound.backend.Infrastructure.Services
                     EventType = x.EventType.EventTypeName,
                     BookingDescription = x.BookingDescription,
                     BookingAddress = x.BookingAddress,
+                    BookingConfirmed = x.BookingConfirmed,
                     PackageEquipment = x.Package.Equipment.Select(equipment => new EquipmentDto
                     {
                         EquipmentId = equipment.ArtistPackageEquipmentId,
@@ -185,7 +186,7 @@ namespace localsound.backend.Infrastructure.Services
             }
             catch(Exception e)
             {
-                var message = $"{nameof(BookingService)} - {nameof(GetFutureBookings)} - {e.Message}";
+                var message = $"{nameof(BookingService)} - {nameof(GetNonCompletedBookings)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<List<BookingDto>>(HttpStatusCode.InternalServerError)

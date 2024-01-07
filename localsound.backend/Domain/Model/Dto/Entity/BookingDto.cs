@@ -14,6 +14,7 @@
         public string BookingAddress { get; set; }
         public string EventType { get; set; }
         public string BookingDescription { get; set; }
+        public bool? BookingConfirmed { get; set; }
         public List<EquipmentDto> PackageEquipment { get; set; }
     }
 }

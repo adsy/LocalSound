@@ -29,8 +29,8 @@ namespace localsound.backend.api.Controllers
         }
 
         [HttpGet]
-        [Route("member/{memberId}/get-future-bookings")]
-        public async Task<ActionResult> GetFutureBookings([FromQuery] bool? bookingConfirmed, [FromQuery] int page, string memberId)
+        [Route("member/{memberId}/get-bookings")]
+        public async Task<ActionResult> GetNonCompletedBookings([FromQuery] bool? bookingConfirmed, [FromQuery] int page, string memberId)
         {
             var result = await Mediator.Send(new GetUserBookingsQuery
             {

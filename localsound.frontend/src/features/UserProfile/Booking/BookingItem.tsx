@@ -16,7 +16,7 @@ const BookingItem = ({ booking, bookingType }: Props) => {
       </div>
 
       <div className="d-flex flex-row flex-wrap">
-        <div className="col-12 col-md-6">
+        <div className="col-6 col-xs-6">
           <div className="mb-3">
             <h4>Artist</h4>
             {booking.artistName}
@@ -37,7 +37,7 @@ const BookingItem = ({ booking, bookingType }: Props) => {
             {booking.bookingLength} hours
           </div>
         </div>
-        <div className="col-12 col-md-6">
+        <div className="col-6 col-xs-6">
           <div className="mb-3">
             <h4>Booker</h4>
             {booking.bookerName}

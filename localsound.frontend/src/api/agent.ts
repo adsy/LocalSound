@@ -223,7 +223,7 @@ const Bookings = {
     page: number,
     bookingConfirmed: boolean | null
   ) => {
-    let url = `bookings/member/${memberId}/get-future-bookings?page=${page}`;
+    let url = `bookings/member/${memberId}/get-bookings?page=${page}`;
 
     if (bookingConfirmed !== null) {
       url += "&bookingConfirmed=" + bookingConfirmed;
@@ -231,6 +231,16 @@ const Bookings = {
 
     return requests.get<BookingModel[]>(url);
   },
+  acceptBooking: (memberId: string, bookingId: string) =>
+    requests.put(
+      `bookings/member/${memberId}/booking/${bookingId}/accept-booking`,
+      {}
+    ),
+  cancelBooking: (memberId: string, bookingId: string) =>
+    requests.put(
+      `bookings/member/${memberId}/booking/${bookingId}/cancel-booking`,
+      {}
+    ),
 };
 
 const agent = {
