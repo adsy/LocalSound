@@ -1545,6 +1545,10 @@ i.large.icon {
 }
 
 #bookings {
+  .component-container:last-of-type {
+    margin-bottom: 30px;
+  }
+
   .booking-item {
     // background: $white200;
     padding: 15px;

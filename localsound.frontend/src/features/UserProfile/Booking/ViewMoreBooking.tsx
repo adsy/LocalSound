@@ -47,7 +47,13 @@ const ViewMoreBooking = ({
         document.documentElement.scrollTop -
         listRef?.current?.offsetHeight;
 
-      if (!error && canLoadMore && !loading && offset > 0 && offset < 102) {
+      if (
+        !error &&
+        canLoadMore &&
+        !loading &&
+        offset > 0 &&
+        (offset < 102 || offset > 2200)
+      ) {
         setPage(page + 1);
       }
     }

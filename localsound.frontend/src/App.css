@@ -1721,6 +1721,9 @@ i.large.icon {
   }
 }
 
+#bookings .component-container:last-of-type {
+  margin-bottom: 30px;
+}
 #bookings .booking-item {
   padding: 15px;
   border: 1px solid #e2e8f0;
