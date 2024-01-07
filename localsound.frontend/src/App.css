@@ -1202,6 +1202,11 @@ i.large.icon {
   width: 100%;
   background-color: #fcfcfd;
 }
+#modal-popup .black-badge:first-of-type,
+#edit-artist .black-badge:first-of-type,
+#artist-profile .black-badge:first-of-type {
+  margin-left: 0px;
+}
 #modal-popup .react-datepicker-wrapper,
 #edit-artist .react-datepicker-wrapper,
 #artist-profile .react-datepicker-wrapper {
@@ -1706,9 +1711,6 @@ i.large.icon {
   }
 }
 
-#bookings .black-badge:first-of-type {
-  margin-left: 0px;
-}
 #bookings .booking-item {
   padding: 15px;
   border: 1px solid #e2e8f0;

@@ -60,7 +60,7 @@ namespace localsound.backend.Infrastructure.Repositories
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddSeconds(10),
+                Expires = DateTime.Now.AddMinutes(15),
                 SigningCredentials = credentials
             };
 

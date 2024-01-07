@@ -9,7 +9,9 @@ using MediatR;
 namespace localsound.backend.api.Handlers.Booking
 {
     public class BookingHandler : IRequestHandler<CreateBookingCommand, ServiceResponse>, 
-        IRequestHandler<GetUserBookingsQuery, ServiceResponse<List<BookingDto>>>
+        IRequestHandler<GetUserBookingsQuery, ServiceResponse<List<BookingDto>>>,
+        IRequestHandler<AcceptBookingCommand, ServiceResponse>,
+        IRequestHandler<CancelBookingCommand, ServiceResponse>
     {
         private readonly IBookingService _bookingService;
 
@@ -26,6 +28,16 @@ namespace localsound.backend.api.Handlers.Booking
         public async Task<ServiceResponse<List<BookingDto>>> Handle(GetUserBookingsQuery request, CancellationToken cancellationToken)
         {
             return await _bookingService.GetFutureBookings(request.AppUserId, request.MemberId, request.BookingConfirmed, request.Page);
+        }
+
+        public async Task<ServiceResponse> Handle(CancelBookingCommand request, CancellationToken cancellationToken)
+        {
+            return await _bookingService.CancelBooking(request.AppUserId, request.MemberId, request.BookingId);
+        }
+
+        public async Task<ServiceResponse> Handle(AcceptBookingCommand request, CancellationToken cancellationToken)
+        {
+            return await _bookingService.AcceptBooking(request.AppUserId, request.MemberId, request.BookingId);
         }
     }
 }

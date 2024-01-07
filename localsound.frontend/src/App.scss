@@ -1089,6 +1089,10 @@ i.large.icon {
   width: 100%;
   background-color: $white200;
 
+  .black-badge:first-of-type {
+    margin-left: 0px;
+  }
+
   .react-datepicker-wrapper {
     width: 100%;
   }
@@ -1527,10 +1531,6 @@ i.large.icon {
 }
 
 #bookings {
-  .black-badge:first-of-type {
-    margin-left: 0px;
-  }
-
   .booking-item {
     // background: $white200;
     padding: 15px;

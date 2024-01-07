@@ -24,6 +24,76 @@ namespace localsound.backend.Infrastructure.Services
             _accountRepository = accountRepository;
         }
 
+        public async Task<ServiceResponse> AcceptBooking(Guid appUserId, string memberId, Guid bookingId)
+        {
+            try
+            {
+                var appUser = await _accountRepository.GetAppUserFromDbAsync(appUserId, memberId);
+
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured creating your booking, please try again..."
+                    };
+                }
+
+                var acceptResult = await _bookingRepository.AcceptBookingAsync(appUserId, bookingId);
+
+                if (!acceptResult.IsSuccessStatusCode)
+                {
+                    return acceptResult;
+                }
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch(Exception e)
+            {
+                var message = $"{nameof(BookingService)} - {nameof(AcceptBooking)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured accepting your booking, please try again..."
+                };
+            }
+        }
+
+        public async Task<ServiceResponse> CancelBooking(Guid appUserId, string memberId, Guid bookingId)
+        {
+            try
+            {
+                var appUser = await _accountRepository.GetAppUserFromDbAsync(appUserId, memberId);
+
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured cancelling your booking, please try again..."
+                    };
+                }
+
+                var cancelResult = await _bookingRepository.CancelBookingAsync(appUserId, bookingId, appUser.ReturnData.CustomerType);
+
+                if (!cancelResult.IsSuccessStatusCode)
+                {
+                    return cancelResult;
+                }
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(BookingService)} - {nameof(CancelBooking)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured cancelling your booking, please try again..."
+                };
+            }
+        }
+
         public async Task<ServiceResponse> CreateBooking(Guid appUserId, string memberId, CreateBookingDto bookingDto, CancellationToken cancellationToken)
         {
             try

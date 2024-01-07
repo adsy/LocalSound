@@ -7,6 +7,8 @@ namespace localsound.backend.Infrastructure.Interface.Services
 {
     public interface IBookingService
     {
+        Task<ServiceResponse> AcceptBooking(Guid appUserId, string memberId, Guid bookingId);
+        Task<ServiceResponse> CancelBooking(Guid appUserId, string memberId, Guid bookingId);
         Task<ServiceResponse> CreateBooking(Guid appUserId, string memberId, CreateBookingDto bookingDto, CancellationToken cancellationToken);
         Task<ServiceResponse<List<BookingDto>>> GetFutureBookings(Guid appUserId, string memberId, bool? bookingConfirmed, int page);
     }
