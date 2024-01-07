@@ -36,7 +36,7 @@ const CompletedBookings = ({
           userDetails?.memberId!,
           0
         );
-        setCompletedBookings(bookings);
+        setCompletedBookings(bookings.bookings);
       } catch (err: any) {
         setError(err);
       }

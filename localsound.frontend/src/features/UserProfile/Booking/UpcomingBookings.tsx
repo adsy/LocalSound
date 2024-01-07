@@ -43,7 +43,7 @@ const UpcomingBookings = ({
           true
         );
 
-        setUpcomingBookings(bookings);
+        setUpcomingBookings(bookings.bookings);
       } catch (err: any) {
         setError(err);
       }

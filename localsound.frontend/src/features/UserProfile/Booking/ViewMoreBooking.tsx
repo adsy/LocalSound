@@ -35,6 +35,7 @@ const ViewMoreBooking = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
   const [page, setPage] = useState(0);
+  const [canLoadMore, setCanLoadMore] = useState(false);
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const dispatch = useDispatch();
   const listRef = useRef<HTMLDivElement>(null);
@@ -46,7 +47,7 @@ const ViewMoreBooking = ({
         document.documentElement.scrollTop -
         listRef?.current?.offsetHeight;
 
-      if (!error && !loading && offset > 0 && offset < 102) {
+      if (!error && canLoadMore && !loading && offset > 0 && offset < 102) {
         setPage(page + 1);
       }
     }
@@ -62,7 +63,8 @@ const ViewMoreBooking = ({
             page,
             true
           );
-          setBookings([...bookings, ...bookingResult]);
+          setCanLoadMore(bookingResult.canLoadMore);
+          setBookings([...bookings, ...bookingResult.bookings]);
           break;
         }
         case BookingTypes.pending: {
@@ -71,7 +73,8 @@ const ViewMoreBooking = ({
             page,
             null
           );
-          setBookings([...bookings, ...bookingResult]);
+          setCanLoadMore(bookingResult.canLoadMore);
+          setBookings([...bookings, ...bookingResult.bookings]);
           break;
         }
         case BookingTypes.cancelled: {
@@ -80,7 +83,8 @@ const ViewMoreBooking = ({
             page,
             false
           );
-          setBookings([...bookings, ...bookingResult]);
+          setCanLoadMore(bookingResult.canLoadMore);
+          setBookings([...bookings, ...bookingResult.bookings]);
           break;
         }
         case BookingTypes.completed: {
@@ -88,7 +92,8 @@ const ViewMoreBooking = ({
             userDetails?.memberId!,
             page
           );
-          setBookings([...bookings, ...bookingResult]);
+          setCanLoadMore(bookingResult.canLoadMore);
+          setBookings([...bookings, ...bookingResult.bookings]);
           break;
         }
       }
@@ -138,39 +143,37 @@ const ViewMoreBooking = ({
   return (
     <div ref={listRef} className="component-container">
       {getTitle()}
-      {loading ? (
-        <InPageLoadingComponent />
-      ) : (
-        <>
-          {error ? (
-            <ErrorBanner className="mx-3" children={error} />
-          ) : bookings.length > 0 ? (
-            <>
-              <div className="d-flex flex-row flex-wrap">
-                {bookings.map((booking, index) => (
-                  <div
-                    key={index}
-                    className="px-3 col-12 mb-2"
-                    onClick={() => OpenBookingInfo(booking)}
-                  >
-                    <BookingSummary
-                      booking={booking}
-                      type={BookingTypes.upcoming}
-                      user={userDetails!}
-                      pendingBookings={pendingBookings}
-                      setPendingBookings={setPendingBookings}
-                      upcomingBookings={upcomingBookings}
-                      setUpcomingBookings={setUpcomingBookings}
-                      cancelledBookings={cancelledBookings}
-                      setCancelledBookings={setCancelledBookings}
-                    />
-                  </div>
-                ))}
-              </div>
-            </>
-          ) : null}
-        </>
-      )}
+
+      <>
+        {error ? (
+          <ErrorBanner className="mx-3" children={error} />
+        ) : bookings.length > 0 ? (
+          <>
+            <div className="d-flex flex-row flex-wrap">
+              {bookings.map((booking, index) => (
+                <div
+                  key={index}
+                  className="px-3 col-12 mb-2"
+                  onClick={() => OpenBookingInfo(booking)}
+                >
+                  <BookingSummary
+                    booking={booking}
+                    type={BookingTypes.upcoming}
+                    user={userDetails!}
+                    pendingBookings={pendingBookings}
+                    setPendingBookings={setPendingBookings}
+                    upcomingBookings={upcomingBookings}
+                    setUpcomingBookings={setUpcomingBookings}
+                    cancelledBookings={cancelledBookings}
+                    setCancelledBookings={setCancelledBookings}
+                  />
+                </div>
+              ))}
+            </div>
+          </>
+        ) : null}
+      </>
+      {loading ? <InPageLoadingComponent /> : null}
     </div>
   );
 };

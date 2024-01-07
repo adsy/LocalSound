@@ -1,7 +1,6 @@
 ﻿using localsound.backend.api.Commands.Bookings;
 using localsound.backend.api.Queries.Bookings;
 using localsound.backend.Domain.Model;
-using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Domain.Model.Dto.Response;
 using localsound.backend.Infrastructure.Interface.Services;
 using MediatR;
@@ -9,8 +8,8 @@ using MediatR;
 namespace localsound.backend.api.Handlers.Booking
 {
     public class BookingHandler : IRequestHandler<CreateBookingCommand, ServiceResponse>, 
-        IRequestHandler<GetUserBookingsQuery, ServiceResponse<List<BookingDto>>>,
-        IRequestHandler<GetCompletedBookingsQuery, ServiceResponse<List<BookingDto>>>,
+        IRequestHandler<GetUserBookingsQuery, ServiceResponse<BookingListResponse>>,
+        IRequestHandler<GetCompletedBookingsQuery, ServiceResponse<BookingListResponse>>,
         IRequestHandler<AcceptBookingCommand, ServiceResponse>,
         IRequestHandler<CancelBookingCommand, ServiceResponse>
     {
@@ -26,7 +25,7 @@ namespace localsound.backend.api.Handlers.Booking
             return await _bookingService.CreateBooking(request.AppUserId, request.MemberId, request.BookingDto, cancellationToken);
         }
 
-        public async Task<ServiceResponse<List<BookingDto>>> Handle(GetUserBookingsQuery request, CancellationToken cancellationToken)
+        public async Task<ServiceResponse<BookingListResponse>> Handle(GetUserBookingsQuery request, CancellationToken cancellationToken)
         {
             return await _bookingService.GetNonCompletedBookings(request.AppUserId, request.MemberId, request.BookingConfirmed, request.Page);
         }
@@ -41,7 +40,7 @@ namespace localsound.backend.api.Handlers.Booking
             return await _bookingService.AcceptBooking(request.AppUserId, request.MemberId, request.BookingId);
         }
 
-        public async Task<ServiceResponse<List<BookingDto>>> Handle(GetCompletedBookingsQuery request, CancellationToken cancellationToken)
+        public async Task<ServiceResponse<BookingListResponse>> Handle(GetCompletedBookingsQuery request, CancellationToken cancellationToken)
         {
             return await _bookingService.GetCompletedBookings(request.AppUserId, request.MemberId, request.Page);
         }

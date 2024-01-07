@@ -5,7 +5,7 @@ using MediatR;
 
 namespace localsound.backend.api.Queries.Bookings
 {
-    public class GetUserBookingsQuery : IRequest<ServiceResponse<List<BookingDto>>>
+    public class GetUserBookingsQuery : IRequest<ServiceResponse<BookingListResponse>>
     {
         public Guid AppUserId { get; set; }
         public string MemberId { get; set; }

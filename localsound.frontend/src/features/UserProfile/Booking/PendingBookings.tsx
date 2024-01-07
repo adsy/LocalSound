@@ -48,7 +48,7 @@ const PendingBookings = ({
         );
 
         if (bookings) {
-          setPendingBookings(bookings);
+          setPendingBookings(bookings.bookings);
         }
       } catch (err: any) {
         setError(err);

@@ -38,7 +38,7 @@ const CancelledBookings = ({
           false
         );
 
-        setCancelledBookings(bookings);
+        setCancelledBookings(bookings.bookings);
       } catch (err: any) {
         setError(err);
       }

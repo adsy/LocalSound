@@ -22,6 +22,7 @@ import { FollowerListResponse } from "../app/model/dto/follower-list-response.mo
 import { ArtistPackageModel } from "../app/model/dto/artist-package.model";
 import { BookingSubmissionModel } from "../app/model/dto/booking-submission.model";
 import { BookingModel } from "../app/model/dto/booking.model";
+import { BookingListResponse } from "../app/model/dto/booking-list.-response.model";
 
 const axiosApiInstance = axios.create();
 
@@ -231,10 +232,10 @@ const Bookings = {
       url += "&bookingConfirmed=" + bookingConfirmed;
     }
 
-    return requests.get<BookingModel[]>(url);
+    return requests.get<BookingListResponse>(url);
   },
   getCompletedBookings: (memberId: string, page: number) =>
-    requests.get<BookingModel[]>(
+    requests.get<BookingListResponse>(
       `bookings/member/${memberId}/get-completed-bookings`
     ),
   acceptBooking: (memberId: string, bookingId: string) =>

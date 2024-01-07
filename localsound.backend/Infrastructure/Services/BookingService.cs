@@ -1,6 +1,7 @@
 ﻿using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
+using localsound.backend.Domain.Model.Dto.Response;
 using localsound.backend.Domain.Model.Dto.Submission;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
@@ -130,7 +131,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<List<BookingDto>>> GetCompletedBookings(Guid appUserId, string memberId, int page)
+        public async Task<ServiceResponse<BookingListResponse>> GetCompletedBookings(Guid appUserId, string memberId, int page)
         {
             try
             {
@@ -138,7 +139,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
                 {
-                    return new ServiceResponse<List<BookingDto>>(HttpStatusCode.InternalServerError)
+                    return new ServiceResponse<BookingListResponse>(HttpStatusCode.InternalServerError)
                     {
                         ServiceResponseMessage = "An error occured getting your bookings, please try again..."
                     };
@@ -148,7 +149,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 if (!userBookingsResult.IsSuccessStatusCode || userBookingsResult.ReturnData == null)
                 {
-                    return new ServiceResponse<List<BookingDto>>(HttpStatusCode.InternalServerError)
+                    return new ServiceResponse<BookingListResponse>(HttpStatusCode.InternalServerError)
                     {
                         ServiceResponseMessage = "An error occured getting your bookings, please try again..."
                     };
@@ -176,9 +177,13 @@ namespace localsound.backend.Infrastructure.Services
                     }).ToList()
                 }).ToList();
 
-                return new ServiceResponse<List<BookingDto>>(HttpStatusCode.OK)
+                return new ServiceResponse<BookingListResponse>(HttpStatusCode.OK)
                 {
-                    ReturnData = returnData
+                    ReturnData = new BookingListResponse
+                    {
+                        Bookings = returnData,
+                        CanLoadMore = returnData.Count == 10
+                    }
                 };
             }
             catch (Exception e)
@@ -186,14 +191,14 @@ namespace localsound.backend.Infrastructure.Services
                 var message = $"{nameof(BookingService)} - {nameof(GetCompletedBookings)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<List<BookingDto>>(HttpStatusCode.InternalServerError)
+                return new ServiceResponse<BookingListResponse>(HttpStatusCode.InternalServerError)
                 {
                     ServiceResponseMessage = "An error occured getting your bookings, please try again..."
                 };
             }
         }
 
-        public async Task<ServiceResponse<List<BookingDto>>> GetNonCompletedBookings(Guid appUserId, string memberId, bool? bookingConfirmed, int page)
+        public async Task<ServiceResponse<BookingListResponse>> GetNonCompletedBookings(Guid appUserId, string memberId, bool? bookingConfirmed, int page)
         {
             try
             {
@@ -201,7 +206,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
                 {
-                    return new ServiceResponse<List<BookingDto>>(HttpStatusCode.InternalServerError)
+                    return new ServiceResponse<BookingListResponse>(HttpStatusCode.InternalServerError)
                     {
                         ServiceResponseMessage = "An error occured getting your bookings, please try again..."
                     };
@@ -211,7 +216,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 if (!userBookingsResult.IsSuccessStatusCode || userBookingsResult.ReturnData == null)
                 {
-                    return new ServiceResponse<List<BookingDto>>(HttpStatusCode.InternalServerError)
+                    return new ServiceResponse<BookingListResponse>(HttpStatusCode.InternalServerError)
                     {
                         ServiceResponseMessage = "An error occured getting your bookings, please try again..."
                     };
@@ -239,9 +244,13 @@ namespace localsound.backend.Infrastructure.Services
                     }).ToList()
                 }).ToList();
 
-                return new ServiceResponse<List<BookingDto>>(HttpStatusCode.OK)
+                return new ServiceResponse<BookingListResponse>(HttpStatusCode.OK)
                 {
-                    ReturnData = returnData
+                    ReturnData = new BookingListResponse
+                    {
+                        Bookings = returnData,
+                        CanLoadMore = returnData.Count == 10
+                    }
                 };
             }
             catch(Exception e)
@@ -249,7 +258,7 @@ namespace localsound.backend.Infrastructure.Services
                 var message = $"{nameof(BookingService)} - {nameof(GetNonCompletedBookings)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<List<BookingDto>>(HttpStatusCode.InternalServerError)
+                return new ServiceResponse<BookingListResponse>(HttpStatusCode.InternalServerError)
                 {
                     ServiceResponseMessage = "An error occured getting your bookings, please try again..."
                 };
