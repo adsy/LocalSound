@@ -1,6 +1,6 @@
-export enum BookingsTypes {
+export enum BookingTypes {
   upcoming,
   pending,
   cancelled,
-  past,
+  completed,
 }

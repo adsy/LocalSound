@@ -1,7 +1,7 @@
 import { userInfo } from "os";
 import { BookingModel } from "../../../app/model/dto/booking.model";
 import { UserModel } from "../../../app/model/dto/user.model";
-import { BookingsTypes } from "../../../app/model/enums/BookingTypes";
+import { BookingTypes } from "../../../app/model/enums/BookingTypes";
 import { CustomerTypes } from "../../../app/model/enums/customerTypes";
 import Label from "../../../common/components/Label/Label";
 import { Icon } from "semantic-ui-react";
@@ -13,7 +13,7 @@ import AcceptCancelBookingModal from "./AcceptCancelBookingModal";
 
 interface Props {
   booking: BookingModel;
-  type: BookingsTypes;
+  type: BookingTypes;
   user: UserModel;
   pendingBookings?: BookingModel[];
   setPendingBookings?: (bookings: BookingModel[]) => void;
@@ -37,7 +37,6 @@ const BookingSummary = ({
   const dispatch = useDispatch();
 
   const returnDateLabel = () => {
-    console.log(booking.bookingDate);
     return (
       <div className="d-flex flex-row align-items-center">
         <Icon name="calendar" size="small" />
@@ -87,7 +86,7 @@ const BookingSummary = ({
       </div>
       <div className="d-flex flex-row justify-content-end">
         {user.customerType === CustomerTypes.Artist &&
-        type === BookingsTypes.pending ? (
+        type === BookingTypes.pending ? (
           <Button className="black-button" onClick={(e) => openModal(e, true)}>
             <h4>
               <Icon
@@ -98,7 +97,7 @@ const BookingSummary = ({
             </h4>
           </Button>
         ) : null}
-        {type === BookingsTypes.upcoming || type === BookingsTypes.pending ? (
+        {type === BookingTypes.upcoming || type === BookingTypes.pending ? (
           <Button
             className="black-button ml-1"
             onClick={(e) => openModal(e, false)}

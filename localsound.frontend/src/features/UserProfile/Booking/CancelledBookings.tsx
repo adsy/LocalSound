@@ -6,7 +6,7 @@ import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import { BookingModel } from "../../../app/model/dto/booking.model";
 import InfoBanner from "../../../common/banner/InfoBanner";
 import { Icon } from "semantic-ui-react";
-import { BookingsTypes } from "../../../app/model/enums/BookingTypes";
+import { BookingTypes } from "../../../app/model/enums/BookingTypes";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import BookingItem from "./BookingItem";
 import BookingSummary from "./BookingSummary";
@@ -16,11 +16,13 @@ import ErrorBanner from "../../../common/banner/ErrorBanner";
 interface Props {
   cancelledBookings: BookingModel[];
   setCancelledBookings: (bookings: BookingModel[]) => void;
+  setViewMore: (bookingType: BookingTypes | null) => void;
 }
 
 const CancelledBookings = ({
   cancelledBookings,
   setCancelledBookings,
+  setViewMore,
 }: Props) => {
   const dispatch = useDispatch();
   const userDetails = useSelector((state: State) => state.user.userDetails);
@@ -49,7 +51,7 @@ const CancelledBookings = ({
       handleToggleModal({
         size: "small",
         body: (
-          <BookingItem booking={booking} bookingType={BookingsTypes.pending} />
+          <BookingItem booking={booking} bookingType={BookingTypes.pending} />
         ),
         open: true,
       })
@@ -58,13 +60,13 @@ const CancelledBookings = ({
 
   return (
     <div className="component-container">
+      <h3>
+        <span className="black-highlight">Cancelled</span>
+      </h3>
       {loading ? (
         <InPageLoadingComponent />
       ) : (
         <>
-          <h3>
-            <span className="black-highlight">Cancelled</span>
-          </h3>
           {error ? (
             <ErrorBanner children={error} />
           ) : cancelledBookings.length > 0 ? (
@@ -73,12 +75,12 @@ const CancelledBookings = ({
                 {cancelledBookings.map((booking, index) => (
                   <div
                     key={index}
-                    className="px-3 col-12 col-lg-6 mb-2"
+                    className="px-3 col-12 mb-2"
                     onClick={() => OpenBookingInfo(booking)}
                   >
                     <BookingSummary
                       booking={booking}
-                      type={BookingsTypes.cancelled}
+                      type={BookingTypes.cancelled}
                       user={userDetails!}
                       cancelledBookings={cancelledBookings}
                       setCancelledBookings={setCancelledBookings}
@@ -87,7 +89,10 @@ const CancelledBookings = ({
                 ))}
               </div>
               <div className="d-flex flex-row justify-content-center">
-                <Button className="mt-2 mx-3 black-button px-5">
+                <Button
+                  className="mt-2 mx-3 black-button px-5"
+                  onClick={() => setViewMore(BookingTypes.cancelled)}
+                >
                   <h4>View more</h4>
                 </Button>
               </div>

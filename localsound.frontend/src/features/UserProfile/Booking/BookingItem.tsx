@@ -1,11 +1,11 @@
 import { BookingModel } from "../../../app/model/dto/booking.model";
-import { BookingsTypes } from "../../../app/model/enums/BookingTypes";
+import { BookingTypes } from "../../../app/model/enums/BookingTypes";
 import Label from "../../../common/components/Label/Label";
 import { formatDate } from "../../../common/helper";
 
 interface Props {
   booking: BookingModel;
-  bookingType: BookingsTypes;
+  bookingType: BookingTypes;
 }
 
 const BookingItem = ({ booking, bookingType }: Props) => {

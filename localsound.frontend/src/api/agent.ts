@@ -70,10 +70,12 @@ axiosApiInstance.interceptors.response.use(
       ) {
         if (!isRefreshing) {
           isRefreshing = true;
-          Authentication.refreshToken().then(async () => {
-            isRefreshing = false;
-            onRefreshed();
-          });
+          Authentication.refreshToken()
+            .then(async () => {
+              isRefreshing = false;
+              onRefreshed();
+            })
+            .catch(async (err) => await Authentication.signOut());
         }
 
         const retryOrigReq = new Promise((resolve, reject) => {

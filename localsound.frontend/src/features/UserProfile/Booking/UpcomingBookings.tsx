@@ -7,17 +7,19 @@ import { BookingModel } from "../../../app/model/dto/booking.model";
 import InfoBanner from "../../../common/banner/InfoBanner";
 import { Icon } from "semantic-ui-react";
 import BookingSummary from "./BookingSummary";
-import { BookingsTypes } from "../../../app/model/enums/BookingTypes";
+import { BookingTypes } from "../../../app/model/enums/BookingTypes";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import BookingItem from "./BookingItem";
 import { Button } from "react-bootstrap";
 import ErrorBanner from "../../../common/banner/ErrorBanner";
+import ViewMoreBooking from "./ViewMoreBooking";
 
 interface Props {
   upcomingBookings: BookingModel[];
   setUpcomingBookings: (bookings: BookingModel[]) => void;
   cancelledBookings: BookingModel[];
   setCancelledBookings: (bookings: BookingModel[]) => void;
+  setViewMore: (bookingType: BookingTypes | null) => void;
 }
 
 const UpcomingBookings = ({
@@ -25,6 +27,7 @@ const UpcomingBookings = ({
   setUpcomingBookings,
   cancelledBookings,
   setCancelledBookings,
+  setViewMore,
 }: Props) => {
   const dispatch = useDispatch();
   const userDetails = useSelector((state: State) => state.user.userDetails);
@@ -53,7 +56,7 @@ const UpcomingBookings = ({
       handleToggleModal({
         size: "small",
         body: (
-          <BookingItem booking={booking} bookingType={BookingsTypes.upcoming} />
+          <BookingItem booking={booking} bookingType={BookingTypes.upcoming} />
         ),
         open: true,
       })
@@ -62,13 +65,13 @@ const UpcomingBookings = ({
 
   return (
     <div className="component-container">
+      <h3>
+        <span className="black-highlight">Upcoming</span>
+      </h3>
       {loading ? (
         <InPageLoadingComponent />
       ) : (
         <>
-          <h3>
-            <span className="black-highlight">Upcoming</span>
-          </h3>
           {error ? (
             <ErrorBanner className="mx-3" children={error} />
           ) : upcomingBookings.length > 0 ? (
@@ -77,12 +80,12 @@ const UpcomingBookings = ({
                 {upcomingBookings.map((booking, index) => (
                   <div
                     key={index}
-                    className="px-3 col-12 col-xl-6 mb-2"
+                    className="px-3 col-12 mb-2"
                     onClick={() => OpenBookingInfo(booking)}
                   >
                     <BookingSummary
                       booking={booking}
-                      type={BookingsTypes.upcoming}
+                      type={BookingTypes.upcoming}
                       user={userDetails!}
                       upcomingBookings={upcomingBookings}
                       setUpcomingBookings={setUpcomingBookings}
@@ -93,7 +96,10 @@ const UpcomingBookings = ({
                 ))}
               </div>
               <div className="d-flex flex-row justify-content-center">
-                <Button className="mt-2 mx-3 black-button px-5">
+                <Button
+                  className="mt-2 mx-3 black-button px-5"
+                  onClick={() => setViewMore(BookingTypes.upcoming)}
+                >
                   <h4>View more</h4>
                 </Button>
               </div>
