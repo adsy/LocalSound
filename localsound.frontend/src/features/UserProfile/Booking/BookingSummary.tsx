@@ -17,8 +17,8 @@ interface Props {
   user: UserModel;
   pendingBookings?: BookingModel[];
   setPendingBookings?: (bookings: BookingModel[]) => void;
-  cancelledBookings: BookingModel[];
-  setCancelledBookings: (bookings: BookingModel[]) => void;
+  cancelledBookings?: BookingModel[];
+  setCancelledBookings?: (bookings: BookingModel[]) => void;
   upcomingBookings?: BookingModel[];
   setUpcomingBookings?: (bookings: BookingModel[]) => void;
 }
@@ -37,6 +37,7 @@ const BookingSummary = ({
   const dispatch = useDispatch();
 
   const returnDateLabel = () => {
+    console.log(booking.bookingDate);
     return (
       <div className="d-flex flex-row align-items-center">
         <Icon name="calendar" size="small" />

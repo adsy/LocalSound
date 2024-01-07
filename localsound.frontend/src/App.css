@@ -835,7 +835,6 @@ i.large.icon {
   padding: 0;
   font-size: 14px;
   text-wrap: initial;
-  margin-left: 0.25rem;
 }
 .black-badge .badge-delete-btn {
   padding-right: 6.825px;
@@ -1208,9 +1207,14 @@ i.large.icon {
   width: 100%;
   background-color: #fcfcfd;
 }
-#modal-popup .black-badge:first-of-type,
-#edit-artist .black-badge:first-of-type,
-#artist-profile .black-badge:first-of-type {
+#modal-popup .badge-container,
+#edit-artist .badge-container,
+#artist-profile .badge-container {
+  margin-left: 0.25rem;
+}
+#modal-popup .badge-container:first-of-type,
+#edit-artist .badge-container:first-of-type,
+#artist-profile .badge-container:first-of-type {
   margin-left: 0px;
 }
 #modal-popup .react-datepicker-wrapper,

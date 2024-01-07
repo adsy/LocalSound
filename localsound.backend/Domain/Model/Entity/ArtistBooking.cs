@@ -18,6 +18,7 @@ namespace localsound.backend.Domain.Model.Entity
         public decimal BookingLength { get; set; }
         public DateTime BookingDate { get; set; }
         public bool? BookingConfirmed { get; set; }
+        public bool BookingCompleted { get; set; }
 
         public virtual Artist Artist { get; set; }
         public virtual AppUser Booker { get; set; }

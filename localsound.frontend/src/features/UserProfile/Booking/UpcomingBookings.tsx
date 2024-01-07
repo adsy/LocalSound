@@ -34,7 +34,7 @@ const UpcomingBookings = ({
   useLayoutEffect(() => {
     (async () => {
       try {
-        var bookings = await agent.Bookings.getFutureBookings(
+        var bookings = await agent.Bookings.getNonCompletedBookings(
           userDetails?.memberId!,
           0,
           true

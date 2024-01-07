@@ -133,6 +133,67 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
+        public async Task<ServiceResponse<List<ArtistBooking>>> GetCompletedBookingsAsync(Guid appUserId, int page)
+        {
+            try
+            {
+                var user = await _dbContext.AppUser.FirstOrDefaultAsync(x => x.Id == appUserId);
+
+                if (user == null)
+                {
+                    return new ServiceResponse<List<ArtistBooking>>(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured getting your bookings, please try again..."
+                    };
+                }
+
+                List<ArtistBooking>? bookings = null;
+                if (user.CustomerType == CustomerTypeEnum.Artist)
+                {
+                    bookings = await _dbContext.ArtistBooking.Where(x => x.ArtistId == appUserId && x.BookingConfirmed == true  && x.BookingCompleted)
+                        .Include(x => x.Artist)
+                        .Include(x => x.Booker)
+                        .ThenInclude(x => x.NonArtist)
+                        .Include(x => x.Package)
+                        .ThenInclude(x => x.Equipment)
+                        .Include(x => x.EventType)
+                        .OrderByDescending(x => x.BookingDate)
+                        .Skip(page * 10)
+                        .Take(10)
+                        .ToListAsync();
+                }
+                else
+                {
+                    bookings = await _dbContext.ArtistBooking.Where(x => x.BookerId == appUserId && x.BookingConfirmed == true && x.BookingCompleted)
+                        .Include(x => x.Artist)
+                        .Include(x => x.Booker)
+                        .ThenInclude(x => x.NonArtist)
+                        .Include(x => x.Package)
+                        .ThenInclude(x => x.Equipment)
+                        .Include(x => x.EventType)
+                        .OrderByDescending(x => x.BookingDate)
+                        .Skip(page * 10)
+                        .Take(10)
+                        .ToListAsync();
+                }
+
+                return new ServiceResponse<List<ArtistBooking>>(HttpStatusCode.OK)
+                {
+                    ReturnData = bookings
+                };
+            }
+            catch(Exception e)
+            {
+                var message = $"{nameof(BookingRepository)} - {nameof(GetCompletedBookingsAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<List<ArtistBooking>>(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured getting your booking, please try again..."
+                };
+            }
+        }
+
         public async Task<ServiceResponse<List<ArtistBooking>>> GetNonCompletedBookingsAsync(Guid appUserId, bool? bookingConfirmed, int page)
         {
             try
@@ -150,13 +211,14 @@ namespace localsound.backend.Infrastructure.Repositories
                 List<ArtistBooking>? bookings = null;
                 if (user.CustomerType == CustomerTypeEnum.Artist)
                 {
-                    bookings = await _dbContext.ArtistBooking.Where(x => x.ArtistId == appUserId && x.BookingConfirmed == bookingConfirmed && x.BookingDate >= new DateTime())
+                    bookings = await _dbContext.ArtistBooking
                         .Include(x => x.Artist)
                         .Include(x => x.Booker)
                         .ThenInclude(x => x.NonArtist)
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
+                        .Where(x => x.ArtistId == appUserId && x.BookingConfirmed == bookingConfirmed && !x.BookingCompleted)
                         .OrderByDescending(x => x.BookingDate)
                         .Skip(page * 10)
                         .Take(10)
@@ -164,13 +226,14 @@ namespace localsound.backend.Infrastructure.Repositories
                 }
                 else
                 {
-                    bookings = await _dbContext.ArtistBooking.Where(x => x.BookerId == appUserId && x.BookingConfirmed == bookingConfirmed && x.BookingDate >= new DateTime())
+                    bookings = await _dbContext.ArtistBooking
                         .Include(x => x.Artist)
                         .Include(x => x.Booker)
                         .ThenInclude(x => x.NonArtist)
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
+                        .Where(x => x.BookerId == appUserId && x.BookingConfirmed == bookingConfirmed && !x.BookingCompleted)
                         .OrderByDescending(x => x.BookingDate)
                         .Skip(page * 10)
                         .Take(10)

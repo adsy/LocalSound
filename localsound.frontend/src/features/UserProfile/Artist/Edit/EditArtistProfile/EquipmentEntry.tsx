@@ -29,7 +29,7 @@ const EquipmentEntry = ({ equipment, setEquipment }: Props) => {
       <div className="box d-flex flex-column justify-content-between">
         <div className="container">
           {equipment.map((equipment, index) => (
-            <span key={index}>
+            <span key={index} className="badge-container">
               <Label
                 label={equipment.equipmentName}
                 id={equipment.equipmentId}

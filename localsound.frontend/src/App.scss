@@ -675,7 +675,6 @@ i.large.icon {
   padding: 0;
   font-size: 14px;
   text-wrap: initial;
-  margin-left: 0.25rem;
 
   .badge-delete-btn {
     padding-right: 6.825px;
@@ -1100,7 +1099,11 @@ i.large.icon {
   width: 100%;
   background-color: $white200;
 
-  .black-badge:first-of-type {
+  .badge-container {
+    margin-left: 0.25rem;
+  }
+
+  .badge-container:first-of-type {
     margin-left: 0px;
   }
 

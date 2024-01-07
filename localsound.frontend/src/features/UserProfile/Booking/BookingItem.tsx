@@ -67,7 +67,9 @@ const BookingItem = ({ booking, bookingType }: Props) => {
       <div className="">
         <h4 className="mb-2">Equipment</h4>
         {booking.packageEquipment.map((equipment, index) => (
-          <Label label={equipment.equipmentName} id={equipment.equipmentId} />
+          <span className="badge-container" key={index}>
+            <Label label={equipment.equipmentName} id={equipment.equipmentId} />
+          </span>
         ))}
       </div>
     </div>

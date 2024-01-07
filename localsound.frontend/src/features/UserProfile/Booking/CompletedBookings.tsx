@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../app/model/redux/state";
 import { useLayoutEffect, useState } from "react";
 import agent from "../../../api/agent";
@@ -7,6 +7,11 @@ import { BookingModel } from "../../../app/model/dto/booking.model";
 import InfoBanner from "../../../common/banner/InfoBanner";
 import { Icon } from "semantic-ui-react";
 import ErrorBanner from "../../../common/banner/ErrorBanner";
+import BookingSummary from "./BookingSummary";
+import { BookingsTypes } from "../../../app/model/enums/BookingTypes";
+import { Button } from "react-bootstrap";
+import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
+import BookingItem from "./BookingItem";
 
 interface Props {
   completedBookings: BookingModel[];
@@ -17,6 +22,7 @@ const CompletedBookings = ({
   completedBookings,
   setCompletedBookings,
 }: Props) => {
+  const dispatch = useDispatch();
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,18 +30,29 @@ const CompletedBookings = ({
   useLayoutEffect(() => {
     (async () => {
       try {
-        // var bookings = await agent.Bookings.getFutureBookings(
-        //   userDetails?.memberId!,
-        //   0,
-        //   true
-        // );
-        // setPastBookings(bookings);
+        var bookings = await agent.Bookings.getCompletedBookings(
+          userDetails?.memberId!,
+          0
+        );
+        setCompletedBookings(bookings);
       } catch (err: any) {
         setError(err);
       }
       setLoading(false);
     })();
   }, []);
+
+  const OpenBookingInfo = (booking: BookingModel) => {
+    dispatch(
+      handleToggleModal({
+        size: "small",
+        body: (
+          <BookingItem booking={booking} bookingType={BookingsTypes.pending} />
+        ),
+        open: true,
+      })
+    );
+  };
 
   return (
     <div className="component-container">
@@ -49,7 +66,28 @@ const CompletedBookings = ({
           {error ? (
             <ErrorBanner className="mx-3" children={error} />
           ) : completedBookings.length > 0 ? (
-            <div></div>
+            <>
+              <div className="d-flex flex-row flex-wrap">
+                {completedBookings.map((booking, index) => (
+                  <div
+                    key={index}
+                    className="px-3 col-12 col-lg-6 mb-2"
+                    onClick={() => OpenBookingInfo(booking)}
+                  >
+                    <BookingSummary
+                      booking={booking}
+                      type={BookingsTypes.cancelled}
+                      user={userDetails!}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="d-flex flex-row justify-content-center">
+                <Button className="mt-2 mx-3 black-button px-5">
+                  <h4>View more</h4>
+                </Button>
+              </div>
+            </>
           ) : (
             <InfoBanner className="fade-in mb-2 mx-3">
               <div className="d-flex flex-row justify-content-center align-items-center">

@@ -48,6 +48,25 @@ namespace localsound.backend.api.Controllers
             return Ok(result.ReturnData);
         }
 
+        [HttpGet]
+        [Route("member/{memberId}/get-completed-bookings")]
+        public async Task<ActionResult> GetCompletedBookings([FromQuery] int page, string memberId)
+        {
+            var result = await Mediator.Send(new GetCompletedBookingsQuery
+            {
+                AppUserId = CurrentUser.AppUserId,
+                MemberId = memberId,
+                Page = page
+            });
+
+            if (!result.IsSuccessStatusCode)
+            {
+                return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
+            }
+
+            return Ok(result.ReturnData);
+        }
+
         [HttpPut]
         [Route("member/{memberId}/booking/{bookingId}/accept-booking")]
         public async Task<ActionResult> AcceptBooking(string memberId, Guid bookingId) 

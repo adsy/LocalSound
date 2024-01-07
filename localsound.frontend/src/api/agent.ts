@@ -218,7 +218,7 @@ const Packages = {
 const Bookings = {
   createBooking: (memberId: string, bookingData: BookingSubmissionModel) =>
     requests.post(`bookings/member/${memberId}/create-booking`, bookingData),
-  getFutureBookings: (
+  getNonCompletedBookings: (
     memberId: string,
     page: number,
     bookingConfirmed: boolean | null
@@ -231,6 +231,10 @@ const Bookings = {
 
     return requests.get<BookingModel[]>(url);
   },
+  getCompletedBookings: (memberId: string, page: number) =>
+    requests.get<BookingModel[]>(
+      `bookings/member/${memberId}/get-completed-bookings`
+    ),
   acceptBooking: (memberId: string, bookingId: string) =>
     requests.put(
       `bookings/member/${memberId}/booking/${bookingId}/accept-booking`,

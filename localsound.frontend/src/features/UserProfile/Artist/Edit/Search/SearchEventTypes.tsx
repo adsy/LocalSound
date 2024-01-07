@@ -59,7 +59,7 @@ const SearchEventTypes = ({ eventTypes, setEventTypes }: Props) => {
       <div className="box d-flex flex-column justify-content-between">
         <div className="container">
           {eventTypes.map((eventType, index) => (
-            <span key={index}>
+            <span key={index} className="badge-container">
               <Label
                 label={eventType.eventTypeName}
                 id={eventType.eventTypeId}

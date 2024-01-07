@@ -10,6 +10,7 @@ namespace localsound.backend.api.Handlers.Booking
 {
     public class BookingHandler : IRequestHandler<CreateBookingCommand, ServiceResponse>, 
         IRequestHandler<GetUserBookingsQuery, ServiceResponse<List<BookingDto>>>,
+        IRequestHandler<GetCompletedBookingsQuery, ServiceResponse<List<BookingDto>>>,
         IRequestHandler<AcceptBookingCommand, ServiceResponse>,
         IRequestHandler<CancelBookingCommand, ServiceResponse>
     {
@@ -38,6 +39,11 @@ namespace localsound.backend.api.Handlers.Booking
         public async Task<ServiceResponse> Handle(AcceptBookingCommand request, CancellationToken cancellationToken)
         {
             return await _bookingService.AcceptBooking(request.AppUserId, request.MemberId, request.BookingId);
+        }
+
+        public async Task<ServiceResponse<List<BookingDto>>> Handle(GetCompletedBookingsQuery request, CancellationToken cancellationToken)
+        {
+            return await _bookingService.GetCompletedBookings(request.AppUserId, request.MemberId, request.Page);
         }
     }
 }

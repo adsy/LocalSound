@@ -64,7 +64,7 @@ const SearchGenreTypes = ({
       <div className="box d-flex flex-column justify-content-between">
         <div className="container">
           {selectedGenres.map((selectedGenre, index) => (
-            <span key={index}>
+            <span key={index} className="badge-container">
               <Label
                 label={selectedGenre.genreName}
                 id={selectedGenre.genreId}

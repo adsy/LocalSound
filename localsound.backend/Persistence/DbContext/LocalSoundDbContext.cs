@@ -124,6 +124,7 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<ArtistBooking>().HasOne(x => x.Package).WithMany(x => x.RelatedBookings).OnDelete(DeleteBehavior.NoAction);
             builder.Entity<ArtistBooking>().HasOne(x => x.EventType).WithMany(x => x.RelatedBookings).OnDelete(DeleteBehavior.NoAction);
             builder.Entity<ArtistBooking>().HasIndex(x => x.ArtistId).IsClustered(true);
+            builder.Entity<ArtistBooking>().Property(x => x.BookingCompleted).HasDefaultValue(false);
 
             builder.Entity<ArtistEventType>().HasKey(x => new { x.AppUserId, x.EventTypeId });
             builder.Entity<ArtistEventType>().HasOne(x => x.EventType);

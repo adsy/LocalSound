@@ -167,7 +167,7 @@ const ArtistPackageDisplay = ({
             ) : null}
             <div className="d-flex flex-row flex-wrap justify-content-center">
               {artistPackage.equipment.map((equipment, index) => (
-                <span key={index}>
+                <span className="badge-container" key={index}>
                   <Label
                     label={equipment.equipmentName}
                     id={equipment.equipmentId}

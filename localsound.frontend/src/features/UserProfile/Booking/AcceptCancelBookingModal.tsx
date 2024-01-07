@@ -12,8 +12,8 @@ interface Props {
   booking: BookingModel;
   pendingBookings?: BookingModel[];
   setPendingBookings?: (bookings: BookingModel[]) => void;
-  cancelledBookings: BookingModel[];
-  setCancelledBookings: (bookings: BookingModel[]) => void;
+  cancelledBookings?: BookingModel[];
+  setCancelledBookings?: (bookings: BookingModel[]) => void;
   upcomingBookings?: BookingModel[];
   setUpcomingBookings?: (bookings: BookingModel[]) => void;
 }
@@ -73,7 +73,9 @@ const AcceptCancelBookingModal = ({
           updatePendingBookings();
         }
         booking.bookingConfirmed = false;
-        setCancelledBookings([booking, ...cancelledBookings]);
+        if (cancelledBookings && setCancelledBookings) {
+          setCancelledBookings([booking, ...cancelledBookings]);
+        }
       }
       dispatch(handleResetModal());
     } catch (err: any) {

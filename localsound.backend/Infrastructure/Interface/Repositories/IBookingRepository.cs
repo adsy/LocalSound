@@ -11,5 +11,6 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
         Task<ServiceResponse> CancelBookingAsync(Guid appUserId, Guid bookingId, CustomerTypeEnum customerType);
         Task<ServiceResponse> CreateBookingAsync(Guid appUserId, CreateBookingDto bookingDto);
         Task<ServiceResponse<List<ArtistBooking>>> GetNonCompletedBookingsAsync(Guid appUserId, bool? bookingConfirmed, int page);
+        Task<ServiceResponse<List<ArtistBooking>>> GetCompletedBookingsAsync(Guid appUserId, int page);
     }
 }

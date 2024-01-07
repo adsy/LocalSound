@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using localsound.backend.api.Queries.Account;
 
-namespace localsound.backend.api.Queries.Validators
+namespace localsound.backend.api.Queries.Validators.Account
 {
     public class GetProfileDataQueryValidator : AbstractValidator<GetProfileDataQuery>
     {
