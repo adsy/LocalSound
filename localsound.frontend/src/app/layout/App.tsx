@@ -75,24 +75,27 @@ const App = () => {
             render={() => (
               <>
                 <TopNavbar />
-                <Container className="app-container">
-                  <div className="masthead">
-                    <Switch>
-                      <PrivateRoute exact path="/home" component={HomePage} />
-                      <PrivateRoute
-                        exact
-                        path="/bookings"
-                        component={BookingsOverview}
-                      />
-                      <PrivateRoute
-                        exact
-                        path="/account-settings"
-                        component={AccountSettings}
-                      />
-                      <Route exact path="/(.+)" component={UserProfile} />
-                    </Switch>
-                  </div>
-                </Container>
+
+                <main className="w-100">
+                  <Container className="app-container">
+                    <div className="masthead">
+                      <Switch>
+                        <PrivateRoute exact path="/home" component={HomePage} />
+                        <PrivateRoute
+                          exact
+                          path="/bookings"
+                          component={BookingsOverview}
+                        />
+                        <PrivateRoute
+                          exact
+                          path="/account-settings"
+                          component={AccountSettings}
+                        />
+                        <Route exact path="/(.+)" component={UserProfile} />
+                      </Switch>
+                    </div>
+                  </Container>
+                </main>
               </>
             )}
           />

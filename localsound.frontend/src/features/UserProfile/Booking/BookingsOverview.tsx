@@ -39,6 +39,7 @@ const BookingsOverview = () => {
             setUpcomingBookings={setUpcomingBookings}
             cancelledBookings={cancelledBookings}
             setCancelledBookings={setCancelledBookings}
+            setViewMore={setViewMore}
           />
         </div>
       ) : (

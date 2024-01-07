@@ -8,9 +8,11 @@ import { State } from "../../../app/model/redux/state";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import BookingItem from "./BookingItem";
 import BookingSummary from "./BookingSummary";
-import { cp } from "fs";
 import agent from "../../../api/agent";
-import { debounce } from "lodash";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { Button } from "react-bootstrap";
+import { Icon } from "semantic-ui-react";
+import useFixMissingScroll from "../../../common/hooks/UseLoadMoreWithoutScroll";
 
 interface Props {
   bookingType: BookingTypes;
@@ -20,6 +22,7 @@ interface Props {
   setCancelledBookings: (bookings: BookingModel[]) => void;
   upcomingBookings: BookingModel[];
   setUpcomingBookings: (bookings: BookingModel[]) => void;
+  setViewMore: (viewMore: BookingTypes | null) => void;
 }
 
 const ViewMoreBooking = ({
@@ -30,6 +33,7 @@ const ViewMoreBooking = ({
   setUpcomingBookings,
   cancelledBookings,
   setCancelledBookings,
+  setViewMore,
 }: Props) => {
   const [bookings, setBookings] = useState<BookingModel[]>([]);
   const [loading, setLoading] = useState(false);
@@ -40,24 +44,57 @@ const ViewMoreBooking = ({
   const dispatch = useDispatch();
   const listRef = useRef<HTMLDivElement>(null);
 
-  window.onscroll = debounce(() => {
-    if (listRef?.current) {
-      const offset =
-        window.innerHeight +
-        document.documentElement.scrollTop -
-        listRef?.current?.offsetHeight;
-
-      if (
-        !error &&
-        canLoadMore &&
-        !loading &&
-        offset > 0 &&
-        (offset < 102 || offset > 2200)
-      ) {
-        setPage(page + 1);
+  const getMoreBookings = async () => {
+    setLoading(true);
+    switch (bookingType) {
+      case BookingTypes.upcoming: {
+        var bookingResult = await agent.Bookings.getNonCompletedBookings(
+          userDetails?.memberId!,
+          page + 1,
+          true
+        );
+        setCanLoadMore(bookingResult.canLoadMore);
+        setBookings([...bookings, ...bookingResult.bookings]);
+        break;
+      }
+      case BookingTypes.pending: {
+        var bookingResult = await agent.Bookings.getNonCompletedBookings(
+          userDetails?.memberId!,
+          page + 1,
+          null
+        );
+        setCanLoadMore(bookingResult.canLoadMore);
+        setBookings([...bookings, ...bookingResult.bookings]);
+        break;
+      }
+      case BookingTypes.cancelled: {
+        var bookingResult = await agent.Bookings.getNonCompletedBookings(
+          userDetails?.memberId!,
+          page + 1,
+          false
+        );
+        setCanLoadMore(bookingResult.canLoadMore);
+        setBookings([...bookings, ...bookingResult.bookings]);
+        break;
+      }
+      case BookingTypes.completed: {
+        var bookingResult = await agent.Bookings.getCompletedBookings(
+          userDetails?.memberId!,
+          page + 1
+        );
+        setCanLoadMore(bookingResult.canLoadMore);
+        setBookings([...bookings, ...bookingResult.bookings]);
+        break;
       }
     }
-  }, 100);
+    setPage(page + 1);
+    setLoading(false);
+  };
+
+  useFixMissingScroll({
+    hasMoreItems: canLoadMore,
+    fetchMoreItems: getMoreBookings,
+  });
 
   useLayoutEffect(() => {
     (async () => {
@@ -105,7 +142,7 @@ const ViewMoreBooking = ({
       }
       setLoading(false);
     })();
-  }, [page]);
+  }, []);
 
   const getTitle = () => {
     switch (bookingType) {
@@ -148,38 +185,53 @@ const ViewMoreBooking = ({
 
   return (
     <div ref={listRef} className="component-container">
-      {getTitle()}
+      <div className="d-flex flex-row justify-content-between mb-3 align-items-center">
+        {getTitle()}
+        <Button className="white-button" onClick={() => setViewMore(null)}>
+          <h4 className="d-flex flex-row align-items-center">
+            <Icon name="arrow left" size="small" className="m-0" />
+            <span className="ml-1">Go back</span>
+          </h4>
+        </Button>
+      </div>
 
       <>
         {error ? (
           <ErrorBanner className="mx-3" children={error} />
         ) : bookings.length > 0 ? (
-          <>
-            <div className="d-flex flex-row flex-wrap">
-              {bookings.map((booking, index) => (
-                <div
-                  key={index}
-                  className="px-3 col-12 mb-2"
-                  onClick={() => OpenBookingInfo(booking)}
-                >
-                  <BookingSummary
-                    booking={booking}
-                    type={BookingTypes.upcoming}
-                    user={userDetails!}
-                    pendingBookings={pendingBookings}
-                    setPendingBookings={setPendingBookings}
-                    upcomingBookings={upcomingBookings}
-                    setUpcomingBookings={setUpcomingBookings}
-                    cancelledBookings={cancelledBookings}
-                    setCancelledBookings={setCancelledBookings}
-                  />
-                </div>
-              ))}
-            </div>
-          </>
+          <InfiniteScroll
+            dataLength={bookings.length} //This is important field to render the next data
+            next={() => getMoreBookings()}
+            hasMore={canLoadMore}
+            loader={<></>}
+          >
+            {bookings.map((booking, index) => (
+              <div
+                key={index}
+                className="px-3 col-12 mb-2"
+                onClick={() => OpenBookingInfo(booking)}
+              >
+                <BookingSummary
+                  booking={booking}
+                  type={BookingTypes.upcoming}
+                  user={userDetails!}
+                  pendingBookings={pendingBookings}
+                  setPendingBookings={setPendingBookings}
+                  upcomingBookings={upcomingBookings}
+                  setUpcomingBookings={setUpcomingBookings}
+                  cancelledBookings={cancelledBookings}
+                  setCancelledBookings={setCancelledBookings}
+                />
+              </div>
+            ))}
+          </InfiniteScroll>
         ) : null}
       </>
-      {loading ? <InPageLoadingComponent /> : null}
+      {loading ? (
+        <div className="mt-2 mb-1">
+          <InPageLoadingComponent />{" "}
+        </div>
+      ) : null}
     </div>
   );
 };
