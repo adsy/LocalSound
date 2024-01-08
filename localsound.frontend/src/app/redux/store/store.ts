@@ -31,7 +31,7 @@ var rootReducer = combineReducers({
 const persistConfig = {
   key: "localSound",
   storage,
-  blacklist: ["modal", "player", "pageOperation"],
+  blacklist: ["modal", "player", "pageOperation", "app"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

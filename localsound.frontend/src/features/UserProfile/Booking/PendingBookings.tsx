@@ -75,7 +75,7 @@ const PendingBookings = ({
         <span className="black-highlight">Pending</span>
       </h3>
       {loading ? (
-        <InPageLoadingComponent />
+        <InPageLoadingComponent height={80} width={80} />
       ) : (
         <>
           <p className="px-3">

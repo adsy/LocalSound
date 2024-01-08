@@ -1,7 +1,7 @@
 import { CustomerTypes } from "../enums/customerTypes";
 
 interface AppState {
-  appLoaded: boolean;
+  appLoading: boolean;
   userType: CustomerTypes | null;
 }
 

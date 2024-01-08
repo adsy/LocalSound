@@ -45,50 +45,54 @@ const ViewMoreBooking = ({
   const listRef = useRef<HTMLDivElement>(null);
 
   const getMoreBookings = async () => {
-    setLoading(true);
-    switch (bookingType) {
-      case BookingTypes.upcoming: {
-        var bookingResult = await agent.Bookings.getNonCompletedBookings(
-          userDetails?.memberId!,
-          page + 1,
-          true
-        );
-        setCanLoadMore(bookingResult.canLoadMore);
-        setBookings([...bookings, ...bookingResult.bookings]);
-        break;
+    try {
+      setLoading(true);
+      switch (bookingType) {
+        case BookingTypes.upcoming: {
+          var bookingResult = await agent.Bookings.getNonCompletedBookings(
+            userDetails?.memberId!,
+            page + 1,
+            true
+          );
+          setCanLoadMore(bookingResult.canLoadMore);
+          setBookings([...bookings, ...bookingResult.bookings]);
+          break;
+        }
+        case BookingTypes.pending: {
+          var bookingResult = await agent.Bookings.getNonCompletedBookings(
+            userDetails?.memberId!,
+            page + 1,
+            null
+          );
+          setCanLoadMore(bookingResult.canLoadMore);
+          setBookings([...bookings, ...bookingResult.bookings]);
+          break;
+        }
+        case BookingTypes.cancelled: {
+          var bookingResult = await agent.Bookings.getNonCompletedBookings(
+            userDetails?.memberId!,
+            page + 1,
+            false
+          );
+          setCanLoadMore(bookingResult.canLoadMore);
+          setBookings([...bookings, ...bookingResult.bookings]);
+          break;
+        }
+        case BookingTypes.completed: {
+          var bookingResult = await agent.Bookings.getCompletedBookings(
+            userDetails?.memberId!,
+            page + 1
+          );
+          setCanLoadMore(bookingResult.canLoadMore);
+          setBookings([...bookings, ...bookingResult.bookings]);
+          break;
+        }
       }
-      case BookingTypes.pending: {
-        var bookingResult = await agent.Bookings.getNonCompletedBookings(
-          userDetails?.memberId!,
-          page + 1,
-          null
-        );
-        setCanLoadMore(bookingResult.canLoadMore);
-        setBookings([...bookings, ...bookingResult.bookings]);
-        break;
-      }
-      case BookingTypes.cancelled: {
-        var bookingResult = await agent.Bookings.getNonCompletedBookings(
-          userDetails?.memberId!,
-          page + 1,
-          false
-        );
-        setCanLoadMore(bookingResult.canLoadMore);
-        setBookings([...bookings, ...bookingResult.bookings]);
-        break;
-      }
-      case BookingTypes.completed: {
-        var bookingResult = await agent.Bookings.getCompletedBookings(
-          userDetails?.memberId!,
-          page + 1
-        );
-        setCanLoadMore(bookingResult.canLoadMore);
-        setBookings([...bookings, ...bookingResult.bookings]);
-        break;
-      }
+      setPage(page + 1);
+      setLoading(false);
+    } catch (err: any) {
+      setError(err);
     }
-    setPage(page + 1);
-    setLoading(false);
   };
 
   useFixMissingScroll({
@@ -229,7 +233,7 @@ const ViewMoreBooking = ({
       </>
       {loading ? (
         <div className="mt-2 mb-1">
-          <InPageLoadingComponent />{" "}
+          <InPageLoadingComponent height={80} width={80} />
         </div>
       ) : null}
     </div>

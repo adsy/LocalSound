@@ -69,7 +69,7 @@ const UpcomingBookings = ({
         <span className="black-highlight">Upcoming</span>
       </h3>
       {loading ? (
-        <InPageLoadingComponent />
+        <InPageLoadingComponent height={80} width={80} />
       ) : (
         <>
           {error ? (

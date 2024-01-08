@@ -62,7 +62,7 @@ const CompletedBookings = ({
         <span className="black-highlight">Completed</span>
       </h3>
       {loading ? (
-        <InPageLoadingComponent />
+        <InPageLoadingComponent height={80} width={80} />
       ) : (
         <>
           {error ? (

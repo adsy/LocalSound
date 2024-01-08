@@ -2,21 +2,21 @@ import { createSlice } from "@reduxjs/toolkit";
 import { AppState } from "../../model/redux/appState";
 
 const initialState: AppState = {
-  appLoaded: false,
+  appLoading: false,
   userType: null,
 };
 export const applicationSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
-    handleAppLoaded: (state = initialState, action) => {
-      state.appLoaded = action.payload;
+    handleAppLoading: (state = initialState, action) => {
+      state.appLoading = action.payload;
     },
     handleResetAppState: () => initialState,
   },
 });
 
-export const { handleAppLoaded, handleResetAppState } =
+export const { handleAppLoading, handleResetAppState } =
   applicationSlice.actions;
 
 export default applicationSlice.reducer;

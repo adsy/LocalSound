@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Tab, Tabs } from "react-bootstrap";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
@@ -23,6 +23,8 @@ import Login from "../../Authentication/Login/Login";
 import AddArtistPackage from "./ArtistPackages/AddArtistPackage";
 import ArtistPackages from "./ArtistPackages/ArtistPackages";
 import { ArtistPackageModel } from "../../../app/model/dto/artist-package.model";
+import { handleAppLoading } from "../../../app/redux/actions/applicationSlice";
+import { State } from "../../../app/model/redux/state";
 
 interface Props {
   loggedInUser: UserModel;
@@ -38,7 +40,6 @@ const ArtistProfile = ({
   setProfile,
 }: Props) => {
   const [updatingCoverPhoto, setUpdatingCoverPhoto] = useState(false);
-  const [submittingRequest, setSubmittingRequest] = useState(false);
   const [updateFollowerError, setUpdateFollowerError] = useState<string | null>(
     null
   );
@@ -51,10 +52,14 @@ const ArtistProfile = ({
   const [packages, setPackages] = useState<ArtistPackageModel[]>([]);
   const [isFollowing, setIsFollowing] = useState(false);
   const [canLoadMore, setCanLoadMore] = useState(true);
+  const appLoading = useSelector((state: State) => state.app.appLoading);
   const dispatch = useDispatch();
 
   const loadImage = (image: AccountImageModel) => {
-    if (imgsLoaded) setImgsLoaded(false);
+    if (imgsLoaded) {
+      dispatch(handleAppLoading(true));
+      setImgsLoaded(false);
+    }
     return new Promise((resolve, reject) => {
       const loadImg = new Image();
       loadImg.src = image.accountImageUrl;
@@ -85,6 +90,7 @@ const ArtistProfile = ({
         })
         .catch((err) => console.log("Failed to load images", err))
         .finally(() => {
+          dispatch(handleAppLoading(false));
           setImgsLoaded(true);
         });
     } else {
@@ -105,6 +111,7 @@ const ArtistProfile = ({
             setImgsLoaded(true);
           });
       } else {
+        dispatch(handleAppLoading(false));
         setImgsLoaded(true);
       }
     }
@@ -213,7 +220,7 @@ const ArtistProfile = ({
 
   return (
     <>
-      {imgsLoaded && !submittingRequest ? (
+      {!appLoading ? (
         <div id="artist-profile">
           <div className="d-flex flex-column flex-wrap p-0 fade-in w-100">
             <div className="d-flex flex-row banner-holder">
@@ -335,7 +342,6 @@ const ArtistProfile = ({
                     file={file!}
                     setFile={setFile}
                     setUpdatingCoverPhoto={setUpdatingCoverPhoto}
-                    setSubmittingRequest={setSubmittingRequest}
                     setPhotoUpdateError={setPhotoUpdateError}
                   />
                   <div className="details-container flex-wrap">
@@ -436,22 +442,6 @@ const ArtistProfile = ({
               </Tabs>
             </div>
           </div>
-        </div>
-      ) : !imgsLoaded && !submittingRequest ? (
-        <div className="d-flex justify-content-center align-self-center">
-          <InPageLoadingComponent
-            height={100}
-            width={100}
-            withContainer={true}
-          />
-        </div>
-      ) : submittingRequest ? (
-        <div className="d-flex justify-content-center align-self-center">
-          <InPageLoadingComponent
-            height={100}
-            width={100}
-            withContainer={true}
-          />
         </div>
       ) : null}
     </>

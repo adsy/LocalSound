@@ -14,17 +14,22 @@ import {
   handleResetUserState,
   handleSetUserDetails,
 } from "../redux/actions/userSlice";
-import { handleResetAppState } from "../redux/actions/applicationSlice";
+import {
+  handleAppLoading,
+  handleResetAppState,
+} from "../redux/actions/applicationSlice";
 import { UserModel } from "../model/dto/user.model";
 import { State } from "../model/redux/state";
 import AccountSettings from "../../features/AccountSettings/AccountSettings";
 import MusicPlayer from "../../features/MusicPlayer/MusicPlayer";
 import BookingsOverview from "../../features/UserProfile/Booking/BookingsOverview";
+import InPageLoadingComponent from "./InPageLoadingComponent";
 
 const App = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const userDetails = useSelector((state: State) => state.user?.userDetails);
+  const appLoading = useSelector((state: State) => state.app.appLoading);
   const player = useSelector((state: State) => state.player);
 
   useEffect(() => {
@@ -39,8 +44,10 @@ const App = () => {
 
       (async () => {
         try {
+          dispatch(handleAppLoading(true));
           await checkCurrentUser().then((userDetails: UserModel) => {
             dispatch(handleSetUserDetails(userDetails));
+            dispatch(handleAppLoading(false));
           });
         } catch (err) {
           await signout().finally(() => {
@@ -56,25 +63,36 @@ const App = () => {
   return (
     <>
       <ModalContainer />
+
+      <Route
+        exact
+        path="/"
+        render={() => (
+          <div id="app-layout" className="d-flex flex-column w-100">
+            <Container>
+              <LandingPage />
+            </Container>
+          </div>
+        )}
+      />
       <div
         id="app-layout"
         className="d-flex flex-column w-100 justify-content-center"
       >
         <Route
-          exact
-          path="/"
-          render={() => (
-            <Container>
-              <LandingPage />
-            </Container>
-          )}
-        />
-        <Route
           path={"/(.+)"}
           render={() => (
             <>
               <TopNavbar />
-
+              {appLoading ? (
+                <div className="align-self-center d-flex justify-content-center">
+                  <InPageLoadingComponent
+                    height={100}
+                    width={100}
+                    withContainer={true}
+                  />
+                </div>
+              ) : null}
               <main className="w-100 app-container app-holder">
                 <Container>
                   <div className="masthead">

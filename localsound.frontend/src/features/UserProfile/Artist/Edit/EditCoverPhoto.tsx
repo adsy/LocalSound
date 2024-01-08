@@ -5,12 +5,12 @@ import { State } from "../../../../app/model/redux/state";
 import { AccountImageTypes } from "../../../../app/model/enums/accountImageTypes";
 import { handleUpdateUserCoverPhoto } from "../../../../app/redux/actions/userSlice";
 import { CropTypes } from "../../../../app/model/enums/cropTypes";
+import { handleAppLoading } from "../../../../app/redux/actions/applicationSlice";
 
 interface Props {
   file: File;
   setUpdatingCoverPhoto: (updating: boolean) => void;
   setFile: (file: File | null) => void;
-  setSubmittingRequest: (submittingRequest: boolean) => void;
   setPhotoUpdateError: (photoUpdateError: string) => void;
 }
 
@@ -18,7 +18,6 @@ const EditCoverPhoto = ({
   file,
   setUpdatingCoverPhoto,
   setFile,
-  setSubmittingRequest,
   setPhotoUpdateError,
 }: Props) => {
   const userDetail = useSelector((state: State) => state.user.userDetails);
@@ -33,7 +32,7 @@ const EditCoverPhoto = ({
       formData.append("fileExt", `.png`);
 
       try {
-        setSubmittingRequest(true);
+        dispatch(handleAppLoading(true));
         var result = await agent.Profile.uploadProfileImage(
           userDetail?.memberId!,
           formData,
@@ -48,7 +47,7 @@ const EditCoverPhoto = ({
           "There was an error updating your cover photo, please try again.."
         );
       }
-      setSubmittingRequest(false);
+      dispatch(handleAppLoading(false));
     }
   };
 
