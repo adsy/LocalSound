@@ -60,48 +60,46 @@ const App = () => {
         id="app-layout"
         className="d-flex flex-column w-100 justify-content-center"
       >
-        <div className="d-flex flex-row w-100 justify-content-center app-holder">
-          <Route
-            exact
-            path="/"
-            render={() => (
-              <Container>
-                <LandingPage />
-              </Container>
-            )}
-          />
-          <Route
-            path={"/(.+)"}
-            render={() => (
-              <>
-                <TopNavbar />
+        <Route
+          exact
+          path="/"
+          render={() => (
+            <Container>
+              <LandingPage />
+            </Container>
+          )}
+        />
+        <Route
+          path={"/(.+)"}
+          render={() => (
+            <>
+              <TopNavbar />
 
-                <main className="w-100">
-                  <Container className="app-container">
-                    <div className="masthead">
-                      <Switch>
-                        <PrivateRoute exact path="/home" component={HomePage} />
-                        <PrivateRoute
-                          exact
-                          path="/bookings"
-                          component={BookingsOverview}
-                        />
-                        <PrivateRoute
-                          exact
-                          path="/account-settings"
-                          component={AccountSettings}
-                        />
-                        <Route exact path="/(.+)" component={UserProfile} />
-                      </Switch>
-                    </div>
-                  </Container>
-                </main>
-              </>
-            )}
-          />
-        </div>
-        {player.trackId ? <MusicPlayer /> : null}
+              <main className="w-100 app-container app-holder">
+                <Container>
+                  <div className="masthead">
+                    <Switch>
+                      <PrivateRoute exact path="/home" component={HomePage} />
+                      <PrivateRoute
+                        exact
+                        path="/bookings"
+                        component={BookingsOverview}
+                      />
+                      <PrivateRoute
+                        exact
+                        path="/account-settings"
+                        component={AccountSettings}
+                      />
+                      <Route exact path="/(.+)" component={UserProfile} />
+                    </Switch>
+                  </div>
+                </Container>
+              </main>
+            </>
+          )}
+        />
       </div>
+      {player.trackId ? <MusicPlayer /> : null}
     </>
   );
 };

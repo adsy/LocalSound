@@ -432,11 +432,9 @@ h6 .purple-highlight:before {
 }
 
 .app-container {
-  height: 100%;
   transition: width 0.3s ease, margin-left 0.3s ease, margin-right 0.3s ease, padding 0.3s ease !important;
-  min-height: calc(100vh - 79px);
-  height: 1px;
   padding: 0px;
+  height: fit-content;
 }
 
 .app-holder {
@@ -541,8 +539,7 @@ h6 .purple-highlight:before {
 
 /** LANDING PAGE **/
 #landing-page {
-  margin-top: -40px;
-  padding-bottom: 40px;
+  margin-top: 30px;
 }
 #landing-page .banner {
   height: 25rem;

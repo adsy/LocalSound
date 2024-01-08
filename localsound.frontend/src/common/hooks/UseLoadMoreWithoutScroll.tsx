@@ -7,21 +7,23 @@ interface Props {
 
 const useFixMissingScroll = ({ hasMoreItems, fetchMoreItems }: Props) => {
   const mainElement = useMemo(() => document.querySelector("main"), []);
+  const bodyElement = useMemo(() => document.querySelector("body"), []);
 
   const fetchCb = useCallback(() => {
     fetchMoreItems();
   }, [fetchMoreItems]);
 
   useEffect(() => {
-    const hasScroll = mainElement
-      ? mainElement.scrollHeight > mainElement.clientHeight
-      : false;
+    const hasScroll =
+      mainElement && bodyElement
+        ? mainElement.scrollHeight > bodyElement.clientHeight
+        : false;
     if (!hasScroll && hasMoreItems) {
       setTimeout(() => {
         fetchCb();
       }, 100);
     }
-  }, [hasMoreItems, fetchCb, mainElement]);
+  }, [hasMoreItems, mainElement, bodyElement]);
 };
 
 export default useFixMissingScroll;

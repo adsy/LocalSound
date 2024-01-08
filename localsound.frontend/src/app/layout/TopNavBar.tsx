@@ -50,7 +50,7 @@ const TopNavbar = () => {
 
   return (
     <>
-      <div id="navbar" className="w-100 mb-4">
+      <div id="navbar" className="w-100">
         <Navbar collapseOnSelect key={null} bg="" expand={false}>
           <div
             className="navbar-logo d-flex flex-row justify-content-center align-content-center pr-2 pt-1 pb-1"

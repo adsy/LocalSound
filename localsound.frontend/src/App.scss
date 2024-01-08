@@ -301,12 +301,10 @@ $end: 10;
 }
 
 .app-container {
-  height: 100%;
   transition: width 0.3s ease, margin-left 0.3s ease, margin-right 0.3s ease,
     padding 0.3s ease !important;
-  min-height: calc(100vh - 79px);
-  height: 1px;
   padding: 0px;
+  height: fit-content;
 }
 
 .app-holder {
@@ -387,8 +385,7 @@ $end: 10;
 
 /** LANDING PAGE **/
 #landing-page {
-  margin-top: -40px;
-  padding-bottom: 40px;
+  margin-top: 30px;
   .auth-button {
     // width: 45%;
   }

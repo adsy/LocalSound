@@ -236,7 +236,7 @@ const Bookings = {
   },
   getCompletedBookings: (memberId: string, page: number) =>
     requests.get<BookingListResponse>(
-      `bookings/member/${memberId}/get-completed-bookings`
+      `bookings/member/${memberId}/get-completed-bookings?page=${page}`
     ),
   acceptBooking: (memberId: string, bookingId: string) =>
     requests.put(
