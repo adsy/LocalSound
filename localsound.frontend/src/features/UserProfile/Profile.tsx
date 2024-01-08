@@ -11,7 +11,6 @@ import { handleAppLoading } from "../../app/redux/actions/applicationSlice";
 
 const UserProfileSummary = () => {
   const dispatch = useDispatch();
-  const appLoading = useSelector((state: State) => state.app.appLoading);
   const userDetail = useSelector((state: State) => state.user.userDetails);
   const [profile, setProfile] = useState<UserModel | null>(null);
   const [noMatch, setNoMatch] = useState(false);
@@ -27,6 +26,7 @@ const UserProfileSummary = () => {
   }, [controller]);
 
   useLayoutEffect(() => {
+    setProfile(null);
     const getProfile = async () => {
       dispatch(handleAppLoading(true));
       var profileUrl = history.location.pathname.slice(1);
@@ -48,13 +48,17 @@ const UserProfileSummary = () => {
     getProfile().catch((err) => {
       setNoMatch(true);
     });
-  }, [userDetail?.memberId]);
+  }, [userDetail?.memberId, history.location]);
+
+  useEffect(() => {
+    if (userDetail && viewingOwnProfile) setProfile(userDetail);
+  }, [userDetail]);
 
   return (
     <>
       <div id="user-profile">
         {!noMatch &&
-        !appLoading &&
+        profile &&
         profile?.customerType === CustomerTypes.Artist ? (
           <ArtistProfile
             loggedInUser={userDetail!}
@@ -63,7 +67,7 @@ const UserProfileSummary = () => {
             viewingOwnProfile={viewingOwnProfile}
           />
         ) : null}
-        {noMatch && !appLoading ? <ProfileNotFound /> : null}
+        {noMatch && !profile ? <ProfileNotFound /> : null}
       </div>
     </>
   );

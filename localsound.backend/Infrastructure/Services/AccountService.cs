@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
@@ -393,12 +394,20 @@ namespace localsound.backend.Infrastructure.Services
                 {
                     ReturnData = new FollowerListResponseDto
                     {
-                        Followers = result.ReturnData.Select(x => new UserSummaryDto
+                        Followers = !retrieveFollowing ? 
+                        result.ReturnData.Select(x => new UserSummaryDto
                         {
                             MemberId = x.Follower.MemberId,
                             ProfileUrl = x.Follower.NonArtist != null ? x.Follower.NonArtist.ProfileUrl : x.Follower.Artist.ProfileUrl,
                             Name = x.Follower.NonArtist != null ? $"{x.Follower.NonArtist.FirstName} {x.Follower.NonArtist.LastName}" : x.Follower.Artist.Name,
                             Images = _mapper.Map<List<AccountImageDto>>(x.Follower.Images)
+                        }).ToList() : 
+                        result.ReturnData.Select(x => new UserSummaryDto
+                        {
+                            MemberId = x.Artist.User.MemberId,
+                            ProfileUrl = x.Artist.ProfileUrl,
+                            Name = x.Artist.Name,
+                            Images = _mapper.Map<List<AccountImageDto>>(x.Artist.User.Images)
                         }).ToList(),
                         CanLoadMore = result.ReturnData.Count == 30
                     }

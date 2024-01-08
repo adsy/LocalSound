@@ -75,12 +75,13 @@ const ArtistProfile = ({
   }, [artistDetails.memberId, artistDetails?.isFollowing]);
 
   useLayoutEffect(() => {
-    if (loggedInUser?.memberId === artistDetails.memberId) {
-      const IMAGES = [...loggedInUser.images];
-
+    setCurrentTab(ArtistProfileTabs.ArtistDetails);
+    dispatch(handleAppLoading(true));
+    if (artistDetails?.images?.length > 0) {
+      const IMAGES = [...artistDetails.images];
       Promise.all(IMAGES.map((image) => loadImage(image)))
         .then(() => {
-          const coverImage = loggedInUser?.images?.find(
+          const coverImage = artistDetails?.images?.find(
             (x) => x.accountImageTypeId == AccountImageTypes.CoverImage
           );
 
@@ -90,32 +91,15 @@ const ArtistProfile = ({
         })
         .catch((err) => console.log("Failed to load images", err))
         .finally(() => {
-          dispatch(handleAppLoading(false));
           setImgsLoaded(true);
+          dispatch(handleAppLoading(false));
         });
     } else {
-      if (artistDetails?.images?.length > 0) {
-        const IMAGES = [...artistDetails.images];
-        Promise.all(IMAGES.map((image) => loadImage(image)))
-          .then(() => {
-            const coverImage = artistDetails?.images?.find(
-              (x) => x.accountImageTypeId == AccountImageTypes.CoverImage
-            );
-
-            if (coverImage) {
-              setCoverImage(coverImage);
-            }
-          })
-          .catch((err) => console.log("Failed to load images", err))
-          .finally(() => {
-            setImgsLoaded(true);
-          });
-      } else {
-        dispatch(handleAppLoading(false));
-        setImgsLoaded(true);
-      }
+      setCoverImage(null);
+      setImgsLoaded(true);
+      dispatch(handleAppLoading(false));
     }
-  }, [artistDetails.memberId, loggedInUser?.images]);
+  }, [artistDetails.memberId, artistDetails.images]);
 
   const editArtistProfile = () => {
     dispatch(
@@ -214,7 +198,7 @@ const ArtistProfile = ({
       backgroundPosition: "center center",
       backgroundRepeat: "no-repeat",
       height: "30rem",
-      background: "linear-gradient(20deg, #232323, #001514, #232323)",
+      backgroundImage: "linear-gradient(20deg, #232323, #001514, #232323)",
     };
   };
 

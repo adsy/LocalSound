@@ -226,7 +226,7 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 return new ServiceResponse<List<ArtistFollower>>(HttpStatusCode.OK)
                 {
-                    ReturnData = artist.Followers?.Any() == true ? artist.Followers.Select(x => x).ToList() : new List<ArtistFollower>()
+                    ReturnData = artist.User.Following?.Any() == true ? artist.User.Following.Select(x => x).ToList() : new List<ArtistFollower>()
                 };
             }
             catch (Exception e)

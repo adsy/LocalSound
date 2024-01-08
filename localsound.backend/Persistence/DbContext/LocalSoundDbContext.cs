@@ -97,6 +97,7 @@ namespace localsound.backend.Persistence.DbContext
 
             builder.HasSequence("MemberId", x => x.StartsAt(100000).IncrementsBy(1));
             builder.Entity<AppUser>().Property(x => x.MemberId).HasDefaultValueSql("NEXT VALUE FOR MemberId");
+            builder.Entity<AppUser>().HasMany(x => x.Following);
 
             builder.Entity<AppUserToken>().Property(o => o.ExpirationDate).HasDefaultValueSql("DateAdd(week,1,getDate())");
 
