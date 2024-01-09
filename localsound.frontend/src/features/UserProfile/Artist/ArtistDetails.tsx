@@ -36,6 +36,7 @@ const ArtistDetails = ({
             size="small"
             circular
             className={`profile-photo mb-4 summary-photo align-self-center`}
+            alt="profile-image"
           />
           <div className="d-flex flex-column pb-4">
             <div className="d-flex flex-row">
@@ -132,6 +133,7 @@ const ArtistDetails = ({
                     href={userDetails.soundcloudUrl}
                     target="_blank"
                     className="btn soundcloud-button w-fit-content d-flex flex-row mb-1 mr-1"
+                    title="soundcloud-link"
                   >
                     <div className="soundcloud-icon align-self-center"></div>
                   </a>
@@ -143,6 +145,7 @@ const ArtistDetails = ({
                     href={userDetails.spotifyUrl}
                     target="_blank"
                     className="btn spotify-button w-fit-content d-flex flex-row mb-1 mr-1"
+                    title="spotify-link"
                   >
                     <div className="spotify-icon align-self-center"></div>
                   </a>
@@ -154,6 +157,7 @@ const ArtistDetails = ({
                     href={userDetails.youtubeUrl}
                     target="_blank"
                     className="btn youtube-button w-fit-content d-flex flex-row mb-3"
+                    title="youtube-link"
                   >
                     <div className="soundcloud-icon align-self-center"></div>
                   </a>

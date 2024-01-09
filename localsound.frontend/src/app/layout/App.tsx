@@ -92,27 +92,28 @@ const App = () => {
                     withContainer={true}
                   />
                 </div>
-              ) : null}
-              <main className="w-100 app-container app-holder">
-                <Container>
-                  <div className="masthead">
-                    <Switch>
-                      <PrivateRoute exact path="/home" component={HomePage} />
-                      <PrivateRoute
-                        exact
-                        path="/bookings"
-                        component={BookingsOverview}
-                      />
-                      <PrivateRoute
-                        exact
-                        path="/account-settings"
-                        component={AccountSettings}
-                      />
-                      <Route exact path="/(.+)" component={UserProfile} />
-                    </Switch>
-                  </div>
-                </Container>
-              </main>
+              ) : (
+                <main className={`w-100 app-container app-holder`}>
+                  <Container>
+                    <div className="masthead">
+                      <Switch>
+                        <PrivateRoute exact path="/home" component={HomePage} />
+                        <PrivateRoute
+                          exact
+                          path="/bookings"
+                          component={BookingsOverview}
+                        />
+                        <PrivateRoute
+                          exact
+                          path="/account-settings"
+                          component={AccountSettings}
+                        />
+                        <Route exact path="/(.+)" component={UserProfile} />
+                      </Switch>
+                    </div>
+                  </Container>
+                </main>
+              )}
             </>
           )}
         />

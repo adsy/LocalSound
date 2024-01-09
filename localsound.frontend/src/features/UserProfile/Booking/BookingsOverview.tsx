@@ -1,13 +1,10 @@
-import CancelledBookings from "./CancelledBookings";
-import CompletedBookings from "./CompletedBookings";
-import PendingBookings from "./PendingBookings";
-import UpcomingBookings from "./UpcomingBookings";
 import { BookingModel } from "./../../../app/model/dto/booking.model";
 import { useEffect, useState } from "react";
 import { BookingTypes } from "../../../app/model/enums/BookingTypes";
 import ViewMoreBooking from "./ViewMoreBooking";
 import { useSelector } from "react-redux";
 import { State } from "../../../app/model/redux/state";
+import BookingViewContainer from "./BookingViewContainer";
 
 const BookingsOverview = () => {
   const [upcomingBookings, setUpcomingBookings] = useState<BookingModel[]>([]);
@@ -50,16 +47,7 @@ const BookingsOverview = () => {
           ) : (
             <>
               <div className="col-12 col-lg-12 booking-container">
-                <UpcomingBookings
-                  upcomingBookings={upcomingBookings}
-                  setUpcomingBookings={setUpcomingBookings}
-                  cancelledBookings={cancelledBookings}
-                  setCancelledBookings={setCancelledBookings}
-                  setViewMore={setViewMore}
-                />
-              </div>
-              <div className="col-12 col-lg-12 booking-container">
-                <PendingBookings
+                <BookingViewContainer
                   pendingBookings={pendingBookings}
                   setPendingBookings={setPendingBookings}
                   upcomingBookings={upcomingBookings}
@@ -67,20 +55,43 @@ const BookingsOverview = () => {
                   cancelledBookings={cancelledBookings}
                   setCancelledBookings={setCancelledBookings}
                   setViewMore={setViewMore}
+                  bookingType={BookingTypes.upcoming}
                 />
               </div>
               <div className="col-12 col-lg-12 booking-container">
-                <CompletedBookings
-                  completedBookings={completedBookings}
-                  setCompletedBookings={setCompletedBookings}
-                  setViewMore={setViewMore}
-                />
-              </div>
-              <div className="col-12 col-lg-12 booking-container">
-                <CancelledBookings
+                <BookingViewContainer
+                  pendingBookings={pendingBookings}
+                  setPendingBookings={setPendingBookings}
+                  upcomingBookings={upcomingBookings}
+                  setUpcomingBookings={setUpcomingBookings}
                   cancelledBookings={cancelledBookings}
                   setCancelledBookings={setCancelledBookings}
                   setViewMore={setViewMore}
+                  bookingType={BookingTypes.pending}
+                />
+              </div>
+              <div className="col-12 col-lg-12 booking-container">
+                <BookingViewContainer
+                  pendingBookings={pendingBookings}
+                  setPendingBookings={setPendingBookings}
+                  upcomingBookings={upcomingBookings}
+                  setUpcomingBookings={setUpcomingBookings}
+                  cancelledBookings={cancelledBookings}
+                  setCancelledBookings={setCancelledBookings}
+                  setViewMore={setViewMore}
+                  bookingType={BookingTypes.completed}
+                />
+              </div>
+              <div className="col-12 col-lg-12 booking-container">
+                <BookingViewContainer
+                  pendingBookings={pendingBookings}
+                  setPendingBookings={setPendingBookings}
+                  upcomingBookings={upcomingBookings}
+                  setUpcomingBookings={setUpcomingBookings}
+                  cancelledBookings={cancelledBookings}
+                  setCancelledBookings={setCancelledBookings}
+                  setViewMore={setViewMore}
+                  bookingType={BookingTypes.cancelled}
                 />
               </div>
             </>

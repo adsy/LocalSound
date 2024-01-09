@@ -48,7 +48,7 @@ const UserProfileSummary = () => {
     getProfile().catch((err) => {
       setNoMatch(true);
     });
-  }, [userDetail?.memberId, history.location]);
+  }, [userDetail, history.location]);
 
   useEffect(() => {
     if (userDetail && viewingOwnProfile) setProfile(userDetail);

@@ -29,5 +29,6 @@ namespace localsound.backend.Domain.Model.Dto.Entity
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? IsFollowing { get; set; } 
+        public bool CanAddPackage { get; set; }
     }
 }

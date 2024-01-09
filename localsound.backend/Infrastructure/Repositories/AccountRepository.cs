@@ -253,6 +253,25 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.Followers)
                     .Include(x => x.User)
                     .ThenInclude(x => x.Following)
+                    .Include(x => x.Packages)
+                    .Select(x => new Artist
+                    {
+                        AppUserId = x.AppUserId,
+                        User = x.User,
+                        Name = x.Name,
+                        ProfileUrl = x.ProfileUrl,
+                        Address = x.Address,
+                        PhoneNumber = x.PhoneNumber,
+                        SoundcloudUrl = x.SoundcloudUrl,
+                        SpotifyUrl = x.SpotifyUrl,
+                        YoutubeUrl = x.YoutubeUrl,
+                        AboutSection = x.AboutSection,
+                        Genres = x.Genres,
+                        EventTypes = x.EventTypes,
+                        Equipment = x.Equipment,
+                        Followers = x.Followers,
+                        Packages = x.Packages.Where(x => x.IsAvailable).ToList(),
+                    })
                     .FirstOrDefaultAsync(x => x.AppUserId == id);
 
                 if (artist == null)
@@ -291,6 +310,25 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.Followers)
                     .Include(x => x.User)
                     .ThenInclude(x => x.Following)
+                    .Include(x => x.Packages)
+                    .Select(x => new Artist
+                    {
+                        AppUserId = x.AppUserId,
+                        User = x.User,
+                        Name = x.Name,
+                        ProfileUrl = x.ProfileUrl,
+                        Address = x.Address,
+                        PhoneNumber = x.PhoneNumber,
+                        SoundcloudUrl = x.SoundcloudUrl,
+                        SpotifyUrl = x.SpotifyUrl,
+                        YoutubeUrl = x.YoutubeUrl, 
+                        AboutSection = x.AboutSection,
+                        Genres = x.Genres,
+                        EventTypes = x.EventTypes,
+                        Equipment = x.Equipment,
+                        Followers = x.Followers,
+                        Packages = x.Packages.Where(x => x.IsAvailable).ToList(),
+                    })
                     .FirstOrDefaultAsync(x => x.ProfileUrl == profileUrl);
 
                 if (artist == null)

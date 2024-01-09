@@ -6,6 +6,7 @@ import { UserModel } from "../../../../app/model/dto/user.model";
 import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
 import ErrorBanner from "../../../../common/banner/ErrorBanner";
 import agent from "../../../../api/agent";
+import { handleSetUserDetails } from "../../../../app/redux/actions/userSlice";
 
 interface Props {
   artistPackage: ArtistPackageModel;
@@ -42,6 +43,13 @@ const DeletePackageConfirmation = ({
           (x) => x.artistPackageId !== artistPackage.artistPackageId
         );
         setPackages(packagesFiltered);
+
+        if (!artistDetails.canAddPackage) {
+          var clone = { ...artistDetails };
+          clone.canAddPackage = true;
+          dispatch(handleSetUserDetails(clone));
+        }
+
         dispatch(handleResetModal());
       }
     } catch (err: any) {

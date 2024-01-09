@@ -8,7 +8,7 @@ interface Props {
   bookingType: BookingTypes;
 }
 
-const BookingItem = ({ booking, bookingType }: Props) => {
+const BookingItemModal = ({ booking, bookingType }: Props) => {
   return (
     <div id="modal-popup">
       <div className="d-flex flex-row mb-4">
@@ -76,4 +76,4 @@ const BookingItem = ({ booking, bookingType }: Props) => {
   );
 };
 
-export default BookingItem;
+export default BookingItemModal;

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { BookingTypes } from "../../../app/model/enums/BookingTypes";
 import { BookingModel } from "./../../../app/model/dto/booking.model";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
@@ -6,7 +6,7 @@ import ErrorBanner from "../../../common/banner/ErrorBanner";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../app/model/redux/state";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
-import BookingItem from "./BookingItem";
+import BookingItemModal from "./BookingItemModal";
 import BookingSummary from "./BookingSummary";
 import agent from "../../../api/agent";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -42,7 +42,6 @@ const ViewMoreBooking = ({
   const [canLoadMore, setCanLoadMore] = useState(false);
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const dispatch = useDispatch();
-  const listRef = useRef<HTMLDivElement>(null);
 
   const getMoreBookings = async () => {
     try {
@@ -181,17 +180,21 @@ const ViewMoreBooking = ({
     dispatch(
       handleToggleModal({
         size: "small",
-        body: <BookingItem booking={booking} bookingType={bookingType} />,
+        body: <BookingItemModal booking={booking} bookingType={bookingType} />,
         open: true,
       })
     );
   };
 
   return (
-    <div ref={listRef} className="component-container">
+    <div className="component-container">
       <div className="d-flex flex-row justify-content-between mb-3 align-items-center">
         {getTitle()}
-        <Button className="white-button" onClick={() => setViewMore(null)}>
+        <Button
+          className="white-button"
+          onClick={() => setViewMore(null)}
+          title="Go back"
+        >
           <h4 className="d-flex flex-row align-items-center">
             <Icon name="arrow left" size="small" className="m-0" />
             <span className="ml-1">Go back</span>

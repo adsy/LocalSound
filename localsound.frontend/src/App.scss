@@ -45,8 +45,8 @@ $purple100: #6d69fa;
   color: $black100;
   font-size: 16px;
   letter-spacing: 2px;
-  transition: border-color 0.5s ease;
-  transition: background-color 0.5s ease;
+  transition: border-color 0.3s ease;
+  transition: background-color 0.3s ease;
   border-radius: 10px 10px;
 }
 
@@ -312,6 +312,10 @@ $end: 10;
   transition: width 0.3s ease, margin-left 0.3s ease, margin-right 0.3s ease,
     padding 0.3s ease !important;
   padding: 0px;
+  height: -moz-max-content; /* Firefox/Gecko */
+  height: -webkit-max-content; /* Chrome */
+  height: intrinsic;
+  height: max-content;
   height: fit-content;
 }
 
@@ -333,6 +337,10 @@ $end: 10;
 }
 
 .w-fit-content {
+  width: -moz-max-content; /* Firefox/Gecko */
+  width: -webkit-max-content; /* Chrome */
+  width: intrinsic;
+  width: max-content;
   width: fit-content;
 }
 
@@ -548,20 +556,28 @@ i.large.icon {
 /** BUTTONS **/
 .white-button {
   @include button-style;
-  // background-color: $purple100 !important;
-  border: 1px solid transparent;
+  background-color: $white200 !important;
+  border: 1px solid $black200;
   padding: 5px;
-  color: black !important;
+  color: $black200 !important;
   background-color: unset;
-  text-transform: uppercase !important;
-  transition: border 0.3s ease-in-out !important;
+  transition: width 0.3s ease-in-out, color 0.3s ease-in-out,
+    border 0.3s ease-in-out, background-color 0.3s ease-in-out !important;
+
+  h4 {
+    transition: color 0.3s ease-in-out !important;
+  }
 }
 
 .white-button:hover,
 .white-button:active,
 .white-button:focus {
-  background-color: unset !important;
-  border: 1px solid $black100;
+  color: $white300 !important;
+  background-color: $purple100 !important;
+  border: 1px solid $black200;
+  h4 {
+    color: $white300 !important;
+  }
 }
 
 .white-button {
@@ -593,10 +609,10 @@ i.large.icon {
 }
 
 .black-button {
-  text-transform: uppercase;
+  // text-transform: uppercase;
   @include button-style;
   background-color: $black100;
-  border: 1px solid $black100;
+  border: 1px solid $black200;
   padding: 5px;
   transition: border 0.3s ease-in-out !important;
   background-image: linear-gradient($black100, $black200);
@@ -627,7 +643,6 @@ i.large.icon {
   }
   @include button-style;
   @include text-shadow;
-  transition: background-color border 0.5s ease;
   background-color: #ff6100;
   border: black 1px solid;
 }
@@ -1017,7 +1032,7 @@ i.large.icon {
     }
 
     .description {
-      white-space: break-spaces;
+      white-space: pre-wrap;
     }
 
     .images-container {
@@ -1261,7 +1276,9 @@ i.large.icon {
     border: 1px solid $black200;
     padding-top: 5px !important;
     background-color: $white200 !important;
-    height: fit-content;
+    height: -moz-max-content; /* Firefox/Gecko */
+    height: -webkit-max-content; /* Chrome */
+    height: intrinsic; /* Safari/WebKit uses a non-standard name */
   }
 }
 
@@ -1438,7 +1455,7 @@ i.large.icon {
   .about-text {
     letter-spacing: 1px;
     text-align: justify;
-    white-space: break-spaces;
+    white-space: pre-wrap;
     .black-badge {
       margin-left: 0;
       margin-right: 0.25rem;
@@ -1547,6 +1564,10 @@ i.large.icon {
       }
     }
   }
+}
+
+#follower-square {
+  cursor: pointer;
 }
 
 #bookings {

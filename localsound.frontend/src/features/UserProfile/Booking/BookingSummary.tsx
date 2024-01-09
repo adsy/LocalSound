@@ -87,7 +87,11 @@ const BookingSummary = ({
       <div className="d-flex flex-row justify-content-end">
         {user.customerType === CustomerTypes.Artist &&
         type === BookingTypes.pending ? (
-          <Button className="black-button" onClick={(e) => openModal(e, true)}>
+          <Button
+            className="black-button"
+            onClick={(e) => openModal(e, true)}
+            title="Accept booking"
+          >
             <h4>
               <Icon
                 name="check"
@@ -101,6 +105,7 @@ const BookingSummary = ({
           <Button
             className="black-button ml-1"
             onClick={(e) => openModal(e, false)}
+            title="Cancel booking"
           >
             <h4>
               <Icon

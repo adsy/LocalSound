@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Tab, Tabs } from "react-bootstrap";
+import { Button, Tab, Tabs } from "react-bootstrap";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
 import { UserModel } from "../../../app/model/dto/user.model";
@@ -52,7 +52,7 @@ const ArtistProfile = ({
   const [packages, setPackages] = useState<ArtistPackageModel[]>([]);
   const [isFollowing, setIsFollowing] = useState(false);
   const [canLoadMore, setCanLoadMore] = useState(true);
-  const appLoading = useSelector((state: State) => state.app.appLoading);
+  const [updatingFollowingStatus, setUpdatingFollowingStatus] = useState(false);
   const dispatch = useDispatch();
 
   const loadImage = (image: AccountImageModel) => {
@@ -76,7 +76,6 @@ const ArtistProfile = ({
 
   useLayoutEffect(() => {
     setCurrentTab(ArtistProfileTabs.ArtistDetails);
-    dispatch(handleAppLoading(true));
     if (artistDetails?.images?.length > 0) {
       const IMAGES = [...artistDetails.images];
       Promise.all(IMAGES.map((image) => loadImage(image)))
@@ -97,7 +96,6 @@ const ArtistProfile = ({
     } else {
       setCoverImage(null);
       setImgsLoaded(true);
-      dispatch(handleAppLoading(false));
     }
   }, [artistDetails.memberId, artistDetails.images]);
 
@@ -145,6 +143,7 @@ const ArtistProfile = ({
   };
 
   const updateArtistFollow = async (follow: boolean) => {
+    setUpdatingFollowingStatus(true);
     if (loggedInUser) {
       setUpdateFollowerError(null);
       try {
@@ -179,6 +178,7 @@ const ArtistProfile = ({
         })
       );
     }
+    setUpdatingFollowingStatus(false);
   };
 
   const generateCoverImage = () => {
@@ -204,10 +204,10 @@ const ArtistProfile = ({
 
   return (
     <>
-      {!appLoading ? (
-        <div id="artist-profile">
-          <div className="d-flex flex-column flex-wrap p-0 fade-in w-100">
-            <div className="d-flex flex-row banner-holder">
+      <div id="artist-profile">
+        <div className="d-flex flex-column flex-wrap p-0 fade-in w-100">
+          {imgsLoaded ? (
+            <div className="d-flex flex-row banner-holder fade-in">
               {!updatingCoverPhoto && !file ? (
                 <div
                   style={{ ...generateCoverImage() }}
@@ -252,6 +252,7 @@ const ArtistProfile = ({
                               onClick={() => editArtistProfile()}
                               target="_blank"
                               className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3 mr-1"
+                              title="edit-details"
                             >
                               <h4>
                                 <Icon name="pencil" className="m-0" />
@@ -261,20 +262,24 @@ const ArtistProfile = ({
                               onClick={() => uploadTrack()}
                               target="_blank"
                               className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3 mr-1"
+                              title="upload-track"
                             >
                               <h4>
                                 <Icon name="upload" className="m-0" />
                               </h4>
                             </a>
-                            <a
-                              onClick={() => createPackage()}
-                              target="_blank"
-                              className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3"
-                            >
-                              <h4>
-                                <Icon name="box" className="m-0" />
-                              </h4>
-                            </a>
+                            {artistDetails.canAddPackage ? (
+                              <a
+                                onClick={() => createPackage()}
+                                target="_blank"
+                                className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3"
+                                title="create-package"
+                              >
+                                <h4>
+                                  <Icon name="box" className="m-0" />
+                                </h4>
+                              </a>
+                            ) : null}
                           </div>
                         </>
                       ) : (
@@ -287,7 +292,7 @@ const ArtistProfile = ({
                               />
                             ) : null}
                           </div>
-                          <a
+                          <Button
                             onClick={async () => {
                               if (isFollowing) {
                                 await updateArtistFollow(false);
@@ -296,24 +301,29 @@ const ArtistProfile = ({
                               }
                             }}
                             target="_blank"
-                            className="btn black-button edit-profile-button w-fit-content d-flex flex-row"
+                            className="btn white-button edit-profile-button w-fit-content d-flex flex-row"
+                            title="update-following"
                           >
-                            <h4>
-                              {isFollowing ? (
-                                <span className="mr-1 fade-in">
-                                  Unfollow artist
-                                </span>
-                              ) : (
-                                <span className="mr-1 fade-in">
-                                  Follow artist
-                                </span>
-                              )}
-                              <Icon
-                                name="heart"
-                                className="mt-0 mb-0 mr-0 ml-1"
-                              />
-                            </h4>
-                          </a>
+                            {!updatingFollowingStatus ? (
+                              <h4 className="fade-in">
+                                {isFollowing ? (
+                                  <span className="mr-1 fade-in ml-1">
+                                    Unfollow artist
+                                  </span>
+                                ) : (
+                                  <span className="mr-1 fade-in ml-1">
+                                    Follow artist
+                                  </span>
+                                )}
+                                <Icon
+                                  name="heart"
+                                  className="mt-0 mb-0 mr-0 ml-1"
+                                />
+                              </h4>
+                            ) : (
+                              <InPageLoadingComponent height={20} width={20} />
+                            )}
+                          </Button>
                         </div>
                       )}
                     </div>
@@ -334,100 +344,106 @@ const ArtistProfile = ({
                 </div>
               )}
             </div>
-            <div className="component-container">
-              <Tabs
-                id="controlled-tab-example"
-                activeKey={currentTab}
-                onSelect={(k) => {
-                  switch (k) {
-                    case "0": {
-                      setCurrentTab(ArtistProfileTabs.ArtistDetails);
-                      break;
-                    }
-                    case "1": {
-                      setCurrentTab(ArtistProfileTabs.Uploads);
-                      break;
-                    }
-                    case "2": {
-                      setCurrentTab(ArtistProfileTabs.Followers);
-                      break;
-                    }
-                    case "3": {
-                      setCurrentTab(ArtistProfileTabs.Following);
-                      break;
-                    }
-                    case "4": {
-                      setCurrentTab(ArtistProfileTabs.Packages);
-                      break;
-                    }
+          ) : (
+            <InPageLoadingComponent
+              withContainer={true}
+              height={100}
+              width={100}
+            />
+          )}
+          <div className="component-container">
+            <Tabs
+              id="controlled-tab-example"
+              activeKey={currentTab}
+              onSelect={(k) => {
+                switch (k) {
+                  case "0": {
+                    setCurrentTab(ArtistProfileTabs.ArtistDetails);
+                    break;
                   }
-                }}
-                className="mb-4"
+                  case "1": {
+                    setCurrentTab(ArtistProfileTabs.Uploads);
+                    break;
+                  }
+                  case "2": {
+                    setCurrentTab(ArtistProfileTabs.Followers);
+                    break;
+                  }
+                  case "3": {
+                    setCurrentTab(ArtistProfileTabs.Following);
+                    break;
+                  }
+                  case "4": {
+                    setCurrentTab(ArtistProfileTabs.Packages);
+                    break;
+                  }
+                }
+              }}
+              className="mb-4"
+            >
+              <Tab
+                eventKey={ArtistProfileTabs.ArtistDetails}
+                title="ARTIST DETAILS"
+                className=""
               >
-                <Tab
-                  eventKey={ArtistProfileTabs.ArtistDetails}
-                  title="ARTIST DETAILS"
-                  className=""
-                >
-                  <ArtistDetails
-                    userDetails={artistDetails}
-                    photoUpdateError={photoUpdateError}
-                    setCurrentTab={setCurrentTab}
-                  />
-                </Tab>
-                <Tab
-                  eventKey={ArtistProfileTabs.Uploads}
-                  title="UPLOADS"
-                  className=""
-                >
-                  <UploadList
-                    userDetails={artistDetails}
-                    currentTab={currentTab}
-                    tracks={tracks}
-                    setTracks={setTracks}
-                    viewingOwnProfile={viewingOwnProfile}
-                    canLoadMore={canLoadMore}
-                    setCanLoadMore={setCanLoadMore}
-                  />
-                </Tab>
-                <Tab
-                  eventKey={ArtistProfileTabs.Followers}
-                  title="FOLLOWERS"
-                  className=""
-                >
-                  <Followers
-                    artistDetails={artistDetails}
-                    currentTab={currentTab}
-                  />
-                </Tab>
-                <Tab
-                  eventKey={ArtistProfileTabs.Following}
-                  title="FOLLOWING"
-                  className=""
-                >
-                  <Following
-                    artistDetails={artistDetails}
-                    currentTab={currentTab}
-                  />
-                </Tab>
-                <Tab
-                  eventKey={ArtistProfileTabs.Packages}
-                  title="PACKAGES"
-                  className=""
-                >
-                  <ArtistPackages
-                    artistDetails={artistDetails}
-                    currentTab={currentTab}
-                    viewingOwnProfile={viewingOwnProfile}
-                    packages={packages}
-                    setPackages={setPackages}
-                  />
-                </Tab>
-              </Tabs>
-            </div>
+                <ArtistDetails
+                  userDetails={artistDetails}
+                  photoUpdateError={photoUpdateError}
+                  setCurrentTab={setCurrentTab}
+                />
+              </Tab>
+              <Tab
+                eventKey={ArtistProfileTabs.Uploads}
+                title="UPLOADS"
+                className=""
+              >
+                <UploadList
+                  userDetails={artistDetails}
+                  currentTab={currentTab}
+                  tracks={tracks}
+                  setTracks={setTracks}
+                  viewingOwnProfile={viewingOwnProfile}
+                  canLoadMore={canLoadMore}
+                  setCanLoadMore={setCanLoadMore}
+                />
+              </Tab>
+              <Tab
+                eventKey={ArtistProfileTabs.Followers}
+                title="FOLLOWERS"
+                className=""
+              >
+                <Followers
+                  artistDetails={artistDetails}
+                  currentTab={currentTab}
+                />
+              </Tab>
+              <Tab
+                eventKey={ArtistProfileTabs.Following}
+                title="FOLLOWING"
+                className=""
+              >
+                <Following
+                  artistDetails={artistDetails}
+                  currentTab={currentTab}
+                />
+              </Tab>
+              <Tab
+                eventKey={ArtistProfileTabs.Packages}
+                title="PACKAGES"
+                className=""
+              >
+                <ArtistPackages
+                  artistDetails={artistDetails}
+                  currentTab={currentTab}
+                  viewingOwnProfile={viewingOwnProfile}
+                  packages={packages}
+                  setPackages={setPackages}
+                />
+              </Tab>
+            </Tabs>
           </div>
         </div>
-      ) : null}
+      </div>
     </>
   );
 };

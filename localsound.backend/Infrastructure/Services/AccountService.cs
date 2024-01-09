@@ -331,6 +331,7 @@ namespace localsound.backend.Infrastructure.Services
                     if (artistResponse.ReturnData.Followers.Any(x => x.FollowerId == currentUser))
                     {
                         returnDto.IsFollowing = true;
+
                     }
                     else
                     {
@@ -587,6 +588,8 @@ namespace localsound.backend.Infrastructure.Services
             {
                 returnDto.FollowingCount = 0;
             }
+
+            returnDto.CanAddPackage = artist.Packages.Count < 3;
 
 
             return returnDto;

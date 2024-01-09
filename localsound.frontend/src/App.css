@@ -442,6 +442,10 @@ h6 .purple-highlight:before {
 .app-container {
   transition: width 0.3s ease, margin-left 0.3s ease, margin-right 0.3s ease, padding 0.3s ease !important;
   padding: 0px;
+  height: -moz-max-content; /* Firefox/Gecko */
+  height: -webkit-max-content; /* Chrome */
+  height: intrinsic;
+  height: max-content;
   height: fit-content;
 }
 
@@ -463,6 +467,10 @@ h6 .purple-highlight:before {
 }
 
 .w-fit-content {
+  width: -moz-max-content; /* Firefox/Gecko */
+  width: -webkit-max-content; /* Chrome */
+  width: intrinsic;
+  width: max-content;
   width: fit-content;
 }
 
@@ -686,22 +694,31 @@ i.large.icon {
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  transition: border-color 0.5s ease;
-  transition: background-color 0.5s ease;
+  transition: border-color 0.3s ease;
+  transition: background-color 0.3s ease;
   border-radius: 10px 10px;
-  border: 1px solid transparent;
+  background-color: #fcfcfd !important;
+  border: 1px solid #001514;
   padding: 5px;
-  color: black !important;
+  color: #001514 !important;
   background-color: unset;
-  text-transform: uppercase !important;
-  transition: border 0.3s ease-in-out !important;
+  transition: width 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out, background-color 0.3s ease-in-out !important;
+}
+.white-button h4 {
+  transition: color 0.3s ease-in-out !important;
 }
 
 .white-button:hover,
 .white-button:active,
 .white-button:focus {
-  background-color: unset !important;
-  border: 1px solid #232323;
+  color: #e2e8f0 !important;
+  background-color: #6d69fa !important;
+  border: 1px solid #001514;
+}
+.white-button:hover h4,
+.white-button:active h4,
+.white-button:focus h4 {
+  color: #e2e8f0 !important;
 }
 
 .white-button h4 {
@@ -712,8 +729,8 @@ i.large.icon {
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  transition: border-color 0.5s ease;
-  transition: background-color 0.5s ease;
+  transition: border-color 0.3s ease;
+  transition: background-color 0.3s ease;
   border-radius: 10px 10px;
   border: 1px solid transparent;
   padding: 5px;
@@ -734,15 +751,14 @@ i.large.icon {
 }
 
 .black-button {
-  text-transform: uppercase;
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  transition: border-color 0.5s ease;
-  transition: background-color 0.5s ease;
+  transition: border-color 0.3s ease;
+  transition: background-color 0.3s ease;
   border-radius: 10px 10px;
   background-color: #232323;
-  border: 1px solid #232323;
+  border: 1px solid #001514;
   padding: 5px;
   transition: border 0.3s ease-in-out !important;
   background-image: linear-gradient(#232323, #001514);
@@ -770,11 +786,10 @@ i.large.icon {
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  transition: border-color 0.5s ease;
-  transition: background-color 0.5s ease;
+  transition: border-color 0.3s ease;
+  transition: background-color 0.3s ease;
   border-radius: 10px 10px;
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-  transition: background-color border 0.5s ease;
   background-color: #ff6100;
   border: black 1px solid;
 }
@@ -794,8 +809,8 @@ i.large.icon {
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  transition: border-color 0.5s ease;
-  transition: background-color 0.5s ease;
+  transition: border-color 0.3s ease;
+  transition: background-color 0.3s ease;
   border-radius: 10px 10px;
   transition: background-color border 0.5s ease;
   background-color: #1ed75d;
@@ -816,8 +831,8 @@ i.large.icon {
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
-  transition: border-color 0.5s ease;
-  transition: background-color 0.5s ease;
+  transition: border-color 0.3s ease;
+  transition: background-color 0.3s ease;
   border-radius: 10px 10px;
   transition: background-color 0.5s ease;
   background-color: #ff0000;
@@ -1132,7 +1147,7 @@ i.large.icon {
   padding-right: 3px;
 }
 #artist-packages #artist-package-display .description {
-  white-space: break-spaces;
+  white-space: pre-wrap;
 }
 #artist-packages #artist-package-display .images-container {
   margin-top: 10px;
@@ -1475,7 +1490,9 @@ i.large.icon {
   border: 1px solid #001514;
   padding-top: 5px !important;
   background-color: #fcfcfd !important;
-  height: fit-content;
+  height: -moz-max-content; /* Firefox/Gecko */
+  height: -webkit-max-content; /* Chrome */
+  height: intrinsic; /* Safari/WebKit uses a non-standard name */
 }
 
 #loading-component .loading-text {
@@ -1634,7 +1651,7 @@ i.large.icon {
 #user-profile .about-text {
   letter-spacing: 1px;
   text-align: justify;
-  white-space: break-spaces;
+  white-space: pre-wrap;
 }
 #user-profile .about-text .black-badge {
   margin-left: 0;
@@ -1724,6 +1741,10 @@ i.large.icon {
   #user-profile #follower-list .section-title {
     font-size: 12px;
   }
+}
+
+#follower-square {
+  cursor: pointer;
 }
 
 #bookings .component-container:last-of-type {
