@@ -26,12 +26,12 @@ const UserProfileSummary = () => {
     };
   }, [controller]);
 
-  useLayoutEffect(() => {
-    dispatch(handleSetProfile(null));
-    setLoading(true);
-    const getProfile = async () => {
-      var profileUrl = history.location.pathname.slice(1);
+  const getProfile = async () => {
+    var profileUrl = history.location.pathname.slice(1);
 
+    if (profileUrl !== profile?.profileUrl) {
+      dispatch(handleSetProfile(null));
+      setLoading(true);
       if (!userDetail || userDetail?.profileUrl !== profileUrl) {
         if (profileUrl?.length > 0) {
           var result = await agent.Profile.getProfile(profileUrl);
@@ -42,15 +42,19 @@ const UserProfileSummary = () => {
         dispatch(handleSetProfile(userDetail));
         setViewingOwnProfile(true);
       }
-    };
+    }
+  };
 
-    getProfile()
-      .catch((err) => {
-        setNoMatch(true);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  useLayoutEffect(() => {
+    (async () => {
+      await getProfile()
+        .catch((err) => {
+          setNoMatch(true);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    })();
   }, [userDetail, history.location]);
 
   return (

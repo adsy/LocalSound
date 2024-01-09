@@ -20,6 +20,7 @@ import {
   handleTrackUpdated,
   handleTrackUploaded,
 } from "../../../../app/redux/actions/pageOperationSlice";
+import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
 
 interface Props {
   trackDetails: ArtistTrackUploadModel;
@@ -279,14 +280,7 @@ const EditTrackForm = ({
                         <h4>Update track</h4>
                       </Button>
                     ) : (
-                      <ProgressBar>
-                        <ProgressBar
-                          className="track-progress"
-                          animated
-                          //   now={trackProgress}
-                          now={0}
-                        />
-                      </ProgressBar>
+                      <InPageLoadingComponent />
                     )}
                   </div>
                 </Form>

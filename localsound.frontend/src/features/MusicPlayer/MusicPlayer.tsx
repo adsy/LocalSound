@@ -16,6 +16,7 @@ const MusicPlayer = () => {
   const [currentTrack, setCurrentTrack] = useState<string | null>(null);
   const waveformRef = useRef<HTMLAudioElement>(null);
   const seekerRef = useRef<HTMLInputElement>(null);
+  const volumeRef = useRef<HTMLInputElement>(null);
   const [mediaElementSource, setMediaElementSource] =
     useState<MediaElementAudioSourceNode>();
   const [audioContext, setAudioContext] = useState<AudioContext>(
@@ -174,81 +175,112 @@ const MusicPlayer = () => {
     waveformRef!.current!.currentTime = pointOfSong;
   };
 
+  const updateVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
+    var percentage = Number.parseInt(e.target.value) / 10000;
+    var volume = 1 * percentage;
+    waveformRef!.current!.volume = volume;
+  };
+
   return (
     <div id="music-player" className="fade-in">
       <Container className="px-3 d-flex flex-column align-items-between h-100">
         <div className="mt-2 player-container mb-2">
-          <audio
-            id="music"
-            preload="all"
-            ref={waveformRef}
-            onTimeUpdate={(e) => updateTime(e)}
-          ></audio>
-          <div className="pr-3 d-flex flex-row">
-            <div className="pr-2">
-              <Icon
-                className="audio-button"
-                name="backward"
-                size="large"
-                color="grey"
-                onClick={() => {
-                  // dispatch(handlePlaySong());
-                }}
-              />
+          <div className="d-flex flex-row col-12 col-lg-2 track-details">
+            <div className="track-image">
+              <Image size="mini" src={player.trackImage} className="" />
             </div>
-            <div>
-              {!player.playing ? (
+            <div className="d-flex flex-column ml-2 track-artist">
+              <div className="track-name">{player.trackName}</div>
+              <div className="artist-name">{player.artistName}</div>
+            </div>
+          </div>
+          <div className="d-flex flex-row col-12 col-lg-10 align-items-center">
+            <audio
+              id="music"
+              preload="all"
+              ref={waveformRef}
+              onTimeUpdate={(e) => updateTime(e)}
+            ></audio>
+            <div className="pr-3 d-flex flex-row">
+              <div className="pr-2">
                 <Icon
-                  className="audio-button m-0"
-                  name="play"
+                  className="audio-button"
+                  name="backward"
                   size="large"
                   color="grey"
                   onClick={() => {
-                    dispatch(handlePlaySong());
+                    // dispatch(handlePlaySong());
                   }}
                 />
-              ) : (
+              </div>
+              <div>
+                {!player.playing ? (
+                  <Icon
+                    className="audio-button m-0"
+                    name="play"
+                    size="large"
+                    color="grey"
+                    onClick={() => {
+                      dispatch(handlePlaySong());
+                    }}
+                  />
+                ) : (
+                  <Icon
+                    className="audio-button m-0"
+                    name="pause"
+                    size="large"
+                    color="grey"
+                    onClick={() => {
+                      dispatch(handlePauseSong());
+                    }}
+                  />
+                )}
+              </div>
+              <div className="pl-2">
                 <Icon
-                  className="audio-button m-0"
-                  name="pause"
+                  className="audio-button"
+                  name="forward"
                   size="large"
                   color="grey"
                   onClick={() => {
-                    dispatch(handlePauseSong());
+                    // dispatch(handlePlaySong());
                   }}
                 />
-              )}
+              </div>
+              <div className="pl-2 volume">
+                <Icon
+                  name="volume down"
+                  size="large"
+                  color="grey"
+                  className="audio-button"
+                />
+                <div className="volume-control">
+                  <input
+                    ref={volumeRef}
+                    type="range"
+                    className="seek-slider volume-slider"
+                    max="10000"
+                    onChange={(e) => {
+                      updateVolume(e);
+                    }}
+                  ></input>
+                </div>
+              </div>
             </div>
-            <div className="pl-2">
-              <Icon
-                className="audio-button"
-                name="forward"
-                size="large"
-                color="grey"
-                onClick={() => {
-                  // dispatch(handlePlaySong());
-                }}
-              />
-            </div>
-          </div>
-          <h5 className="m-0 pr-3">{time}</h5>
-          <input
-            ref={seekerRef}
-            type="range"
-            className="seek-slider"
-            max="10000"
-            onChange={(e) => {
-              updateCurrentTime(e);
-            }}
-          ></input>
-          {/* <h3 className="m-0">{player.trackName}</h3> */}
-          {time && totalTime ? <h5 className="m-0 pl-3">{totalTime}</h5> : null}
-          <div>
-            <Image size="mini" src={player.trackImage} className="ml-5" />
-          </div>
-          <div className="d-flex flex-column ml-2">
-            <div className="track-name">{player.trackName}</div>
-            <div className="artist-name">{player.artistName}</div>
+            <h5 className="m-0 pr-3">{time}</h5>
+            <input
+              ref={seekerRef}
+              type="range"
+              className="seek-slider"
+              max="10000"
+              onChange={(e) => {
+                updateCurrentTime(e);
+              }}
+            ></input>
+            {/* <h3 className="m-0">{player.trackName}</h3> */}
+            {time && totalTime ? (
+              <h5 className="m-0 pl-3">{totalTime}</h5>
+            ) : null}
           </div>
         </div>
       </Container>

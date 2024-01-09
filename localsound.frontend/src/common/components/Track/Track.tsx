@@ -43,6 +43,7 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    setTrackImage(null);
     if (track.trackImageUrl) {
       const IMAGES = [track.trackImageUrl];
       Promise.all(IMAGES.map((image) => loadImage(image)))
@@ -63,7 +64,7 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
         setTrackImage(PlaceholderImg);
       }
     }
-  }, [track.artistTrackUploadId]);
+  }, [track.artistTrackUploadId, track.trackImageUrl]);
 
   const loadImage = (image: string) => {
     if (trackImageLoaded) setTrackImageLoaded(false);
@@ -103,7 +104,7 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
           artistProfile: artistDetails.profileUrl,
           trackName: track.trackName,
           artistName: artistDetails.name,
-          trackImage: track.trackImageUrl,
+          trackImage: trackImage,
           duration: track.duration,
         })
       );
