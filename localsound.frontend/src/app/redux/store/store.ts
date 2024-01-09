@@ -13,6 +13,7 @@ import ModalReducer from "../actions/modalSlice";
 import PlayerReducer from "../actions/playerSlice";
 import UserReducer, { handleResetUserState } from "../actions/userSlice";
 import PageOperationReducer from "../actions/pageOperationSlice";
+import ProfileReducer from "../actions/profileSlice";
 
 const middleware = [];
 
@@ -26,12 +27,13 @@ var rootReducer = combineReducers({
   user: UserReducer,
   player: PlayerReducer,
   pageOperation: PageOperationReducer,
+  profile: ProfileReducer,
 });
 
 const persistConfig = {
   key: "localSound",
   storage,
-  blacklist: ["modal", "player", "pageOperation", "app"],
+  blacklist: ["modal", "player", "pageOperation", "app", "profile"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

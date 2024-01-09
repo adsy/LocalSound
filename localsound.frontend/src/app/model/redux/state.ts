@@ -1,8 +1,8 @@
-import { ActionState } from "./actionState";
 import { AppState } from "./appState";
 import { ModalState } from "./modalState";
 import { PageOperationState } from "./pageOperationState";
 import { PlayerState } from "./playerState";
+import { ProfileState } from "./profileState";
 import { UserState } from "./userState";
 
 interface State {
@@ -10,8 +10,8 @@ interface State {
   modal: ModalState;
   user: UserState;
   player: PlayerState;
-  action: ActionState;
   pageOperation: PageOperationState;
+  profile: ProfileState;
 }
 
 export type { State };

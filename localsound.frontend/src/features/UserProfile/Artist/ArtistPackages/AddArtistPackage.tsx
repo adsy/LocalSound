@@ -14,6 +14,7 @@ import { handleResetModal } from "../../../../app/redux/actions/modalSlice";
 import ErrorBanner from "../../../../common/banner/ErrorBanner";
 import { ArtistPackageModel } from "../../../../app/model/dto/artist-package.model";
 import { handleSetUserDetails } from "../../../../app/redux/actions/userSlice";
+import { handleUpdateAllowAddPackage } from "../../../../app/redux/actions/profileSlice";
 
 interface Props {
   userDetails: UserModel;
@@ -70,9 +71,7 @@ const AddArtistPackage = ({ userDetails, setPackages }: Props) => {
                 setPackages(packages);
 
                 if (packages.length == 3) {
-                  var clone = { ...userDetails };
-                  clone.canAddPackage = false;
-                  dispatch(handleSetUserDetails(clone));
+                  dispatch(handleUpdateAllowAddPackage(false));
                 }
 
                 dispatch(handleResetModal());
@@ -118,7 +117,8 @@ const AddArtistPackage = ({ userDetails, setPackages }: Props) => {
                             </div>
                             <p className="text-justify">
                               Add the list of equipment you will provide with
-                              this package.
+                              this package. Type your equipment name and press
+                              enter to add it to the list.
                             </p>
                             <EquipmentEntry
                               equipment={equipment}

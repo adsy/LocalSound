@@ -7,6 +7,7 @@ import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponen
 import ErrorBanner from "../../../../common/banner/ErrorBanner";
 import agent from "../../../../api/agent";
 import { handleSetUserDetails } from "../../../../app/redux/actions/userSlice";
+import { handleUpdateAllowAddPackage } from "../../../../app/redux/actions/profileSlice";
 
 interface Props {
   artistPackage: ArtistPackageModel;
@@ -45,9 +46,7 @@ const DeletePackageConfirmation = ({
         setPackages(packagesFiltered);
 
         if (!artistDetails.canAddPackage) {
-          var clone = { ...artistDetails };
-          clone.canAddPackage = true;
-          dispatch(handleSetUserDetails(clone));
+          dispatch(handleUpdateAllowAddPackage(true));
         }
 
         dispatch(handleResetModal());

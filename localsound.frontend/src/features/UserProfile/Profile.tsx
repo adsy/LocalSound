@@ -1,17 +1,18 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../app/model/redux/state";
 import { CustomerTypes } from "../../app/model/enums/customerTypes";
 import ArtistProfile from "./Artist/ArtistProfile";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { UserModel } from "../../app/model/dto/user.model";
 import { useHistory } from "react-router-dom";
 import agent from "../../api/agent";
 import ProfileNotFound from "./ProfileNotFound";
 import InPageLoadingComponent from "../../app/layout/InPageLoadingComponent";
+import { handleSetProfile } from "../../app/redux/actions/profileSlice";
 
 const UserProfileSummary = () => {
+  const dispatch = useDispatch();
   const userDetail = useSelector((state: State) => state.user.userDetails);
-  const [profile, setProfile] = useState<UserModel | null>(null);
+  const profile = useSelector((state: State) => state.profile.profileData);
   const [noMatch, setNoMatch] = useState(false);
   const [viewingOwnProfile, setViewingOwnProfile] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -26,7 +27,7 @@ const UserProfileSummary = () => {
   }, [controller]);
 
   useLayoutEffect(() => {
-    setProfile(null);
+    dispatch(handleSetProfile(null));
     setLoading(true);
     const getProfile = async () => {
       var profileUrl = history.location.pathname.slice(1);
@@ -34,11 +35,11 @@ const UserProfileSummary = () => {
       if (!userDetail || userDetail?.profileUrl !== profileUrl) {
         if (profileUrl?.length > 0) {
           var result = await agent.Profile.getProfile(profileUrl);
-          setProfile(result);
+          dispatch(handleSetProfile(result));
           setViewingOwnProfile(false);
         }
       } else if (userDetail) {
-        setProfile(userDetail);
+        dispatch(handleSetProfile(userDetail));
         setViewingOwnProfile(true);
       }
     };
@@ -51,10 +52,6 @@ const UserProfileSummary = () => {
         setLoading(false);
       });
   }, [userDetail, history.location]);
-
-  useEffect(() => {
-    if (userDetail && viewingOwnProfile) setProfile(userDetail);
-  }, [userDetail]);
 
   return (
     <>
@@ -74,7 +71,6 @@ const UserProfileSummary = () => {
           <ArtistProfile
             loggedInUser={userDetail!}
             artistDetails={profile}
-            setProfile={setProfile}
             viewingOwnProfile={viewingOwnProfile}
           />
         </div>

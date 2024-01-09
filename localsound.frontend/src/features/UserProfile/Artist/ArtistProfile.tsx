@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Tab, Tabs } from "react-bootstrap";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
@@ -24,20 +24,18 @@ import AddArtistPackage from "./ArtistPackages/AddArtistPackage";
 import ArtistPackages from "./ArtistPackages/ArtistPackages";
 import { ArtistPackageModel } from "../../../app/model/dto/artist-package.model";
 import { handleAppLoading } from "../../../app/redux/actions/applicationSlice";
-import { State } from "../../../app/model/redux/state";
+import { handleUpdateProfileFollowCount } from "../../../app/redux/actions/profileSlice";
 
 interface Props {
   loggedInUser: UserModel;
   artistDetails: UserModel;
   viewingOwnProfile: boolean;
-  setProfile: (artistDetails: UserModel) => void;
 }
 
 const ArtistProfile = ({
   loggedInUser,
   artistDetails,
   viewingOwnProfile,
-  setProfile,
 }: Props) => {
   const [updatingCoverPhoto, setUpdatingCoverPhoto] = useState(false);
   const [updateFollowerError, setUpdateFollowerError] = useState<string | null>(
@@ -153,20 +151,21 @@ const ArtistProfile = ({
             artistDetails.memberId
           );
           setIsFollowing(true);
-          var localArtist = artistDetails;
-          localArtist.followerCount += 1;
-          setProfile(localArtist);
+          dispatch(
+            handleUpdateProfileFollowCount(artistDetails.followerCount + 1)
+          );
         } else {
           await agent.Artist.unfollowArtist(
             loggedInUser.memberId,
             artistDetails.memberId
           );
           setIsFollowing(false);
-          var localArtist = artistDetails;
-          localArtist.followerCount -= 1;
-          setProfile(localArtist);
+          dispatch(
+            handleUpdateProfileFollowCount(artistDetails.followerCount - 1)
+          );
         }
       } catch (err: any) {
+        console.log(err);
         setUpdateFollowerError(err);
       }
     } else {
@@ -300,7 +299,6 @@ const ArtistProfile = ({
                                 await updateArtistFollow(true);
                               }
                             }}
-                            target="_blank"
                             className="btn white-button edit-profile-button w-fit-content d-flex flex-row"
                             title="update-following"
                           >

@@ -169,7 +169,8 @@ const EditArtistPackage = ({
                                 </div>
                                 <p className="text-justify">
                                   Add the list of equipment you will provide
-                                  with this package.
+                                  with this package. Type your equipment name
+                                  and press enter to add it to the list.
                                 </p>
                                 <EquipmentEntry
                                   equipment={equipment}
