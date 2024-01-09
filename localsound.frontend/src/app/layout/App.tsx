@@ -93,24 +93,22 @@ const App = () => {
                   />
                 </div>
               ) : (
-                <main className={`w-100 app-container app-holder`}>
+                <main className={`w-100 app-container app-holder d-flex`}>
                   <Container>
-                    <div className="masthead">
-                      <Switch>
-                        <PrivateRoute exact path="/home" component={HomePage} />
-                        <PrivateRoute
-                          exact
-                          path="/bookings"
-                          component={BookingsOverview}
-                        />
-                        <PrivateRoute
-                          exact
-                          path="/account-settings"
-                          component={AccountSettings}
-                        />
-                        <Route exact path="/(.+)" component={UserProfile} />
-                      </Switch>
-                    </div>
+                    <Switch>
+                      <PrivateRoute exact path="/home" component={HomePage} />
+                      <PrivateRoute
+                        exact
+                        path="/bookings"
+                        component={BookingsOverview}
+                      />
+                      <PrivateRoute
+                        exact
+                        path="/account-settings"
+                        component={AccountSettings}
+                      />
+                      <Route exact path="/(.+)" component={UserProfile} />
+                    </Switch>
                   </Container>
                 </main>
               )}

@@ -107,6 +107,11 @@ body {
   height: 100%;
 }
 
+.top-71 {
+  // margin-top: -71px;
+  transform: translateY(-36px);
+}
+
 h1 {
 }
 
@@ -322,6 +327,7 @@ $end: 10;
 .app-holder {
   top: 71px;
   position: absolute;
+  min-height: calc(100% - 71px);
 }
 
 .black-border {

@@ -21,6 +21,10 @@ body {
   height: 100%;
 }
 
+.top-71 {
+  transform: translateY(-36px);
+}
+
 h1,
 h2,
 h3,
@@ -452,6 +456,7 @@ h6 .purple-highlight:before {
 .app-holder {
   top: 71px;
   position: absolute;
+  min-height: calc(100% - 71px);
 }
 
 .black-border {
