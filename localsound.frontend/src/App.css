@@ -943,17 +943,44 @@ i.large.icon {
   color: white !important;
 }
 #music-player .player-container .volume {
+  display: flex;
+  align-items: center;
   position: relative;
+  cursor: pointer;
+  height: 40px;
+}
+#music-player .player-container .volume .arrow-down {
+  position: absolute;
+  top: 140px;
+  width: 0;
+  height: 0;
+  margin-left: -1px;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 12px solid #001514;
+}
+#music-player .player-container .volume .inner-arrow {
+  position: absolute;
+  top: 139px;
+  margin-left: 0px;
+  width: 0;
+  height: 0;
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
+  border-top: 11px solid #232323;
+  z-index: 2;
 }
 #music-player .player-container .volume .volume-control {
   position: absolute;
   display: none;
-  height: 196px;
-  width: 11px;
-  margin-left: 5px;
+  height: 143px;
+  width: 25px;
+  margin-left: -33px;
   background-color: #232323;
+  border: 2px solid #001514;
+  border-bottom: unset;
   border-radius: 10px 10px 0px 0px;
-  top: -196px;
+  top: -150px;
   /* Removes default focus */
   /***** Chrome, Safari, Opera and Edge Chromium styles *****/
   /* slider track */
@@ -963,14 +990,16 @@ i.large.icon {
   /* slider thumb */
 }
 #music-player .player-container .volume .volume-control input[type=range].seek-slider {
+  touch-action: none;
   -webkit-appearance: none;
   appearance: none;
   background: transparent;
   cursor: pointer;
-  width: 12.5rem;
+  width: 9.3rem;
   transform: rotate(270deg);
-  margin-left: -82px;
-  margin-top: 86px;
+  margin-left: -54px;
+  margin-top: 68px;
+  z-index: 100 !important;
 }
 #music-player .player-container .volume .volume-control input[type=range].seek-slider:focus {
   outline: none;
@@ -979,11 +1008,13 @@ i.large.icon {
   background-color: #6d69fa;
   border-radius: 0.5rem;
   height: 0.5rem;
+  z-index: 100 !important;
 }
 #music-player .player-container .volume .volume-control input[type=range].seek-slider::-webkit-slider-thumb {
+  z-index: 100 !important;
   -webkit-appearance: none; /* Override default look */
   appearance: none;
-  margin-top: -3px; /* Centers thumb on the track */
+  margin-top: -0.2rem; /* Centers thumb on the track */
   /*custom styles*/
   background-color: #f1f1f1;
   border-radius: 200px;
@@ -1012,6 +1043,16 @@ i.large.icon {
 @media only screen and (max-width: 991px) {
   #music-player .player-container {
     flex-direction: column-reverse;
+  }
+  #music-player .player-container .volume-control {
+    height: 143px !important;
+    top: -149px !important;
+  }
+  #music-player .player-container .arrow-down {
+    top: 141px !important;
+  }
+  #music-player .player-container .inner-arrow {
+    top: 140px !important;
   }
   #music-player .player-container .track-details {
     justify-content: center !important;
@@ -1055,6 +1096,7 @@ i.large.icon {
   font-weight: 800;
 }
 #music-player input[type=range].seek-slider {
+  touch-action: none;
   -webkit-appearance: none;
   appearance: none;
   background: transparent;

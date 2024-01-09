@@ -1,4 +1,10 @@
-import { SyntheticEvent, useLayoutEffect, useRef, useState } from "react";
+import {
+  SyntheticEvent,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../app/model/redux/state";
 import { Icon, Image } from "semantic-ui-react";
@@ -17,6 +23,8 @@ const MusicPlayer = () => {
   const waveformRef = useRef<HTMLAudioElement>(null);
   const seekerRef = useRef<HTMLInputElement>(null);
   const volumeRef = useRef<HTMLInputElement>(null);
+  const [volumeMuted, setVolumeMuted] = useState(false);
+  const [volume, setVolume] = useState(1);
   const [mediaElementSource, setMediaElementSource] =
     useState<MediaElementAudioSourceNode>();
   const [audioContext, setAudioContext] = useState<AudioContext>(
@@ -26,7 +34,25 @@ const MusicPlayer = () => {
 
   var singleton = SingletonFactory.getInstance();
 
+  useEffect(() => {
+    if (volumeMuted) {
+      if (waveformRef.current) {
+        waveformRef.current.volume = 0;
+        volumeRef.current!.value = "0";
+      }
+    } else {
+      if (waveformRef.current) {
+        waveformRef.current.volume = volume;
+        volumeRef.current!.value = `${volume * 10000}`;
+      }
+    }
+  }, [volumeMuted]);
+
   useLayoutEffect(() => {
+    if (volumeRef?.current) {
+      volumeRef.current.value = "10000";
+    }
+
     if (waveformRef.current) {
       singleton.audioElementRef = waveformRef;
       waveformRef!.current!.crossOrigin = "anonymous";
@@ -175,9 +201,10 @@ const MusicPlayer = () => {
     waveformRef!.current!.currentTime = pointOfSong;
   };
 
-  const updateVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
-    var percentage = Number.parseInt(e.target.value) / 10000;
+  const updateVolume = (value: string) => {
+    var percentage = Number.parseInt(value) / 10000;
     var volume = 1 * percentage;
+    setVolume(volume);
     waveformRef!.current!.volume = volume;
   };
 
@@ -201,7 +228,7 @@ const MusicPlayer = () => {
               ref={waveformRef}
               onTimeUpdate={(e) => updateTime(e)}
             ></audio>
-            <div className="pr-3 d-flex flex-row">
+            <div className="pr-3 d-flex flex-row align-items-center">
               <div className="pr-2">
                 <Icon
                   className="audio-button"
@@ -247,23 +274,38 @@ const MusicPlayer = () => {
                   }}
                 />
               </div>
-              <div className="pl-2 volume">
-                <Icon
-                  name="volume down"
-                  size="large"
-                  color="grey"
-                  className="audio-button"
-                />
-                <div className="volume-control">
-                  <input
-                    ref={volumeRef}
-                    type="range"
-                    className="seek-slider volume-slider"
-                    max="10000"
-                    onChange={(e) => {
-                      updateVolume(e);
-                    }}
-                  ></input>
+              <div className="pl-2 volume d-flex align-items-center">
+                {!volumeMuted ? (
+                  <Icon
+                    name="volume down"
+                    size="large"
+                    color="grey"
+                    className="audio-button"
+                    onClick={() => setVolumeMuted(!volumeMuted)}
+                  />
+                ) : (
+                  <Icon
+                    name="volume off"
+                    size="large"
+                    color="grey"
+                    className="audio-button"
+                    onClick={() => setVolumeMuted(!volumeMuted)}
+                  />
+                )}
+                <div>
+                  <div className="volume-control">
+                    <input
+                      ref={volumeRef}
+                      type="range"
+                      className="seek-slider volume-slider"
+                      max="10000"
+                      onChange={(e) => {
+                        updateVolume(e.target.value);
+                      }}
+                    ></input>
+                    <div className="inner-arrow"></div>
+                    <div className="arrow-down"></div>
+                  </div>
                 </div>
               </div>
             </div>

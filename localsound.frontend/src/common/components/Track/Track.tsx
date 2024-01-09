@@ -106,6 +106,7 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
           artistName: artistDetails.name,
           trackImage: trackImage,
           duration: track.duration,
+          trackList: tracks,
         })
       );
     }

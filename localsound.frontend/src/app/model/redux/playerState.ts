@@ -1,3 +1,5 @@
+import { ArtistTrackUploadModel } from "../dto/artist-track-upload.model";
+
 export interface PlayerState {
   trackId: string | null;
   playing: boolean;
@@ -7,4 +9,5 @@ export interface PlayerState {
   artistName: string | null;
   artistProfile: string | null;
   duration: number | null;
+  trackList: ArtistTrackUploadModel[];
 }
