@@ -14,6 +14,7 @@ import { CropTypes } from "../../../../../app/model/enums/cropTypes";
 import ImageCropper from "../../../../../common/components/Cropper/ImageCropper";
 import { handleResetModal } from "../../../../../app/redux/actions/modalSlice";
 import ErrorBanner from "../../../../../common/banner/ErrorBanner";
+import { handleUpdateProfilePhoto } from "../../../../../app/redux/actions/profileSlice";
 
 interface Props {
   disabled?: boolean;
@@ -92,8 +93,9 @@ const EditArtistDetailsForm = ({
           AccountImageTypes.ProfileImage
         );
 
-        dispatch(handleResetModal());
         dispatch(handleUpdateUserProfilePhoto(result));
+        dispatch(handleUpdateProfilePhoto(result));
+        dispatch(handleResetModal());
       } catch (err: any) {
         setPhotoUpdateError(err);
         setSubmittingPhotoUpdate(false);

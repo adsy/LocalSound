@@ -6,6 +6,7 @@ import { AccountImageTypes } from "../../../../app/model/enums/accountImageTypes
 import { handleUpdateUserCoverPhoto } from "../../../../app/redux/actions/userSlice";
 import { CropTypes } from "../../../../app/model/enums/cropTypes";
 import { handleAppLoading } from "../../../../app/redux/actions/applicationSlice";
+import { handleUpdateProfileCoverPhoto } from "../../../../app/redux/actions/profileSlice";
 
 interface Props {
   file: File;
@@ -40,8 +41,9 @@ const EditCoverPhoto = ({
         );
 
         setFile(null);
-        setUpdatingCoverPhoto(false);
         dispatch(handleUpdateUserCoverPhoto(result));
+        dispatch(handleUpdateProfileCoverPhoto(result));
+        setUpdatingCoverPhoto(false);
       } catch (err) {
         setPhotoUpdateError(
           "There was an error updating your cover photo, please try again.."

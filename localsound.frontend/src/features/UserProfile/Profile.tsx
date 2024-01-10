@@ -42,6 +42,8 @@ const UserProfileSummary = () => {
         dispatch(handleSetProfile(userDetail));
         setViewingOwnProfile(true);
       }
+    } else {
+      setViewingOwnProfile(true);
     }
   };
 

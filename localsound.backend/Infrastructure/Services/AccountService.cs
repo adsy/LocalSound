@@ -428,7 +428,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse> UpdateAccountImage(Guid userId, string memberId, IFormFile photo, AccountImageTypeEnum imageType, string fileExt)
+        public async Task<ServiceResponse<string>> UpdateAccountImage(Guid userId, string memberId, IFormFile photo, AccountImageTypeEnum imageType, string fileExt)
         {
             try
             {
@@ -436,21 +436,21 @@ namespace localsound.backend.Infrastructure.Services
 
                 if (!accountResult.IsSuccessStatusCode)
                 {
-                    return new ServiceResponse(accountResult.StatusCode);
+                    return new ServiceResponse<string>(accountResult.StatusCode);
                 }
 
                 var deleteResult = await _accountImageService.DeleteAccountImageIfExists(imageType, userId);
 
                 if (deleteResult.StatusCode == HttpStatusCode.InternalServerError)
                 {
-                    return new ServiceResponse(deleteResult.StatusCode);
+                    return new ServiceResponse<string>(deleteResult.StatusCode);
                 }
 
                 var result = await _accountImageService.UploadAccountImage(imageType, userId, photo, fileExt);
 
                 if (!result.IsSuccessStatusCode)
                 {
-                    return new ServiceResponse(result.StatusCode);
+                    return new ServiceResponse<string>(result.StatusCode);
                 }
 
                 return result;
@@ -460,7 +460,7 @@ namespace localsound.backend.Infrastructure.Services
                 var message = $"{nameof(AccountService)} - {nameof(GetProfileDataAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse(HttpStatusCode.InternalServerError)
+                return new ServiceResponse<string>(HttpStatusCode.InternalServerError)
                 {
                     ServiceResponseMessage = "An error occured while saving your image, please try again..."
                 };

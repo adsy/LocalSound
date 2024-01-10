@@ -4,7 +4,7 @@ using MediatR;
 
 namespace localsound.backend.api.Commands.Account
 {
-    public class UpdateAccountImageCommand : IRequest<ServiceResponse>
+    public class UpdateAccountImageCommand : IRequest<ServiceResponse<string>>
     {
         public Guid UserId { get; set; }
         public string MemberId { get; set; }

@@ -12,7 +12,7 @@ namespace localsound.backend.api.Handlers.Account
     public class AccountHandler : IRequestHandler<LoginCommand, ServiceResponse<LoginResponseDto>>,
         IRequestHandler<RegisterCommand, ServiceResponse<LoginResponseDto>>,
         IRequestHandler<GetProfileDataQuery, ServiceResponse<IAppUserDto>>,
-        IRequestHandler<UpdateAccountImageCommand, ServiceResponse>,
+        IRequestHandler<UpdateAccountImageCommand, ServiceResponse<string>>,
         IRequestHandler<GetAccountImageQuery, ServiceResponse<AccountImageDto>>,
         IRequestHandler<CheckCurrentUserTokenQuery, ServiceResponse<IAppUserDto>>,
         IRequestHandler<GetProfileFollowerDataQuery, ServiceResponse<FollowerListResponseDto>>
@@ -39,7 +39,7 @@ namespace localsound.backend.api.Handlers.Account
             return await _accountService.GetProfileDataAsync(request.ProfileUrl, request.CurrentUser, cancellationToken);
         }
 
-        public async Task<ServiceResponse> Handle(UpdateAccountImageCommand request, CancellationToken cancellationToken)
+        public async Task<ServiceResponse<string>> Handle(UpdateAccountImageCommand request, CancellationToken cancellationToken)
         {
             return await _accountService.UpdateAccountImage(request.UserId, request.MemberId, request.Photo, request.ImageType, request.FileExt);
         }

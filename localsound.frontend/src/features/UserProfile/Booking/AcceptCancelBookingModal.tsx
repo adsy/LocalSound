@@ -6,6 +6,7 @@ import { handleResetModal } from "../../../app/redux/actions/modalSlice";
 import ErrorBanner from "../../../common/banner/ErrorBanner";
 import { State } from "../../../app/model/redux/state";
 import agent from "../../../api/agent";
+import signalHub from "../../../api/signalR";
 
 interface Props {
   isAccepting: boolean;
@@ -65,6 +66,11 @@ const AcceptCancelBookingModal = ({
           booking.bookingConfirmed = true;
           setUpcomingBookings([booking, ...upcomingBookings]);
         }
+        signalHub.createNotification({
+          receiverMemberId: booking.bookerId,
+          message: "Your booking has been accepted!",
+          redirectUrl: "/bookings",
+        });
       } else {
         await agent.Bookings.cancelBooking(user?.memberId!, booking.bookingId);
         if (booking.bookingConfirmed) {
@@ -76,6 +82,11 @@ const AcceptCancelBookingModal = ({
         if (cancelledBookings && setCancelledBookings) {
           setCancelledBookings([booking, ...cancelledBookings]);
         }
+        signalHub.createNotification({
+          receiverMemberId: booking.bookerId,
+          message: "Unfortunately your booking has been cancelled!",
+          redirectUrl: "/bookings",
+        });
       }
       dispatch(handleResetModal());
     } catch (err: any) {

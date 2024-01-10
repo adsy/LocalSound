@@ -25,6 +25,7 @@ import ArtistPackages from "./ArtistPackages/ArtistPackages";
 import { ArtistPackageModel } from "../../../app/model/dto/artist-package.model";
 import { handleAppLoading } from "../../../app/redux/actions/applicationSlice";
 import { handleUpdateProfileFollowCount } from "../../../app/redux/actions/profileSlice";
+import signalHub from "../../../api/signalR";
 
 interface Props {
   loggedInUser: UserModel;
@@ -153,6 +154,11 @@ const ArtistProfile = ({
           dispatch(
             handleUpdateProfileFollowCount(artistDetails.followerCount + 1)
           );
+          signalHub.createNotification({
+            receiverMemberId: artistDetails.memberId,
+            message: `You have a new follower!`,
+            redirectUrl: "",
+          });
         } else {
           await agent.Artist.unfollowArtist(
             loggedInUser.memberId,
