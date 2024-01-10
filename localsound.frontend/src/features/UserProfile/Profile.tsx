@@ -12,7 +12,7 @@ import { handleSetProfile } from "../../app/redux/actions/pageDataSlice";
 const UserProfileSummary = () => {
   const dispatch = useDispatch();
   const userDetail = useSelector((state: State) => state.user.userDetails);
-  const profile = useSelector((state: State) => state.profile.profileData);
+  const profile = useSelector((state: State) => state.pageData.profileData);
   const [noMatch, setNoMatch] = useState(false);
   const [viewingOwnProfile, setViewingOwnProfile] = useState(false);
   const [loading, setLoading] = useState(false);

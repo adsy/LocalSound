@@ -11,7 +11,7 @@ interface State {
   user: UserState;
   player: PlayerState;
   pageOperation: PageOperationState;
-  profile: PageDataState;
+  pageData: PageDataState;
 }
 
 export type { State };
