@@ -74,16 +74,6 @@ namespace localsound.backend.Infrastructure.Mapping
             CreateMap<ArtistTrackGenre, GenreDto>()
                 .ForMember(dest => dest.GenreId, source => source.MapFrom(x => x.Genre.GenreId))
                 .ForMember(dest => dest.GenreName, source => source.MapFrom(x => x.Genre.GenreName));
-
-            CreateMap<Notification, NotificationDto>()
-                .ForMember(dest => dest.NotificationId, source => source.MapFrom(x => x.NotificationId))
-                .ForMember(dest => dest.ReceivingMemberId, source => source.MapFrom(x => x.NotificationReceiver.MemberId))
-                .ForMember(dest => dest.CreatorMemberId, source => source.MapFrom(x => x.NotificationCreator.MemberId))
-                .ForMember(dest => dest.NotificationMessage, source => source.MapFrom(x => x.NotificationMessage))
-                .ForMember(dest => dest.RedirectUrl, source => source.MapFrom(x => x.RedirectUrl));
-                //.ForMember(dest => dest.NotificationViewed, source => source.MapFrom(x =>
-                //    x.NotificationCreator.Images.ToList()[0].AccountImageUrl
-                //));
         }
     }
 }

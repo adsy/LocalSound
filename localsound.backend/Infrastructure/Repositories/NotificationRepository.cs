@@ -24,21 +24,23 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var notification = await _dbContext.Notification.AddAsync(new Notification
-                {
-                    NotificationId = Guid.NewGuid(),
-                    NotificationCreatorId = creatorUserId,
-                    NotificationReceiverId = receiverUserId,
-                    NotificationMessage = message,
-                    RedirectUrl = redirectUrl
-                });
+                //var notification = await _dbContext.Notification.AddAsync(new Notification
+                //{
+                //    NotificationId = Guid.NewGuid(),
+                //    NotificationCreatorId = creatorUserId,
+                //    NotificationReceiverId = receiverUserId,
+                //    NotificationMessage = message,
+                //    RedirectUrl = redirectUrl
+                //});
 
-                await _dbContext.SaveChangesAsync();
+                //await _dbContext.SaveChangesAsync();
 
-                return new ServiceResponse<Notification>(HttpStatusCode.OK)
-                {
-                    ReturnData = notification.Entity
-                };
+                //return new ServiceResponse<Notification>(HttpStatusCode.OK)
+                //{
+                //    ReturnData = notification.Entity
+                //};
+
+                return new ServiceResponse<Notification>(HttpStatusCode.OK);
             }
             catch(Exception e)
             {
@@ -53,33 +55,21 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var notifications = await _dbContext.Notification
-                    .Include(x => x.NotificationReceiver)
-                    .Include(x => x.NotificationCreator)
-                    .ThenInclude(x => x.Images)
-                    .Select(x => new Notification
-                    {
-                        NotificationId = x.NotificationId,
-                        NotificationReceiverId = x.NotificationReceiverId,
-                        NotificationReceiver = x.NotificationReceiver,
-                        NotificationCreatorId = x.NotificationCreatorId,
-                        NotificationCreator = new AppUser
-                        {
-                            Images = x.NotificationCreator.Images.Where(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage).ToList()
-                        },
-                        NotificationMessage = x.NotificationMessage,
-                        RedirectUrl = x.RedirectUrl,
-                        NotificationViewed = x.NotificationViewed,
-                    })
-                    .Where(x => x.NotificationReceiverId == userId)
-                    .Skip(page * 10)
-                    .Take(10)
-                    .ToListAsync();
+                //var notifications = await _dbContext.Notification
+                //    .Include(x => x.NotificationReceiver)
+                //    .Include(x => x.NotificationCreator)
+                //    .ThenInclude(x => x.Images)
+                //    .Where(x => x.NotificationReceiverId == userId)
+                //    .Skip(page * 10)
+                //    .Take(10)
+                //    .ToListAsync();
 
-                return new ServiceResponse<List<Notification>>(HttpStatusCode.OK)
-                {
-                    ReturnData = notifications
-                };
+                //return new ServiceResponse<List<Notification>>(HttpStatusCode.OK)
+                //{
+                //    ReturnData = notifications
+                //};
+
+                return new ServiceResponse<List<Notification>>(HttpStatusCode.OK);
             }   
             catch(Exception e)
             {

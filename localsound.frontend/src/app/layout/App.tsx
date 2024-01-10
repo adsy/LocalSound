@@ -26,6 +26,8 @@ import InPageLoadingComponent from "./InPageLoadingComponent";
 import signalHub from "../../api/signalR";
 import { handleResetNotificationState } from "../redux/actions/notificationSlice";
 import TopNavbar from "./TopNavBar";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   const history = useHistory();
@@ -140,6 +142,18 @@ const App = () => {
                   </Container>
                 </main>
               )}
+              <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+              />
             </>
           )}
         />

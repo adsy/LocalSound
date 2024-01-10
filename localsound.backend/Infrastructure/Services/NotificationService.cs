@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Domain.Model.Dto.Response;
@@ -54,7 +55,16 @@ namespace localsound.backend.Infrastructure.Services
                     ReturnData = new NotificationCreatedResponseDto
                     {
                         ReceiverUserId = receiver.ReturnData.Id,
-                        Notification = _mapper.Map<NotificationDto>(notification.ReturnData)
+                        Notification = new NotificationDto
+                        {
+                            NotificationId = notification.ReturnData.NotificationId,
+                            ReceivingMemberId = notification.ReturnData.NotificationReceiver.MemberId,
+                            CreatorMemberId = notification.ReturnData.NotificationCreator.MemberId,
+                            NotificationMessage = notification.ReturnData.NotificationMessage,
+                            RedirectUrl = notification.ReturnData.RedirectUrl,
+                            NotificationViewed = notification.ReturnData.NotificationViewed,
+                            UserImage = notification.ReturnData.NotificationCreator.Images.ToList().Any() ? notification.ReturnData.NotificationCreator.Images.ToList().Find(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage)?.AccountImageUrl : null
+                        }
                     }
                 };
             }
@@ -85,7 +95,16 @@ namespace localsound.backend.Infrastructure.Services
                     return new ServiceResponse<List<NotificationDto>>(HttpStatusCode.InternalServerError);
                 }
 
-                var notificationList = _mapper.Map<List<NotificationDto>>(notifications.ReturnData);
+                var notificationList = notifications.ReturnData.Select(x => new NotificationDto
+                {
+                    NotificationId = x.NotificationId, 
+                    ReceivingMemberId = x.NotificationReceiver.MemberId,
+                    CreatorMemberId = x.NotificationCreator.MemberId, 
+                    NotificationMessage = x.NotificationMessage,
+                    RedirectUrl = x.RedirectUrl,
+                    NotificationViewed = x.NotificationViewed,
+                    UserImage = x.NotificationCreator.Images.ToList().Any() ? x.NotificationCreator.Images.ToList().Find(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage)?.AccountImageUrl : null
+                }).ToList();
 
                 return new ServiceResponse<List<NotificationDto>>(HttpStatusCode.OK)
                 {
