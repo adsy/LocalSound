@@ -11,8 +11,6 @@ import { UpdateArtistPersonalDetailsModel } from "../app/model/dto/update-artist
 import { GenreModel } from "../app/model/dto/genre.model";
 import { AccountImageTypes } from "../app/model/enums/accountImageTypes";
 import { AccountImageModel } from "../app/model/dto/account-image.model";
-import { history } from "../common/history/history";
-import { resetState } from "../app/redux/store/store";
 import { UpdateArtistProfileDetailsModel } from "../app/model/dto/update-artist-profile.model";
 import { EventTypeModel } from "../app/model/dto/eventType.model";
 import { TrackUploadSASModel } from "../app/model/dto/track-upload-sas.model";
@@ -21,7 +19,6 @@ import { TrackListResponse } from "../app/model/dto/track-list-response.model";
 import { FollowerListResponse } from "../app/model/dto/follower-list-response.model";
 import { ArtistPackageModel } from "../app/model/dto/artist-package.model";
 import { BookingSubmissionModel } from "../app/model/dto/booking-submission.model";
-import { BookingModel } from "../app/model/dto/booking.model";
 import { BookingListResponse } from "../app/model/dto/booking-list.-response.model";
 
 const axiosApiInstance = axios.create();

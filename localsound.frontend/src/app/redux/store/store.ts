@@ -14,6 +14,11 @@ import PlayerReducer from "../actions/playerSlice";
 import UserReducer, { handleResetUserState } from "../actions/userSlice";
 import PageOperationReducer from "../actions/pageOperationSlice";
 import ProfileReducer from "../actions/profileSlice";
+import NotificationReducer, {
+  handleSaveNotification,
+  handleSaveNotifications,
+} from "../actions/notificationSlice";
+import { NotificationModel } from "../../model/dto/notification.model";
 
 const middleware = [];
 
@@ -28,12 +33,20 @@ var rootReducer = combineReducers({
   player: PlayerReducer,
   pageOperation: PageOperationReducer,
   profile: ProfileReducer,
+  notifications: NotificationReducer,
 });
 
 const persistConfig = {
   key: "localSound",
   storage,
-  blacklist: ["modal", "player", "pageOperation", "app", "profile"],
+  blacklist: [
+    "modal",
+    "player",
+    "pageOperation",
+    "app",
+    "profile",
+    "notifications",
+  ],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -50,6 +63,14 @@ const persistor = persistStore(store);
 export const resetState = () => {
   store.dispatch(handleResetUserState());
   store.dispatch(handleResetAppState());
+};
+
+export const StoreSaveNotifications = (notifications: NotificationModel[]) => {
+  store.dispatch(handleSaveNotifications(notifications));
+};
+
+export const StoreSaveNotification = (notification: NotificationModel) => {
+  store.dispatch(handleSaveNotification(notification));
 };
 
 export { store, persistor };

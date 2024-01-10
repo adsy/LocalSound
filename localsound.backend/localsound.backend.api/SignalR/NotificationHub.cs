@@ -1,5 +1,4 @@
 ﻿using localsound.backend.api.Queries.Notifications;
-using localsound.backend.Domain.Model.Interfaces.Entity;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;

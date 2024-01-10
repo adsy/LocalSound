@@ -24,6 +24,7 @@ import AccountSettings from "../../features/AccountSettings/AccountSettings";
 import MusicPlayer from "../../features/MusicPlayer/MusicPlayer";
 import BookingsOverview from "../../features/UserProfile/Booking/BookingsOverview";
 import InPageLoadingComponent from "./InPageLoadingComponent";
+import signalHub from "../../api/signalR";
 
 const App = () => {
   const history = useHistory();
@@ -61,6 +62,12 @@ const App = () => {
       dispatch(handleAppLoading(false));
     }
   }, []);
+
+  useEffect(() => {
+    if (userDetails) {
+      signalHub.createSignalConnection();
+    }
+  }, [userDetails?.memberId]);
 
   return (
     <>

@@ -10,6 +10,11 @@ namespace localsound.backend.api.Handlers.Notification
     {
         private readonly INotificationService _notificationService;
 
+        public NotificationHandler(INotificationService notificationService)
+        {
+            _notificationService = notificationService;
+        }
+
         public async Task<ServiceResponse<List<NotificationDto>>> Handle(GetNotificationsQuery request, CancellationToken cancellationToken)
         {
             return await _notificationService.GetUserNotifications(request.UserId, cancellationToken);

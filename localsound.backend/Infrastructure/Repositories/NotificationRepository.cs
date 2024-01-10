@@ -1,4 +1,5 @@
-﻿using localsound.backend.Domain.Model;
+﻿using localsound.backend.Domain.Enum;
+using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Persistence.DbContext;
@@ -23,7 +24,25 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var notifications = await _dbContext.Notification.Where(x => x.NotificationReceiverId == userId)
+                var notifications = await _dbContext.Notification
+                    .Include(x => x.NotificationReceiver)
+                    .Include(x => x.NotificationCreator)
+                    .ThenInclude(x => x.Images)
+                    .Select(x => new Notification
+                    {
+                        NotificationId = x.NotificationId,
+                        NotificationReceiverId = x.NotificationReceiverId,
+                        NotificationReceiver = x.NotificationReceiver,
+                        NotificationCreatorId = x.NotificationCreatorId,
+                        NotificationCreator = new AppUser
+                        {
+                            Images = x.NotificationCreator.Images.Where(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage).ToList()
+                        },
+                        NotificationMessage = x.NotificationMessage,
+                        RedirectUrl = x.RedirectUrl,
+                        NotificationViewed = x.NotificationViewed,
+                    })
+                    .Where(x => x.NotificationReceiverId == userId)
                     .Skip(page * 10)
                     .Take(10)
                     .ToListAsync();

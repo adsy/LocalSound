@@ -37,6 +37,10 @@ namespace localsound.backend.Infrastructure.Services
                 }
 
                 var notificationList = _mapper.Map<List<NotificationDto>>(notifications.ReturnData);
+                foreach(var notification in notificationList)
+                {
+
+                }
 
                 return new ServiceResponse<List<NotificationDto>>(HttpStatusCode.OK)
                 {

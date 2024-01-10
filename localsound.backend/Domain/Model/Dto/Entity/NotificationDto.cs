@@ -3,7 +3,8 @@
     public class NotificationDto
     {
         public Guid NotificationId { get; set; }
-        public string UserMemberId { get; set; }
+        public string ReceivingMemberId { get; set; }
+        public string CreatorMemberId { get; set; }
         public string NotificationMessage { get; set; }
         public string RedirectUrl { get; set; }
         public bool NotificationViewed { get; set; }

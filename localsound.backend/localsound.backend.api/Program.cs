@@ -2,6 +2,7 @@ using Azure.Messaging.ServiceBus;
 using Azure.Storage.Blobs;
 using localsound.backend.api.Extensions;
 using localsound.backend.api.Middleware;
+using localsound.backend.api.SignalR;
 using localsound.backend.Domain.ModelAdaptor;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
@@ -104,6 +105,8 @@ builder.Services.AddCors(options =>
      );
 });
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -116,10 +119,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
 app.UseCors("CORSAllowLocalHost5173");
 
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<NotificationHub>("/notification");
 
 app.Run();

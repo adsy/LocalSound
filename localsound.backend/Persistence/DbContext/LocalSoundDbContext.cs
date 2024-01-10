@@ -177,7 +177,7 @@ namespace localsound.backend.Persistence.DbContext
 
             builder.Entity<Notification>().HasKey(x => x.NotificationId).IsClustered(false);
             builder.Entity<Notification>().HasOne(x => x.NotificationReceiver).WithOne().OnDelete(DeleteBehavior.NoAction);
-            builder.Entity<Notification>().HasOne(x => x.NotificationCreater).WithOne().OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<Notification>().HasOne(x => x.NotificationCreator).WithOne().OnDelete(DeleteBehavior.NoAction);
             builder.Entity<Notification>().HasIndex(x => x.NotificationReceiverId).IsClustered(true);
         }
 
