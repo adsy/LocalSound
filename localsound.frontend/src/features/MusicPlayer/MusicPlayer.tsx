@@ -325,7 +325,7 @@ const MusicPlayer = () => {
       <Container className="px-3 d-flex flex-column align-items-between h-100">
         <div className="mt-2 player-container mb-2">
           <div className="d-flex flex-row col-12 col-lg-2 track-details">
-            <div className="track-image">
+            <div className="track-image d-flex justify-content-center align-items-center">
               <Image size="mini" src={player.trackImage} className="" />
             </div>
             <div

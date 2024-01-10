@@ -1047,7 +1047,7 @@ i.large.icon {
 }
 @media only screen and (max-width: 991px) {
   #music-player .player-container {
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
   #music-player .player-container .volume-control {
     height: 143px !important;
@@ -1071,16 +1071,17 @@ i.large.icon {
   }
   #music-player .player-container .track-artist .track-name {
     margin-right: 5px;
+    font-size: 16px;
   }
   #music-player .player-container .track-artist .track-name::after {
     content: " - ";
   }
   #music-player .player-container .track-artist .artist-name {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 800;
   }
   #music-player .player-container .track-image {
-    display: none;
+    display: none !important;
   }
   #music-player .player-container .track-details {
     justify-content: start;
@@ -1098,7 +1099,7 @@ i.large.icon {
   color: gray;
 }
 #music-player .track-name {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 800;
 }
 #music-player input[type=range].seek-slider {

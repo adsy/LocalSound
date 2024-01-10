@@ -900,7 +900,7 @@ i.large.icon {
     }
 
     @media only screen and (max-width: 991px) {
-      flex-direction: column-reverse;
+      flex-direction: column;
 
       .volume-control {
         height: 143px !important;
@@ -917,6 +917,9 @@ i.large.icon {
 
       .track-details {
         justify-content: center !important;
+        // position: relative;
+        // animation: move-words 15s linear infinite;
+        // margin: 0;
         cursor: pointer;
       }
 
@@ -928,6 +931,7 @@ i.large.icon {
 
         .track-name {
           margin-right: 5px;
+          font-size: 16px;
         }
 
         .track-name::after {
@@ -935,13 +939,13 @@ i.large.icon {
         }
 
         .artist-name {
-          font-size: 18px;
+          font-size: 16px;
           font-weight: 800;
         }
       }
 
       .track-image {
-        display: none;
+        display: none !important;
       }
 
       .track-details {
@@ -965,7 +969,7 @@ i.large.icon {
   }
 
   .track-name {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 800;
   }
 
