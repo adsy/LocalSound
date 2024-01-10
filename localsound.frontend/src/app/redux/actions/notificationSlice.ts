@@ -2,18 +2,18 @@ import { createSlice } from "@reduxjs/toolkit";
 import { NotificationState } from "../../model/redux/notificationState";
 
 const initialState: NotificationState = {
-  notifications: [],
+  notificationList: [],
 };
 export const notificationSlice = createSlice({
   name: "notifications",
   initialState,
   reducers: {
     handleSaveNotifications: (state = initialState, action) => {
-      state.notifications = action.payload;
+      state.notificationList = action.payload;
     },
     handleResetNotificationState: () => initialState,
     handleSaveNotification: (state = initialState, action) => {
-      state.notifications.push(action.payload);
+      state.notificationList.push(action.payload);
     },
   },
 });

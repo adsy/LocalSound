@@ -2,12 +2,11 @@ import { Route, Switch, useHistory } from "react-router-dom";
 import "../../App.css";
 import LandingPage from "../../features/LandingPage/LandingPage";
 import ModalContainer from "../../common/modal/ModalContainer";
-import TopNavbar from "./TopNavBar";
 import UserProfile from "../../features/UserProfile/Profile";
 import { Container } from "react-bootstrap";
 import PrivateRoute from "./PrivateRoute";
 import HomePage from "../../features/Home/HomePage";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import agent from "../../api/agent";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -25,6 +24,8 @@ import MusicPlayer from "../../features/MusicPlayer/MusicPlayer";
 import BookingsOverview from "../../features/UserProfile/Booking/BookingsOverview";
 import InPageLoadingComponent from "./InPageLoadingComponent";
 import signalHub from "../../api/signalR";
+import { handleResetNotificationState } from "../redux/actions/notificationSlice";
+import TopNavbar from "./TopNavBar";
 
 const App = () => {
   const history = useHistory();
@@ -32,6 +33,24 @@ const App = () => {
   const userDetails = useSelector((state: State) => state.user?.userDetails);
   const appLoading = useSelector((state: State) => state.app.appLoading);
   const player = useSelector((state: State) => state.player);
+
+  const useUnload = (fn: any) => {
+    const cb = useRef(fn);
+
+    useEffect(() => {
+      const onUnload = cb.current;
+      window.addEventListener("beforeunload", onUnload);
+      return () => {
+        window.removeEventListener("beforeunload", onUnload);
+      };
+    }, [cb]);
+  };
+
+  useUnload((e: any) => {
+    // disconnect from signalR when page is closed
+    signalHub.disconnectConnection();
+    dispatch(handleResetNotificationState());
+  });
 
   useEffect(() => {
     if (userDetails) {

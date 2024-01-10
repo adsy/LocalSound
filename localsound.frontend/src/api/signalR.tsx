@@ -10,6 +10,7 @@ import {
   StoreSaveNotifications,
 } from "../app/redux/store/store";
 import NotificationPopUp from "../common/components/Notification/NotificationPopUp";
+import { CreateNotification } from "../app/model/dto/create-booking-created-notification.model";
 
 var hubConnection: HubConnection | null;
 
@@ -45,6 +46,14 @@ const createSignalConnection = () => {
   });
 };
 
+const createNotification = async (payload: CreateNotification) => {
+  try {
+    await hubConnection?.invoke("CreateNotification", payload);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const disconnectConnection = async () => {
   await hubConnection?.stop();
 };
@@ -52,6 +61,7 @@ const disconnectConnection = async () => {
 const signalHub = {
   createSignalConnection,
   disconnectConnection,
+  createNotification,
 };
 
 export default signalHub;

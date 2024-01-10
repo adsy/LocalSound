@@ -12,6 +12,7 @@ import { handleResetAppState } from "../redux/actions/applicationSlice";
 import { handleToggleModal } from "../redux/actions/modalSlice";
 import Login from "../../features/Authentication/Login/Login";
 import Register from "../../features/Authentication/Register/Register";
+import signalHub from "../../api/signalR";
 
 const TopNavbar = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
@@ -23,6 +24,7 @@ const TopNavbar = () => {
   const handleSignout = async () => {
     await agent.Authentication.signOut();
     history.push("/");
+    signalHub.disconnectConnection();
     dispatch(handleResetUserState());
     dispatch(handleResetAppState());
     setShow(false);

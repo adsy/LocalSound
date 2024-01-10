@@ -167,6 +167,31 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
+        public async Task<ServiceResponse<AppUser>> GetAppUserFromDbAsync(string memberId)
+        {
+            try
+            {
+                var user = await _dbContext.AppUser.FirstOrDefaultAsync(x => x.MemberId == memberId);
+
+                if (user == null)
+                {
+                    return new ServiceResponse<AppUser>(HttpStatusCode.Unauthorized);
+                }
+
+                return new ServiceResponse<AppUser>(HttpStatusCode.OK)
+                {
+                    ReturnData = user
+                };
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(AccountRepository)} - {nameof(GetAppUserFromDbAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<AppUser>(HttpStatusCode.InternalServerError);
+            }
+        }
+
         public async Task<ServiceResponse<List<ArtistFollower>>> GetArtistFollowersFromDbAsync(string memberId, int page, CancellationToken cancellationToken)
         {
             try

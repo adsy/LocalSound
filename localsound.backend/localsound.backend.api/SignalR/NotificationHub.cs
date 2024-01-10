@@ -1,4 +1,5 @@
-﻿using localsound.backend.api.Queries.Notifications;
+﻿using localsound.backend.api.Commands.Notification;
+using localsound.backend.api.Queries.Notifications;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
@@ -12,6 +13,24 @@ namespace localsound.backend.api.SignalR
         public NotificationHub(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        public async Task CreateNotification(CreateNotificationCommand command)
+        {
+            var id = Context?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var parseResult = Guid.TryParse(id, out var parsedId);
+            
+            if (parseResult)
+            {
+                command.CreatorUserId = parsedId;
+
+                var notificationData = await _mediator.Send(command);
+
+                if (notificationData.IsSuccessStatusCode && notificationData.ReturnData != null)
+                {
+                    await Clients.Group(notificationData.ReturnData.ReceiverUserId.ToString()).SendAsync("ReceiveNotification", notificationData.ReturnData.Notification);
+                }
+            }
         }
 
         public override async Task OnConnectedAsync()

@@ -16,6 +16,7 @@ import { State } from "../../../app/model/redux/state";
 import { UserModel } from "../../../app/model/dto/user.model";
 import { BookingSubmissionModel } from "../../../app/model/dto/booking-submission.model";
 import { handleResetModal } from "../../../app/redux/actions/modalSlice";
+import signalHub from "../../../api/signalR";
 
 interface Props {
   artistPackage: ArtistPackageModel;
@@ -92,6 +93,12 @@ const CreateBooking = ({ artistPackage, artistDetails }: Props) => {
                   } as BookingSubmissionModel;
 
                   await agent.Bookings.createBooking(memberId!, bookingModel);
+
+                  await signalHub.createNotification({
+                    receiverMemberId: artistDetails.memberId,
+                    message: "You have a new booking!",
+                    redirectUrl: "/bookings",
+                  });
 
                   dispatch(handleResetModal());
                 } catch (err: any) {

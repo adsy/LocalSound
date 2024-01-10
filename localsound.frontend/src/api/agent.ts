@@ -55,7 +55,7 @@ const onRefreshed = () => {
 axiosApiInstance.interceptors.response.use(
   async (response: AxiosResponse) => {
     if (import.meta.env.MODE === "development") {
-      await sleep(2000);
+      // await sleep(2000);
     }
     return response;
   },

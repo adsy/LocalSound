@@ -80,8 +80,10 @@ namespace localsound.backend.Infrastructure.Mapping
                 .ForMember(dest => dest.ReceivingMemberId, source => source.MapFrom(x => x.NotificationReceiver.MemberId))
                 .ForMember(dest => dest.CreatorMemberId, source => source.MapFrom(x => x.NotificationCreator.MemberId))
                 .ForMember(dest => dest.NotificationMessage, source => source.MapFrom(x => x.NotificationMessage))
-                .ForMember(dest => dest.RedirectUrl, source => source.MapFrom(x => x.RedirectUrl))
-                .ForMember(dest => dest.NotificationViewed, source => source.MapFrom(x => x.NotificationCreator.Images.ToList()[0].AccountImageUrl));
+                .ForMember(dest => dest.RedirectUrl, source => source.MapFrom(x => x.RedirectUrl));
+                //.ForMember(dest => dest.NotificationViewed, source => source.MapFrom(x =>
+                //    x.NotificationCreator.Images.ToList()[0].AccountImageUrl
+                //));
         }
     }
 }

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserState } from "../../model/redux/userState";
 import { AccountImageTypes } from "../../model/enums/accountImageTypes";
+import signalHub from "../../../api/signalR";
 
 const initialState: UserState = {
   userDetails: null,

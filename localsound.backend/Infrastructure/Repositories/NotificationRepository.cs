@@ -20,6 +20,35 @@ namespace localsound.backend.Infrastructure.Repositories
             _logger = logger;
         }
 
+        public async Task<ServiceResponse<Notification>> CreateNotificationAsync(Guid creatorUserId, Guid receiverUserId, string message, string redirectUrl)
+        {
+            try
+            {
+                var notification = await _dbContext.Notification.AddAsync(new Notification
+                {
+                    NotificationId = Guid.NewGuid(),
+                    NotificationCreatorId = creatorUserId,
+                    NotificationReceiverId = receiverUserId,
+                    NotificationMessage = message,
+                    RedirectUrl = redirectUrl
+                });
+
+                await _dbContext.SaveChangesAsync();
+
+                return new ServiceResponse<Notification>(HttpStatusCode.OK)
+                {
+                    ReturnData = notification.Entity
+                };
+            }
+            catch(Exception e)
+            {
+                var errorMessage = $"{nameof(NotificationRepository)} - {nameof(GetUserNotificationsAsync)} - {e.Message}";
+                _logger.LogError(e, errorMessage);
+
+                return new ServiceResponse<Notification>(HttpStatusCode.InternalServerError);
+            }
+        }
+
         public async Task<ServiceResponse<List<Notification>>> GetUserNotificationsAsync(Guid userId, int page)
         {
             try
