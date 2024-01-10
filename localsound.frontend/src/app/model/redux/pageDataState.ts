@@ -1,5 +1,5 @@
 import { UserModel } from "../dto/user.model";
 
-export interface ProfileState {
+export interface PageDataState {
   profileData: UserModel | null;
 }

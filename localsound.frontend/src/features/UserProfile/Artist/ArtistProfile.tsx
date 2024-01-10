@@ -24,7 +24,7 @@ import AddArtistPackage from "./ArtistPackages/AddArtistPackage";
 import ArtistPackages from "./ArtistPackages/ArtistPackages";
 import { ArtistPackageModel } from "../../../app/model/dto/artist-package.model";
 import { handleAppLoading } from "../../../app/redux/actions/applicationSlice";
-import { handleUpdateProfileFollowCount } from "../../../app/redux/actions/profileSlice";
+import { handleUpdateProfileFollowCount } from "../../../app/redux/actions/pageDataSlice";
 import signalHub from "../../../api/signalR";
 
 interface Props {

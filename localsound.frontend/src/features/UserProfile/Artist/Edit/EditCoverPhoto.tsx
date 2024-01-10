@@ -6,7 +6,7 @@ import { AccountImageTypes } from "../../../../app/model/enums/accountImageTypes
 import { handleUpdateUserCoverPhoto } from "../../../../app/redux/actions/userSlice";
 import { CropTypes } from "../../../../app/model/enums/cropTypes";
 import { handleAppLoading } from "../../../../app/redux/actions/applicationSlice";
-import { handleUpdateProfileCoverPhoto } from "../../../../app/redux/actions/profileSlice";
+import { handleUpdateProfileCoverPhoto } from "../../../../app/redux/actions/pageDataSlice";
 
 interface Props {
   file: File;

@@ -14,7 +14,7 @@ import { CropTypes } from "../../../../../app/model/enums/cropTypes";
 import ImageCropper from "../../../../../common/components/Cropper/ImageCropper";
 import { handleResetModal } from "../../../../../app/redux/actions/modalSlice";
 import ErrorBanner from "../../../../../common/banner/ErrorBanner";
-import { handleUpdateProfilePhoto } from "../../../../../app/redux/actions/profileSlice";
+import { handleUpdateProfilePhoto } from "../../../../../app/redux/actions/pageDataSlice";
 
 interface Props {
   disabled?: boolean;

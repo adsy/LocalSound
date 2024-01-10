@@ -2,7 +2,7 @@ import { AppState } from "./appState";
 import { ModalState } from "./modalState";
 import { PageOperationState } from "./pageOperationState";
 import { PlayerState } from "./playerState";
-import { ProfileState } from "./profileState";
+import { PageDataState } from "./pageDataState";
 import { UserState } from "./userState";
 
 interface State {
@@ -11,7 +11,7 @@ interface State {
   user: UserState;
   player: PlayerState;
   pageOperation: PageOperationState;
-  profile: ProfileState;
+  profile: PageDataState;
 }
 
 export type { State };

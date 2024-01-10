@@ -16,25 +16,10 @@ import useFixMissingScroll from "../../../common/hooks/UseLoadMoreWithoutScroll"
 
 interface Props {
   bookingType: BookingTypes;
-  pendingBookings: BookingModel[];
-  setPendingBookings: (bookings: BookingModel[]) => void;
-  cancelledBookings: BookingModel[];
-  setCancelledBookings: (bookings: BookingModel[]) => void;
-  upcomingBookings: BookingModel[];
-  setUpcomingBookings: (bookings: BookingModel[]) => void;
   setViewMore: (viewMore: BookingTypes | null) => void;
 }
 
-const ViewMoreBooking = ({
-  bookingType,
-  pendingBookings,
-  setPendingBookings,
-  upcomingBookings,
-  setUpcomingBookings,
-  cancelledBookings,
-  setCancelledBookings,
-  setViewMore,
-}: Props) => {
+const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
   const [bookings, setBookings] = useState<BookingModel[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
@@ -222,12 +207,6 @@ const ViewMoreBooking = ({
                   booking={booking}
                   type={bookingType}
                   user={userDetails!}
-                  pendingBookings={pendingBookings}
-                  setPendingBookings={setPendingBookings}
-                  upcomingBookings={upcomingBookings}
-                  setUpcomingBookings={setUpcomingBookings}
-                  cancelledBookings={cancelledBookings}
-                  setCancelledBookings={setCancelledBookings}
                 />
               </div>
             ))}

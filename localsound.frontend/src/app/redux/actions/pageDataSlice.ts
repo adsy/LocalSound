@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ProfileState } from "../../model/redux/profileState";
+import { PageDataState } from "../../model/redux/pageDataState";
 import { AccountImageTypes } from "../../model/enums/accountImageTypes";
 
-const initialState: ProfileState = {
+const initialState: PageDataState = {
   profileData: null,
 };
-export const applicationSlice = createSlice({
-  name: "profile",
+export const pageDataSlice = createSlice({
+  name: "pageData",
   initialState,
   reducers: {
     handleSetProfile: (state = initialState, action) => {
@@ -45,6 +45,6 @@ export const {
   handleUpdateProfileFollowCount,
   handleUpdateProfileCoverPhoto,
   handleUpdateProfilePhoto,
-} = applicationSlice.actions;
+} = pageDataSlice.actions;
 
-export default applicationSlice.reducer;
+export default pageDataSlice.reducer;

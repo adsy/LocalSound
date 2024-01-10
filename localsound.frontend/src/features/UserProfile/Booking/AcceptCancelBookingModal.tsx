@@ -12,24 +12,9 @@ import { useHistory } from "react-router-dom";
 interface Props {
   isAccepting: boolean;
   booking: BookingModel;
-  pendingBookings?: BookingModel[];
-  setPendingBookings?: (bookings: BookingModel[]) => void;
-  cancelledBookings?: BookingModel[];
-  setCancelledBookings?: (bookings: BookingModel[]) => void;
-  upcomingBookings?: BookingModel[];
-  setUpcomingBookings?: (bookings: BookingModel[]) => void;
 }
 
-const AcceptCancelBookingModal = ({
-  isAccepting,
-  booking,
-  pendingBookings,
-  setPendingBookings,
-  upcomingBookings,
-  setUpcomingBookings,
-  cancelledBookings,
-  setCancelledBookings,
-}: Props) => {
+const AcceptCancelBookingModal = ({ isAccepting, booking }: Props) => {
   const user = useSelector((state: State) => state.user.userDetails);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -40,34 +25,34 @@ const AcceptCancelBookingModal = ({
     dispatch(handleResetModal());
   };
 
-  const updatePendingBookings = () => {
-    if (pendingBookings && setPendingBookings) {
-      var clone = pendingBookings.filter(
-        (x) => x.bookingId !== booking.bookingId
-      );
-      setPendingBookings(clone);
-    }
-  };
+  // const updatePendingBookings = () => {
+  //   if (pendingBookings && setPendingBookings) {
+  //     var clone = pendingBookings.filter(
+  //       (x) => x.bookingId !== booking.bookingId
+  //     );
+  //     setPendingBookings(clone);
+  //   }
+  // };
 
-  const updateUpcomingBookings = () => {
-    if (upcomingBookings && setUpcomingBookings) {
-      var clone = upcomingBookings.filter(
-        (x) => x.bookingId !== booking.bookingId
-      );
-      setUpcomingBookings(clone);
-    }
-  };
+  // const updateUpcomingBookings = () => {
+  //   if (upcomingBookings && setUpcomingBookings) {
+  //     var clone = upcomingBookings.filter(
+  //       (x) => x.bookingId !== booking.bookingId
+  //     );
+  //     setUpcomingBookings(clone);
+  //   }
+  // };
 
   const accept = async () => {
     try {
       setLoading(true);
       if (isAccepting) {
         await agent.Bookings.acceptBooking(user?.memberId!, booking.bookingId);
-        updatePendingBookings();
-        if (upcomingBookings && setUpcomingBookings) {
-          booking.bookingConfirmed = true;
-          setUpcomingBookings([booking, ...upcomingBookings]);
-        }
+        // updatePendingBookings();
+        // if (upcomingBookings && setUpcomingBookings) {
+        //   booking.bookingConfirmed = true;
+        //   setUpcomingBookings([booking, ...upcomingBookings]);
+        // }
         signalHub.createNotification({
           receiverMemberId: booking.bookerId,
           message: "Your booking has been accepted!",
@@ -75,15 +60,15 @@ const AcceptCancelBookingModal = ({
         });
       } else {
         await agent.Bookings.cancelBooking(user?.memberId!, booking.bookingId);
-        if (booking.bookingConfirmed) {
-          updateUpcomingBookings();
-        } else {
-          updatePendingBookings();
-        }
-        booking.bookingConfirmed = false;
-        if (cancelledBookings && setCancelledBookings) {
-          setCancelledBookings([booking, ...cancelledBookings]);
-        }
+        // if (booking.bookingConfirmed) {
+        //   updateUpcomingBookings();
+        // } else {
+        //   updatePendingBookings();
+        // }
+        // booking.bookingConfirmed = false;
+        // if (cancelledBookings && setCancelledBookings) {
+        //   setCancelledBookings([booking, ...cancelledBookings]);
+        // }
         signalHub.createNotification({
           receiverMemberId: booking.bookerId,
           message: "Unfortunately your booking has been cancelled!",

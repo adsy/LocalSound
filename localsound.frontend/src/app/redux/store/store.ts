@@ -13,7 +13,7 @@ import ModalReducer from "../actions/modalSlice";
 import PlayerReducer from "../actions/playerSlice";
 import UserReducer, { handleResetUserState } from "../actions/userSlice";
 import PageOperationReducer from "../actions/pageOperationSlice";
-import ProfileReducer from "../actions/profileSlice";
+import PageDataReducer from "../actions/pageDataSlice";
 import NotificationReducer, {
   handleSaveNotification,
   handleSaveNotifications,
@@ -32,7 +32,7 @@ var rootReducer = combineReducers({
   user: UserReducer,
   player: PlayerReducer,
   pageOperation: PageOperationReducer,
-  profile: ProfileReducer,
+  pageData: PageDataReducer,
   notifications: NotificationReducer,
 });
 
@@ -44,7 +44,7 @@ const persistConfig = {
     "player",
     "pageOperation",
     "app",
-    "profile",
+    "pageData",
     "notifications",
   ],
 };

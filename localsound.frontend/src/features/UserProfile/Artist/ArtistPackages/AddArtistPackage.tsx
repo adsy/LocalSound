@@ -14,7 +14,7 @@ import { handleResetModal } from "../../../../app/redux/actions/modalSlice";
 import ErrorBanner from "../../../../common/banner/ErrorBanner";
 import { ArtistPackageModel } from "../../../../app/model/dto/artist-package.model";
 import { handleSetUserDetails } from "../../../../app/redux/actions/userSlice";
-import { handleUpdateAllowAddPackage } from "../../../../app/redux/actions/profileSlice";
+import { handleUpdateAllowAddPackage } from "../../../../app/redux/actions/pageDataSlice";
 
 interface Props {
   userDetails: UserModel;

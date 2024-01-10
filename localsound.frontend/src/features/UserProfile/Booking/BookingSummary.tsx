@@ -15,25 +15,9 @@ interface Props {
   booking: BookingModel;
   type: BookingTypes;
   user: UserModel;
-  pendingBookings?: BookingModel[];
-  setPendingBookings?: (bookings: BookingModel[]) => void;
-  cancelledBookings?: BookingModel[];
-  setCancelledBookings?: (bookings: BookingModel[]) => void;
-  upcomingBookings?: BookingModel[];
-  setUpcomingBookings?: (bookings: BookingModel[]) => void;
 }
 
-const BookingSummary = ({
-  booking,
-  type,
-  user,
-  pendingBookings,
-  setPendingBookings,
-  upcomingBookings,
-  setUpcomingBookings,
-  cancelledBookings,
-  setCancelledBookings,
-}: Props) => {
+const BookingSummary = ({ booking, type, user }: Props) => {
   const dispatch = useDispatch();
 
   const returnDateLabel = () => {
@@ -54,12 +38,6 @@ const BookingSummary = ({
           <AcceptCancelBookingModal
             isAccepting={isAccepting}
             booking={booking}
-            pendingBookings={pendingBookings}
-            setPendingBookings={setPendingBookings}
-            upcomingBookings={upcomingBookings}
-            setUpcomingBookings={setUpcomingBookings}
-            cancelledBookings={cancelledBookings}
-            setCancelledBookings={setCancelledBookings}
           />
         ),
         open: true,

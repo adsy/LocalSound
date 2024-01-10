@@ -7,7 +7,7 @@ import { useHistory } from "react-router-dom";
 import agent from "../../api/agent";
 import ProfileNotFound from "./ProfileNotFound";
 import InPageLoadingComponent from "../../app/layout/InPageLoadingComponent";
-import { handleSetProfile } from "../../app/redux/actions/profileSlice";
+import { handleSetProfile } from "../../app/redux/actions/pageDataSlice";
 
 const UserProfileSummary = () => {
   const dispatch = useDispatch();
