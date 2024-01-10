@@ -11,4 +11,7 @@ export interface ArtistTrackUploadModel {
   waveformUrl: string;
   duration: number;
   uploadDate: Date;
+  artistProfile: string;
+  artistName: string;
+  artistMemberId: string;
 }

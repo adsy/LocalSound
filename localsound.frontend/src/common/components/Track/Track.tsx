@@ -7,6 +7,7 @@ import {
   handlePauseSong,
   handlePlaySong,
   handleSetPlayerSong,
+  handleSetTrackList,
 } from "../../../app/redux/actions/playerSlice";
 import { State } from "../../../app/model/redux/state";
 import { UserModel } from "../../../app/model/dto/user.model";
@@ -29,9 +30,18 @@ interface Props {
   artistDetails: UserModel;
   tracks: ArtistTrackUploadModel[];
   setTracks: (tracks: ArtistTrackUploadModel[]) => void;
+  canLoadMore: boolean;
+  page: number;
 }
 
-const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
+const Track = ({
+  track,
+  artistDetails,
+  tracks,
+  setTracks,
+  canLoadMore,
+  page,
+}: Props) => {
   const player = useSelector((state: State) => state.player);
   const loggedInUser = useSelector((state: State) => state.user.userDetails);
   const [singleton, setSingleton] = useState<SingletonClass>(
@@ -101,12 +111,18 @@ const Track = ({ track, artistDetails, tracks, setTracks }: Props) => {
         handleSetPlayerSong({
           trackId: track.artistTrackUploadId,
           trackUrl: track.trackUrl,
-          artistProfile: artistDetails.profileUrl,
+          artistProfile: track.artistProfile,
           trackName: track.trackName,
-          artistName: artistDetails.name,
+          artistName: track.artistName,
           trackImage: trackImage,
           duration: track.duration,
+        })
+      );
+      dispatch(
+        handleSetTrackList({
           trackList: tracks,
+          canLoadMore: canLoadMore,
+          page: page,
         })
       );
     }

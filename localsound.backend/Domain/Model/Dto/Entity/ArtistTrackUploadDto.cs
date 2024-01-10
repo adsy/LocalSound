@@ -7,6 +7,9 @@
         public string TrackDescription { get; set; }
         public string TrackImageUrl { get; set; }
         public string TrackDataLocation { get; set; }
+        public string ArtistProfile { get; set; }
+        public string ArtistName { get; set; }
+        public string ArtistMemberId { get; set; }
         public string TrackUrl { get; set; }
         public string WaveformUrl { get; set; }
         public double Duration { get; set; }

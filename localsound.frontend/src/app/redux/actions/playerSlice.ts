@@ -10,6 +10,8 @@ const initialState: PlayerState = {
   artistName: null,
   artistProfile: null,
   duration: null,
+  canLoadMore: false,
+  page: 0,
   trackList: [],
 };
 
@@ -27,13 +29,17 @@ export const playerSlice = createSlice({
       state.artistName = payload.artistName;
       state.artistProfile = payload.artistProfile;
       state.duration = payload.duration;
-      state.trackList = payload.trackList;
     },
     handlePauseSong: (state) => {
       state.playing = false;
     },
     handlePlaySong: (state) => {
       state.playing = true;
+    },
+    handleSetTrackList: (state, { payload }) => {
+      state.trackList = payload.trackList;
+      state.canLoadMore = payload.canLoadMore;
+      state.page = payload.page;
     },
   },
 });
@@ -43,6 +49,7 @@ export const {
   handleSetPlayerSong,
   handlePauseSong,
   handlePlaySong,
+  handleSetTrackList,
 } = playerSlice.actions;
 
 export default playerSlice.reducer;

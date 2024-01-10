@@ -9,5 +9,7 @@ export interface PlayerState {
   artistName: string | null;
   artistProfile: string | null;
   duration: number | null;
+  canLoadMore: boolean;
+  page: number;
   trackList: ArtistTrackUploadModel[];
 }

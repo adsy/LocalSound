@@ -49,7 +49,6 @@ const ArtistProfile = ({
   const [tracks, setTracks] = useState<ArtistTrackUploadModel[]>([]);
   const [packages, setPackages] = useState<ArtistPackageModel[]>([]);
   const [isFollowing, setIsFollowing] = useState(false);
-  const [canLoadMore, setCanLoadMore] = useState(true);
   const [updatingFollowingStatus, setUpdatingFollowingStatus] = useState(false);
   const dispatch = useDispatch();
 
@@ -401,8 +400,6 @@ const ArtistProfile = ({
                   tracks={tracks}
                   setTracks={setTracks}
                   viewingOwnProfile={viewingOwnProfile}
-                  canLoadMore={canLoadMore}
-                  setCanLoadMore={setCanLoadMore}
                 />
               </Tab>
               <Tab

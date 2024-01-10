@@ -66,7 +66,10 @@ namespace localsound.backend.Infrastructure.Mapping
                 .ForMember(dest => dest.TrackUrl, source => source.MapFrom(x => x.TrackUrl))
                 .ForMember(dest => dest.WaveformUrl, source => source.MapFrom(x => x.WaveformUrl))
                 .ForMember(dest => dest.Duration, source => source.MapFrom(x => x.Duration))
-                .ForMember(dest => dest.UploadDate, source => source.MapFrom(x => x.UploadDate));
+                .ForMember(dest => dest.UploadDate, source => source.MapFrom(x => x.UploadDate))
+                .ForMember(dest => dest.ArtistName, source => source.MapFrom(x => x.Artist.Name))
+                .ForMember(dest => dest.ArtistMemberId, source => source.MapFrom(x => x.Artist.User.MemberId))
+                .ForMember(dest => dest.ArtistProfile, source => source.MapFrom(x => x.Artist.ProfileUrl));
 
             CreateMap<ArtistTrackGenre, GenreDto>()
                 .ForMember(dest => dest.GenreId, source => source.MapFrom(x => x.Genre.GenreId))

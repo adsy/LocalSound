@@ -1,5 +1,5 @@
 import { UserModel } from "../../../../app/model/dto/user.model";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import agent from "../../../../api/agent";
 import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-upload.model";
 import Track from "../../../../common/components/Track/Track";
@@ -15,6 +15,7 @@ import ErrorBanner from "../../../../common/banner/ErrorBanner";
 import InfoBanner from "../../../../common/banner/InfoBanner";
 import useFixMissingScroll from "../../../../common/hooks/UseLoadMoreWithoutScroll";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { handleSetTrackList } from "../../../../app/redux/actions/playerSlice";
 
 interface Props {
   userDetails: UserModel;
@@ -22,8 +23,6 @@ interface Props {
   tracks: ArtistTrackUploadModel[];
   setTracks: (tracks: ArtistTrackUploadModel[]) => void;
   viewingOwnProfile: boolean;
-  canLoadMore: boolean;
-  setCanLoadMore: (loadMore: boolean) => void;
 }
 
 const UploadList = ({
@@ -32,15 +31,15 @@ const UploadList = ({
   tracks,
   setTracks,
   viewingOwnProfile,
-  setCanLoadMore,
-  canLoadMore,
 }: Props) => {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadTracksError, setLoadTracksError] = useState<string | null>();
+  const [canLoadMore, setCanLoadMore] = useState(true);
   const uploadState = useSelector(
     (state: State) => state.pageOperation.uploadTracks
   );
+  const playerState = useSelector((state: State) => state.player);
   const dispatch = useDispatch();
 
   const getMoreTracks = async () => {
@@ -53,6 +52,16 @@ const UploadList = ({
         );
         setTracks([...tracks, ...result.trackList]);
         setCanLoadMore(result.canLoadMore);
+
+        if (userDetails.profileUrl === playerState.artistProfile) {
+          dispatch(
+            handleSetTrackList({
+              trackList: [...tracks, ...result.trackList],
+              page: page + 1,
+              canLoadMore: result.canLoadMore,
+            })
+          );
+        }
       } catch (err: any) {
         setLoadTracksError(err);
       }
@@ -68,20 +77,36 @@ const UploadList = ({
 
   useLayoutEffect(() => {
     (async () => {
-      if (currentTab === ArtistProfileTabs.Uploads && canLoadMore) {
-        try {
-          setLoading(true);
-          var result = await agent.Tracks.getArtistUploads(
-            userDetails!.memberId,
-            page
-          );
-          setTracks([...tracks, ...result.trackList]);
-          setCanLoadMore(result.canLoadMore);
-        } catch (err: any) {
-          setLoadTracksError(err);
+      if (userDetails.profileUrl !== playerState.artistProfile) {
+        if (currentTab === ArtistProfileTabs.Uploads && canLoadMore) {
+          try {
+            setLoading(true);
+            var result = await agent.Tracks.getArtistUploads(
+              userDetails!.memberId,
+              page
+            );
+            setTracks([...tracks, ...result.trackList]);
+            setCanLoadMore(result.canLoadMore);
+
+            if (userDetails.profileUrl === playerState.artistProfile) {
+              dispatch(
+                handleSetTrackList({
+                  trackList: [...tracks, ...result.trackList],
+                  page: page + 1,
+                  canLoadMore: result.canLoadMore,
+                })
+              );
+            }
+          } catch (err: any) {
+            setLoadTracksError(err);
+          }
+          setLoading(false);
+          setPage(page + 1);
         }
-        setLoading(false);
-        setPage(page + 1);
+      } else {
+        setTracks([...playerState.trackList]);
+        setCanLoadMore(playerState.canLoadMore);
+        setPage(playerState.page);
       }
     })();
 
@@ -96,6 +121,17 @@ const UploadList = ({
       setLoadTracksError(null);
     };
   }, [currentTab]);
+
+  useEffect(() => {
+    if (
+      playerState.trackList.length > 0 &&
+      userDetails.profileUrl === playerState.artistProfile
+    ) {
+      setTracks(playerState.trackList);
+      setCanLoadMore(playerState.canLoadMore);
+      setPage(playerState.page);
+    }
+  }, [playerState.trackList]);
 
   return (
     <div id="upload-list">
@@ -161,6 +197,8 @@ const UploadList = ({
               artistDetails={userDetails}
               tracks={tracks}
               setTracks={setTracks}
+              canLoadMore={canLoadMore}
+              page={page}
             />
           </div>
         ))}

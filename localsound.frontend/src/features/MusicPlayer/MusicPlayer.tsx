@@ -12,8 +12,12 @@ import { Container } from "react-bootstrap";
 import {
   handlePauseSong,
   handlePlaySong,
+  handleResetPlayerState,
+  handleSetPlayerSong,
+  handleSetTrackList,
 } from "../../app/redux/actions/playerSlice";
 import { SingletonFactory } from "../../common/appSingleton/appSingleton";
+import agent from "../../api/agent";
 
 const MusicPlayer = () => {
   const player = useSelector((state: State) => state.player);
@@ -25,6 +29,7 @@ const MusicPlayer = () => {
   const volumeRef = useRef<HTMLInputElement>(null);
   const [volumeMuted, setVolumeMuted] = useState(false);
   const [volume, setVolume] = useState(1);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [mediaElementSource, setMediaElementSource] =
     useState<MediaElementAudioSourceNode>();
   const [audioContext, setAudioContext] = useState<AudioContext>(
@@ -208,6 +213,105 @@ const MusicPlayer = () => {
     waveformRef!.current!.volume = volume;
   };
 
+  const getPreviousSong = () => {
+    if (waveformRef!.current) {
+      if (waveformRef.current.currentTime > 3) {
+        waveformRef.current.currentTime = 0;
+      } else {
+        var currentIndex = player.trackList.findIndex(
+          (x) => x.artistTrackUploadId == player.trackId
+        );
+
+        if (currentIndex > 0) {
+          var track = player.trackList[currentIndex - 1];
+          dispatch(
+            handleSetPlayerSong({
+              trackId: track.artistTrackUploadId,
+              trackUrl: track.trackUrl,
+              artistProfile: track.artistProfile,
+              trackName: track.trackName,
+              artistName: track.artistName,
+              trackImage: track.trackImageUrl,
+              duration: track.duration,
+            })
+          );
+        } else {
+          waveformRef.current.currentTime = 0;
+        }
+      }
+    }
+  };
+
+  const getNextSong = async () => {
+    var currentIndex = player.trackList.findIndex(
+      (x) => x.artistTrackUploadId == player.trackId
+    );
+
+    if (currentIndex + 1 < player.trackList.length) {
+      var track = player.trackList[currentIndex + 1];
+
+      dispatch(
+        handleSetPlayerSong({
+          trackId: track.artistTrackUploadId,
+          trackUrl: track.trackUrl,
+          artistProfile: track.artistProfile,
+          trackName: track.trackName,
+          artistName: track.artistName,
+          trackImage: track.trackImageUrl,
+          duration: track.duration,
+        })
+      );
+    } else {
+      if (player.canLoadMore) {
+        if (!loadingMore) {
+          try {
+            setLoadingMore(true);
+            var result = await agent.Tracks.getArtistUploads(
+              player.trackList[currentIndex].artistMemberId,
+              player.page
+            );
+
+            if (result.trackList.length > 0) {
+              var newTrackList = [...player.trackList, ...result.trackList];
+              dispatch(
+                handleSetTrackList({
+                  trackList: newTrackList,
+                  page: player.page + 1,
+                  canLoadMore: result.canLoadMore,
+                })
+              );
+
+              var track = newTrackList[currentIndex + 1];
+
+              dispatch(
+                handleSetPlayerSong({
+                  trackId: track.artistTrackUploadId,
+                  trackUrl: track.trackUrl,
+                  artistProfile: track.artistProfile,
+                  trackName: track.trackName,
+                  artistName: track.artistName,
+                  trackImage: track.trackImageUrl,
+                  duration: track.duration,
+                })
+              );
+            } else {
+              waveformRef.current!.pause();
+              waveformRef.current!.currentTime = 0;
+              dispatch(handlePauseSong());
+            }
+            setLoadingMore(false);
+          } catch (err) {
+            //TODO: Do something on error
+          }
+        }
+      } else {
+        waveformRef.current!.pause();
+        waveformRef.current!.currentTime = 0;
+        dispatch(handlePauseSong());
+      }
+    }
+  };
+
   return (
     <div id="music-player" className="fade-in">
       <Container className="px-3 d-flex flex-column align-items-between h-100">
@@ -236,7 +340,7 @@ const MusicPlayer = () => {
                   size="large"
                   color="grey"
                   onClick={() => {
-                    // dispatch(handlePlaySong());
+                    getPreviousSong();
                   }}
                 />
               </div>
@@ -269,8 +373,8 @@ const MusicPlayer = () => {
                   name="forward"
                   size="large"
                   color="grey"
-                  onClick={() => {
-                    // dispatch(handlePlaySong());
+                  onClick={async () => {
+                    await getNextSong();
                   }}
                 />
               </div>
