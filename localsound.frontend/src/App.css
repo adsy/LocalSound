@@ -1899,6 +1899,9 @@ i.large.icon {
   cursor: pointer;
 }
 
+#bookings {
+  margin-bottom: 40px;
+}
 #bookings .component-container:last-of-type {
   margin-bottom: 30px;
 }
@@ -1924,9 +1927,6 @@ i.large.icon {
   font-size: 14px;
 }
 @media only screen and (max-width: 991px) {
-  #bookings {
-    padding-bottom: 40px;
-  }
   #bookings .booking-container {
     padding: 0px;
   }

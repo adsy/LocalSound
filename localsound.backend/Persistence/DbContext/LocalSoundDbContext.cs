@@ -41,6 +41,7 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<FileContent> FileContent { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<NonArtist> NonArtist { get; set; }
+        public DbSet<Notification> Notification { get; set; }
         
 
         public async Task BeginTransactionAsync()
@@ -173,6 +174,11 @@ namespace localsound.backend.Persistence.DbContext
                 x.HasOne(x => x.Artist).WithMany(x => x.Followers);
                 x.HasOne(x => x.Follower).WithMany(x => x.Following);
             });
+
+            builder.Entity<Notification>().HasKey(x => x.NotificationId).IsClustered(false);
+            builder.Entity<Notification>().HasOne(x => x.NotificationReceiver).WithOne().OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<Notification>().HasOne(x => x.NotificationCreater).WithOne().OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<Notification>().HasIndex(x => x.NotificationReceiverId).IsClustered(true);
         }
 
         public async Task<ServiceResponse> HandleSavingDB()

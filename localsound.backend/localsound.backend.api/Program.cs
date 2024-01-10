@@ -87,6 +87,8 @@ builder.Services.AddTransient<IPackageRepository, PackageRepository>();
 builder.Services.AddTransient<IPackageService,  PackageService>();
 builder.Services.AddTransient<IBookingRepository, BookingRepository>();
 builder.Services.AddTransient<IBookingService, BookingService>();
+builder.Services.AddTransient<INotificationService, NotificationService>();
+builder.Services.AddTransient<INotificationRepository, NotificationRepository>();
 
 builder.Services.AddHttpContextAccessor();
 
