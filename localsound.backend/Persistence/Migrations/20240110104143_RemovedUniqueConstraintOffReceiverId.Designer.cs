@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using localsound.backend.Persistence.DbContext;
 
@@ -11,9 +12,11 @@ using localsound.backend.Persistence.DbContext;
 namespace localsound.backend.Persistence.Migrations
 {
     [DbContext(typeof(LocalSoundDbContext))]
-    partial class LocalSoundDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240110104143_RemovedUniqueConstraintOffReceiverId")]
+    partial class RemovedUniqueConstraintOffReceiverId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -719,9 +722,8 @@ namespace localsound.backend.Persistence.Migrations
 
                     SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("NotificationId"), false);
 
-                    b.HasIndex("NotificationCreatorId");
-
-                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("NotificationCreatorId"), false);
+                    b.HasIndex("NotificationCreatorId")
+                        .IsUnique();
 
                     b.HasIndex("NotificationReceiverId");
 

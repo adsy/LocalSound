@@ -179,6 +179,7 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<Notification>().HasOne(x => x.NotificationReceiver).WithOne().OnDelete(DeleteBehavior.NoAction);
             builder.Entity<Notification>().HasOne(x => x.NotificationCreator).WithOne().OnDelete(DeleteBehavior.NoAction);
             builder.Entity<Notification>().HasIndex(x => x.NotificationReceiverId).IsUnique(false).IsClustered(true);
+            builder.Entity<Notification>().HasIndex(x => x.NotificationCreatorId).IsUnique(false).IsClustered(false);
         }
 
         public async Task<ServiceResponse> HandleSavingDB()
