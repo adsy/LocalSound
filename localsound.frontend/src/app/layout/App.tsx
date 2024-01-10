@@ -57,6 +57,8 @@ const App = () => {
           });
         }
       })();
+    } else {
+      dispatch(handleAppLoading(false));
     }
   }, []);
 

@@ -12,14 +12,16 @@ import { Container } from "react-bootstrap";
 import {
   handlePauseSong,
   handlePlaySong,
-  handleResetPlayerState,
   handleSetPlayerSong,
   handleSetTrackList,
 } from "../../app/redux/actions/playerSlice";
 import { SingletonFactory } from "../../common/appSingleton/appSingleton";
 import agent from "../../api/agent";
+import InPageLoadingComponent from "../../app/layout/InPageLoadingComponent";
+import { useHistory } from "react-router-dom";
 
 const MusicPlayer = () => {
+  const history = useHistory();
   const player = useSelector((state: State) => state.player);
   const [time, setTime] = useState<any>(null);
   const [totalTime, setTotalTime] = useState<string | null>(null);
@@ -312,6 +314,12 @@ const MusicPlayer = () => {
     }
   };
 
+  const goArtistProfile = () => {
+    if (player.artistProfile) {
+      history.push(player.artistProfile);
+    }
+  };
+
   return (
     <div id="music-player" className="fade-in">
       <Container className="px-3 d-flex flex-column align-items-between h-100">
@@ -320,7 +328,10 @@ const MusicPlayer = () => {
             <div className="track-image">
               <Image size="mini" src={player.trackImage} className="" />
             </div>
-            <div className="d-flex flex-column ml-2 track-artist">
+            <div
+              className="d-flex flex-column ml-2 track-artist"
+              onClick={() => goArtistProfile()}
+            >
               <div className="track-name">{player.trackName}</div>
               <div className="artist-name">{player.artistName}</div>
             </div>
@@ -333,85 +344,91 @@ const MusicPlayer = () => {
               onTimeUpdate={(e) => updateTime(e)}
             ></audio>
             <div className="pr-3 d-flex flex-row align-items-center">
-              <div className="pr-2">
-                <Icon
-                  className="audio-button"
-                  name="backward"
-                  size="large"
-                  color="grey"
-                  onClick={() => {
-                    getPreviousSong();
-                  }}
-                />
-              </div>
-              <div>
-                {!player.playing ? (
-                  <Icon
-                    className="audio-button m-0"
-                    name="play"
-                    size="large"
-                    color="grey"
-                    onClick={() => {
-                      dispatch(handlePlaySong());
-                    }}
-                  />
-                ) : (
-                  <Icon
-                    className="audio-button m-0"
-                    name="pause"
-                    size="large"
-                    color="grey"
-                    onClick={() => {
-                      dispatch(handlePauseSong());
-                    }}
-                  />
-                )}
-              </div>
-              <div className="pl-2">
-                <Icon
-                  className="audio-button"
-                  name="forward"
-                  size="large"
-                  color="grey"
-                  onClick={async () => {
-                    await getNextSong();
-                  }}
-                />
-              </div>
-              <div className="pl-2 volume d-flex align-items-center">
-                {!volumeMuted ? (
-                  <Icon
-                    name="volume down"
-                    size="large"
-                    color="grey"
-                    className="audio-button"
-                    onClick={() => setVolumeMuted(!volumeMuted)}
-                  />
-                ) : (
-                  <Icon
-                    name="volume off"
-                    size="large"
-                    color="grey"
-                    className="audio-button"
-                    onClick={() => setVolumeMuted(!volumeMuted)}
-                  />
-                )}
-                <div>
-                  <div className="volume-control">
-                    <input
-                      ref={volumeRef}
-                      type="range"
-                      className="seek-slider volume-slider"
-                      max="10000"
-                      onChange={(e) => {
-                        updateVolume(e.target.value);
+              {loadingMore ? (
+                <InPageLoadingComponent width={40} height={40} />
+              ) : (
+                <div className="d-flex flex-row fade-in align-items-center">
+                  <div className="pr-2">
+                    <Icon
+                      className="audio-button"
+                      name="backward"
+                      size="large"
+                      color="grey"
+                      onClick={() => {
+                        getPreviousSong();
                       }}
-                    ></input>
-                    <div className="inner-arrow"></div>
-                    <div className="arrow-down"></div>
+                    />
+                  </div>
+                  <div>
+                    {!player.playing ? (
+                      <Icon
+                        className="audio-button m-0 fade-in"
+                        name="play"
+                        size="large"
+                        color="grey"
+                        onClick={() => {
+                          dispatch(handlePlaySong());
+                        }}
+                      />
+                    ) : (
+                      <Icon
+                        className="audio-button m-0 fade-in"
+                        name="pause"
+                        size="large"
+                        color="grey"
+                        onClick={() => {
+                          dispatch(handlePauseSong());
+                        }}
+                      />
+                    )}
+                  </div>
+                  <div className="pl-2">
+                    <Icon
+                      className="audio-button"
+                      name="forward"
+                      size="large"
+                      color="grey"
+                      onClick={async () => {
+                        await getNextSong();
+                      }}
+                    />
+                  </div>
+                  <div className="pl-2 volume d-flex align-items-center">
+                    {!volumeMuted ? (
+                      <Icon
+                        name="volume up"
+                        size="large"
+                        color="grey"
+                        className="audio-button"
+                        onClick={() => setVolumeMuted(!volumeMuted)}
+                      />
+                    ) : (
+                      <Icon
+                        name="volume off"
+                        size="large"
+                        color="grey"
+                        className="audio-button"
+                        onClick={() => setVolumeMuted(!volumeMuted)}
+                      />
+                    )}
+                    <div>
+                      <div className="volume-control">
+                        <input
+                          ref={volumeRef}
+                          type="range"
+                          className="seek-slider volume-slider"
+                          max="10000"
+                          onChange={(e) => {
+                            updateVolume(e.target.value);
+                          }}
+                        ></input>
+                        <div className="inner-arrow"></div>
+                        <div className="arrow-down"></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
             <h5 className="m-0 pr-3">{time}</h5>
             <input

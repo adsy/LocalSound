@@ -328,6 +328,10 @@ $end: 10;
   top: 71px;
   position: absolute;
   min-height: calc(100% - 71px);
+
+  @media only screen and (max-width: 991px) {
+    padding-bottom: 30px;
+  }
 }
 
 .black-border {
@@ -913,6 +917,7 @@ i.large.icon {
 
       .track-details {
         justify-content: center !important;
+        cursor: pointer;
       }
 
       .track-artist {
@@ -1774,9 +1779,19 @@ i.large.icon {
   }
 
   @media only screen and (max-width: 991px) {
+    padding-bottom: 40px;
     .booking-container {
       padding: 0px;
     }
+  }
+}
+
+@keyframes move-words {
+  0% {
+    left: 100%;
+  }
+  100% {
+    left: -100%;
   }
 }
 
