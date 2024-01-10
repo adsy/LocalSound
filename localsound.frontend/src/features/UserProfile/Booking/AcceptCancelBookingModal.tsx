@@ -7,6 +7,7 @@ import ErrorBanner from "../../../common/banner/ErrorBanner";
 import { State } from "../../../app/model/redux/state";
 import agent from "../../../api/agent";
 import signalHub from "../../../api/signalR";
+import { useHistory } from "react-router-dom";
 
 interface Props {
   isAccepting: boolean;
@@ -33,6 +34,7 @@ const AcceptCancelBookingModal = ({
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
+  const history = useHistory();
 
   const closeModal = () => {
     dispatch(handleResetModal());
@@ -89,6 +91,7 @@ const AcceptCancelBookingModal = ({
         });
       }
       dispatch(handleResetModal());
+      history.go(0);
     } catch (err: any) {
       setError(err);
     }

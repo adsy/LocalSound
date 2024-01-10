@@ -619,20 +619,24 @@ i.large.icon {
   z-index: 2;
   padding-right: 10px;
   padding-left: 10px;
+  height: 71px;
+  width: 100%;
+  display: flex;
 }
 #navbar .ui.ui-container {
   padding: 0;
 }
 #navbar .navbar-logo {
+  width: 50px;
+  height: 50px;
+}
+#navbar .navbar-logo-container {
   cursor: pointer;
   border-right: 3px solid #001514;
   border-radius: 15px;
 }
 #navbar .navbar-title {
-  font-size: 32px !important;
-  text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
-  color: #fcfcfd;
-  letter-spacing: 3.5px;
+  letter-spacing: 1.5px;
 }
 #navbar .navbar-toggler-icon {
   display: inline-block;
@@ -644,6 +648,18 @@ i.large.icon {
   background-position: center;
   background-size: 100%;
   border: unset !important;
+}
+#navbar .notification-icon {
+  display: inline-block;
+  width: 2.3em;
+  height: 2.3em;
+  vertical-align: middle;
+  background: url(./assets/icons/bell.svg) 50% 50% no-repeat;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+  border: unset !important;
+  cursor: pointer;
 }
 #navbar .navbar-toggler {
   margin-right: 0 !important;
@@ -1906,6 +1922,7 @@ i.large.icon {
   margin-bottom: 30px;
 }
 #bookings .booking-item {
+  background: #fcfcfd;
   padding: 15px;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
@@ -2003,14 +2020,7 @@ i.large.icon {
     padding-right: 10px;
   }
 }
-@media only screen and (max-width: 767px) {
-  #navbar .navbar {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-  #navbar .navbar-title {
-    display: none;
-  }
+@media only screen and (max-width: 768px) {
   #navbar .navbar-toggler {
     border: unset !important;
   }
@@ -2023,6 +2033,19 @@ i.large.icon {
   }
   #track .track-name {
     font-size: 14px !important;
+  }
+}
+@media only screen and (max-width: 469px) {
+  #navbar .navbar-logo {
+    border-right: unset;
+    height: 40px;
+    width: 40px;
+  }
+  #navbar .navbar-logo-container {
+    border-right: unset;
+  }
+  #navbar .navbar-title {
+    font-size: 18px;
   }
 }
 

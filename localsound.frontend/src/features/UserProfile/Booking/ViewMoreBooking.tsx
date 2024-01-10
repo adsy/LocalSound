@@ -220,7 +220,7 @@ const ViewMoreBooking = ({
               >
                 <BookingSummary
                   booking={booking}
-                  type={BookingTypes.upcoming}
+                  type={bookingType}
                   user={userDetails!}
                   pendingBookings={pendingBookings}
                   setPendingBookings={setPendingBookings}

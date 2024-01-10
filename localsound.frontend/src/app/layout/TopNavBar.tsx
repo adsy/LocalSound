@@ -4,7 +4,7 @@ import { State } from "../model/redux/state";
 import logo from "../../assets/updated-logo4.png";
 import { useEffect, useState } from "react";
 import { Button, Container, Nav, Offcanvas } from "react-bootstrap";
-import { Divider, Icon } from "semantic-ui-react";
+import { Divider, Icon, Image } from "semantic-ui-react";
 import { NavLink, useHistory } from "react-router-dom";
 import agent from "../../api/agent";
 import { handleResetUserState } from "../redux/actions/userSlice";
@@ -53,9 +53,15 @@ const TopNavbar = () => {
   return (
     <>
       <div id="navbar" className="w-100">
-        <Navbar collapseOnSelect key={null} bg="" expand={false}>
+        <Navbar
+          collapseOnSelect
+          key={null}
+          bg=""
+          expand={false}
+          className="d-flex flex-row w-100"
+        >
           <div
-            className="navbar-logo d-flex flex-row justify-content-center align-content-center pr-2 pt-1 pb-1"
+            className="d-flex flex-row justify-content-center align-content-center pr-2 pt-1 pb-1 navbar-logo-container"
             onClick={() => {
               if (userDetails) {
                 history.push("/home");
@@ -64,22 +70,26 @@ const TopNavbar = () => {
               }
             }}
           >
-            <img
+            <Image
               alt=""
               src={logo}
-              width="50"
-              height="50"
-              className="d-inline-block align-top"
+              size={"large"}
+              className="d-inline-block align-top navbar-logo"
             />
-            <h1 className="m-0 pl-2 align-self-center">LocalSound</h1>
+            <h1 className="m-0 pl-2 align-self-center navbar-title">
+              LocalSound
+            </h1>
           </div>
           <div className={`d-flex flex-row ml-1`}>
             {userDetails ? (
-              <Navbar.Toggle
-                aria-controls={`offcanvasNavbar-expand-false`}
-                className=" mr-1 align-self-center"
-                onClick={() => setShow(true)}
-              />
+              <div className="d-flex flex-row align-items-center">
+                <div className="notification-icon mr-2"></div>
+                <Navbar.Toggle
+                  aria-controls={`offcanvasNavbar-expand-false`}
+                  className=" mr-1 align-self-center"
+                  onClick={() => setShow(true)}
+                />
+              </div>
             ) : (
               <div className="d-flex flex-row justify-content-center">
                 <Button

@@ -470,22 +470,30 @@ i.large.icon {
   z-index: 2;
   padding-right: 10px;
   padding-left: 10px;
+  height: 71px;
+  width: 100%;
+  display: flex;
 
   .ui.ui-container {
     padding: 0;
   }
 
   .navbar-logo {
+    width: 50px;
+    height: 50px;
+  }
+
+  .navbar-logo-container {
     cursor: pointer;
     border-right: 3px solid $black200;
     border-radius: 15px;
   }
 
   .navbar-title {
-    font-size: 32px !important;
-    @include inverse-text-shadow;
-    color: $white200;
-    letter-spacing: 3.5px;
+    // font-size: 32px !important;
+    // @include inverse-text-shadow;
+    // color: $white200;
+    letter-spacing: 1.5px;
   }
 
   .navbar-toggler-icon {
@@ -499,6 +507,19 @@ i.large.icon {
     background-position: center;
     background-size: 100%;
     border: unset !important;
+  }
+
+  .notification-icon {
+    display: inline-block;
+    width: 2.3em;
+    height: 2.3em;
+    vertical-align: middle;
+    background: url(./assets/icons/bell.svg) 50% 50% no-repeat;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+    border: unset !important;
+    cursor: pointer;
   }
 
   .navbar-toggler {
@@ -1756,7 +1777,7 @@ i.large.icon {
   }
 
   .booking-item {
-    // background: $white200;
+    background: $white200;
     padding: 15px;
     border: 1px solid $white300;
     border-radius: 10px;
@@ -1874,17 +1895,8 @@ i.large.icon {
   }
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 768px) {
   #navbar {
-    .navbar {
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-
-    .navbar-title {
-      display: none;
-    }
-
     .navbar-toggler {
       border: unset !important;
     }
@@ -1902,6 +1914,24 @@ i.large.icon {
 
     .track-name {
       font-size: 14px !important;
+    }
+  }
+}
+
+@media only screen and (max-width: 469px) {
+  #navbar {
+    .navbar-logo {
+      border-right: unset;
+      height: 40px;
+      width: 40px;
+    }
+
+    .navbar-logo-container {
+      border-right: unset;
+    }
+
+    .navbar-title {
+      font-size: 18px;
     }
   }
 }
