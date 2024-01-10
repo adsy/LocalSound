@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { NotificationModel } from "../../../app/model/dto/notification.model";
+import userImg from "../../../assets/placeholder.png";
 
 interface Props {
   notification: NotificationModel;
@@ -30,9 +31,9 @@ const NotificationPopUp = ({ notification }: Props) => {
       <div className="d-flex flex-row align-items-center clickable">
         <img
           className="notification-image mr-1"
-          width={50}
-          height={50}
-          src={notification.userImage}
+          width={30}
+          height={30}
+          src={notification.userImage ? notification.userImage : userImg}
         />
         <div className="font-bold p-1 notification-text">
           {notification.notificationMessage}

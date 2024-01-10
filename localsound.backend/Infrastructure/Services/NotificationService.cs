@@ -39,9 +39,9 @@ namespace localsound.backend.Infrastructure.Services
                     return new ServiceResponse<NotificationCreatedResponseDto>(HttpStatusCode.InternalServerError);
                 }
 
-                var notification = await _notificationRepository.CreateNotificationAsync(creatorUserId, receiver.ReturnData.Id, message, redirectUrl);
+                var createResult = await _notificationRepository.CreateNotificationAsync(creatorUserId, receiver.ReturnData.Id, message, redirectUrl);
 
-                if (!notification.IsSuccessStatusCode || notification.ReturnData == null)
+                if (!createResult.IsSuccessStatusCode || createResult.ReturnData == null)
                 {
                     var itemAddErrorMessage = $"{nameof(NotificationService)} - {nameof(CreateNotification)} - " +
                         $"Error occured creating booking created notification for member:{receiverMemberId}";
@@ -49,6 +49,8 @@ namespace localsound.backend.Infrastructure.Services
 
                     return new ServiceResponse<NotificationCreatedResponseDto>(HttpStatusCode.InternalServerError);
                 }
+
+                var notification = await _notificationRepository.GetUserNotificationAsync(createResult.ReturnData.NotificationId);
 
                 return new ServiceResponse<NotificationCreatedResponseDto>(HttpStatusCode.OK)
                 {
@@ -63,7 +65,7 @@ namespace localsound.backend.Infrastructure.Services
                             NotificationMessage = notification.ReturnData.NotificationMessage,
                             RedirectUrl = notification.ReturnData.RedirectUrl,
                             NotificationViewed = notification.ReturnData.NotificationViewed,
-                            UserImage = notification.ReturnData.NotificationCreator.Images.ToList().Any() ? notification.ReturnData.NotificationCreator.Images.ToList().Find(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage)?.AccountImageUrl : null
+                            UserImage = !notification.ReturnData.NotificationCreator.Images.ToList().Any() ? null : notification.ReturnData.NotificationCreator.Images.ToList().Find(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage)?.AccountImageUrl
                         }
                     }
                 };
