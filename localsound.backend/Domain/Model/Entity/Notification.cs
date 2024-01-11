@@ -12,6 +12,7 @@ namespace localsound.backend.Domain.Model.Entity
         public string NotificationMessage { get; set; }
         public string RedirectUrl { get; set; }
         public bool NotificationViewed { get; set; }
+        public DateTime CreatedOn { get; set; }
 
         public virtual AppUser NotificationReceiver { get; set; }
         public virtual AppUser NotificationCreator { get; set; }

@@ -1,6 +1,4 @@
-﻿using Azure;
-using localsound.backend.Domain.Enum;
-using localsound.backend.Domain.Model;
+﻿using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Persistence.DbContext;
@@ -31,6 +29,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     NotificationCreatorId = creatorUserId,
                     NotificationReceiverId = receiverUserId,
                     NotificationMessage = message,
+                    CreatedOn = DateTime.Now,
                     RedirectUrl = redirectUrl
                 });
 

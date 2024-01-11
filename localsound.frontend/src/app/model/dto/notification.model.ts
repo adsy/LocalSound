@@ -4,6 +4,6 @@ export interface NotificationModel {
   creatorMemberId: string;
   notificationMessage: string;
   redirectUrl: string;
-  notificationView: boolean;
+  notificationViewed: boolean;
   userImage: string;
 }

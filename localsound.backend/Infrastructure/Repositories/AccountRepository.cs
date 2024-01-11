@@ -150,6 +150,7 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 if (user == null)
                 {
+                    _logger.LogError($"Error matching user: UserId ${id} does not match account with memberId ${memberId}");
                     return new ServiceResponse<AppUser>(HttpStatusCode.Unauthorized);
                 }
 

@@ -20,6 +20,7 @@ import { FollowerListResponse } from "../app/model/dto/follower-list-response.mo
 import { ArtistPackageModel } from "../app/model/dto/artist-package.model";
 import { BookingSubmissionModel } from "../app/model/dto/booking-submission.model";
 import { BookingListResponse } from "../app/model/dto/booking-list.-response.model";
+import { NotificationListResponseModel } from "../app/model/dto/notification-list-response.model";
 
 const axiosApiInstance = axios.create();
 
@@ -248,6 +249,10 @@ const Bookings = {
 };
 
 const Notifications = {
+  getMoreNotifications: (memberId: string, page: number) =>
+    requests.get<NotificationListResponseModel>(
+      `notifications/member/${memberId}/get-more-notifications?page=${page}`
+    ),
   removeNotification: (notificationId: string) =>
     requests.delete(
       `notifications/notification/${notificationId}/delete-notification`

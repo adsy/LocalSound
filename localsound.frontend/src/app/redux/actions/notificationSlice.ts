@@ -3,14 +3,24 @@ import { NotificationState } from "../../model/redux/notificationState";
 
 const initialState: NotificationState = {
   notificationList: [],
+  canLoadMore: false,
   notificationContainerVisible: false,
+  page: 0,
 };
 export const notificationSlice = createSlice({
   name: "notifications",
   initialState,
   reducers: {
     handleSaveNotifications: (state = initialState, action) => {
-      state.notificationList = action.payload;
+      var clone = [
+        ...state.notificationList,
+        ...action.payload.notificationList,
+      ];
+      state.notificationList = clone;
+      state.canLoadMore = action.payload.canLoadMore;
+      if (action.payload.canLoadMore) {
+        state.page += 1;
+      }
     },
     handleResetNotificationState: () => initialState,
     handleSaveNotification: (state = initialState, action) => {

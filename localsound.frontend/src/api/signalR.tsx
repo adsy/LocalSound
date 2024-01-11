@@ -11,6 +11,7 @@ import {
 } from "../app/redux/store/store";
 import NotificationPopUp from "../common/components/Notification/NotificationPopUp";
 import { CreateNotification } from "../app/model/dto/create-booking-created-notification.model";
+import { NotificationListResponseModel } from "../app/model/dto/notification-list-response.model";
 
 var hubConnection: HubConnection | null;
 
@@ -35,7 +36,7 @@ const createSignalConnection = () => {
 
   hubConnection.on(
     "LoadNotifications",
-    (notifications: NotificationModel[]) => {
+    (notifications: NotificationListResponseModel) => {
       StoreSaveNotifications(notifications);
     }
   );

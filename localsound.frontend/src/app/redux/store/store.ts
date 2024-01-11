@@ -15,10 +15,12 @@ import UserReducer, { handleResetUserState } from "../actions/userSlice";
 import PageOperationReducer from "../actions/pageOperationSlice";
 import PageDataReducer from "../actions/pageDataSlice";
 import NotificationReducer, {
+  handleHideNotificationContainer,
   handleSaveNotification,
   handleSaveNotifications,
 } from "../actions/notificationSlice";
 import { NotificationModel } from "../../model/dto/notification.model";
+import { NotificationListResponseModel } from "../../model/dto/notification-list-response.model";
 
 const middleware = [];
 
@@ -65,7 +67,9 @@ export const resetState = () => {
   store.dispatch(handleResetAppState());
 };
 
-export const StoreSaveNotifications = (notifications: NotificationModel[]) => {
+export const StoreSaveNotifications = (
+  notifications: NotificationListResponseModel
+) => {
   store.dispatch(handleSaveNotifications(notifications));
 };
 

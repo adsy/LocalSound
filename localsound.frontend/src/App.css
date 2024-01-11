@@ -758,7 +758,7 @@ i.large.icon {
   transition: border-color 0.3s ease;
   transition: background-color 0.3s ease;
   border-radius: 10px 10px;
-  border: 1px solid transparent;
+  border: 1px solid transparent !important;
   padding: 5px;
   color: black !important;
   background-color: unset;
@@ -769,7 +769,12 @@ i.large.icon {
 .transparent-button:active,
 .transparent-button:focus {
   background-color: unset !important;
-  border: 1px solid transparent;
+  border: 1px solid unset !important;
+}
+.transparent-button:hover h4,
+.transparent-button:active h4,
+.transparent-button:focus h4 {
+  color: #6d69fa;
 }
 
 .transparent-button h4 {
@@ -1949,15 +1954,31 @@ i.large.icon {
   }
 }
 
-#notifications-container {
-  top: 40px;
-  right: 80px;
-  border-radius: 5px 5px 5px 5px;
-  width: 280px;
-  border: 1px solid #e2e8f0;
+.arrow-up {
   position: absolute;
-  padding: 3px;
-  background-color: #f1f1f1;
+  top: 37px;
+  right: 76px;
+  z-index: 4;
+  width: 0;
+  height: 0;
+  margin-left: -1px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 18px solid #232323;
+}
+
+#notifications-container {
+  top: 55px;
+  right: 45px;
+  border-radius: 5px 5px 5px 5px;
+  width: 300px;
+  border: 1px solid #232323;
+  position: absolute;
+  padding: 1px;
+  background-color: #232323;
+  max-height: 600px;
+  overflow-y: auto;
+  scrollbar-color: #6d69fa #232323;
 }
 #notifications-container .notification-item {
   cursor: pointer;
@@ -1967,24 +1988,67 @@ i.large.icon {
   flex-direction: row;
   align-items: center;
   border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  width: 100%;
+}
+#notifications-container .notification-item.unviewed {
+  background-color: #f1f1f1;
+}
+#notifications-container .notification-item .cancel-notification-btn {
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  width: 17px;
+  height: 17px;
+}
+#notifications-container .notification-item .cancel-notification-btn .cancel-notification-icon {
+  position: absolute;
+  right: -5px;
+  top: -4px;
+  transition: font-size 0.3s ease-in-out;
+}
+#notifications-container .notification-item .cancel-notification-btn .cancel-notification-icon:hover {
+  font-size: 16px;
 }
 #notifications-container .notification-item .notification-image {
-  margin-left: 8px;
+  margin-left: 12px;
 }
 #notifications-container .notification-item .notification-message {
   font-size: 16px;
   margin-left: 10px;
   font-weight: 800;
 }
-#notifications-container .notification-item:hover {
+#notifications-container .notification-item .notification-item:hover {
   background-color: #e2e8f0;
 }
-#notifications-container .notification-item:first-of-type {
+#notifications-container .notification-item .notification-item:first-of-type {
   border-radius: 10px 10px 0px 0px;
 }
-#notifications-container .notification-item:last-of-type {
+#notifications-container .notification-item .notification-item:last-of-type {
   border-bottom: unset;
   border-radius: 0px 0px 10px 10px;
+}
+
+/* width */
+#notifications-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+#notifications-container::-webkit-scrollbar-track {
+  background: #001514;
+}
+
+/* Handle */
+#notifications-container::-webkit-scrollbar-thumb {
+  background: #6d69fa;
+}
+
+/* Handle on hover */
+#notifications-container::-webkit-scrollbar-thumb:hover {
+  background: #6d69fa;
 }
 
 @keyframes move-words {

@@ -3,6 +3,7 @@ using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Domain.Model.Dto.Response;
+using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
 using Microsoft.Extensions.Logging;
@@ -82,7 +83,63 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<List<NotificationDto>>> GetUserNotifications(Guid userId, CancellationToken cancellationToken)
+        public async Task<ServiceResponse<NotificationListResponseDto>> GetMoreUserNotifications(Guid userId, string memberId, int page)
+        {
+            try
+            {
+                var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
+
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                {
+                    return new ServiceResponse<NotificationListResponseDto>(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = $"Error occured getting your notifications, please try again..."
+                    };
+                }
+
+                var notifications = await _notificationRepository.GetUserNotificationsAsync(userId, page);
+
+                if (!notifications.IsSuccessStatusCode || notifications.ReturnData == null)
+                {
+                    return new ServiceResponse<NotificationListResponseDto>(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = $"Error occured getting your notifications, please try again..."
+                    };
+                }
+
+                var notificationList = notifications.ReturnData.Select(x => new NotificationDto
+                {
+                    NotificationId = x.NotificationId,
+                    ReceivingMemberId = x.NotificationReceiver.MemberId,
+                    CreatorMemberId = x.NotificationCreator.MemberId,
+                    NotificationMessage = x.NotificationMessage,
+                    RedirectUrl = x.RedirectUrl,
+                    NotificationViewed = x.NotificationViewed,
+                    UserImage = x.NotificationCreator.Images.ToList().Any() ? x.NotificationCreator.Images.ToList().Find(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage)?.AccountImageUrl : null
+                }).ToList();
+
+                return new ServiceResponse<NotificationListResponseDto>(HttpStatusCode.OK)
+                {
+                    ReturnData = new NotificationListResponseDto
+                    {
+                        NotificationList = notificationList,
+                        CanLoadMore = notificationList.Count == 10
+                    }
+                };
+            }
+            catch(Exception e)
+            {
+                var errorMessage = $"{nameof(NotificationService)} - {nameof(CreateNotification)} - {e.Message}";
+                _logger.LogError(e, errorMessage);
+
+                return new ServiceResponse<NotificationListResponseDto>(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = $"Error occured getting your notifications, please try again..."
+                };
+            }
+        }
+
+        public async Task<ServiceResponse<NotificationListResponseDto>> GetUserNotifications(Guid userId, CancellationToken cancellationToken)
         {
             try
             {
@@ -94,7 +151,7 @@ namespace localsound.backend.Infrastructure.Services
                         $"Error occured retrieving notifications for user:{userId}";
                     _logger.LogError(itemAddErrorMessage);
 
-                    return new ServiceResponse<List<NotificationDto>>(HttpStatusCode.InternalServerError);
+                    return new ServiceResponse<NotificationListResponseDto>(HttpStatusCode.InternalServerError);
                 }
 
                 var notificationList = notifications.ReturnData.Select(x => new NotificationDto
@@ -108,9 +165,13 @@ namespace localsound.backend.Infrastructure.Services
                     UserImage = x.NotificationCreator.Images.ToList().Any() ? x.NotificationCreator.Images.ToList().Find(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage)?.AccountImageUrl : null
                 }).ToList();
 
-                return new ServiceResponse<List<NotificationDto>>(HttpStatusCode.OK)
+                return new ServiceResponse<NotificationListResponseDto>(HttpStatusCode.OK)
                 {
-                    ReturnData = notificationList
+                    ReturnData = new NotificationListResponseDto
+                    {
+                        NotificationList = notificationList,
+                        CanLoadMore = notificationList.Count == 10
+                    }
                 };
             }
             catch(Exception e)
@@ -118,7 +179,7 @@ namespace localsound.backend.Infrastructure.Services
                 var message = $"{nameof(NotificationService)} - {nameof(GetUserNotifications)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<List<NotificationDto>>(HttpStatusCode.InternalServerError)
+                return new ServiceResponse<NotificationListResponseDto>(HttpStatusCode.InternalServerError)
                 {
                     ServiceResponseMessage = "An error occured getting user notifications"
                 };
