@@ -1840,9 +1840,26 @@ i.large.icon {
   overflow-y: auto;
   scrollbar-color: $purple100 $black100;
 
+  .notification-item-container:first-of-type {
+    border-radius: 5px 5px 0px 0px;
+  }
+  .notification-item-container:last-of-type {
+    border-radius: 0px 0px 5px 5px;
+  }
+
+  .notification-item-container:hover {
+    background-color: $white300 !important;
+  }
+
+  .notification-item-container {
+    background-color: $white100;
+    &.unviewed {
+      background-color: $white200;
+    }
+  }
+
   .notification-item {
     cursor: pointer;
-    background-color: $white200;
     min-height: 53px;
     display: flex;
     flex-direction: row;
@@ -1852,10 +1869,7 @@ i.large.icon {
     flex-direction: row;
     position: relative;
     width: 100%;
-
-    &.unviewed {
-      background-color: $white100;
-    }
+    height: 80px;
 
     .cancel-notification-btn {
       position: absolute;
@@ -1881,15 +1895,11 @@ i.large.icon {
 
     .notification-message {
       font-size: 16px;
-      padding-left: 15px;
+      padding-left: 10px;
       font-weight: 800;
       padding-right: 22px;
       padding-top: 10px;
       padding-bottom: 10px;
-    }
-
-    .notification-item:hover {
-      background-color: $white300;
     }
   }
 }

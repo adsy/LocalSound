@@ -58,7 +58,9 @@ const NotificationsContainer = () => {
             {notificationData.notificationList.map((notification, index) => (
               <div
                 key={index}
-                className="notification-item"
+                className={`notification-item-container ${
+                  !notification.notificationViewed ? "unviewed" : ""
+                }`}
                 onClick={async () => await clickNotification(notification)}
               >
                 <NotificationItem notification={notification} />

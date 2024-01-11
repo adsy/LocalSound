@@ -11,11 +11,7 @@ const NotificationItem = ({ notification }: Props) => {
   const deleteNotification = async () => {};
 
   return (
-    <div
-      className={`notification-item fade-in ${
-        !notification.notificationViewed ? "unviewed" : ""
-      }`}
-    >
+    <div className={`notification-item fade-in`}>
       <Button
         className="transparent-button cancel-notification-btn"
         onClick={async () => await deleteNotification()}
@@ -32,8 +28,8 @@ const NotificationItem = ({ notification }: Props) => {
         <Image
           // size="mini"
           circular
-          width={40}
-          height={40}
+          width={35}
+          height={35}
           src={notification.userImage ? notification.userImage : placeholderImg}
           className="notification-image"
         ></Image>
