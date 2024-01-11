@@ -4,6 +4,7 @@ import { PageOperationState } from "./pageOperationState";
 import { PlayerState } from "./playerState";
 import { PageDataState } from "./pageDataState";
 import { UserState } from "./userState";
+import { NotificationState } from "./notificationState";
 
 interface State {
   app: AppState;
@@ -12,6 +13,7 @@ interface State {
   player: PlayerState;
   pageOperation: PageOperationState;
   pageData: PageDataState;
+  notifications: NotificationState;
 }
 
 export type { State };

@@ -1949,6 +1949,44 @@ i.large.icon {
   }
 }
 
+#notifications-container {
+  top: 40px;
+  right: 80px;
+  border-radius: 5px 5px 5px 5px;
+  width: 280px;
+  border: 1px solid #e2e8f0;
+  position: absolute;
+  padding: 3px;
+  background-color: #f1f1f1;
+}
+#notifications-container .notification-item {
+  cursor: pointer;
+  background-color: #fcfcfd;
+  min-height: 53px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid #e2e8f0;
+}
+#notifications-container .notification-item .notification-image {
+  margin-left: 8px;
+}
+#notifications-container .notification-item .notification-message {
+  font-size: 16px;
+  margin-left: 10px;
+  font-weight: 800;
+}
+#notifications-container .notification-item:hover {
+  background-color: #e2e8f0;
+}
+#notifications-container .notification-item:first-of-type {
+  border-radius: 10px 10px 0px 0px;
+}
+#notifications-container .notification-item:last-of-type {
+  border-bottom: unset;
+  border-radius: 0px 0px 10px 10px;
+}
+
 @keyframes move-words {
   0% {
     left: 100%;

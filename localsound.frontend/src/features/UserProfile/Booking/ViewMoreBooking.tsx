@@ -30,7 +30,6 @@ interface Props {
 const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const bookingData = useSelector((state: State) => state.pageData.bookingData);
-  const [bookings, setBookings] = useState<BookingModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const [page, setPage] = useState(0);
@@ -44,8 +43,8 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
   }, []);
 
   const getMoreBookings = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       switch (bookingType) {
         case BookingTypes.upcoming: {
           var bookingResult = await agent.Bookings.getNonCompletedBookings(
@@ -108,10 +107,10 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
         }
       }
       setPage(page + 1);
-      setLoading(false);
     } catch (err: any) {
       setError(err);
     }
+    setLoading(false);
   };
 
   useFixMissingScroll({
@@ -168,26 +167,22 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
     })();
   }, []);
 
-  useEffect(() => {
+  const getBookings = () => {
     switch (bookingType) {
       case BookingTypes.upcoming: {
-        setBookings(bookingData.upcoming);
-        break;
+        return bookingData.upcoming;
       }
       case BookingTypes.pending: {
-        setBookings(bookingData.pending);
-        break;
+        return bookingData.pending;
       }
       case BookingTypes.cancelled: {
-        setBookings(bookingData.cancelled);
-        break;
+        return bookingData.cancelled;
       }
       case BookingTypes.completed: {
-        setBookings(bookingData.completed);
-        break;
+        return bookingData.completed;
       }
     }
-  }, [bookingData]);
+  };
 
   const getTitle = () => {
     switch (bookingType) {
@@ -260,14 +255,14 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
       <>
         {error ? (
           <ErrorBanner className="mx-3" children={error} />
-        ) : bookings.length > 0 ? (
+        ) : getBookings().length > 0 ? (
           <InfiniteScroll
-            dataLength={bookings.length} //This is important field to render the next data
+            dataLength={getBookings().length} //This is important field to render the next data
             next={() => getMoreBookings()}
             hasMore={canLoadMore}
             loader={<></>}
           >
-            {bookings.map((booking, index) => {
+            {getBookings().map((booking, index) => {
               return (
                 <div
                   key={index}

@@ -1811,6 +1811,50 @@ i.large.icon {
   }
 }
 
+#notifications-container {
+  top: 40px;
+  right: 80px;
+  border-radius: 5px 5px 5px 5px;
+  width: 280px;
+  border: 1px solid $white300;
+  position: absolute;
+  padding: 3px;
+  background-color: $white100;
+
+  .notification-item {
+    cursor: pointer;
+    background-color: $white200;
+    min-height: 53px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid $white300;
+
+    .notification-image {
+      margin-left: 8px;
+    }
+
+    .notification-message {
+      font-size: 16px;
+      margin-left: 10px;
+      font-weight: 800;
+    }
+  }
+
+  .notification-item:hover {
+    background-color: $white300;
+  }
+
+  .notification-item:first-of-type {
+    border-radius: 10px 10px 0px 0px;
+  }
+
+  .notification-item:last-of-type {
+    border-bottom: unset;
+    border-radius: 0px 0px 10px 10px;
+  }
+}
+
 @keyframes move-words {
   0% {
     left: 100%;

@@ -247,6 +247,13 @@ const Bookings = {
     ),
 };
 
+const Notifications = {
+  removeNotification: (notificationId: string) =>
+    requests.delete(
+      `notifications/notification/${notificationId}/delete-notification`
+    ),
+};
+
 const agent = {
   Authentication,
   Profile,
@@ -256,6 +263,7 @@ const agent = {
   Tracks,
   Packages,
   Bookings,
+  Notifications,
 };
 
 export default agent;

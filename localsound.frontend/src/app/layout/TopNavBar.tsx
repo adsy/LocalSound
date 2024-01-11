@@ -2,8 +2,8 @@ import Navbar from "react-bootstrap/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../model/redux/state";
 import logo from "../../assets/updated-logo4.png";
-import { useEffect, useState } from "react";
-import { Button, Container, Nav, Offcanvas } from "react-bootstrap";
+import { useState } from "react";
+import { Button, Nav, Offcanvas } from "react-bootstrap";
 import { Divider, Icon, Image } from "semantic-ui-react";
 import { NavLink, useHistory } from "react-router-dom";
 import agent from "../../api/agent";
@@ -13,9 +13,15 @@ import { handleToggleModal } from "../redux/actions/modalSlice";
 import Login from "../../features/Authentication/Login/Login";
 import Register from "../../features/Authentication/Register/Register";
 import signalHub from "../../api/signalR";
+import NotificationsContainer from "../../common/components/Notification/NotificationsContainer";
+import {
+  handleHideNotificationContainer,
+  handleShowNotificationContainer,
+} from "../redux/actions/notificationSlice";
 
 const TopNavbar = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
+  const notificationData = useSelector((state: State) => state.notifications);
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -82,8 +88,20 @@ const TopNavbar = () => {
           </div>
           <div className={`d-flex flex-row ml-1`}>
             {userDetails ? (
-              <div className="d-flex flex-row align-items-center">
-                <div className="notification-icon mr-2"></div>
+              <div className="d-flex flex-row align-items-center position-relative">
+                <div
+                  className="notification-icon mr-2"
+                  onClick={() => {
+                    if (notificationData.notificationContainerVisible) {
+                      dispatch(handleHideNotificationContainer());
+                    } else {
+                      dispatch(handleShowNotificationContainer());
+                    }
+                  }}
+                ></div>
+                {notificationData.notificationContainerVisible ? (
+                  <NotificationsContainer />
+                ) : null}
                 <Navbar.Toggle
                   aria-controls={`offcanvasNavbar-expand-false`}
                   className=" mr-1 align-self-center"

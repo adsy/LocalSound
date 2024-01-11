@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { BookingTypes } from "../../../app/model/enums/BookingTypes";
 import { BookingModel } from "../../../app/model/dto/booking.model";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
@@ -29,80 +29,78 @@ const BookingViewContainer = ({ bookingType, setViewMore }: Props) => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const bookingData = useSelector((state: State) => state.pageData.bookingData);
   const [canLoadMore, setCanLoadMore] = useState(false);
-  const [bookings, setBookings] = useState<BookingModel[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
-  const [page, setPage] = useState(0);
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {
     (async () => {
       setLoading(true);
-      switch (bookingType) {
-        case BookingTypes.upcoming: {
-          var bookingResult = await agent.Bookings.getNonCompletedBookings(
-            userDetails?.memberId!,
-            page,
-            true
-          );
-          setCanLoadMore(bookingResult.canLoadMore);
-          dispatch(handleSetUpcomingBookings([...bookingResult.bookings]));
-          break;
+      try {
+        switch (bookingType) {
+          case BookingTypes.upcoming: {
+            var bookingResult = await agent.Bookings.getNonCompletedBookings(
+              userDetails?.memberId!,
+              0,
+              true
+            );
+            setCanLoadMore(bookingResult.canLoadMore);
+            dispatch(handleSetUpcomingBookings([...bookingResult.bookings]));
+            break;
+          }
+          case BookingTypes.pending: {
+            var bookingResult = await agent.Bookings.getNonCompletedBookings(
+              userDetails?.memberId!,
+              0,
+              null
+            );
+            setCanLoadMore(bookingResult.canLoadMore);
+            dispatch(handleSetPendingBookings([...bookingResult.bookings]));
+            break;
+          }
+          case BookingTypes.cancelled: {
+            var bookingResult = await agent.Bookings.getNonCompletedBookings(
+              userDetails?.memberId!,
+              0,
+              false
+            );
+            setCanLoadMore(bookingResult.canLoadMore);
+            dispatch(handleSetCancelledBookings([...bookingResult.bookings]));
+            break;
+          }
+          case BookingTypes.completed: {
+            var bookingResult = await agent.Bookings.getCompletedBookings(
+              userDetails?.memberId!,
+              0
+            );
+            setCanLoadMore(bookingResult.canLoadMore);
+            dispatch(handleSetCompletedBookings([...bookingResult.bookings]));
+            break;
+          }
         }
-        case BookingTypes.pending: {
-          var bookingResult = await agent.Bookings.getNonCompletedBookings(
-            userDetails?.memberId!,
-            page,
-            null
-          );
-          setCanLoadMore(bookingResult.canLoadMore);
-          dispatch(handleSetPendingBookings([...bookingResult.bookings]));
-          break;
-        }
-        case BookingTypes.cancelled: {
-          var bookingResult = await agent.Bookings.getNonCompletedBookings(
-            userDetails?.memberId!,
-            page,
-            false
-          );
-          setCanLoadMore(bookingResult.canLoadMore);
-          dispatch(handleSetCancelledBookings([...bookingResult.bookings]));
-          break;
-        }
-        case BookingTypes.completed: {
-          var bookingResult = await agent.Bookings.getCompletedBookings(
-            userDetails?.memberId!,
-            page
-          );
-          setCanLoadMore(bookingResult.canLoadMore);
-          dispatch(handleSetCompletedBookings([...bookingResult.bookings]));
-          break;
-        }
+      } catch (err: any) {
+        setError(err);
       }
       setLoading(false);
     })();
   }, []);
 
-  useEffect(() => {
+  const getBookings = () => {
     switch (bookingType) {
       case BookingTypes.upcoming: {
-        setBookings(bookingData.upcoming);
-        break;
+        return bookingData.upcoming;
       }
       case BookingTypes.pending: {
-        setBookings(bookingData.pending);
-        break;
+        return bookingData.pending;
       }
       case BookingTypes.cancelled: {
-        setBookings(bookingData.cancelled);
-        break;
+        return bookingData.cancelled;
       }
       case BookingTypes.completed: {
-        setBookings(bookingData.completed);
-        break;
+        return bookingData.completed;
       }
     }
-  }, [loading, bookingData]);
+  };
 
   const getTitle = () => {
     switch (bookingType) {
@@ -184,10 +182,10 @@ const BookingViewContainer = ({ bookingType, setViewMore }: Props) => {
           <p className="px-3">{getText()}</p>
           {error ? (
             <ErrorBanner className="mx-3" children={error} />
-          ) : bookings.length > 0 ? (
+          ) : getBookings().length > 0 ? (
             <>
               <div className="d-flex flex-row flex-wrap">
-                {bookings.map((booking, index) => (
+                {getBookings().map((booking, index) => (
                   <div
                     key={index}
                     className="px-3 col-12 mb-2"
