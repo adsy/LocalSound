@@ -1881,21 +1881,15 @@ i.large.icon {
 
     .notification-message {
       font-size: 16px;
-      margin-left: 10px;
+      padding-left: 15px;
       font-weight: 800;
+      padding-right: 22px;
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
 
     .notification-item:hover {
       background-color: $white300;
-    }
-
-    .notification-item:first-of-type {
-      border-radius: 10px 10px 0px 0px;
-    }
-
-    .notification-item:last-of-type {
-      border-bottom: unset;
-      border-radius: 0px 0px 10px 10px;
     }
   }
 }

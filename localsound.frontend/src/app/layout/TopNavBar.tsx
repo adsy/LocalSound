@@ -18,22 +18,26 @@ import {
   handleHideNotificationContainer,
   handleShowNotificationContainer,
 } from "../redux/actions/notificationSlice";
+import InPageLoadingComponent from "./InPageLoadingComponent";
 
 const TopNavbar = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const notificationData = useSelector((state: State) => state.notifications);
+  const [signingOut, setSigningOut] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
 
   const [show, setShow] = useState(false);
 
   const handleSignout = async () => {
+    setSigningOut(true);
     await agent.Authentication.signOut();
     history.push("/");
     signalHub.disconnectConnection();
     dispatch(handleResetUserState());
     dispatch(handleResetAppState());
     setShow(false);
+    setSigningOut(false);
   };
 
   const handleAuthenticationRequest = (isLogin: boolean) => {
@@ -197,17 +201,21 @@ const TopNavbar = () => {
                             </h5>
                           </NavLink>
                         </div>
-                        <div
-                          className="w-100 d-flex flex-row justify-content-center align-content-center"
-                          onClick={async () => await handleSignout()}
-                        >
-                          <Button className="black-button d-flex flex-row justify-content-center mb-2 w-100 mx-5">
-                            <span className="signout-icon align-self-center d-inline-block"></span>
-                            <h4 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
-                              Logout
-                            </h4>
-                          </Button>
-                        </div>
+                        {!signingOut ? (
+                          <div
+                            className="w-100 d-flex flex-row justify-content-center align-content-center"
+                            onClick={async () => await handleSignout()}
+                          >
+                            <Button className="black-button d-flex flex-row justify-content-center mb-2 w-100 mx-5">
+                              <span className="signout-icon align-self-center d-inline-block"></span>
+                              <h4 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
+                                Logout
+                              </h4>
+                            </Button>
+                          </div>
+                        ) : (
+                          <InPageLoadingComponent width={50} height={50} />
+                        )}
                       </div>
                     </div>
                   </div>

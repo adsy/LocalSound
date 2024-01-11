@@ -84,6 +84,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.NotificationCreator)
                     .ThenInclude(x => x.Images)
                     .Where(x => x.NotificationReceiverId == userId)
+                    .OrderByDescending(x => x.CreatedOn)
                     .Skip(page * 10)
                     .Take(10)
                     .ToListAsync();

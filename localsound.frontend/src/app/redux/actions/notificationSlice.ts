@@ -24,7 +24,8 @@ export const notificationSlice = createSlice({
     },
     handleResetNotificationState: () => initialState,
     handleSaveNotification: (state = initialState, action) => {
-      state.notificationList.push(action.payload);
+      var clone = [action.payload, ...state.notificationList];
+      state.notificationList = clone;
     },
     handleShowNotificationContainer: (state = initialState) => {
       state.notificationContainerVisible = true;

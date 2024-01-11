@@ -96,7 +96,7 @@ const CreateBooking = ({ artistPackage, artistDetails }: Props) => {
 
                   await signalHub.createNotification({
                     receiverMemberId: artistDetails.memberId,
-                    message: "You have a new booking!",
+                    message: `Congratulations! Someone has booked your ${artistPackage.artistPackageName} package.`,
                     redirectUrl: "/bookings",
                   });
 

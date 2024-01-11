@@ -51,7 +51,7 @@ const NotificationsContainer = () => {
 
   return (
     <>
-      <div className="arrow-up"></div>
+      <div className="arrow-up fade-in"></div>
       <div id="notifications-container" className="fade-in">
         {notificationData.notificationList.length > 0 ? (
           <>

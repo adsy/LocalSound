@@ -26,6 +26,7 @@ import { ArtistPackageModel } from "../../../app/model/dto/artist-package.model"
 import { handleAppLoading } from "../../../app/redux/actions/applicationSlice";
 import { handleUpdateProfileFollowCount } from "../../../app/redux/actions/pageDataSlice";
 import signalHub from "../../../api/signalR";
+import { CustomerTypes } from "../../../app/model/enums/customerTypes";
 
 interface Props {
   loggedInUser: UserModel;
@@ -151,12 +152,17 @@ const ArtistProfile = ({
             artistDetails.memberId
           );
           setIsFollowing(true);
+
           dispatch(
             handleUpdateProfileFollowCount(artistDetails.followerCount + 1)
           );
           signalHub.createNotification({
             receiverMemberId: artistDetails.memberId,
-            message: `You have a new follower!`,
+            message: `${
+              loggedInUser.customerType === CustomerTypes.NonArtist
+                ? `${loggedInUser.firstName} ${loggedInUser.lastName} has started following you.`
+                : `${loggedInUser.name} has started following you.`
+            }`,
             redirectUrl: "",
           });
         } else {

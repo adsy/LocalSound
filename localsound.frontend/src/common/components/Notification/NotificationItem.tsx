@@ -12,7 +12,7 @@ const NotificationItem = ({ notification }: Props) => {
 
   return (
     <div
-      className={`notification-item ${
+      className={`notification-item fade-in ${
         !notification.notificationViewed ? "unviewed" : ""
       }`}
     >
@@ -28,14 +28,16 @@ const NotificationItem = ({ notification }: Props) => {
           ></Icon>
         </h4>
       </Button>
-      <Image
-        // size="mini"
-        circular
-        width={30}
-        height={30}
-        src={notification.userImage ? notification.userImage : placeholderImg}
-        className="notification-image"
-      ></Image>
+      <div className="col-2">
+        <Image
+          // size="mini"
+          circular
+          width={40}
+          height={40}
+          src={notification.userImage ? notification.userImage : placeholderImg}
+          className="notification-image"
+        ></Image>
+      </div>
       <div className="notification-message">
         {notification.notificationMessage}
       </div>
