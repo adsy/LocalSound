@@ -1,9 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PageDataState } from "../../model/redux/pageDataState";
 import { AccountImageTypes } from "../../model/enums/accountImageTypes";
+import { BookingOverviewState } from "../../model/redux/pageDataState.Bookings";
 
 const initialState: PageDataState = {
   profileData: null,
+  bookingData: {
+    upcoming: [],
+    pending: [],
+    completed: [],
+    cancelled: [],
+  },
 };
 export const pageDataSlice = createSlice({
   name: "pageData",
@@ -36,6 +43,34 @@ export const pageDataSlice = createSlice({
         state.profileData.images = images;
       }
     },
+    handleResetBookingOverviewData: (state = initialState) => {
+      state.bookingData = {
+        upcoming: [],
+        pending: [],
+        completed: [],
+        cancelled: [],
+      };
+    },
+    handleSetUpcomingBookings: (state = initialState, action) => {
+      if (state.bookingData) {
+        state.bookingData.upcoming = action.payload;
+      }
+    },
+    handleSetPendingBookings: (state = initialState, action) => {
+      if (state.bookingData) {
+        state.bookingData.pending = action.payload;
+      }
+    },
+    handleSetCompletedBookings: (state = initialState, action) => {
+      if (state.bookingData) {
+        state.bookingData.completed = action.payload;
+      }
+    },
+    handleSetCancelledBookings: (state = initialState, action) => {
+      if (state.bookingData) {
+        state.bookingData.cancelled = action.payload;
+      }
+    },
   },
 });
 
@@ -45,6 +80,11 @@ export const {
   handleUpdateProfileFollowCount,
   handleUpdateProfileCoverPhoto,
   handleUpdateProfilePhoto,
+  handleResetBookingOverviewData,
+  handleSetUpcomingBookings,
+  handleSetPendingBookings,
+  handleSetCompletedBookings,
+  handleSetCancelledBookings,
 } = pageDataSlice.actions;
 
 export default pageDataSlice.reducer;

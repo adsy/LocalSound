@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { BookingTypes } from "../../../app/model/enums/BookingTypes";
 import { BookingModel } from "../../../app/model/dto/booking.model";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
@@ -13,6 +13,12 @@ import { Button } from "react-bootstrap";
 import { Icon } from "semantic-ui-react";
 import { CustomerTypes } from "../../../app/model/enums/customerTypes";
 import InfoBanner from "../../../common/banner/InfoBanner";
+import {
+  handleSetCancelledBookings,
+  handleSetCompletedBookings,
+  handleSetPendingBookings,
+  handleSetUpcomingBookings,
+} from "../../../app/redux/actions/pageDataSlice";
 
 interface Props {
   bookingType: BookingTypes;
@@ -20,11 +26,13 @@ interface Props {
 }
 
 const BookingViewContainer = ({ bookingType, setViewMore }: Props) => {
+  const userDetails = useSelector((state: State) => state.user.userDetails);
+  const bookingData = useSelector((state: State) => state.pageData.bookingData);
+  const [canLoadMore, setCanLoadMore] = useState(false);
   const [bookings, setBookings] = useState<BookingModel[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
   const [page, setPage] = useState(0);
-  const userDetails = useSelector((state: State) => state.user.userDetails);
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {
@@ -37,7 +45,8 @@ const BookingViewContainer = ({ bookingType, setViewMore }: Props) => {
             page,
             true
           );
-          setBookings([...bookings, ...bookingResult.bookings]);
+          setCanLoadMore(bookingResult.canLoadMore);
+          dispatch(handleSetUpcomingBookings([...bookingResult.bookings]));
           break;
         }
         case BookingTypes.pending: {
@@ -46,7 +55,8 @@ const BookingViewContainer = ({ bookingType, setViewMore }: Props) => {
             page,
             null
           );
-          setBookings([...bookings, ...bookingResult.bookings]);
+          setCanLoadMore(bookingResult.canLoadMore);
+          dispatch(handleSetPendingBookings([...bookingResult.bookings]));
           break;
         }
         case BookingTypes.cancelled: {
@@ -55,7 +65,8 @@ const BookingViewContainer = ({ bookingType, setViewMore }: Props) => {
             page,
             false
           );
-          setBookings([...bookings, ...bookingResult.bookings]);
+          setCanLoadMore(bookingResult.canLoadMore);
+          dispatch(handleSetCancelledBookings([...bookingResult.bookings]));
           break;
         }
         case BookingTypes.completed: {
@@ -63,13 +74,35 @@ const BookingViewContainer = ({ bookingType, setViewMore }: Props) => {
             userDetails?.memberId!,
             page
           );
-          setBookings([...bookings, ...bookingResult.bookings]);
+          setCanLoadMore(bookingResult.canLoadMore);
+          dispatch(handleSetCompletedBookings([...bookingResult.bookings]));
           break;
         }
       }
       setLoading(false);
     })();
   }, []);
+
+  useEffect(() => {
+    switch (bookingType) {
+      case BookingTypes.upcoming: {
+        setBookings(bookingData.upcoming);
+        break;
+      }
+      case BookingTypes.pending: {
+        setBookings(bookingData.pending);
+        break;
+      }
+      case BookingTypes.cancelled: {
+        setBookings(bookingData.cancelled);
+        break;
+      }
+      case BookingTypes.completed: {
+        setBookings(bookingData.completed);
+        break;
+      }
+    }
+  }, [loading, bookingData]);
 
   const getTitle = () => {
     switch (bookingType) {
@@ -168,15 +201,17 @@ const BookingViewContainer = ({ bookingType, setViewMore }: Props) => {
                   </div>
                 ))}
               </div>
-              <div className="d-flex flex-row justify-content-center">
-                <Button
-                  className="mt-2 mx-3 black-button px-5"
-                  onClick={() => setViewMore(bookingType)}
-                  title="View more"
-                >
-                  <h4>View more</h4>
-                </Button>
-              </div>
+              {canLoadMore ? (
+                <div className="d-flex flex-row justify-content-center">
+                  <Button
+                    className="mt-2 mx-3 black-button px-5"
+                    onClick={() => setViewMore(bookingType)}
+                    title="View more"
+                  >
+                    <h4>View more</h4>
+                  </Button>
+                </div>
+              ) : null}
             </>
           ) : (
             <InfoBanner className="fade-in mb-2 mx-3">

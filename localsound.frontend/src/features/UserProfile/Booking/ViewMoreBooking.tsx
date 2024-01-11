@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { BookingTypes } from "../../../app/model/enums/BookingTypes";
 import { BookingModel } from "./../../../app/model/dto/booking.model";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
@@ -13,6 +13,14 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Button } from "react-bootstrap";
 import { Icon } from "semantic-ui-react";
 import useFixMissingScroll from "../../../common/hooks/UseLoadMoreWithoutScroll";
+import {
+  handleResetBookingOverviewData,
+  handleSetCancelledBookings,
+  handleSetCompletedBookings,
+  handleSetPendingBookings,
+  handleSetUpcomingBookings,
+} from "../../../app/redux/actions/pageDataSlice";
+import InfoBanner from "../../../common/banner/InfoBanner";
 
 interface Props {
   bookingType: BookingTypes;
@@ -20,13 +28,20 @@ interface Props {
 }
 
 const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
+  const userDetails = useSelector((state: State) => state.user.userDetails);
+  const bookingData = useSelector((state: State) => state.pageData.bookingData);
   const [bookings, setBookings] = useState<BookingModel[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const [page, setPage] = useState(0);
   const [canLoadMore, setCanLoadMore] = useState(false);
-  const userDetails = useSelector((state: State) => state.user.userDetails);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch(handleResetBookingOverviewData());
+    };
+  }, []);
 
   const getMoreBookings = async () => {
     try {
@@ -39,7 +54,12 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
             true
           );
           setCanLoadMore(bookingResult.canLoadMore);
-          setBookings([...bookings, ...bookingResult.bookings]);
+          dispatch(
+            handleSetUpcomingBookings([
+              ...bookingData.upcoming,
+              ...bookingResult.bookings,
+            ])
+          );
           break;
         }
         case BookingTypes.pending: {
@@ -49,7 +69,12 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
             null
           );
           setCanLoadMore(bookingResult.canLoadMore);
-          setBookings([...bookings, ...bookingResult.bookings]);
+          dispatch(
+            handleSetPendingBookings([
+              ...bookingData.pending,
+              ...bookingResult.bookings,
+            ])
+          );
           break;
         }
         case BookingTypes.cancelled: {
@@ -59,7 +84,12 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
             false
           );
           setCanLoadMore(bookingResult.canLoadMore);
-          setBookings([...bookings, ...bookingResult.bookings]);
+          dispatch(
+            handleSetCancelledBookings([
+              ...bookingData.cancelled,
+              ...bookingResult.bookings,
+            ])
+          );
           break;
         }
         case BookingTypes.completed: {
@@ -68,7 +98,12 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
             page + 1
           );
           setCanLoadMore(bookingResult.canLoadMore);
-          setBookings([...bookings, ...bookingResult.bookings]);
+          dispatch(
+            handleSetCompletedBookings([
+              ...bookingData.completed,
+              ...bookingResult.bookings,
+            ])
+          );
           break;
         }
       }
@@ -85,6 +120,7 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
   });
 
   useLayoutEffect(() => {
+    dispatch(handleResetBookingOverviewData());
     (async () => {
       setLoading(true);
       switch (bookingType) {
@@ -95,7 +131,7 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
             true
           );
           setCanLoadMore(bookingResult.canLoadMore);
-          setBookings([...bookings, ...bookingResult.bookings]);
+          dispatch(handleSetUpcomingBookings([...bookingResult.bookings]));
           break;
         }
         case BookingTypes.pending: {
@@ -105,7 +141,7 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
             null
           );
           setCanLoadMore(bookingResult.canLoadMore);
-          setBookings([...bookings, ...bookingResult.bookings]);
+          dispatch(handleSetPendingBookings([...bookingResult.bookings]));
           break;
         }
         case BookingTypes.cancelled: {
@@ -115,7 +151,7 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
             false
           );
           setCanLoadMore(bookingResult.canLoadMore);
-          setBookings([...bookings, ...bookingResult.bookings]);
+          dispatch(handleSetCancelledBookings([...bookingResult.bookings]));
           break;
         }
         case BookingTypes.completed: {
@@ -124,13 +160,34 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
             page
           );
           setCanLoadMore(bookingResult.canLoadMore);
-          setBookings([...bookings, ...bookingResult.bookings]);
+          dispatch(handleSetCompletedBookings([...bookingResult.bookings]));
           break;
         }
       }
       setLoading(false);
     })();
   }, []);
+
+  useEffect(() => {
+    switch (bookingType) {
+      case BookingTypes.upcoming: {
+        setBookings(bookingData.upcoming);
+        break;
+      }
+      case BookingTypes.pending: {
+        setBookings(bookingData.pending);
+        break;
+      }
+      case BookingTypes.cancelled: {
+        setBookings(bookingData.cancelled);
+        break;
+      }
+      case BookingTypes.completed: {
+        setBookings(bookingData.completed);
+        break;
+      }
+    }
+  }, [bookingData]);
 
   const getTitle = () => {
     switch (bookingType) {
@@ -158,6 +215,19 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
             <span className="black-highlight">Completed</span>
           </h3>
         );
+    }
+  };
+
+  const getInfoBannerText = () => {
+    switch (bookingType) {
+      case BookingTypes.pending:
+        return "You currently have no pending bookings.";
+      case BookingTypes.completed:
+        return "You currently have no completed bookings.";
+      case BookingTypes.cancelled:
+        return "You currently have no cancelled bookings.";
+      case BookingTypes.upcoming:
+        return "You currently have no upcoming bookings.";
     }
   };
 
@@ -197,20 +267,33 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
             hasMore={canLoadMore}
             loader={<></>}
           >
-            {bookings.map((booking, index) => (
-              <div
-                key={index}
-                className="px-3 col-12 mb-2"
-                onClick={() => OpenBookingInfo(booking)}
-              >
-                <BookingSummary
-                  booking={booking}
-                  type={bookingType}
-                  user={userDetails!}
-                />
-              </div>
-            ))}
+            {bookings.map((booking, index) => {
+              return (
+                <div
+                  key={index}
+                  className="px-3 col-12 mb-2"
+                  onClick={() => OpenBookingInfo(booking)}
+                >
+                  <BookingSummary
+                    booking={booking}
+                    type={bookingType}
+                    user={userDetails!}
+                  />
+                </div>
+              );
+            })}
           </InfiniteScroll>
+        ) : !loading ? (
+          <InfoBanner className="fade-in mb-2 mx-3">
+            <div className="d-flex flex-row justify-content-center align-items-center">
+              <Icon
+                name="calendar"
+                size="small"
+                className="follower-icon d-flex align-items-center justify-content-center"
+              />
+              <div className="ml-2">{getInfoBannerText()}</div>
+            </div>
+          </InfoBanner>
         ) : null}
       </>
       {loading ? (
