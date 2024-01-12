@@ -8,13 +8,17 @@ interface Props {
 }
 
 const NotificationItem = ({ notification }: Props) => {
-  const deleteNotification = async () => {};
+  const deleteNotification = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+  };
 
   return (
     <div className={`notification-item fade-in`}>
       <Button
         className="transparent-button cancel-notification-btn"
-        onClick={async () => await deleteNotification()}
+        onClick={async (e) => await deleteNotification(e)}
       >
         <h4>
           <Icon

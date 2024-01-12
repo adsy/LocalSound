@@ -32,7 +32,9 @@ const NotificationsContainer = () => {
     } catch (err: any) {
       //TODO: Do something on error
     }
-    history.push(notification.redirectUrl);
+    if (notification.redirectUrl) {
+      history.push(notification.redirectUrl);
+    }
   };
 
   const getMoreNotifications = async () => {
@@ -84,7 +86,9 @@ const NotificationsContainer = () => {
             ) : null}
           </>
         ) : (
-          <div className="notification-empty">You have no notifications.</div>
+          <div className="notification-empty d-flex flex-row align-items-center justify-content-center">
+            <h4>You currently have no notifications</h4>
+          </div>
         )}
       </div>
     </>

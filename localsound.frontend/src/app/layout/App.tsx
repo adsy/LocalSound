@@ -24,7 +24,10 @@ import MusicPlayer from "../../features/MusicPlayer/MusicPlayer";
 import BookingsOverview from "../../features/UserProfile/Booking/BookingsOverview";
 import InPageLoadingComponent from "./InPageLoadingComponent";
 import signalHub from "../../api/signalR";
-import { handleResetNotificationState } from "../redux/actions/notificationSlice";
+import {
+  handleHideNotificationContainer,
+  handleResetNotificationState,
+} from "../redux/actions/notificationSlice";
 import TopNavbar from "./TopNavBar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -34,6 +37,7 @@ const App = () => {
   const dispatch = useDispatch();
   const userDetails = useSelector((state: State) => state.user?.userDetails);
   const appLoading = useSelector((state: State) => state.app.appLoading);
+  const notificationData = useSelector((state: State) => state.notifications);
   const player = useSelector((state: State) => state.player);
 
   const useUnload = (fn: any) => {
@@ -108,6 +112,11 @@ const App = () => {
       <div
         id="app-layout"
         className="d-flex flex-column w-100 justify-content-center"
+        onClick={() => {
+          if (notificationData.notificationContainerVisible) {
+            dispatch(handleHideNotificationContainer());
+          }
+        }}
       >
         <Route
           path={"/(.+)"}
