@@ -107,7 +107,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<List<Notification>>> GetUserNotificationsAsync(Guid userId, int page)
+        public async Task<ServiceResponse<List<Notification>>> GetUserNotificationsAsync(Guid userId)
         {
             try
             {
@@ -117,7 +117,6 @@ namespace localsound.backend.Infrastructure.Repositories
                     .ThenInclude(x => x.Images)
                     .Where(x => x.NotificationReceiverId == userId)
                     .OrderByDescending(x => x.CreatedOn)
-                    .Skip(page * 10)
                     .Take(10)
                     .ToListAsync();
 

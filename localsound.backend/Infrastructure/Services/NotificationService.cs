@@ -117,7 +117,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<NotificationListResponseDto>> GetMoreUserNotifications(Guid userId, string memberId, int page)
+        public async Task<ServiceResponse<NotificationListResponseDto>> GetMoreUserNotifications(Guid userId, string memberId)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var notifications = await _notificationRepository.GetUserNotificationsAsync(userId, page);
+                var notifications = await _notificationRepository.GetUserNotificationsAsync(userId);
 
                 if (!notifications.IsSuccessStatusCode || notifications.ReturnData == null)
                 {
@@ -177,7 +177,7 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var notifications = await _notificationRepository.GetUserNotificationsAsync(userId, 0);
+                var notifications = await _notificationRepository.GetUserNotificationsAsync(userId);
 
                 if (!notifications.IsSuccessStatusCode || notifications.ReturnData == null)
                 {

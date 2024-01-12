@@ -4,5 +4,6 @@ export interface NotificationState {
   notificationList: NotificationModel[];
   canLoadMore: boolean;
   notificationContainerVisible: boolean;
-  page: number;
+  deletingIds: string[];
+  initialLoad: boolean;
 }

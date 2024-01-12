@@ -5,7 +5,8 @@ const initialState: NotificationState = {
   notificationList: [],
   canLoadMore: false,
   notificationContainerVisible: false,
-  page: 0,
+  deletingIds: [],
+  initialLoad: false,
 };
 export const notificationSlice = createSlice({
   name: "notifications",
@@ -18,9 +19,6 @@ export const notificationSlice = createSlice({
       ];
       state.notificationList = clone;
       state.canLoadMore = action.payload.canLoadMore;
-      if (action.payload.canLoadMore) {
-        state.page += 1;
-      }
     },
     handleResetNotificationState: () => initialState,
     handleSaveNotification: (state = initialState, action) => {
@@ -43,6 +41,15 @@ export const notificationSlice = createSlice({
     handleUpdateNotifications: (state = initialState, action) => {
       state.notificationList = action.payload;
     },
+    handleAddDeletingId: (state = initialState, action) => {
+      state.deletingIds.push(action.payload);
+    },
+    handleUpdateDeletingIds: (state = initialState, action) => {
+      state.deletingIds = action.payload;
+    },
+    handleUpdateInitialLoad: (state = initialState) => {
+      state.initialLoad = true;
+    },
   },
 });
 
@@ -54,6 +61,9 @@ export const {
   handleHideNotificationContainer,
   handleRemoveNotification,
   handleUpdateNotifications,
+  handleAddDeletingId,
+  handleUpdateDeletingIds,
+  handleUpdateInitialLoad,
 } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

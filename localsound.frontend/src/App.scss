@@ -1898,6 +1898,10 @@ i.large.icon {
     height: 40px;
     background-color: $white100;
     border-radius: 4px;
+    p {
+      font-size: 15px;
+      font-weight: 1000;
+    }
   }
 
   .notification-item-container:first-of-type {

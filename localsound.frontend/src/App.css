@@ -2026,6 +2026,10 @@ i.large.icon {
   background-color: #f1f1f1;
   border-radius: 4px;
 }
+#notifications-container .notification-empty p {
+  font-size: 15px;
+  font-weight: 1000;
+}
 #notifications-container .notification-item-container:first-of-type {
   border-radius: 5px 5px 0px 0px;
 }

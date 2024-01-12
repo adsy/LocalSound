@@ -8,6 +8,7 @@ import { NotificationModel } from "../app/model/dto/notification.model";
 import {
   StoreSaveNotification,
   StoreSaveNotifications,
+  StoreUpdateNotificationInitialLoad,
 } from "../app/redux/store/store";
 import NotificationPopUp from "../common/components/Notification/NotificationPopUp";
 import { CreateNotification } from "../app/model/dto/create-booking-created-notification.model";
@@ -38,6 +39,7 @@ const createSignalConnection = () => {
     "LoadNotifications",
     (notifications: NotificationListResponseModel) => {
       StoreSaveNotifications(notifications);
+      StoreUpdateNotificationInitialLoad();
     }
   );
 

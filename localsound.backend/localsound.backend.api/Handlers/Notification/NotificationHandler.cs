@@ -31,7 +31,7 @@ namespace localsound.backend.api.Handlers.Notification
 
         public async Task<ServiceResponse<NotificationListResponseDto>> Handle(GetMoreNotificationsQuery request, CancellationToken cancellationToken)
         {
-            return await _notificationService.GetMoreUserNotifications(request.AppUserId, request.MemberId, request.Page);
+            return await _notificationService.GetMoreUserNotifications(request.AppUserId, request.MemberId);
         }
 
         public async Task<ServiceResponse> Handle(DeleteNotificationCommand request, CancellationToken cancellationToken)

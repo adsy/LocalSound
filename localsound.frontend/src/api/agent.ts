@@ -56,7 +56,7 @@ const onRefreshed = () => {
 axiosApiInstance.interceptors.response.use(
   async (response: AxiosResponse) => {
     if (import.meta.env.MODE === "development") {
-      await sleep(3000);
+      await sleep(2000);
     }
     return response;
   },
@@ -249,9 +249,9 @@ const Bookings = {
 };
 
 const Notifications = {
-  getMoreNotifications: (memberId: string, page: number) =>
+  getMoreNotifications: (memberId: string) =>
     requests.get<NotificationListResponseModel>(
-      `notifications/member/${memberId}/get-more-notifications?page=${page}`
+      `notifications/member/${memberId}/get-more-notifications`
     ),
   removeNotification: (memberId: string, notificationId: string) =>
     requests.delete(
