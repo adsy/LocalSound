@@ -40,6 +40,9 @@ export const notificationSlice = createSlice({
       );
       state.notificationList = otherNotifications;
     },
+    handleUpdateNotifications: (state = initialState, action) => {
+      state.notificationList = action.payload;
+    },
   },
 });
 
@@ -50,6 +53,7 @@ export const {
   handleShowNotificationContainer,
   handleHideNotificationContainer,
   handleRemoveNotification,
+  handleUpdateNotifications,
 } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

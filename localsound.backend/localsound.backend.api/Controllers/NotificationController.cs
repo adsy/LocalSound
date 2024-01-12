@@ -1,5 +1,7 @@
-﻿using localsound.backend.api.Queries.Notifications;
+﻿using localsound.backend.api.Commands.Notification;
+using localsound.backend.api.Queries.Notifications;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 
 namespace localsound.backend.api.Controllers
 {
@@ -24,6 +26,25 @@ namespace localsound.backend.api.Controllers
             }
 
             return Ok(result.ReturnData);
+        }
+
+        [HttpDelete]
+        [Route("member/{memberId}/notification/{notificationId}/delete-notification")]
+        public async Task<ActionResult> DeleteNotification(string memberId, Guid notificationId)
+        {
+            var result = await Mediator.Send(new DeleteNotificationCommand
+            {
+                UserId = CurrentUser.AppUserId,
+                MemberId = memberId,
+                NotificationId = notificationId
+            });
+
+            if (!result.IsSuccessStatusCode)
+            {
+                return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
+            }
+
+            return Ok();
         }
     }
 }

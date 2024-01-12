@@ -49,6 +49,38 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
+        public async Task<ServiceResponse> DeleteUserNotificationAsync(Guid userId, Guid notificationId)
+        {
+            try
+            {
+                var notification = await _dbContext.Notification.FirstOrDefaultAsync(x => x.NotificationReceiverId == userId && x.NotificationId == notificationId);
+
+                if (notification == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.NotFound)
+                    {
+                        ServiceResponseMessage = "An error occured delete your notification, please try again..."
+                    }; ;
+                }
+
+                _dbContext.Notification.Remove(notification);
+
+                await _dbContext.SaveChangesAsync();
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch(Exception e)
+            {
+                var errorMessage = $"{nameof(NotificationRepository)} - {nameof(DeleteUserNotificationAsync)} - {e.Message}";
+                _logger.LogError(e, errorMessage);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured delete your notification, please try again..."
+                }; ;
+            }
+        }
+
         public async Task<ServiceResponse<Notification>> GetUserNotificationAsync(Guid notificationId)
         {
             try

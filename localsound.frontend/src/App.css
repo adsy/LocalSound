@@ -603,8 +603,40 @@ h6 .purple-highlight:before {
   background-color: white;
   color: #232323;
 }
-#landing-page .image-example {
-  height: 550px;
+#landing-page .landing-page-carousel {
+  position: relative;
+  height: 500px;
+  width: 700px !important;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+#landing-page .landing-page-carousel .image-example {
+  position: absolute;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+#landing-page .landing-page-carousel .image-example.visible {
+  opacity: 1;
+  visibility: inherit;
+  transform: translateX(0px) !important;
+}
+#landing-page .landing-page-carousel .image-example.left-2 {
+  transform: translateX(-1500px) !important;
+  opacity: 0;
+}
+#landing-page .landing-page-carousel .image-example.left-1 {
+  transform: translateX(-750px) !important;
+  opacity: 0;
+}
+#landing-page .landing-page-carousel .image-example.right-1 {
+  transform: translateX(750px) !important;
+  opacity: 0;
+}
+#landing-page .landing-page-carousel .image-example.right-2 {
+  transform: translateX(-1500px) !important;
+  opacity: 0;
+}
+#landing-page .active {
+  background-color: #6d69fa !important;
 }
 
 i.large.icon {
@@ -782,6 +814,12 @@ i.large.icon {
 
 .transparent-button h4 {
   color: #001514;
+}
+
+.transparent-button.disabled {
+  opacity: 0.5;
+  background-color: unset !important;
+  border: unset !important;
 }
 
 .black-button {

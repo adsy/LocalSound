@@ -454,8 +454,51 @@ $end: 10;
     @include container;
   }
 
-  .image-example {
-    height: 550px;
+  .landing-page-carousel {
+    position: relative;
+    height: 500px;
+    width: 700px !important;
+    overflow-x: hidden;
+    overflow-y: hidden;
+
+    .image-example {
+      position: absolute;
+      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+
+      &.visible {
+        opacity: 1;
+        visibility: inherit;
+        transform: translateX(0px) !important;
+      }
+
+      &.left-2 {
+        transform: translateX(-1500px) !important;
+        opacity: 0;
+        // visibility: hidden;
+      }
+
+      &.left-1 {
+        transform: translateX(-750px) !important;
+        opacity: 0;
+        // visibility: hidden;
+      }
+
+      &.right-1 {
+        transform: translateX(750px) !important;
+        opacity: 0;
+        // visibility: hidden;
+      }
+
+      &.right-2 {
+        transform: translateX(-1500px) !important;
+        opacity: 0;
+        // visibility: hidden;
+      }
+    }
+  }
+
+  .active {
+    background-color: $purple100 !important;
   }
 }
 
@@ -644,6 +687,13 @@ i.large.icon {
   h4 {
     color: $black200;
   }
+}
+
+.transparent-button.disabled {
+  opacity: 0.5;
+  background-color: unset !important;
+  border: unset !important;
+  // color: white;
 }
 
 .black-button {

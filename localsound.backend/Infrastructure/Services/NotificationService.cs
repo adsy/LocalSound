@@ -3,7 +3,6 @@ using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Domain.Model.Dto.Response;
-using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
 using Microsoft.Extensions.Logging;
@@ -79,6 +78,41 @@ namespace localsound.backend.Infrastructure.Services
                 return new ServiceResponse<NotificationCreatedResponseDto>(HttpStatusCode.InternalServerError)
                 {
                     ServiceResponseMessage = $"Error occured creating booking created notification for member:{receiverMemberId}"
+                };
+            }
+        }
+
+        public async Task<ServiceResponse> DeleteUserNotification(Guid userId, string memberId, Guid notificationId)
+        {
+            try
+            {
+                var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
+
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                {
+                    return new ServiceResponse<NotificationListResponseDto>(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = $"Error occured getting your notifications, please try again..."
+                    };
+                }
+
+                var deleteResult = await _notificationRepository.DeleteUserNotificationAsync(userId, notificationId);
+
+                if (!deleteResult.IsSuccessStatusCode)
+                {
+                    return deleteResult;
+                }
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch(Exception e)
+            {
+                var errorMessage = $"{nameof(NotificationService)} - {nameof(DeleteUserNotification)} - {e.Message}";
+                _logger.LogError(e, errorMessage);
+
+                return new ServiceResponse<NotificationListResponseDto>(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = $"Error occured deleting your notification, please try again..."
                 };
             }
         }

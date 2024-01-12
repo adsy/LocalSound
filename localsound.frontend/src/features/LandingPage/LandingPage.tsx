@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import LandingPageBanner from "./LandingPageBanner";
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useState } from "react";
 import { State } from "../../app/model/redux/state";
 import { useHistory } from "react-router-dom";
 import Login from "../../features/Authentication/Login/Login";
@@ -15,8 +15,11 @@ import BookingsExample from "../../assets/bookingsExample.png";
 
 const LandingPage = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
+  const [visibleImageIndex, setVisibleImageIndex] = useState(0);
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const images = [ProfileExample, UploadsExample, BookingsExample];
 
   useLayoutEffect(() => {
     if (userDetails && userDetails.emailConfirmed) {
@@ -53,6 +56,16 @@ const LandingPage = () => {
     }
   };
 
+  const getImageCarouselClass = (visibleImageIndex: number, index: number) => {
+    const positions = [
+      ["visible", "right-1", "right-2"],
+      ["left-1", "visible", "right-1"],
+      ["left-2", "left-1", "visible"],
+    ];
+
+    return positions[visibleImageIndex][index] || "unknown";
+  };
+
   return (
     <div id="landing-page" className="fade-in">
       <LandingPageBanner />
@@ -85,8 +98,8 @@ const LandingPage = () => {
       </div>
       <div className="text-align-justify mb-5 component-container">
         <div>
-          <div className="d-flex flex-row">
-            <div className="d-flex flex-column justify-content-center pr-5">
+          <div className="d-flex flex-row justify-content-between">
+            <div className="d-flex flex-column justify-content-center pr-5 col-5">
               <h4 className="mb-0">Welcome to your artist's playground! </h4>
               <h1 className="search-text">GET YOUR PROFILE OUT THERE</h1>
               <p>
@@ -102,12 +115,46 @@ const LandingPage = () => {
                 time to amplify your presence in the music scene!
               </p>
             </div>
-            <Image src={ProfileExample} className="image-example" />
+            <div className="d-flex flex-column">
+              <div className="landing-page-carousel d-flex flex-row">
+                {images.map((image, index) => (
+                  <Image
+                    src={image}
+                    className={`image-example ${getImageCarouselClass(
+                      visibleImageIndex,
+                      index
+                    )}`}
+                  />
+                ))}
+              </div>
+              <div className="d-flex flex-row justify-content-center carousel-buttons">
+                <Button
+                  className={`white-button mr-2 ${
+                    visibleImageIndex === 0 ? "active" : ""
+                  }`}
+                  onClick={() => setVisibleImageIndex(0)}
+                ></Button>
+                <Button
+                  className={`white-button ${
+                    visibleImageIndex === 1 ? "active" : ""
+                  }`}
+                  onClick={() => setVisibleImageIndex(1)}
+                ></Button>
+                <Button
+                  className={`white-button ml-2 ${
+                    visibleImageIndex === 2 ? "active" : ""
+                  }`}
+                  onClick={() => setVisibleImageIndex(2)}
+                ></Button>
+              </div>
+            </div>
           </div>
         </div>
         <div className="mt-5">
-          <div className="d-flex flex-row">
-            <Image src={UploadsExample} className="image-example" />
+          <div className="d-flex flex-row justify-content-between">
+            <Placeholder>
+              <Placeholder.Image style={{ height: 450, width: 850 }} />
+            </Placeholder>
             <div className="d-flex flex-column justify-content-center pl-5">
               <h4 className="mb-0 text-right">
                 Discover the heartbeat of your local music scene effortlessly on
@@ -146,7 +193,9 @@ const LandingPage = () => {
                 time to amplify your presence in the music scene!
               </p>
             </div>
-            <Image src={BookingsExample} className="image-example" />
+            <Placeholder>
+              <Placeholder.Image style={{ height: 450, width: 850 }} />
+            </Placeholder>
           </div>
         </div>
       </div>

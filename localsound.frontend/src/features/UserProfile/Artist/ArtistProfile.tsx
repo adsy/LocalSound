@@ -142,42 +142,45 @@ const ArtistProfile = ({
   };
 
   const updateArtistFollow = async (follow: boolean) => {
-    setUpdatingFollowingStatus(true);
     if (loggedInUser) {
-      setUpdateFollowerError(null);
-      try {
-        if (follow) {
-          await agent.Artist.followArtist(
-            loggedInUser.memberId,
-            artistDetails.memberId
-          );
-          setIsFollowing(true);
+      if (!updatingFollowingStatus) {
+        setUpdatingFollowingStatus(true);
+        setUpdateFollowerError(null);
+        try {
+          if (follow) {
+            await agent.Artist.followArtist(
+              loggedInUser.memberId,
+              artistDetails.memberId
+            );
+            setIsFollowing(true);
 
-          dispatch(
-            handleUpdateProfileFollowCount(artistDetails.followerCount + 1)
-          );
-          signalHub.createNotification({
-            receiverMemberId: artistDetails.memberId,
-            message: `${
-              loggedInUser.customerType === CustomerTypes.NonArtist
-                ? `${loggedInUser.firstName} ${loggedInUser.lastName} has started following you.`
-                : `${loggedInUser.name} has started following you.`
-            }`,
-            redirectUrl: "",
-          });
-        } else {
-          await agent.Artist.unfollowArtist(
-            loggedInUser.memberId,
-            artistDetails.memberId
-          );
-          setIsFollowing(false);
-          dispatch(
-            handleUpdateProfileFollowCount(artistDetails.followerCount - 1)
-          );
+            dispatch(
+              handleUpdateProfileFollowCount(artistDetails.followerCount + 1)
+            );
+            signalHub.createNotification({
+              receiverMemberId: artistDetails.memberId,
+              message: `${
+                loggedInUser.customerType === CustomerTypes.NonArtist
+                  ? `${loggedInUser.firstName} ${loggedInUser.lastName} has started following you.`
+                  : `${loggedInUser.name} has started following you.`
+              }`,
+              redirectUrl: "",
+            });
+          } else {
+            await agent.Artist.unfollowArtist(
+              loggedInUser.memberId,
+              artistDetails.memberId
+            );
+            setIsFollowing(false);
+            dispatch(
+              handleUpdateProfileFollowCount(artistDetails.followerCount - 1)
+            );
+          }
+        } catch (err: any) {
+          console.log(err);
+          setUpdateFollowerError(err);
         }
-      } catch (err: any) {
-        console.log(err);
-        setUpdateFollowerError(err);
+        setUpdatingFollowingStatus(false);
       }
     } else {
       dispatch(
@@ -188,7 +191,6 @@ const ArtistProfile = ({
         })
       );
     }
-    setUpdatingFollowingStatus(false);
   };
 
   const generateCoverImage = () => {
