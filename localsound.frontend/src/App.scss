@@ -580,7 +580,7 @@ i.large.icon {
 }
 
 #offcanvasNavbar-expand-false {
-  background-color: $black100;
+  background-color: $white100;
   .navbar-title {
     font-size: 32px !important;
     @include text-shadow;
@@ -607,8 +607,9 @@ i.large.icon {
     padding-left: 10px;
     padding-top: 13px;
     padding-bottom: 13px;
-    transition: background-color 0.2s ease-in, border-radius 0.2s ease-in;
-    background-color: $black100;
+    transition: background-color 0.2s ease-in;
+    background-color: $black200;
+    border-radius: 10px;
   }
 
   .sidebar-text {
@@ -622,8 +623,7 @@ i.large.icon {
   }
 
   .sidebar-item:hover {
-    background-color: $black200;
-    border-radius: 10px;
+    background-color: $purple100;
   }
 
   .sidebar-link-container {
@@ -1886,13 +1886,13 @@ i.large.icon {
   right: 45px;
   border-radius: 5px 5px 5px 5px;
   width: 350px;
-  border: 1px solid $black100;
+  border: 1px solid $black200;
   position: absolute;
   padding: 1px;
-  background-color: $black100;
+  background-color: $black200;
   max-height: 600px;
   overflow-y: auto;
-  scrollbar-color: $purple100 $black100;
+  scrollbar-color: $purple100 $black200;
 
   .notification-empty {
     height: 40px;

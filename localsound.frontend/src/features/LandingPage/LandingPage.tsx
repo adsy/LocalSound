@@ -119,6 +119,7 @@ const LandingPage = () => {
               <div className="landing-page-carousel d-flex flex-row">
                 {images.map((image, index) => (
                   <Image
+                    key={index}
                     src={image}
                     className={`image-example ${getImageCarouselClass(
                       visibleImageIndex,

@@ -7,19 +7,16 @@ import {
   handleHideNotificationContainer,
   handleRemoveNotification,
   handleSaveNotifications,
-  handleUpdateDeletingIds,
-  handleUpdateNotifications,
 } from "../../../app/redux/actions/notificationSlice";
 import agent from "../../../api/agent";
 import { Button } from "react-bootstrap";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 const NotificationsContainer = () => {
   const notificationData = useSelector((state: State) => state.notifications);
   const userData = useSelector((state: State) => state.user.userDetails);
   const [loading, setLoading] = useState(false);
-  const [deleting, setDeleting] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -27,42 +24,6 @@ const NotificationsContainer = () => {
   const notificationList = useRef<NotificationModel[]>();
   deletingIds.current = notificationData.deletingIds;
   notificationList.current = notificationData.notificationList;
-
-  const deleteNextNotification = async () => {
-    try {
-      await agent.Notifications.removeNotification(
-        userData?.memberId!,
-        notificationData.deletingIds[0]
-      );
-      var clone = [...notificationList.current!];
-      var newList = clone.filter(
-        (x) => x.notificationId !== notificationData.deletingIds[0]
-      );
-      dispatch(handleUpdateNotifications(newList));
-      var deletingClone = deletingIds.current!.filter(
-        (x) => x !== notificationData.deletingIds[0]
-      );
-      dispatch(handleUpdateDeletingIds(deletingClone));
-    } catch (err: any) {
-      // TODO: do something on error
-    }
-    setDeleting(false);
-  };
-
-  useEffect(() => {
-    (async () => {
-      if (notificationData.deletingIds.length > 0 && !deleting) {
-        setDeleting(true);
-        await deleteNextNotification();
-      }
-    })();
-  }, [notificationData.deletingIds, deleting]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(handleUpdateDeletingIds([]));
-    };
-  }, []);
 
   const clickNotification = async (notification: NotificationModel) => {
     dispatch(handleHideNotificationContainer());
@@ -123,7 +84,11 @@ const NotificationsContainer = () => {
                 }`}
                 onClick={async () => await clickNotification(notification)}
               >
-                <NotificationItem notification={notification} />
+                <NotificationItem
+                  notification={notification}
+                  deletingIds={deletingIds}
+                  notificationList={notificationList}
+                />
               </div>
             ))}
           </>

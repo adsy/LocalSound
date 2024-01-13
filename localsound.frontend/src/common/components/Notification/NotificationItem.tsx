@@ -5,37 +5,61 @@ import { Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../app/model/redux/state";
-import { handleUpdateDeletingIds } from "../../../app/redux/actions/notificationSlice";
+import {
+  handleUpdateDeletingIds,
+  handleUpdateNotifications,
+} from "../../../app/redux/actions/notificationSlice";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
+import agent from "../../../api/agent";
 
 interface Props {
   notification: NotificationModel;
+  deletingIds: React.MutableRefObject<string[] | undefined>;
+  notificationList: React.MutableRefObject<NotificationModel[] | undefined>;
 }
 
-const NotificationItem = ({ notification }: Props) => {
+const NotificationItem = ({
+  notification,
+  deletingIds,
+  notificationList,
+}: Props) => {
+  const userData = useSelector((state: State) => state.user.userDetails);
   const [deleting, setDeleting] = useState(false);
-  const deletingIds = useSelector(
-    (state: State) => state.notifications.deletingIds
-  );
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (
-      deletingIds.findIndex((x) => x === notification.notificationId) === -1
-    ) {
-      setDeleting(false);
-    } else {
-      setDeleting(true);
+  const deleteNextNotification = async () => {
+    try {
+      await agent.Notifications.removeNotification(
+        userData?.memberId!,
+        notification.notificationId
+      );
+      var clone = [...notificationList.current!];
+      var newList = clone.filter(
+        (x) => x.notificationId !== notification.notificationId
+      );
+      dispatch(handleUpdateNotifications(newList));
+      var deletingClone = deletingIds.current!.filter(
+        (x) => x !== notification.notificationId
+      );
+      dispatch(handleUpdateDeletingIds(deletingClone));
+    } catch (err: any) {
+      // TODO: do something on error
     }
-  }, [deletingIds]);
+    setDeleting(false);
+  };
 
   const deleteNotification = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    setDeleting(true);
     e.stopPropagation();
     dispatch(
-      handleUpdateDeletingIds([...deletingIds, notification.notificationId])
+      handleUpdateDeletingIds([
+        ...deletingIds.current!,
+        notification.notificationId,
+      ])
     );
+    await deleteNextNotification();
   };
 
   return (
