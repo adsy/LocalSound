@@ -103,9 +103,7 @@ const TopNavbar = () => {
                     }
                   }}
                 ></div>
-                {notificationData.notificationContainerVisible ? (
-                  <NotificationsContainer />
-                ) : null}
+                <NotificationsContainer />
                 <Navbar.Toggle
                   aria-controls={`offcanvasNavbar-expand-false`}
                   className=" mr-1 align-self-center"

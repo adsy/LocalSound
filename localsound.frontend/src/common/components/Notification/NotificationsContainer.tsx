@@ -98,7 +98,11 @@ const NotificationsContainer = () => {
   };
 
   return (
-    <>
+    <div
+      className={`${
+        notificationData.notificationContainerVisible ? "" : "d-none"
+      }`}
+    >
       <div className="arrow-up fade-in"></div>
       <div id="notifications-container" className="fade-in">
         {!notificationData.initialLoad ? (
@@ -151,7 +155,7 @@ const NotificationsContainer = () => {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
