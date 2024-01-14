@@ -17,12 +17,14 @@ const NotificationPopUp = ({ notification }: Props) => {
 
   const clickNotification = async () => {
     try {
-      agent.Notifications.clickNotification(
-        userData?.memberId!,
-        notification.notificationId
-      );
+      if (!notification.notificationViewed) {
+        agent.Notifications.clickNotification(
+          userData?.memberId!,
+          notification.notificationId
+        );
 
-      dispatch(handleUpdateNotificationToViewed(notification));
+        dispatch(handleUpdateNotificationToViewed(notification));
+      }
 
       if (notification.redirectUrl) {
         history.push(notification.redirectUrl);

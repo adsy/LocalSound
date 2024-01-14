@@ -6,5 +6,6 @@ namespace localsound.backend.Domain.Model.Dto.Response
     {
         public List<NotificationDto> NotificationList { get; set; }
         public bool CanLoadMore { get; set; }
+        public int UnreadNotificationCount { get; set; }
     }
 }

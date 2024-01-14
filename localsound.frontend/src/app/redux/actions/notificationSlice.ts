@@ -6,11 +6,15 @@ const initialState: NotificationState = {
   canLoadMore: false,
   notificationContainerVisible: false,
   initialLoad: false,
+  unreadNotifications: 0,
 };
 export const notificationSlice = createSlice({
   name: "notifications",
   initialState,
   reducers: {
+    handleSaveUnreadNotificationCount: (state = initialState, action) => {
+      state.unreadNotifications = action.payload;
+    },
     handleSaveNotifications: (state = initialState, action) => {
       var clone = [
         ...state.notificationList,
@@ -23,6 +27,7 @@ export const notificationSlice = createSlice({
     handleSaveNotification: (state = initialState, action) => {
       var clone = [action.payload, ...state.notificationList];
       state.notificationList = clone;
+      state.unreadNotifications += 1;
     },
     handleShowNotificationContainer: (state = initialState) => {
       state.notificationContainerVisible = true;
@@ -40,6 +45,7 @@ export const notificationSlice = createSlice({
 
       if (notification) {
         notification.notificationViewed = true;
+        state.unreadNotifications -= 1;
       }
     },
   },
@@ -53,6 +59,7 @@ export const {
   handleHideNotificationContainer,
   handleUpdateInitialLoad,
   handleUpdateNotificationToViewed,
+  handleSaveUnreadNotificationCount,
 } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

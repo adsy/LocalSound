@@ -20,6 +20,7 @@ import {
   handleShowNotificationContainer,
 } from "../redux/actions/notificationSlice";
 import InPageLoadingComponent from "./InPageLoadingComponent";
+import UnreadNotificationCount from "../../common/components/Notification/UnreadNotificationCount";
 
 const TopNavbar = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
@@ -96,7 +97,7 @@ const TopNavbar = () => {
             {userDetails ? (
               <div className="d-flex flex-row align-items-center position-relative">
                 <div
-                  className="notification-icon mr-2"
+                  className="notification-icon mr-2 position-relative"
                   onClick={() => {
                     if (notificationData.notificationContainerVisible) {
                       dispatch(handleHideNotificationContainer());
@@ -104,7 +105,11 @@ const TopNavbar = () => {
                       dispatch(handleShowNotificationContainer());
                     }
                   }}
-                ></div>
+                >
+                  {notificationData.unreadNotifications > 0 ? (
+                    <UnreadNotificationCount />
+                  ) : null}
+                </div>
                 <NotificationsContainer />
                 <Navbar.Toggle
                   aria-controls={`offcanvasNavbar-expand-false`}

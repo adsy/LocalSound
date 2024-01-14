@@ -190,6 +190,8 @@ namespace localsound.backend.Infrastructure.Services
                     return new ServiceResponse<NotificationListResponseDto>(HttpStatusCode.InternalServerError);
                 }
 
+                var unreadCount = await _notificationRepository.GetUnreadNotificationsCountAsync(userId);
+
                 var notificationList = notifications.ReturnData.Select(x => new NotificationDto
                 {
                     NotificationId = x.NotificationId, 
@@ -207,7 +209,8 @@ namespace localsound.backend.Infrastructure.Services
                     ReturnData = new NotificationListResponseDto
                     {
                         NotificationList = notificationList,
-                        CanLoadMore = notificationList.Count == 10
+                        CanLoadMore = notificationList.Count == 10,
+                        UnreadNotificationCount = unreadCount.ReturnData
                     }
                 };
             }

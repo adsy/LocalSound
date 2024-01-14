@@ -5,4 +5,5 @@ export interface NotificationState {
   canLoadMore: boolean;
   notificationContainerVisible: boolean;
   initialLoad: boolean;
+  unreadNotifications: number;
 }

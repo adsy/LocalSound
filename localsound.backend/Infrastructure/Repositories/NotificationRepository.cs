@@ -75,6 +75,26 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
+        public async Task<ServiceResponse<int>> GetUnreadNotificationsCountAsync(Guid userId)
+        {
+            try
+            {
+                var count = await _dbContext.Notification.CountAsync(x => x.NotificationReceiverId == userId && !x.NotificationViewed);
+
+                return new ServiceResponse<int>(HttpStatusCode.OK)
+                {
+                    ReturnData = count
+                };
+            }
+            catch(Exception e)
+            {
+                var errorMessage = $"{nameof(NotificationRepository)} - {nameof(GetUserNotificationsAsync)} - {e.Message}";
+                _logger.LogError(e, errorMessage);
+
+                return new ServiceResponse<int>(HttpStatusCode.InternalServerError);
+            }
+        }
+
         public async Task<ServiceResponse<Notification>> GetUserNotificationAsync(Guid notificationId)
         {
             try

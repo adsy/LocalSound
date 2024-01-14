@@ -18,6 +18,7 @@ import NotificationReducer, {
   handleHideNotificationContainer,
   handleSaveNotification,
   handleSaveNotifications,
+  handleSaveUnreadNotificationCount,
   handleUpdateInitialLoad,
 } from "../actions/notificationSlice";
 import { NotificationModel } from "../../model/dto/notification.model";
@@ -72,6 +73,9 @@ export const StoreSaveNotifications = (
   notifications: NotificationListResponseModel
 ) => {
   store.dispatch(handleSaveNotifications(notifications));
+  store.dispatch(
+    handleSaveUnreadNotificationCount(notifications.unreadNotificationCount)
+  );
 };
 
 export const StoreSaveNotification = (notification: NotificationModel) => {

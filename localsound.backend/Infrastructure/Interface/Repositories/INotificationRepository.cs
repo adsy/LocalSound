@@ -9,5 +9,6 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
         Task<ServiceResponse<List<Notification>>> GetUserNotificationsAsync(Guid userId, int page);
         Task<ServiceResponse<Notification>> GetUserNotificationAsync(Guid notificationId);
         Task<ServiceResponse> ClickNotificationAsync(Guid userId, Guid notificationId);
+        Task<ServiceResponse<int>> GetUnreadNotificationsCountAsync(Guid userId);
     }
 }
