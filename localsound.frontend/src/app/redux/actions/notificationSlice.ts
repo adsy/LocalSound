@@ -33,6 +33,15 @@ export const notificationSlice = createSlice({
     handleUpdateInitialLoad: (state = initialState) => {
       state.initialLoad = true;
     },
+    handleUpdateNotificationToViewed: (state = initialState, action) => {
+      var notification = state.notificationList.find(
+        (x) => x.notificationId == action.payload.notificationId
+      );
+
+      if (notification) {
+        notification.notificationViewed = true;
+      }
+    },
   },
 });
 
@@ -43,6 +52,7 @@ export const {
   handleShowNotificationContainer,
   handleHideNotificationContainer,
   handleUpdateInitialLoad,
+  handleUpdateNotificationToViewed,
 } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

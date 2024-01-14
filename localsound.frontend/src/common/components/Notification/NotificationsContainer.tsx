@@ -6,39 +6,39 @@ import { NotificationModel } from "../../../app/model/dto/notification.model";
 import {
   handleHideNotificationContainer,
   handleSaveNotifications,
+  handleUpdateNotificationToViewed,
 } from "../../../app/redux/actions/notificationSlice";
 import agent from "../../../api/agent";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const NotificationsContainer = () => {
   const notificationData = useSelector((state: State) => state.notifications);
   const userData = useSelector((state: State) => state.user.userDetails);
-  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const history = useHistory();
   const dispatch = useDispatch();
 
   const clickNotification = async (notification: NotificationModel) => {
-    dispatch(handleHideNotificationContainer());
     try {
-      // await agent.Notifications.removeNotification(notification.notificationId);
-      // dispatch(
-      //   handleRemoveNotification({
-      //     notificationId: notification.notificationId,
-      //   })
-      // );
+      agent.Notifications.clickNotification(
+        userData?.memberId!,
+        notification.notificationId
+      );
+
+      dispatch(handleUpdateNotificationToViewed(notification));
+
+      if (notification.redirectUrl) {
+        history.push(notification.redirectUrl);
+      }
     } catch (err: any) {
       //TODO: Do something on error
     }
-    if (notification.redirectUrl) {
-      history.push(notification.redirectUrl);
-    }
+    dispatch(handleHideNotificationContainer());
   };
 
   const getMoreNotifications = async () => {
-    setLoading(true);
     try {
       var notificationResponse = await agent.Notifications.getMoreNotifications(
         userData?.memberId!,
@@ -48,7 +48,6 @@ const NotificationsContainer = () => {
     } catch (err: any) {
       //TODO: do something on error
     }
-    // setLoading(false);
     setPage(page + 1);
   };
 
@@ -96,24 +95,12 @@ const NotificationsContainer = () => {
                 </div>
               ))}
             </InfiniteScroll>
-            {/* {loading ? (
-              <div className="notification-item-container "></div>
-            ) : null} */}
           </>
         ) : (
           <>
-            {loading ? (
-              <div
-                className="notification-item-container"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <InPageLoadingComponent width={80} height={80} />
-              </div>
-            ) : (
-              <div className="notification-empty d-flex flex-row align-items-center justify-content-center">
-                <p>You currently have 0 notifications...</p>
-              </div>
-            )}
+            <div className=" fade-in notification-empty d-flex flex-row align-items-center justify-content-center">
+              <p>You currently have 0 notifications...</p>
+            </div>
           </>
         )}
       </div>

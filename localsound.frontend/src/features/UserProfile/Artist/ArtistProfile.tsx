@@ -161,7 +161,7 @@ const ArtistProfile = ({
               receiverMemberId: artistDetails.memberId,
               message: `${
                 loggedInUser.customerType === CustomerTypes.NonArtist
-                  ? `${loggedInUser.firstName} ${loggedInUser.lastName} has started following you. Click here to check out their profile!`
+                  ? `${loggedInUser.firstName} ${loggedInUser.lastName} has started following you. Check out their profile!`
                   : `${loggedInUser.name} has started following you.`
               }`,
               redirectUrl: `/${loggedInUser.profileUrl}`,

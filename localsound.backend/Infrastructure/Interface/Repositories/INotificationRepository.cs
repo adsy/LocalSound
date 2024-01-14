@@ -8,5 +8,6 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
         Task<ServiceResponse<Notification>> CreateNotificationAsync(Guid creatorUserId, Guid receiverUserId, string message, string redirectUrl);
         Task<ServiceResponse<List<Notification>>> GetUserNotificationsAsync(Guid userId, int page);
         Task<ServiceResponse<Notification>> GetUserNotificationAsync(Guid notificationId);
+        Task<ServiceResponse> ClickNotificationAsync(Guid userId, Guid notificationId);
     }
 }

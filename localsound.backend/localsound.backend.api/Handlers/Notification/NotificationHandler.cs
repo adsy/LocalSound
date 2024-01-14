@@ -9,7 +9,8 @@ namespace localsound.backend.api.Handlers.Notification
 {
     public class NotificationHandler : IRequestHandler<GetNotificationsQuery, ServiceResponse<NotificationListResponseDto>>,
         IRequestHandler<CreateNotificationCommand, ServiceResponse<NotificationCreatedResponseDto>>,
-        IRequestHandler<GetMoreNotificationsQuery, ServiceResponse<NotificationListResponseDto>>
+        IRequestHandler<GetMoreNotificationsQuery, ServiceResponse<NotificationListResponseDto>>,
+        IRequestHandler<ClickNotificationCommand, ServiceResponse>
     {
         private readonly INotificationService _notificationService;
 
@@ -31,6 +32,11 @@ namespace localsound.backend.api.Handlers.Notification
         public async Task<ServiceResponse<NotificationListResponseDto>> Handle(GetMoreNotificationsQuery request, CancellationToken cancellationToken)
         {
             return await _notificationService.GetMoreUserNotifications(request.AppUserId, request.MemberId, request.Page);
+        }
+
+        public async Task<ServiceResponse> Handle(ClickNotificationCommand request, CancellationToken cancellationToken)
+        {
+            return await _notificationService.ClickNotification(request.AppUserId, request.MemberId, request.NotificationId);
         }
     }
 }

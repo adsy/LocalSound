@@ -25,6 +25,41 @@ namespace localsound.backend.Infrastructure.Services
             _accountRepository = accountRepository;
         }
 
+        public async Task<ServiceResponse> ClickNotification(Guid userId, string memberId, Guid notificationId)
+        {
+            try
+            {
+                var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
+
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = $"updating notification ${notificationId} for member:{memberId}"
+                    };
+                }
+
+                var updateResult = await _notificationRepository.ClickNotificationAsync(userId, notificationId);
+
+                if (!updateResult.IsSuccessStatusCode)
+                {
+                    return updateResult;
+                }
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch(Exception e)
+            {
+                var errorMessage = $"{nameof(NotificationService)} - {nameof(ClickNotification)} - {e.Message}";
+                _logger.LogError(e, errorMessage);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = $"Error occured updating notification ${notificationId} for member:{memberId}"
+                };
+            }
+        }
+
         public async Task<ServiceResponse<NotificationCreatedResponseDto>> CreateNotification(Guid creatorUserId, string receiverMemberId, string message, string redirectUrl)
         {
             try

@@ -1,24 +1,35 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { NotificationModel } from "../../../app/model/dto/notification.model";
 import userImg from "../../../assets/placeholder.png";
+import agent from "../../../api/agent";
+import { State } from "../../../app/model/redux/state";
+import { handleUpdateNotificationToViewed } from "../../../app/redux/actions/notificationSlice";
 
 interface Props {
   notification: NotificationModel;
 }
 
 const NotificationPopUp = ({ notification }: Props) => {
+  const userData = useSelector((state: State) => state.user.userDetails);
   const history = useHistory();
   const dispatch = useDispatch();
 
   const clickNotification = async () => {
-    history.push(notification.redirectUrl);
-    // await agent.Notification.clickNotification(
-    //   notification.notificationId
-    // ).then(() => {
-    //   dispatch(handleRemoveNotification(notification.notificationId));
-    //   dispatch(handleSelectStore(notification.storeId));
-    // });
+    try {
+      agent.Notifications.clickNotification(
+        userData?.memberId!,
+        notification.notificationId
+      );
+
+      dispatch(handleUpdateNotificationToViewed(notification));
+
+      if (notification.redirectUrl) {
+        history.push(notification.redirectUrl);
+      }
+    } catch (err: any) {
+      //TODO: Do something on error
+    }
   };
 
   return (

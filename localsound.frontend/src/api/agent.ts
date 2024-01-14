@@ -56,7 +56,7 @@ const onRefreshed = () => {
 axiosApiInstance.interceptors.response.use(
   async (response: AxiosResponse) => {
     if (import.meta.env.MODE === "development") {
-      // await sleep(10000);
+      await sleep(2000);
     }
     return response;
   },
@@ -253,9 +253,10 @@ const Notifications = {
     requests.get<NotificationListResponseModel>(
       `notifications/member/${memberId}/get-more-notifications?page=${page}`
     ),
-  removeNotification: (memberId: string, notificationId: string) =>
-    requests.delete(
-      `notifications/member/${memberId}/notification/${notificationId}/delete-notification`
+  clickNotification: (memberId: string, notificationId: string) =>
+    requests.put(
+      `notifications/member/${memberId}/notification/${notificationId}/click-notification`,
+      {}
     ),
 };
 

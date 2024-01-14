@@ -27,5 +27,24 @@ namespace localsound.backend.api.Controllers
 
             return Ok(result.ReturnData);
         }
+
+        [HttpPut]
+        [Route("member/{memberId}/notification/{notificationId}/click-notification")]
+        public async Task<ActionResult> ClickNotification(string memberId, Guid notificationId)
+        {
+            var result = await Mediator.Send(new ClickNotificationCommand
+            {
+                AppUserId = CurrentUser.AppUserId,
+                MemberId = memberId,
+                NotificationId = notificationId
+            });
+
+            if (!result.IsSuccessStatusCode)
+            {
+                return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
+            }
+
+            return Ok();
+        }
     }
 }
