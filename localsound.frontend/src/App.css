@@ -702,18 +702,21 @@ i.large.icon {
 }
 #navbar .notification-icon .unread-count {
   position: absolute;
-  background: #6d69fa;
+  background: #f1f1f1;
   top: -15px;
   right: 15px;
-  width: 32px;
-  height: 32px;
+  width: 29px;
+  height: 29px;
   text-align: center;
-  padding-top: 5px;
+  padding-top: 3px;
   padding-left: 1px;
   border-radius: 200px;
   font-size: 14px;
   font-weight: 800;
-  border: 2px solid #001514;
+  border: 2px solid #6d69fa;
+}
+#navbar .notification-icon .unread-count h4 {
+  color: #001514;
 }
 #navbar .navbar-toggler {
   margin-right: 0 !important;
@@ -2053,7 +2056,7 @@ i.large.icon {
   border-radius: 5px 5px 0px 0px;
 }
 #notifications-container .notification-item-container:last-of-type {
-  border-radius: 0px 0px 5px 5px;
+  border-radius: 0px 0px 3px 3px;
 }
 #notifications-container .notification-item-container:hover {
   background-color: #e2e8f0 !important;
@@ -2069,7 +2072,7 @@ i.large.icon {
   display: flex;
   flex-direction: column;
   min-height: 53px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 2px solid #e2e8f0;
   position: relative;
   width: 100%;
   min-height: 65px;
@@ -2088,7 +2091,6 @@ i.large.icon {
   font-weight: 800;
   padding-right: 10px;
 }
-
 /* width */
 #notifications-container::-webkit-scrollbar {
   width: 10px;
@@ -2109,6 +2111,53 @@ i.large.icon {
   background: #6d69fa;
 }
 
+@media only screen and (max-width: 991px) {
+  #app-layout {
+    flex-direction: column !important;
+  }
+  .container {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .profile-photo.banner-photo {
+    display: block !important;
+  }
+  #user-profile .left-col {
+    border-right: unset !important;
+  }
+  .app-holder {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  #navbar .navbar-toggler {
+    border: unset !important;
+  }
+  .ui.container {
+    width: unset !important;
+  }
+  #track .track-image {
+    width: 130px !important;
+    height: 130px !important;
+  }
+  #track .track-name {
+    font-size: 14px !important;
+  }
+}
+@media only screen and (max-width: 469px) {
+  #navbar .navbar-logo {
+    border-right: unset;
+    height: 40px;
+    width: 40px;
+  }
+  #navbar .navbar-logo-container {
+    border-right: unset;
+  }
+  #navbar .navbar-title {
+    font-size: 18px;
+  }
+}
 @keyframes move-words {
   0% {
     left: 100%;
@@ -2159,53 +2208,6 @@ i.large.icon {
   }
   to {
     opacity: 1;
-  }
-}
-@media only screen and (max-width: 991px) {
-  #app-layout {
-    flex-direction: column !important;
-  }
-  .container {
-    padding-left: 0px;
-    padding-right: 0px;
-  }
-  .profile-photo.banner-photo {
-    display: block !important;
-  }
-  #user-profile .left-col {
-    border-right: unset !important;
-  }
-  .app-holder {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-}
-@media only screen and (max-width: 768px) {
-  #navbar .navbar-toggler {
-    border: unset !important;
-  }
-  .ui.container {
-    width: unset !important;
-  }
-  #track .track-image {
-    width: 130px !important;
-    height: 130px !important;
-  }
-  #track .track-name {
-    font-size: 14px !important;
-  }
-}
-@media only screen and (max-width: 469px) {
-  #navbar .navbar-logo {
-    border-right: unset;
-    height: 40px;
-    width: 40px;
-  }
-  #navbar .navbar-logo-container {
-    border-right: unset;
-  }
-  #navbar .navbar-title {
-    font-size: 18px;
   }
 }
 

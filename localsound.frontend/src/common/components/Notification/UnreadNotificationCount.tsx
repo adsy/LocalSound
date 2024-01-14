@@ -8,7 +8,7 @@ const UnreadNotificationCount = () => {
 
   return (
     <div className="unread-count fade-in">
-      <h4 className="mb-0">{unreadCount > 99 ? "99+" : unreadCount}</h4>
+      <p className="mb-0">{unreadCount > 99 ? "99+" : unreadCount}</p>
     </div>
   );
 };
