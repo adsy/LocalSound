@@ -9,8 +9,7 @@ namespace localsound.backend.api.Handlers.Notification
 {
     public class NotificationHandler : IRequestHandler<GetNotificationsQuery, ServiceResponse<NotificationListResponseDto>>,
         IRequestHandler<CreateNotificationCommand, ServiceResponse<NotificationCreatedResponseDto>>,
-        IRequestHandler<GetMoreNotificationsQuery, ServiceResponse<NotificationListResponseDto>>,
-        IRequestHandler<DeleteNotificationCommand, ServiceResponse>
+        IRequestHandler<GetMoreNotificationsQuery, ServiceResponse<NotificationListResponseDto>>
     {
         private readonly INotificationService _notificationService;
 
@@ -31,12 +30,7 @@ namespace localsound.backend.api.Handlers.Notification
 
         public async Task<ServiceResponse<NotificationListResponseDto>> Handle(GetMoreNotificationsQuery request, CancellationToken cancellationToken)
         {
-            return await _notificationService.GetMoreUserNotifications(request.AppUserId, request.MemberId);
-        }
-
-        public async Task<ServiceResponse> Handle(DeleteNotificationCommand request, CancellationToken cancellationToken)
-        {
-            return await _notificationService.DeleteUserNotification(request.UserId, request.MemberId, request.NotificationId);
+            return await _notificationService.GetMoreUserNotifications(request.AppUserId, request.MemberId, request.Page);
         }
     }
 }

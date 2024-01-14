@@ -6,6 +6,7 @@ interface Props {
   height?: number;
   width?: number;
   withContainer?: boolean;
+  containerClass?: string;
 }
 
 const InPageLoadingComponent = ({
@@ -14,13 +15,14 @@ const InPageLoadingComponent = ({
   height = 50,
   width = 50,
   withContainer = false,
+  containerClass,
 }: Props) => {
   return (
     <div
       id="loading-component"
       className={`fade-in d-flex flex-column justify-content-center ${
         withContainer ? "component-container" : null
-      }`}
+      } ${containerClass}`}
     >
       <img
         src={spinner}

@@ -6,4 +6,5 @@ export interface NotificationModel {
   redirectUrl: string;
   notificationViewed: boolean;
   userImage: string;
+  createdOn: Date;
 }

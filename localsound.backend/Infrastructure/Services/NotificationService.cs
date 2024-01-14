@@ -65,7 +65,8 @@ namespace localsound.backend.Infrastructure.Services
                             NotificationMessage = notification.ReturnData.NotificationMessage,
                             RedirectUrl = notification.ReturnData.RedirectUrl,
                             NotificationViewed = notification.ReturnData.NotificationViewed,
-                            UserImage = !notification.ReturnData.NotificationCreator.Images.ToList().Any() ? null : notification.ReturnData.NotificationCreator.Images.ToList().Find(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage)?.AccountImageUrl
+                            UserImage = !notification.ReturnData.NotificationCreator.Images.ToList().Any() ? null : notification.ReturnData.NotificationCreator.Images.ToList().Find(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage)?.AccountImageUrl,
+                            CreatedOn = notification.ReturnData.CreatedOn
                         }
                     }
                 };
@@ -82,7 +83,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse> DeleteUserNotification(Guid userId, string memberId, Guid notificationId)
+        public async Task<ServiceResponse<NotificationListResponseDto>> GetMoreUserNotifications(Guid userId, string memberId, int page)
         {
             try
             {
@@ -96,42 +97,7 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var deleteResult = await _notificationRepository.DeleteUserNotificationAsync(userId, notificationId);
-
-                if (!deleteResult.IsSuccessStatusCode)
-                {
-                    return deleteResult;
-                }
-
-                return new ServiceResponse(HttpStatusCode.OK);
-            }
-            catch(Exception e)
-            {
-                var errorMessage = $"{nameof(NotificationService)} - {nameof(DeleteUserNotification)} - {e.Message}";
-                _logger.LogError(e, errorMessage);
-
-                return new ServiceResponse<NotificationListResponseDto>(HttpStatusCode.InternalServerError)
-                {
-                    ServiceResponseMessage = $"Error occured deleting your notification, please try again..."
-                };
-            }
-        }
-
-        public async Task<ServiceResponse<NotificationListResponseDto>> GetMoreUserNotifications(Guid userId, string memberId)
-        {
-            try
-            {
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
-
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
-                {
-                    return new ServiceResponse<NotificationListResponseDto>(HttpStatusCode.InternalServerError)
-                    {
-                        ServiceResponseMessage = $"Error occured getting your notifications, please try again..."
-                    };
-                }
-
-                var notifications = await _notificationRepository.GetUserNotificationsAsync(userId);
+                var notifications = await _notificationRepository.GetUserNotificationsAsync(userId, page);
 
                 if (!notifications.IsSuccessStatusCode || notifications.ReturnData == null)
                 {
@@ -149,6 +115,7 @@ namespace localsound.backend.Infrastructure.Services
                     NotificationMessage = x.NotificationMessage,
                     RedirectUrl = x.RedirectUrl,
                     NotificationViewed = x.NotificationViewed,
+                    CreatedOn = x.CreatedOn,
                     UserImage = x.NotificationCreator.Images.ToList().Any() ? x.NotificationCreator.Images.ToList().Find(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage)?.AccountImageUrl : null
                 }).ToList();
 
@@ -177,7 +144,7 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var notifications = await _notificationRepository.GetUserNotificationsAsync(userId);
+                var notifications = await _notificationRepository.GetUserNotificationsAsync(userId, 0);
 
                 if (!notifications.IsSuccessStatusCode || notifications.ReturnData == null)
                 {
@@ -196,6 +163,7 @@ namespace localsound.backend.Infrastructure.Services
                     NotificationMessage = x.NotificationMessage,
                     RedirectUrl = x.RedirectUrl,
                     NotificationViewed = x.NotificationViewed,
+                    CreatedOn = x.CreatedOn,
                     UserImage = x.NotificationCreator.Images.ToList().Any() ? x.NotificationCreator.Images.ToList().Find(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage)?.AccountImageUrl : null
                 }).ToList();
 

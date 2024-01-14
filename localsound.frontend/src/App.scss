@@ -112,6 +112,10 @@ body {
   transform: translateY(-36px);
 }
 
+.br-0 {
+  border-radius: 0px !important;
+}
+
 h1 {
 }
 
@@ -1924,33 +1928,18 @@ i.large.icon {
 
   .notification-item {
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
     min-height: 53px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
     border-bottom: 1px solid $white300;
-    display: flex;
-    flex-direction: row;
     position: relative;
     width: 100%;
-    height: 70px;
+    min-height: 65px;
 
-    .cancel-notification-btn {
-      position: absolute;
-      top: 3px;
-      right: 5px;
-      width: 17px;
-      height: 17px;
-      .cancel-notification-icon {
-        position: absolute;
-        right: -5px;
-        top: -4px;
-        transition: font-size 0.3s ease-in-out;
-      }
-
-      .cancel-notification-icon:hover {
-        font-size: 16px;
-      }
+    .notification-date {
+      font-weight: 800;
+      font-size: 12px;
+      color: gray;
     }
 
     .notification-image {
@@ -1961,9 +1950,7 @@ i.large.icon {
       font-size: 16px;
       padding-left: 10px;
       font-weight: 800;
-      padding-right: 22px;
-      padding-top: 10px;
-      padding-bottom: 10px;
+      padding-right: 10px;
     }
   }
 }

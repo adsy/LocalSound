@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { handleSetUserDetails } from "../../../app/redux/actions/userSlice";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import ErrorBanner from "../../../common/banner/ErrorBanner";
+import { handleAppLoading } from "../../../app/redux/actions/applicationSlice";
 
 const ConfirmEmailPopUp = () => {
   const [reloadError, setReloadError] = useState(false);
@@ -26,6 +27,7 @@ const ConfirmEmailPopUp = () => {
       resetErrorState();
       var result = await agent.Authentication.confirmEmail(token);
       dispatch(handleSetUserDetails(result));
+      dispatch(handleAppLoading(false));
       dispatch(
         handleToggleModal({
           open: false,

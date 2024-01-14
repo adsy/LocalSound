@@ -161,10 +161,10 @@ const ArtistProfile = ({
               receiverMemberId: artistDetails.memberId,
               message: `${
                 loggedInUser.customerType === CustomerTypes.NonArtist
-                  ? `${loggedInUser.firstName} ${loggedInUser.lastName} has started following you.`
+                  ? `${loggedInUser.firstName} ${loggedInUser.lastName} has started following you. Click here to check out their profile!`
                   : `${loggedInUser.name} has started following you.`
               }`,
-              redirectUrl: "",
+              redirectUrl: `/${loggedInUser.profileUrl}`,
             });
           } else {
             await agent.Artist.unfollowArtist(

@@ -11,12 +11,13 @@ namespace localsound.backend.api.Controllers
     {
         [HttpGet]
         [Route("member/{memberId}/get-more-notifications")]
-        public async Task<ActionResult> GetMoreNotifications(string memberId, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetMoreNotifications([FromQuery] int page, string memberId, CancellationToken cancellationToken)
         {
             var result = await Mediator.Send(new GetMoreNotificationsQuery
             {
                 AppUserId = CurrentUser.AppUserId,
                 MemberId = memberId,
+                Page = page
             }, cancellationToken);
 
             if (!result.IsSuccessStatusCode)
@@ -25,25 +26,6 @@ namespace localsound.backend.api.Controllers
             }
 
             return Ok(result.ReturnData);
-        }
-
-        [HttpDelete]
-        [Route("member/{memberId}/notification/{notificationId}/delete-notification")]
-        public async Task<ActionResult> DeleteNotification(string memberId, Guid notificationId)
-        {
-            var result = await Mediator.Send(new DeleteNotificationCommand
-            {
-                UserId = CurrentUser.AppUserId,
-                MemberId = memberId,
-                NotificationId = notificationId
-            });
-
-            if (!result.IsSuccessStatusCode)
-            {
-                return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
-            }
-
-            return Ok();
         }
     }
 }

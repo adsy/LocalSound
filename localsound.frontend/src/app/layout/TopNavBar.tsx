@@ -16,6 +16,7 @@ import signalHub from "../../api/signalR";
 import NotificationsContainer from "../../common/components/Notification/NotificationsContainer";
 import {
   handleHideNotificationContainer,
+  handleResetNotificationState,
   handleShowNotificationContainer,
 } from "../redux/actions/notificationSlice";
 import InPageLoadingComponent from "./InPageLoadingComponent";
@@ -36,6 +37,7 @@ const TopNavbar = () => {
     signalHub.disconnectConnection();
     dispatch(handleResetUserState());
     dispatch(handleResetAppState());
+    dispatch(handleResetNotificationState());
     setShow(false);
     setSigningOut(false);
   };

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { AppState } from "../../model/redux/appState";
 
 const initialState: AppState = {
-  appLoading: false,
+  appLoading: true,
   userType: null,
 };
 export const applicationSlice = createSlice({

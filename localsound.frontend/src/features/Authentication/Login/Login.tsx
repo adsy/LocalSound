@@ -12,6 +12,7 @@ import { handleSetUserDetails } from "../../../app/redux/actions/userSlice";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import ConfirmEmailPopUp from "../ConfirmEmail/ConfirmEmailPopUp";
 import ErrorBanner from "../../../common/banner/ErrorBanner";
+import { handleAppLoading } from "../../../app/redux/actions/applicationSlice";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,6 +30,7 @@ const Login = () => {
 
       if (result.emailConfirmed) {
         dispatch(handleSetUserDetails(result));
+        dispatch(handleAppLoading(false));
         dispatch(
           handleToggleModal({
             open: false,

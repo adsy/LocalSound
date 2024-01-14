@@ -5,35 +5,30 @@ import { useHistory } from "react-router-dom";
 import { NotificationModel } from "../../../app/model/dto/notification.model";
 import {
   handleHideNotificationContainer,
-  handleRemoveNotification,
   handleSaveNotifications,
 } from "../../../app/redux/actions/notificationSlice";
 import agent from "../../../api/agent";
-import { Button } from "react-bootstrap";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const NotificationsContainer = () => {
   const notificationData = useSelector((state: State) => state.notifications);
   const userData = useSelector((state: State) => state.user.userDetails);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(0);
   const history = useHistory();
   const dispatch = useDispatch();
-
-  const deletingIds = useRef<string[]>();
-  const notificationList = useRef<NotificationModel[]>();
-  deletingIds.current = notificationData.deletingIds;
-  notificationList.current = notificationData.notificationList;
 
   const clickNotification = async (notification: NotificationModel) => {
     dispatch(handleHideNotificationContainer());
     try {
       // await agent.Notifications.removeNotification(notification.notificationId);
-      dispatch(
-        handleRemoveNotification({
-          notificationId: notification.notificationId,
-        })
-      );
+      // dispatch(
+      //   handleRemoveNotification({
+      //     notificationId: notification.notificationId,
+      //   })
+      // );
     } catch (err: any) {
       //TODO: Do something on error
     }
@@ -42,20 +37,19 @@ const NotificationsContainer = () => {
     }
   };
 
-  const getMoreNotifications = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.stopPropagation();
+  const getMoreNotifications = async () => {
     setLoading(true);
     try {
       var notificationResponse = await agent.Notifications.getMoreNotifications(
-        userData?.memberId!
+        userData?.memberId!,
+        page + 1
       );
       dispatch(handleSaveNotifications(notificationResponse));
     } catch (err: any) {
       //TODO: do something on error
     }
-    setLoading(false);
+    // setLoading(false);
+    setPage(page + 1);
   };
 
   return (
@@ -76,46 +70,49 @@ const NotificationsContainer = () => {
         ) : notificationData.initialLoad &&
           notificationData.notificationList.length > 0 ? (
           <>
-            {notificationData.notificationList.map((notification, index) => (
-              <div
-                key={index}
-                className={`notification-item-container ${
-                  !notification.notificationViewed ? "unviewed" : ""
-                }`}
-                onClick={async () => await clickNotification(notification)}
-              >
-                <NotificationItem
-                  notification={notification}
-                  deletingIds={deletingIds}
-                  notificationList={notificationList}
+            <InfiniteScroll
+              dataLength={notificationData.notificationList.length} //This is important field to render the next data
+              next={() => getMoreNotifications()}
+              hasMore={notificationData.canLoadMore}
+              loader={
+                <InPageLoadingComponent
+                  withContainer={true}
+                  width={50}
+                  height={50}
+                  containerClass="mt-0 br-0 pt-1 pb-1"
                 />
-              </div>
-            ))}
+              }
+              scrollableTarget={"notifications-container"}
+            >
+              {notificationData.notificationList.map((notification, index) => (
+                <div
+                  key={index}
+                  className={`notification-item-container ${
+                    !notification.notificationViewed ? "unviewed" : ""
+                  }`}
+                  onClick={async () => await clickNotification(notification)}
+                >
+                  <NotificationItem notification={notification} />
+                </div>
+              ))}
+            </InfiniteScroll>
+            {/* {loading ? (
+              <div className="notification-item-container "></div>
+            ) : null} */}
           </>
         ) : (
           <>
-            {!notificationData.canLoadMore ? (
-              <div className="notification-empty d-flex flex-row align-items-center justify-content-center">
-                <p>You currently have 0 notifications</p>
+            {loading ? (
+              <div
+                className="notification-item-container"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <InPageLoadingComponent width={80} height={80} />
               </div>
             ) : (
-              <>
-                <div className="notification-empty d-flex flex-row align-items-center justify-content-center">
-                  <p>You're at the end of the list but you still have more!</p>
-                </div>
-                {!loading ? (
-                  <div className="p-2">
-                    <Button
-                      className="black-button w-100"
-                      onClick={async (e) => await getMoreNotifications(e)}
-                    >
-                      <h4>Load more</h4>
-                    </Button>
-                  </div>
-                ) : (
-                  <InPageLoadingComponent width={30} height={30} />
-                )}
-              </>
+              <div className="notification-empty d-flex flex-row align-items-center justify-content-center">
+                <p>You currently have 0 notifications...</p>
+              </div>
             )}
           </>
         )}

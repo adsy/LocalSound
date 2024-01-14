@@ -9,5 +9,6 @@
         public string RedirectUrl { get; set; }
         public bool NotificationViewed { get; set; }
         public string UserImage { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }
