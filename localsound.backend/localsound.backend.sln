@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "localsound.backend.Infrastr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "localsound.backend.Persistence", "Persistence\localsound.backend.Persistence.csproj", "{EF00748F-C16A-4CF4-859E-B8AE5743503C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "localsound.CoreUpdates", "AzureFunctions\localsound.CoreUpdates\localsound.CoreUpdates.csproj", "{177BD20A-3954-495E-9437-A1C19718571F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "localsound.CoreUpdates", "AzureFunctions\localsound.CoreUpdates\localsound.CoreUpdates.csproj", "{177BD20A-3954-495E-9437-A1C19718571F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AzureFunctions", "AzureFunctions", "{A82588D4-5F1A-42BC-A36F-19CDAD66BA8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "localsound.common.package", "localsound.common.package\localsound.common.package.csproj", "{7B27039D-E41A-437F-BA05-01D42FFF3CAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{177BD20A-3954-495E-9437-A1C19718571F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{177BD20A-3954-495E-9437-A1C19718571F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{177BD20A-3954-495E-9437-A1C19718571F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B27039D-E41A-437F-BA05-01D42FFF3CAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B27039D-E41A-437F-BA05-01D42FFF3CAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B27039D-E41A-437F-BA05-01D42FFF3CAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B27039D-E41A-437F-BA05-01D42FFF3CAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
