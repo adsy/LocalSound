@@ -1,4 +1,4 @@
-﻿using localsound.CoreUpdates.Dto.Enum;
+﻿using LocalSound.Shared.Package.ServiceBus.Dto.Enum;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 

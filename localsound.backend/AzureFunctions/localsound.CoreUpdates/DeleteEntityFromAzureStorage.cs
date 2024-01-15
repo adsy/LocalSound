@@ -1,12 +1,12 @@
 using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
-using localsound.CoreUpdates.Dto;
-using localsound.CoreUpdates.Dto.Enum;
-using localsound.CoreUpdates.Dto.QueueMessage;
 using localsound.CoreUpdates.Services;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.ServiceBus;
+using LocalSound.Shared.Package.ServiceBus.Dto;
+using LocalSound.Shared.Package.ServiceBus.Dto.QueueMessage;
+using LocalSound.Shared.Package.ServiceBus.Dto.Enum;
 
 namespace localsound.CoreUpdates
 {

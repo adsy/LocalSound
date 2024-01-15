@@ -1,4 +1,4 @@
-﻿namespace localsound.CoreUpdates.Dto.Enum
+﻿namespace LocalSound.Shared.Package.ServiceBus.Dto.Enum
 {
     public enum DeleteEntityTypeEnum
     {

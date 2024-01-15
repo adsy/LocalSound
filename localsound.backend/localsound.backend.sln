@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "localsound.CoreUpdates", "A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AzureFunctions", "AzureFunctions", "{A82588D4-5F1A-42BC-A36F-19CDAD66BA8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "localsound.common.package", "localsound.common.package\localsound.common.package.csproj", "{7B27039D-E41A-437F-BA05-01D42FFF3CAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalSound.Shared.Package", "localsound.common.package\LocalSound.Shared.Package.csproj", "{7B27039D-E41A-437F-BA05-01D42FFF3CAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

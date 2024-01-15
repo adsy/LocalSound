@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace localsound.CoreUpdates.Dto
+﻿namespace LocalSound.Shared.Package.ServiceBus.Dto
 {
     public class DeleteAccountImageDto
     {

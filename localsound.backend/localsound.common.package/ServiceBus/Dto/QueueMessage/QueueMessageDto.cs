@@ -1,6 +1,6 @@
-﻿using localsound.CoreUpdates.Dto.Enum;
+﻿using LocalSound.Shared.Package.ServiceBus.Dto.Enum;
 
-namespace localsound.CoreUpdates.Dto.QueueMessage
+namespace LocalSound.Shared.Package.ServiceBus.Dto.QueueMessage
 {
     public class QueueMessageDto
     {
