@@ -50,7 +50,7 @@ namespace localsound.backend.Infrastructure.Services
                     {
                         UserId = appUserId,
                         AccountImageId = imageResult.ReturnData.AccountImageId,
-                        UploadLocation = imageResult.ReturnData.FileContent.FileLocation
+                        UploadLocation = imageResult.ReturnData.FileContent.FileLocation+imageResult.ReturnData.FileContent.FileExtensionType
                     }
                 };
 

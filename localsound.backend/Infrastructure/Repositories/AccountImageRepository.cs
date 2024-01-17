@@ -26,7 +26,7 @@ namespace localsound.backend.Infrastructure.Repositories
             {
                 var accountImage = await _dbContext.AccountImage
                     .Include(x => x.FileContent)
-                    .FirstOrDefaultAsync(x => x.AccountImageTypeId == imageType && x.AppUserId == appUserId);
+                    .FirstOrDefaultAsync(x => x.AccountImageTypeId == imageType && x.AppUserId == appUserId && !x.ToBeDeleted);
 
                 if (accountImage == null)
                 {
