@@ -20,7 +20,7 @@ namespace localsound.backend.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public async Task<ServiceResponse<string>> DeleteAccountImageAsync(AccountImageTypeEnum imageType, Guid appUserId)
+        public async Task<ServiceResponse<AccountImage>> MarkAccountImageToBeDeleted(AccountImageTypeEnum imageType, Guid appUserId)
         {
             try
             {
@@ -30,26 +30,24 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 if (accountImage == null)
                 {
-                    return new ServiceResponse<string>(HttpStatusCode.NotFound);
+                    return new ServiceResponse<AccountImage>(HttpStatusCode.NotFound);
                 }
 
-                var returnString = accountImage.FileContent.FileContentId.ToString() + accountImage.FileContent.FileExtensionType;
-
-                _dbContext.FileContent.Remove(accountImage.FileContent);
+                accountImage.ToBeDeleted = true;
 
                 await _dbContext.SaveChangesAsync();
 
-                return new ServiceResponse<string>(HttpStatusCode.OK)
+                return new ServiceResponse<AccountImage>(HttpStatusCode.OK)
                 {
-                    ReturnData = returnString
+                    ReturnData = accountImage
                 };
             }
             catch (Exception e)
             {
-                var message = $"{nameof(AccountImageRepository)} - {nameof(DeleteAccountImageAsync)} - {e.Message}";
+                var message = $"{nameof(AccountImageRepository)} - {nameof(MarkAccountImageToBeDeleted)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<string>(HttpStatusCode.InternalServerError);
+                return new ServiceResponse<AccountImage>(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -60,28 +58,25 @@ namespace localsound.backend.Infrastructure.Repositories
                 var accountImage = await _dbContext.AccountImage
                     .Include(x => x.FileContent)
                     .FirstOrDefaultAsync(x => x.AccountImageTypeId == imageType && x.AppUserId == appUserId);
-                
-                // Add new image in db if it doesnt exist
-                if (accountImage == null)
+
+
+                var fileContentId = Guid.NewGuid();
+
+                // create new file content
+                var fileContent = new FileContent
                 {
-                    var fileContentId = Guid.NewGuid();
+                    FileContentId = fileContentId,
+                    FileExtensionType = fileExt,
+                    FileLocation = fileLocation + $"/{fileContentId}"
+                };
+                accountImage = new AccountImage
+                {
+                    FileContent = fileContent,
+                    AppUserId = appUserId,
+                    AccountImageTypeId = imageType
+                };
 
-                    // create new file content
-                    var fileContent = new FileContent
-                    {
-                        FileContentId = fileContentId,
-                        FileExtensionType = fileExt,
-                        FileLocation = fileLocation+$"/{fileContentId}"
-                    };
-                    accountImage = new AccountImage
-                    {
-                        FileContent = fileContent,
-                        AppUserId = appUserId,
-                        AccountImageTypeId = imageType
-                    };
-
-                    await _dbContext.AccountImage.AddAsync(accountImage);
-                }
+                await _dbContext.AccountImage.AddAsync(accountImage);
 
                 return new ServiceResponse<AccountImage>(HttpStatusCode.OK)
                 {

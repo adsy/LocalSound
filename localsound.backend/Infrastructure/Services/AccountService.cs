@@ -401,14 +401,14 @@ namespace localsound.backend.Infrastructure.Services
                             MemberId = x.Follower.MemberId,
                             ProfileUrl = x.Follower.NonArtist != null ? x.Follower.NonArtist.ProfileUrl : x.Follower.Artist.ProfileUrl,
                             Name = x.Follower.NonArtist != null ? $"{x.Follower.NonArtist.FirstName} {x.Follower.NonArtist.LastName}" : x.Follower.Artist.Name,
-                            Images = _mapper.Map<List<AccountImageDto>>(x.Follower.Images)
+                            Images = _mapper.Map<List<AccountImageDto>>(x.Follower.Images.Where(x => !x.ToBeDeleted))
                         }).ToList() : 
                         result.ReturnData.Select(x => new UserSummaryDto
                         {
                             MemberId = x.Artist.User.MemberId,
                             ProfileUrl = x.Artist.ProfileUrl,
                             Name = x.Artist.Name,
-                            Images = _mapper.Map<List<AccountImageDto>>(x.Artist.User.Images)
+                            Images = _mapper.Map<List<AccountImageDto>>(x.Artist.User.Images.Where(x => !x.ToBeDeleted))
                         }).ToList(),
                         CanLoadMore = result.ReturnData.Count == 30
                     }

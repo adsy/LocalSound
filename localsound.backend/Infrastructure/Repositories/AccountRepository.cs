@@ -121,7 +121,7 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var accountImage = await _dbContext.AccountImage.FirstOrDefaultAsync(x => x.AppUserId == id && x.AccountImageTypeId == imageType);
+                var accountImage = await _dbContext.AccountImage.FirstOrDefaultAsync(x => x.AppUserId == id && x.AccountImageTypeId == imageType && !x.ToBeDeleted);
 
                 if (accountImage == null)
                 {
@@ -283,7 +283,14 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Select(x => new Artist
                     {
                         AppUserId = x.AppUserId,
-                        User = x.User,
+                        User = new AppUser
+                        {
+                            Id = x.User.Id,
+                            MemberId = x.User.MemberId,
+                            Images = x.User.Images.Where(x => !x.ToBeDeleted).ToList(),
+                            CustomerType = x.User.CustomerType,
+                            EmailConfirmed = x.User.EmailConfirmed
+                        },
                         Name = x.Name,
                         ProfileUrl = x.ProfileUrl,
                         Address = x.Address,
@@ -297,6 +304,7 @@ namespace localsound.backend.Infrastructure.Repositories
                         Equipment = x.Equipment,
                         Followers = x.Followers,
                         Packages = x.Packages.Where(x => x.IsAvailable).ToList(),
+                        
                     })
                     .FirstOrDefaultAsync(x => x.AppUserId == id);
 
@@ -340,7 +348,13 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Select(x => new Artist
                     {
                         AppUserId = x.AppUserId,
-                        User = x.User,
+                        User = new AppUser
+                        {
+                            Id = x.User.Id,
+                            MemberId = x.User.MemberId,
+                            Images = x.User.Images.Where(x => !x.ToBeDeleted).ToList(),
+                            CustomerType = x.User.CustomerType
+                        },
                         Name = x.Name,
                         ProfileUrl = x.ProfileUrl,
                         Address = x.Address,

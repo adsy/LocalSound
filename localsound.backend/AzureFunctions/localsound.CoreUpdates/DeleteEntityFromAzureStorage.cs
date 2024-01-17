@@ -21,7 +21,7 @@ namespace localsound.CoreUpdates
 
         [FunctionName("DeleteEntityFromAzureStorage")]
         public async Task Run(
-           [ServiceBusTrigger("queue", Connection = "ServiceBusConnection")]
+           [ServiceBusTrigger("queue", Connection = "deleteEntityQueue")]
            ServiceBusReceivedMessage message,
            ServiceBusMessageActions messageActions)
         {

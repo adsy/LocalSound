@@ -57,15 +57,6 @@ builder.Services.AddSingleton<BlobServiceClient>(x =>
     return _blobServiceClient;
 });
 
-builder.Services.AddSingleton<ServiceBusClient>(x =>
-{
-    var clientOptions = new ServiceBusClientOptions()
-    {
-        TransportType = ServiceBusTransportType.AmqpWebSockets
-    };
-    return new ServiceBusClient(serviceBusSettings.ConnectionString, clientOptions);
-});
-
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<IArtistService, ArtistService>();

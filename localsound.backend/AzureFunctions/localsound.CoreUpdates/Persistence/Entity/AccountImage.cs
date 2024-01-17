@@ -15,6 +15,7 @@ namespace localsound.CoreUpdates.Persistence.Entity
         [ForeignKey("FileContent")]
         public Guid FileContentId { get; set; }
         public string AccountImageUrl { get; set; }
+        public bool ToBeDeleted { get; set; }
 
         public virtual FileContent FileContent { get; set; }
     }

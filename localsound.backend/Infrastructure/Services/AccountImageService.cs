@@ -2,9 +2,13 @@
 using localsound.backend.Domain.Model;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
+using LocalSound.Shared.Package.ServiceBus.Dto;
+using LocalSound.Shared.Package.ServiceBus.Dto.Enum;
+using LocalSound.Shared.Package.ServiceBus.Dto.QueueMessage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using AccountImageTypeEnum = localsound.backend.Domain.Enum.AccountImageTypeEnum;
 
 namespace localsound.backend.Infrastructure.Services
 {
@@ -13,14 +17,16 @@ namespace localsound.backend.Infrastructure.Services
         private readonly IDbTransactionRepository _dbTransactionRepository;
         private readonly IAccountImageRepository _accountImageRepository;
         private readonly IBlobRepository _blobRepository;
+        private readonly IServiceBusRepository _serviceBusRepository;
         private readonly ILogger<AccountImageService> _logger;
 
-        public AccountImageService(IAccountImageRepository accountImageRepository, ILogger<AccountImageService> logger, IDbTransactionRepository dbTransactionRepository, IBlobRepository blobRepository)
+        public AccountImageService(IAccountImageRepository accountImageRepository, ILogger<AccountImageService> logger, IDbTransactionRepository dbTransactionRepository, IBlobRepository blobRepository, IServiceBusRepository serviceBusRepository)
         {
             _accountImageRepository = accountImageRepository;
             _logger = logger;
             _dbTransactionRepository = dbTransactionRepository;
             _blobRepository = blobRepository;
+            _serviceBusRepository = serviceBusRepository;
         }
 
         public async Task<ServiceResponse> DeleteAccountImageIfExists(AccountImageTypeEnum imageType, Guid appUserId)
@@ -29,19 +35,28 @@ namespace localsound.backend.Infrastructure.Services
             {
                 await _dbTransactionRepository.BeginTransactionAsync();
 
-                var fileLocation = $"[{appUserId}]/photos/imageType/{(int)imageType}";
+                var imageResult = await _accountImageRepository.MarkAccountImageToBeDeleted(imageType, appUserId);
 
-                // create database entries
-                var deleteImageResult = await _accountImageRepository.DeleteAccountImageAsync(imageType, appUserId);
-
-                if (!deleteImageResult.IsSuccessStatusCode || deleteImageResult.ReturnData == null)
+                if (!imageResult.IsSuccessStatusCode || imageResult.ReturnData == null)
                 {
                     return new ServiceResponse(HttpStatusCode.NotFound);
                 }
-                // upload to azure
-                var blobDeleteResult = await _blobRepository.DeleteBlobAsync(fileLocation + $"/{deleteImageResult.ReturnData}");
 
-                if (!blobDeleteResult.IsSuccessStatusCode)
+                // Add the delete entity message to be handled by azure function
+                var deleteMessage = new ServiceBusMessageDto<DeleteAccountImageDto>
+                {
+                    Command = DeleteEntityTypeEnum.DeleteAccountImage,
+                    Data = new DeleteAccountImageDto
+                    {
+                        UserId = appUserId,
+                        AccountImageId = imageResult.ReturnData.AccountImageId,
+                        UploadLocation = imageResult.ReturnData.FileContent.FileLocation
+                    }
+                };
+
+                var queueResult = await _serviceBusRepository.SendDeleteQueueEntry<ServiceBusMessageDto<DeleteAccountImageDto>>(deleteMessage);
+
+                if (!queueResult.IsSuccessStatusCode)
                 {
                     // If it fails here theres something wrong with Azure
                     return new ServiceResponse(HttpStatusCode.InternalServerError);
