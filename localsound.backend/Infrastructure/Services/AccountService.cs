@@ -338,7 +338,7 @@ namespace localsound.backend.Infrastructure.Services
                         returnDto.IsFollowing = false;
                     }
 
-                        return new ServiceResponse<IAppUserDto>(HttpStatusCode.OK)
+                    return new ServiceResponse<IAppUserDto>(HttpStatusCode.OK)
                     {
                         ReturnData = returnDto
                     };
