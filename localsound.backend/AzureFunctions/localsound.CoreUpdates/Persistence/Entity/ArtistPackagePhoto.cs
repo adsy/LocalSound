@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System;
 
-namespace localsound.backend.Domain.Model.Entity
+namespace localsound.CoreUpdates.Persistence.Entity
 {
     public class ArtistPackagePhoto
     {
@@ -12,7 +13,6 @@ namespace localsound.backend.Domain.Model.Entity
         public string PhotoUrl { get; set; }
         public bool ToBeDeleted { get; set; }
 
-        public virtual ArtistPackage ArtistPackage { get; set; }
         public virtual FileContent FileContent { get; set; }
     }
 }

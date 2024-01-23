@@ -19,6 +19,7 @@ namespace localsound.CoreUpdates
             var configuration = builder.GetContext().Configuration;
 
             builder.Services.AddTransient<IAccountImageService, AccountImageService>();
+            builder.Services.AddTransient<IPackageService, PackageService>();
             builder.Services.AddTransient<IBlobRepository, BlobRepository>();
             builder.Services.AddTransient<IDbOperationRepository, DbOperationRepository>();
 

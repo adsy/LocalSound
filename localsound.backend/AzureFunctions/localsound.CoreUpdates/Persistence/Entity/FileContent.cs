@@ -9,5 +9,6 @@ namespace localsound.CoreUpdates.Persistence.Entity
         public string FileExtensionType { get; set; }
 
         public virtual AccountImage Image { get; set; }
+        public virtual ArtistPackagePhoto ArtistPackagePhoto { get; set; }
     }
 }

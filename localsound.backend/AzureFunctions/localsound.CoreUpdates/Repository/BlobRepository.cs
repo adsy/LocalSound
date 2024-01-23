@@ -30,6 +30,12 @@ namespace localsound.CoreUpdates.Repository
 
                 var blobClient = blobContainerClient.GetBlobClient(blobPath);
 
+                // If it doesnt exist then we dont need to delete it
+                if (!(await blobClient.ExistsAsync()))
+                {
+                    return true;
+                }
+
                 // Delete the file if it already exists
                 var result = await blobClient.DeleteIfExistsAsync();
 

@@ -2,6 +2,7 @@
 {
     public enum DeleteEntityTypeEnum
     {
-        DeleteAccountImage
+        DeleteAccountImage,
+        DeletePackagePhotos
     }
 }

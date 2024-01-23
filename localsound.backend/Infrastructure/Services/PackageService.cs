@@ -4,6 +4,9 @@ using localsound.backend.Domain.Model.Dto.Submission;
 using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
+using LocalSound.Shared.Package.ServiceBus.Dto;
+using LocalSound.Shared.Package.ServiceBus.Dto.Enum;
+using LocalSound.Shared.Package.ServiceBus.Dto.QueueMessage;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Net;
@@ -12,17 +15,21 @@ namespace localsound.backend.Infrastructure.Services
 {
     public class PackageService : IPackageService
     {
+        private readonly IDbTransactionRepository _dbTransactionRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly IPackageRepository _packageRepository;
+        private readonly IServiceBusRepository _serviceBusRepository;
         private readonly IBlobRepository _blobRepository;
         private readonly ILogger<PackageService> _logger;
 
-        public PackageService(IPackageRepository packageRepository, ILogger<PackageService> logger, IAccountRepository accountRepository, IBlobRepository blobRepository)
+        public PackageService(IPackageRepository packageRepository, ILogger<PackageService> logger, IAccountRepository accountRepository, IBlobRepository blobRepository, IServiceBusRepository serviceBusRepository, IDbTransactionRepository dbTransactionRepository)
         {
             _packageRepository = packageRepository;
             _logger = logger;
             _accountRepository = accountRepository;
             _blobRepository = blobRepository;
+            _serviceBusRepository = serviceBusRepository;
+            _dbTransactionRepository = dbTransactionRepository;
         }
 
         public async Task<ServiceResponse> CreateArtistPackage(Guid appUserId, string memberId, ArtistPackageSubmissionDto packageDto)
@@ -129,6 +136,8 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
+                await _dbTransactionRepository.BeginTransactionAsync();
+
                 var appUser = await _accountRepository.GetAppUserFromDbAsync(appUserId, memberId);
 
                 if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
@@ -149,23 +158,33 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                // delete images
-                foreach (var photo in packageResult.ReturnData.PackagePhotos) 
-                {
-                    var photoDeleteResult = await _blobRepository.DeleteBlobAsync(photo.FileContent.FileLocation);
-
-                    if (!photoDeleteResult.IsSuccessStatusCode)
-                    {
-                        //TODO: Push delete operation to queue if it fails
-                    }
-                }
-
-                var deleteResult = await _packageRepository.DeleteArtistPackageAsync(packageResult.ReturnData);
+                var deleteResult = await _packageRepository.MarkPackageAsUnavailable(packageResult.ReturnData);
 
                 if (!deleteResult.IsSuccessStatusCode)
                 {
                     return deleteResult;
                 }
+
+                var serviceBusResult = await _serviceBusRepository.SendDeleteQueueEntry(new ServiceBusMessageDto<DeletePackagePhotosDto>
+                {
+                    Command = DeleteEntityTypeEnum.DeletePackagePhotos,
+                    Data = new DeletePackagePhotosDto
+                    {
+                        UserId = appUserId,
+                        PackageId = packageId,
+                        PhotoLocations = packageResult.ReturnData.PackagePhotos.Select(x => x.FileContent.FileLocation).ToList()
+                    }
+                });
+
+                if (!serviceBusResult.IsSuccessStatusCode)
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured deleting your package, please try again..."
+                    };
+                }
+                
+                await _dbTransactionRepository.CommitTransactionAsync();
 
                 return new ServiceResponse(HttpStatusCode.OK);
             }
@@ -231,6 +250,8 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
+                await _dbTransactionRepository.BeginTransactionAsync();
+
                 var appUser = await _accountRepository.GetAppUserFromDbAsync(appUserId, memberId);
 
                 if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
@@ -256,9 +277,9 @@ namespace localsound.backend.Infrastructure.Services
 
                 var equipmentUpdate = await _packageRepository.UpdateArtistPackageEquipmentAsync(appUserId, packageId, artistPackageEquipment);
 
-                var package = await _packageRepository.GetArtistPackageAsync(appUserId, packageId);
+                var packageResult = await _packageRepository.GetArtistPackageAsync(appUserId, packageId);
 
-                if (!package.IsSuccessStatusCode || package.ReturnData == null)
+                if (!packageResult.IsSuccessStatusCode || packageResult.ReturnData == null)
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError)
                     {
@@ -273,19 +294,30 @@ namespace localsound.backend.Infrastructure.Services
                     var deletedIds = JsonConvert.DeserializeObject<List<Guid>>(packageDto.DeletedPhotoIds);
                     if (deletedIds != null && deletedIds.Any())
                     {
-                        foreach (var id in deletedIds)
-                        {
-                            var packagePhoto = package.ReturnData.PackagePhotos.FirstOrDefault(x => x.ArtistPackagePhotoId == id);
-
-                            var azureDeleteResult = await _blobRepository.DeleteBlobAsync(packagePhoto.FileContent.FileLocation);
-
-                            if (!azureDeleteResult.IsSuccessStatusCode)
+                        var deletePhotosResult = await _packageRepository.MarkPhotosForDeletion(packageId, deletedIds);
+                        
+                        if (!deletePhotosResult.IsSuccessStatusCode)
+                            return new ServiceResponse(HttpStatusCode.InternalServerError)
                             {
-                                //TODO: Push this to a queue so it can be done later
-                            }
+                                ServiceResponseMessage = "An error occured deleting your package, please try again..."
+                            };
 
-                            deletedPhotos.Add(packagePhoto);
-                        }
+                        var serviceBusResult = await _serviceBusRepository.SendDeleteQueueEntry<ServiceBusMessageDto<DeletePackagePhotosDto>>(new ServiceBusMessageDto<DeletePackagePhotosDto>
+                        {
+                            Command = DeleteEntityTypeEnum.DeletePackagePhotos,
+                            Data = new DeletePackagePhotosDto
+                            {
+                                UserId = appUserId, 
+                                PackageId = packageId,
+                                PhotoLocations = packageResult.ReturnData.PackagePhotos.Where(x => deletedIds.Contains(x.ArtistPackagePhotoId)).Select(x => x.FileContent.FileLocation).ToList()
+                            }
+                        });
+
+                        if (!serviceBusResult.IsSuccessStatusCode)
+                            return new ServiceResponse(HttpStatusCode.InternalServerError)
+                            {
+                                ServiceResponseMessage = "An error occured deleting your package, please try again..."
+                            };
                     }
                 }
 
@@ -332,7 +364,7 @@ namespace localsound.backend.Infrastructure.Services
                     }
                 }
 
-                var updateResult = await _packageRepository.UpdateArtistPackageAsync(package.ReturnData.ArtistPackageId, packageDto.PackageName, packageDto.PackageDescription, packageDto.PackagePrice, newPhotos, deletedPhotos);
+                var updateResult = await _packageRepository.UpdateArtistPackageAsync(packageResult.ReturnData.ArtistPackageId, packageDto.PackageName, packageDto.PackageDescription, packageDto.PackagePrice, newPhotos);
 
                 if (!updateResult.IsSuccessStatusCode)
                 {
@@ -341,6 +373,8 @@ namespace localsound.backend.Infrastructure.Services
                         ServiceResponseMessage = "An error occured updating your package, please try again..."
                     };
                 }
+
+                await _dbTransactionRepository.CommitTransactionAsync();
 
                 return new ServiceResponse(HttpStatusCode.OK);
             }

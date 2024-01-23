@@ -54,7 +54,7 @@ namespace localsound.backend.Infrastructure.Services
                     }
                 };
 
-                var queueResult = await _serviceBusRepository.SendDeleteQueueEntry<ServiceBusMessageDto<DeleteAccountImageDto>>(deleteMessage);
+                var queueResult = await _serviceBusRepository.SendDeleteQueueEntry(deleteMessage);
 
                 if (!queueResult.IsSuccessStatusCode)
                 {

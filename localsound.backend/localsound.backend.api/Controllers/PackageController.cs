@@ -85,5 +85,5 @@ namespace localsound.backend.api.Controllers
 
             return Ok();
         }
-}
+    }
 }

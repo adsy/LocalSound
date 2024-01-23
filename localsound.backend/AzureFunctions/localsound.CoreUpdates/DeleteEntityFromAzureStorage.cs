@@ -13,10 +13,12 @@ namespace localsound.CoreUpdates
     public class DeleteEntityFromAzureStorage
     {
         private readonly IAccountImageService _accountImageService;
+        private readonly IPackageService _packageService;
 
-        public DeleteEntityFromAzureStorage(IAccountImageService accountImageService)
+        public DeleteEntityFromAzureStorage(IAccountImageService accountImageService, IPackageService packageService)
         {
             _accountImageService = accountImageService;
+            _packageService = packageService;
         }
 
         [FunctionName("DeleteEntityFromAzureStorage")]
@@ -33,6 +35,21 @@ namespace localsound.CoreUpdates
                     {
                         DeleteAccountImageDto dto = JsonSerializer.Deserialize<DeleteAccountImageDto>(queueMessage.Data.ToString());
                         var isDeleteOpSuccess = await _accountImageService.DeleteAccountImage(dto.UserId, dto.AccountImageId, dto.UploadLocation);
+
+                        if (isDeleteOpSuccess)
+                        {
+                            await messageActions.CompleteMessageAsync(message);
+                        }
+                        else
+                        {
+                            await messageActions.AbandonMessageAsync(message);
+                        }
+                        break;
+                    }
+                case (DeleteEntityTypeEnum.DeletePackagePhotos):
+                    {
+                        DeletePackagePhotosDto dto = JsonSerializer.Deserialize<DeletePackagePhotosDto>(queueMessage.Data.ToString());
+                        var isDeleteOpSuccess = await _packageService.DeletePackagePhotos(dto.UserId, dto.PackageId, dto.PhotoLocations);
 
                         if (isDeleteOpSuccess)
                         {

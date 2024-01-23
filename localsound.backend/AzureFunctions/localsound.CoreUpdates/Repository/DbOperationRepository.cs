@@ -1,8 +1,8 @@
-﻿using Azure.Storage.Blobs;
-using localsound.CoreUpdates.Persistence;
+﻿using localsound.CoreUpdates.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace localsound.CoreUpdates.Repository
@@ -38,6 +38,32 @@ namespace localsound.CoreUpdates.Repository
             catch (Exception e)
             {
                 var message = $"{nameof(DbOperationRepository)} - {nameof(DeleteAccountImageAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+                return false;
+            }
+        }
+
+        public async Task<bool> DeletePackagePhotosAsync(Guid userId, Guid packageId)
+        {
+            try
+            {
+                var packagePhotos = await _dbContext.ArtistPackagePhoto
+                    .Include(x => x.FileContent)
+                    .Where(x => x.ArtistPackageId == packageId && x.ToBeDeleted)
+                    .ToListAsync();
+
+                foreach(var packagePhoto in packagePhotos)
+                {
+                    _dbContext.FileContent.Remove(packagePhoto.FileContent);
+                }
+
+                await _dbContext.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(DbOperationRepository)} - {nameof(DeletePackagePhotosAsync)} - {e.Message}";
                 _logger.LogError(e, message);
                 return false;
             }
