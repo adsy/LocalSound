@@ -312,7 +312,7 @@ const ArtistProfile = ({
                                 await updateArtistFollow(true);
                               }
                             }}
-                            className="btn white-button edit-profile-button w-fit-content d-flex flex-row"
+                            className="btn white-button edit-profile-button w-fit-content d-flex flex-row follow-btn"
                             title="update-following"
                           >
                             {!updatingFollowingStatus ? (

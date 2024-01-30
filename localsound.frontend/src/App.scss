@@ -629,7 +629,7 @@ i.large.icon {
     display: flex;
     flex-direction: row;
     transition: background-color 0.2s ease-in, border 0.2s ease-in;
-    background-color: $white200;
+    background-color: $white100;
 
     .sidebar-item-content {
       display: flex;
@@ -650,7 +650,7 @@ i.large.icon {
   }
 
   .sidebar-text {
-    @include text-shadow;
+    // @include text-shadow;
     color: black;
   }
 
@@ -666,13 +666,21 @@ i.large.icon {
     }
     // border: 5px solid $purple100 !important;
   }
+
+  .signout-icon {
+    height: 15px;
+    width: 15px;
+    font-size: 15px !important;
+    background-color: transparent !important;
+    align-self: center;
+  }
 }
 
 /** BUTTONS **/
 .white-button {
   @include button-style;
   background-color: $white200 !important;
-  border: 1px solid $black200;
+  border: 2px solid $black200;
   padding: 5px;
   color: $black200 !important;
   background-color: unset;
@@ -687,12 +695,7 @@ i.large.icon {
 .white-button:hover,
 .white-button:active,
 .white-button:focus {
-  color: $white300 !important;
-  background-color: $purple100 !important;
-  border: 1px solid $black200;
-  h4 {
-    color: $white300 !important;
-  }
+  border: 2px solid $purple100;
 }
 
 .white-button {
@@ -700,6 +703,7 @@ i.large.icon {
     color: $black200;
   }
 }
+
 .transparent-button {
   @include button-style;
   border: 1px solid transparent !important;
@@ -1407,11 +1411,16 @@ i.large.icon {
     padding-right: 3px;
   }
 }
+
 #modal-popup,
 #edit-artist,
 #artist-profile {
   width: 100%;
   background-color: $white200;
+
+  .follow-btn {
+    height: 32px;
+  }
 
   .badge-container {
     margin-left: 0.25rem;

@@ -1,4 +1,4 @@
-using Azure.Messaging.ServiceBus;
+using AspNetCoreRateLimit;
 using Azure.Storage.Blobs;
 using localsound.backend.api.Extensions;
 using localsound.backend.api.Middleware;
@@ -8,8 +8,7 @@ using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
 using localsound.backend.Infrastructure.Repositories;
 using localsound.backend.Infrastructure.Services;
-using Microsoft.Azure.Amqp;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
 
@@ -96,6 +95,35 @@ builder.Services.AddCors(options =>
      );
 });
 
+builder.Services.AddMemoryCache();
+
+builder.Services.Configure<IpRateLimitOptions>(options =>
+{
+    options.QuotaExceededMessage = "You're sending too many requests, please try again in 5 seconds...";
+
+    options.EndpointWhitelist = new List<string>
+    {
+        "post:/api/token/refresh-token"
+    };
+
+    options.GeneralRules = new List<RateLimitRule>
+    {
+        new RateLimitRule
+        {
+            Endpoint = "*",
+            Period = "5s",
+            Limit = 10,
+        }
+    };
+});
+
+builder.Services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+builder.Services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+builder.Services.AddInMemoryRateLimiting();
+
+
 builder.Services.AddSignalR();
 
 var app = builder.Build();
@@ -108,14 +136,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Localound.Backend v1"));
 }
 
-app.UseHttpsRedirection();
-
-
 app.UseCors("CORSAllowLocalHost5173");
+
+app.UseIpRateLimiting();
+
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
 app.MapHub<NotificationHub>("/notification");
 
 app.Run();

@@ -751,7 +751,7 @@ i.large.icon {
   display: flex;
   flex-direction: row;
   transition: background-color 0.2s ease-in, border 0.2s ease-in;
-  background-color: #fcfcfd;
+  background-color: #f1f1f1;
 }
 #offcanvasNavbar-expand-false .sidebar-item .sidebar-item-content {
   display: flex;
@@ -768,7 +768,6 @@ i.large.icon {
   flex-direction: row;
 }
 #offcanvasNavbar-expand-false .sidebar-text {
-  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   color: black;
 }
 #offcanvasNavbar-expand-false .sidebar-item.active .sidebar-item-content {
@@ -776,6 +775,13 @@ i.large.icon {
 }
 #offcanvasNavbar-expand-false .sidebar-item .sidebar-item-content:hover {
   border-bottom: 2px solid #6d69fa !important;
+}
+#offcanvasNavbar-expand-false .signout-icon {
+  height: 15px;
+  width: 15px;
+  font-size: 15px !important;
+  background-color: transparent !important;
+  align-self: center;
 }
 
 /** BUTTONS **/
@@ -787,7 +793,7 @@ i.large.icon {
   transition: background-color 0.3s ease;
   border-radius: 10px 10px;
   background-color: #fcfcfd !important;
-  border: 1px solid #001514;
+  border: 2px solid #001514;
   padding: 5px;
   color: #001514 !important;
   background-color: unset;
@@ -800,14 +806,7 @@ i.large.icon {
 .white-button:hover,
 .white-button:active,
 .white-button:focus {
-  color: #e2e8f0 !important;
-  background-color: #6d69fa !important;
-  border: 1px solid #001514;
-}
-.white-button:hover h4,
-.white-button:active h4,
-.white-button:focus h4 {
-  color: #e2e8f0 !important;
+  border: 2px solid #6d69fa;
 }
 
 .white-button h4 {
@@ -1468,6 +1467,11 @@ i.large.icon {
 #artist-profile {
   width: 100%;
   background-color: #fcfcfd;
+}
+#modal-popup .follow-btn,
+#edit-artist .follow-btn,
+#artist-profile .follow-btn {
+  height: 32px;
 }
 #modal-popup .badge-container,
 #edit-artist .badge-container,
