@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
-using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
-using localsound.backend.Infrastructure.Repositories;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
