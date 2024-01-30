@@ -1,7 +1,7 @@
 ﻿using localsound.backend.Domain.Model;
 using MediatR;
 
-namespace localsound.backend.api.Commands.Packages
+namespace localsound.backend.api.Commands.ArtistPackages
 {
     public class DeleteArtistPackageCommand : IRequest<ServiceResponse>
     {

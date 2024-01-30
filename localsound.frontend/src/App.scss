@@ -628,30 +628,43 @@ i.large.icon {
     cursor: pointer;
     display: flex;
     flex-direction: row;
-    padding-left: 10px;
-    padding-top: 13px;
-    padding-bottom: 13px;
-    transition: background-color 0.2s ease-in;
-    background-color: $black200;
-    border-radius: 10px;
+    transition: background-color 0.2s ease-in, border 0.2s ease-in;
+    background-color: $white200;
+
+    .sidebar-item-content {
+      display: flex;
+      flex-direction: row;
+      height: 100%;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-right: 25px;
+      padding-left: 2px;
+      border-bottom: 2px solid transparent !important;
+      // width: 100%;
+    }
+
+    .sidebar-item-content {
+      display: flex;
+      flex-direction: row;
+    }
   }
 
   .sidebar-text {
-    @include inverse-text-shadow;
-    color: white;
+    @include text-shadow;
+    color: black;
   }
 
   .sidebar-item.active {
-    background-color: $purple100 !important;
-    border-radius: 10px;
+    .sidebar-item-content {
+      border-bottom: 2px solid $black200 !important;
+    }
   }
 
-  .sidebar-item:hover {
-    background-color: $purple100;
-  }
-
-  .sidebar-link-container {
-    border-radius: 10px;
+  .sidebar-item {
+    .sidebar-item-content:hover {
+      border-bottom: 2px solid $purple100 !important;
+    }
+    // border: 5px solid $purple100 !important;
   }
 }
 

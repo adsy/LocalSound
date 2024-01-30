@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
-using localsound.backend.api.Commands.Packages;
-using Org.BouncyCastle.Crypto.Engines;
+using localsound.backend.api.Commands.ArtistPackages;
 
 namespace localsound.backend.api.Commands.Validators.Packages
 {

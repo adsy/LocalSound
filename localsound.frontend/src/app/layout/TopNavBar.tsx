@@ -170,40 +170,56 @@ const TopNavbar = () => {
                             className={`sidebar-item mb-2`}
                             onClick={() => setShow(false)}
                           >
-                            <Icon name="home" size="large" />
-                            <h5 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
-                              Home
-                            </h5>
+                            <div className="sidebar-item-content">
+                              <Icon name="home" size="large" color="black" />
+                              <h5 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
+                                Home
+                              </h5>
+                            </div>
                           </NavLink>
                           <NavLink
                             to={`/${userDetails?.profileUrl}`}
                             className={`sidebar-item mb-2`}
                             onClick={() => setShow(false)}
                           >
-                            <Icon name="user" size="large" />
-                            <h5 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
-                              Profile
-                            </h5>
+                            <div className="sidebar-item-content">
+                              <Icon name="user" size="large" color="black" />
+                              <h5 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
+                                Profile
+                              </h5>
+                            </div>
                           </NavLink>
                           <NavLink
                             to={`/bookings`}
                             className={`sidebar-item mb-2`}
                             onClick={() => setShow(false)}
                           >
-                            <Icon name="calendar" size="large" />
-                            <h5 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
-                              Bookings
-                            </h5>
+                            <div className="sidebar-item-content">
+                              <Icon
+                                name="calendar"
+                                size="large"
+                                color="black"
+                              />
+                              <h5 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
+                                Bookings
+                              </h5>
+                            </div>
                           </NavLink>
                           <NavLink
                             to={`/account-settings`}
                             className={`sidebar-item mb-2`}
                             onClick={() => setShow(false)}
                           >
-                            <Icon name="settings" size="large" />
-                            <h5 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
-                              Account settings
-                            </h5>
+                            <div className="sidebar-item-content">
+                              <Icon
+                                name="settings"
+                                size="large"
+                                color="black"
+                              />
+                              <h5 className="pl-2 sidebar-text mt-0 mb-0 align-self-center">
+                                Account settings
+                              </h5>
+                            </div>
                           </NavLink>
                         </div>
                         {!signingOut ? (

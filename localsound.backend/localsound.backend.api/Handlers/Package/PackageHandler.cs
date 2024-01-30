@@ -1,5 +1,5 @@
-﻿using localsound.backend.api.Commands.Packages;
-using localsound.backend.api.Queries.Packages;
+﻿using localsound.backend.api.Commands.ArtistPackages;
+using localsound.backend.api.Queries.ArtistPackages;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Infrastructure.Interface.Services;

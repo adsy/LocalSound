@@ -750,26 +750,32 @@ i.large.icon {
   cursor: pointer;
   display: flex;
   flex-direction: row;
-  padding-left: 10px;
-  padding-top: 13px;
-  padding-bottom: 13px;
-  transition: background-color 0.2s ease-in;
-  background-color: #001514;
-  border-radius: 10px;
+  transition: background-color 0.2s ease-in, border 0.2s ease-in;
+  background-color: #fcfcfd;
+}
+#offcanvasNavbar-expand-false .sidebar-item .sidebar-item-content {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 25px;
+  padding-left: 2px;
+  border-bottom: 2px solid transparent !important;
+}
+#offcanvasNavbar-expand-false .sidebar-item .sidebar-item-content {
+  display: flex;
+  flex-direction: row;
 }
 #offcanvasNavbar-expand-false .sidebar-text {
-  text-shadow: -1px 0 #232323, 0 1px #232323, 1px 0 #232323, 0 -1px #232323;
-  color: white;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  color: black;
 }
-#offcanvasNavbar-expand-false .sidebar-item.active {
-  background-color: #6d69fa !important;
-  border-radius: 10px;
+#offcanvasNavbar-expand-false .sidebar-item.active .sidebar-item-content {
+  border-bottom: 2px solid #001514 !important;
 }
-#offcanvasNavbar-expand-false .sidebar-item:hover {
-  background-color: #6d69fa;
-}
-#offcanvasNavbar-expand-false .sidebar-link-container {
-  border-radius: 10px;
+#offcanvasNavbar-expand-false .sidebar-item .sidebar-item-content:hover {
+  border-bottom: 2px solid #6d69fa !important;
 }
 
 /** BUTTONS **/

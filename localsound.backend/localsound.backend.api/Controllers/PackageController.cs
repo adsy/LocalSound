@@ -1,5 +1,5 @@
-﻿using localsound.backend.api.Commands.Packages;
-using localsound.backend.api.Queries.Packages;
+﻿using localsound.backend.api.Commands.ArtistPackages;
+using localsound.backend.api.Queries.ArtistPackages;
 using localsound.backend.Domain.Model.Dto.Submission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
