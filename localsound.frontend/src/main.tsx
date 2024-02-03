@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./app/layout/App.tsx";
 import "./index.css";
@@ -8,9 +7,9 @@ import { persistor, store } from "./app/redux/store/store.ts";
 import { Router } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import LoadingComponent from "./common/components/Loading/LoadingComponent.tsx";
-import { Wrapper } from "@googlemaps/react-wrapper";
 import { history } from "./common/history/history.ts";
 
+declare const window: any;
 // Create the script tag, set the appropriate attributes
 var script = document.createElement("script");
 script.src = `https://maps.googleapis.com/maps/api/js?key=${
@@ -34,9 +33,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       persistor={persistor}
     >
       <Router history={history}>
-        {/* <Wrapper apiKey={import.meta.env.VITE_MAPS_KEY} libraries={["places"]}> */}
         <App />
-        {/* </Wrapper> */}
       </Router>
     </PersistGate>
   </Provider>
