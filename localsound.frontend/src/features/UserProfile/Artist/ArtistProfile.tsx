@@ -424,6 +424,7 @@ const ArtistProfile = ({
                 <Followers
                   artistDetails={artistDetails}
                   currentTab={currentTab}
+                  viewingOwnProfile={viewingOwnProfile}
                 />
               </Tab>
               <Tab
@@ -434,6 +435,7 @@ const ArtistProfile = ({
                 <Following
                   artistDetails={artistDetails}
                   currentTab={currentTab}
+                  viewingOwnProfile={viewingOwnProfile}
                 />
               </Tab>
               <Tab

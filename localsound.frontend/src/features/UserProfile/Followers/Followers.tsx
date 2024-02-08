@@ -6,14 +6,14 @@ import { ArtistProfileTabs } from "../../../app/model/enums/artistProfileTabType
 import FollowerList from "./FollowerList";
 import ErrorBanner from "../../../common/banner/ErrorBanner";
 import useFixMissingScroll from "../../../common/hooks/UseLoadMoreWithoutScroll";
-import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 
 interface Props {
   artistDetails: UserModel;
   currentTab: ArtistProfileTabs;
+  viewingOwnProfile: boolean;
 }
 
-const Followers = ({ artistDetails, currentTab }: Props) => {
+const Followers = ({ artistDetails, currentTab, viewingOwnProfile }: Props) => {
   const [followers, setFollowers] = useState<UserSummaryModel[]>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -79,6 +79,7 @@ const Followers = ({ artistDetails, currentTab }: Props) => {
           getMore={getMoreFollowers}
           canLoadMore={canLoadMore}
           loading={loading}
+          viewingOwnProfile={viewingOwnProfile}
         />
       )}
     </>

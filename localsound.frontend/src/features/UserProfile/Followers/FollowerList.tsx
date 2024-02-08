@@ -11,6 +11,7 @@ interface Props {
   getMore: () => void;
   canLoadMore: boolean;
   loading: boolean;
+  viewingOwnProfile: boolean;
 }
 
 const FollowingList = ({
@@ -19,6 +20,7 @@ const FollowingList = ({
   getMore,
   canLoadMore,
   loading,
+  viewingOwnProfile,
 }: Props) => {
   return (
     <div id="follower-list">
@@ -51,9 +53,19 @@ const FollowingList = ({
             />
             <div className="ml-2">
               <p className="mb-0">
-                {isFollowers
-                  ? "This account currently has no followers, be the first one to follow them."
-                  : "This account is currently not following any other artists."}
+                {viewingOwnProfile ? (
+                  <>
+                    {isFollowers
+                      ? "You currently have no followers, get yourself out there!"
+                      : "You're not following any other artists at the moment, go make some friends."}
+                  </>
+                ) : (
+                  <>
+                    {isFollowers
+                      ? "This account currently has no followers, be the first one to follow them."
+                      : "This account is currently not following any other artists."}
+                  </>
+                )}
               </p>
             </div>
           </div>

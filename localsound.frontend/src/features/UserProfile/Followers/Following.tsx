@@ -10,9 +10,10 @@ import useFixMissingScroll from "../../../common/hooks/UseLoadMoreWithoutScroll"
 interface Props {
   artistDetails: UserModel;
   currentTab: ArtistProfileTabs;
+  viewingOwnProfile: boolean;
 }
 
-const Following = ({ artistDetails, currentTab }: Props) => {
+const Following = ({ artistDetails, currentTab, viewingOwnProfile }: Props) => {
   const [followers, setFollowers] = useState<UserSummaryModel[]>([]);
   const [loadError, setLoadError] = useState<string | null>();
   const [page, setPage] = useState(0);
@@ -78,6 +79,7 @@ const Following = ({ artistDetails, currentTab }: Props) => {
           canLoadMore={canLoadMore}
           getMore={getMoreFollowing}
           loading={loading}
+          viewingOwnProfile={viewingOwnProfile}
         />
       )}
     </>
