@@ -30,7 +30,7 @@ const NotificationPopUp = ({ notification }: Props) => {
         history.push(notification.redirectUrl);
       }
     } catch (err: any) {
-      //TODO: Do something on error
+      // do nothing on this error api error
     }
   };
 

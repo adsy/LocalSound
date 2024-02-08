@@ -303,7 +303,7 @@ const MusicPlayer = () => {
             }
             setLoadingMore(false);
           } catch (err) {
-            //TODO: Do something on error
+            // do nothing on this error
           }
         }
       } else {

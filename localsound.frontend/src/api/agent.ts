@@ -21,6 +21,7 @@ import { ArtistPackageModel } from "../app/model/dto/artist-package.model";
 import { BookingSubmissionModel } from "../app/model/dto/booking-submission.model";
 import { BookingListResponse } from "../app/model/dto/booking-list.-response.model";
 import { NotificationListResponseModel } from "../app/model/dto/notification-list-response.model";
+import { toast } from "react-toastify";
 
 const axiosApiInstance = axios.create();
 
@@ -44,6 +45,9 @@ axiosApiInstance.interceptors.request.use((config: AdaptAxiosRequestConfig) => {
 let isRefreshing = false;
 let refreshSubscribers: any[] = [];
 
+let isWaiting = false;
+let waitingSubscribers: any[] = [];
+
 const subscribeTokenRefresh = (cb: () => void) => {
   refreshSubscribers.push(cb);
 };
@@ -51,6 +55,15 @@ const subscribeTokenRefresh = (cb: () => void) => {
 const onRefreshed = () => {
   refreshSubscribers.map((cb) => cb());
   refreshSubscribers = [];
+};
+
+const subscribeWaitingPeriodRefresh = (cb: () => void) => {
+  waitingSubscribers.push(cb);
+};
+
+const onWaited = () => {
+  waitingSubscribers.map((cb) => cb());
+  waitingSubscribers = [];
 };
 
 axiosApiInstance.interceptors.response.use(
@@ -63,6 +76,7 @@ axiosApiInstance.interceptors.response.use(
   async (err: AxiosError) => {
     if (err && err.response) {
       const { config, headers } = err.response;
+
       if (
         err.response!.status === 401 &&
         headers["www-authenticate"]?.includes("invalid_token")
@@ -79,6 +93,23 @@ axiosApiInstance.interceptors.response.use(
 
         const retryOrigReq = new Promise((resolve, reject) => {
           subscribeTokenRefresh(async () => {
+            resolve(requests.retry(config));
+          });
+        });
+        return retryOrigReq;
+      } else if (err.response!.status === 429) {
+        toast(err.response.data as string);
+        if (!isWaiting) {
+          isWaiting = true;
+
+          setTimeout(() => {
+            isWaiting = false;
+            onWaited();
+          }, 5000);
+        }
+
+        const retryOrigReq = new Promise((resolve, reject) => {
+          subscribeWaitingPeriodRefresh(async () => {
             resolve(requests.retry(config));
           });
         });

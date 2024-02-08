@@ -12,6 +12,7 @@ import agent from "../../../api/agent";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { toast } from "react-toastify";
 
 const NotificationsContainer = () => {
   const notificationData = useSelector((state: State) => state.notifications);
@@ -35,7 +36,7 @@ const NotificationsContainer = () => {
         history.push(notification.redirectUrl);
       }
     } catch (err: any) {
-      //TODO: Do something on error
+      // Do nothing on error here
     }
     dispatch(handleHideNotificationContainer());
   };
@@ -48,7 +49,7 @@ const NotificationsContainer = () => {
       );
       dispatch(handleSaveNotifications(notificationResponse));
     } catch (err: any) {
-      //TODO: do something on error
+      // Do nothing on error here
     }
     setPage(page + 1);
   };
