@@ -37,7 +37,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 var imageResult = await _accountImageRepository.MarkAccountImageToBeDeleted(imageType, appUserId);
 
-                if (!imageResult.IsSuccessStatusCode || imageResult.ReturnData == null)
+                if (!imageResult.IsSuccessStatusCode || imageResult.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.NotFound);
                 }
@@ -86,7 +86,7 @@ namespace localsound.backend.Infrastructure.Services
                 // create database entries
                 var accountImageResult = await _accountImageRepository.UploadAccountImageAsync(imageType, appUserId, fileLocation, fileExt);
 
-                if (!accountImageResult.IsSuccessStatusCode || accountImageResult.ReturnData == null) 
+                if (!accountImageResult.IsSuccessStatusCode || accountImageResult.ReturnData is null) 
                 {
                     return new ServiceResponse<string>(accountImageResult.StatusCode, accountImageResult.ServiceResponseMessage);
                 }
@@ -94,7 +94,7 @@ namespace localsound.backend.Infrastructure.Services
                 // upload to azure
                 var blobUploadResult = await _blobRepository.UploadBlobAsync(accountImageResult.ReturnData.FileContent.FileLocation+$"{fileExt}", photo);
 
-                if (!blobUploadResult.IsSuccessStatusCode || blobUploadResult.ReturnData == null)
+                if (!blobUploadResult.IsSuccessStatusCode || blobUploadResult.ReturnData is null)
                 {
                     // If it fails here theres something wrong with Azure
                     return new ServiceResponse<string>(HttpStatusCode.InternalServerError);

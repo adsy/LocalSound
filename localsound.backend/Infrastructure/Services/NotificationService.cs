@@ -29,9 +29,9 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
+                var appUser = await _accountRepository.GetAccountFromDbAsync(userId, memberId);
 
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError)
                     {
@@ -64,9 +64,9 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var receiver = await _accountRepository.GetAppUserFromDbAsync(receiverMemberId);
+                var receiver = await _accountRepository.GetAccountFromDbAsync(receiverMemberId);
 
-                if (!receiver.IsSuccessStatusCode || receiver.ReturnData == null)
+                if (!receiver.IsSuccessStatusCode || receiver.ReturnData is null)
                 {
                     var itemAddErrorMessage = $"{nameof(NotificationService)} - {nameof(CreateNotification)} - " +
                         $"Error occured creating booking created notification for member:{receiverMemberId}";
@@ -74,9 +74,9 @@ namespace localsound.backend.Infrastructure.Services
                     return new ServiceResponse<NotificationCreatedResponseDto>(HttpStatusCode.InternalServerError);
                 }
 
-                var createResult = await _notificationRepository.CreateNotificationAsync(creatorUserId, receiver.ReturnData.Id, message, redirectUrl);
+                var createResult = await _notificationRepository.CreateNotificationAsync(creatorUserId, receiver.ReturnData.AppUserId, message, redirectUrl);
 
-                if (!createResult.IsSuccessStatusCode || createResult.ReturnData == null)
+                if (!createResult.IsSuccessStatusCode || createResult.ReturnData is null)
                 {
                     var itemAddErrorMessage = $"{nameof(NotificationService)} - {nameof(CreateNotification)} - " +
                         $"Error occured creating booking created notification for member:{receiverMemberId}";
@@ -87,11 +87,20 @@ namespace localsound.backend.Infrastructure.Services
 
                 var notification = await _notificationRepository.GetUserNotificationAsync(createResult.ReturnData.NotificationId);
 
+
+                if (!notification.IsSuccessStatusCode || notification.ReturnData is null)
+                {
+                    return new ServiceResponse<NotificationCreatedResponseDto>(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = $"Error occured creating booking created notification for member:{receiverMemberId}"
+                    };
+                }
+
                 return new ServiceResponse<NotificationCreatedResponseDto>(HttpStatusCode.OK)
                 {
                     ReturnData = new NotificationCreatedResponseDto
                     {
-                        ReceiverUserId = receiver.ReturnData.Id,
+                        ReceiverUserId = receiver.ReturnData.AppUserId,
                         Notification = new NotificationDto
                         {
                             NotificationId = notification.ReturnData.NotificationId,
@@ -122,9 +131,9 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
+                var appUser = await _accountRepository.GetAccountFromDbAsync(userId, memberId);
 
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
                 {
                     return new ServiceResponse<NotificationListResponseDto>(HttpStatusCode.InternalServerError)
                     {
@@ -134,7 +143,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 var notifications = await _notificationRepository.GetUserNotificationsAsync(userId, page);
 
-                if (!notifications.IsSuccessStatusCode || notifications.ReturnData == null)
+                if (!notifications.IsSuccessStatusCode || notifications.ReturnData is null)
                 {
                     return new ServiceResponse<NotificationListResponseDto>(HttpStatusCode.InternalServerError)
                     {
@@ -181,7 +190,7 @@ namespace localsound.backend.Infrastructure.Services
             {
                 var notifications = await _notificationRepository.GetUserNotificationsAsync(userId, 0);
 
-                if (!notifications.IsSuccessStatusCode || notifications.ReturnData == null)
+                if (!notifications.IsSuccessStatusCode || notifications.ReturnData is null)
                 {
                     var itemAddErrorMessage = $"{nameof(NotificationService)} - {nameof(GetUserNotifications)} - " +
                         $"Error occured retrieving notifications for user:{userId}";

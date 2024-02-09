@@ -16,7 +16,7 @@ namespace localsound.backend.Domain.Model.Entity
         public bool ToBeDeleted { get; set; }
 
         public virtual AccountImageType AccountImageType { get; set; }
-        public virtual AppUser AppUser { get; set; }
+        public virtual Account AppUser { get; set; }
         public virtual FileContent FileContent { get; set; }
     }
 }

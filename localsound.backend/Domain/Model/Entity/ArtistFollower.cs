@@ -9,7 +9,7 @@ namespace localsound.backend.Domain.Model.Entity
         [ForeignKey("Follower")]
         public Guid FollowerId { get; set; }
 
-        public virtual Artist Artist { get; set; }
-        public virtual AppUser Follower { get; set; }
+        public virtual Account Artist { get; set; }
+        public virtual Account Follower { get; set; }
     }
 }

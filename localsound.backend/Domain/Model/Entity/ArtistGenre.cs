@@ -11,6 +11,6 @@ namespace localsound.backend.Domain.Model.Entity
         public Guid GenreId { get; set; }
 
         public virtual Genre Genre { get; set; }
-        public virtual Artist Artist { get; set; }
+        public virtual Account Artist { get; set; }
     }
 }

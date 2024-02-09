@@ -13,7 +13,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -72,7 +71,7 @@ namespace localsound.backend.Infrastructure.Repositories
             return tokenHandler.WriteToken(token);
         }
 
-        public List<Claim> GetClaims(AppUser user)
+        public List<Claim> GetClaims(AppUser user, CustomerTypeEnum customerType)
         {
             // create claims for user
             var claims = new List<Claim>
@@ -81,13 +80,13 @@ namespace localsound.backend.Infrastructure.Repositories
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
 
-            if (user.CustomerType == CustomerTypeEnum.Artist)
+            if (customerType == CustomerTypeEnum.Artist)
             {
                 claims.Add(new Claim(ClaimTypes.Role, CustomerTypeEnum.Artist.ToString()));
             }
             else
             {
-                claims.Add(new Claim(ClaimTypes.Role, CustomerTypeEnum.Artist.ToString()));
+                claims.Add(new Claim(ClaimTypes.Role, CustomerTypeEnum.NonArtist.ToString()));
             }
 
             return claims;
@@ -114,14 +113,14 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 var user = await _userManager.FindByIdAsync(id.ToString());
 
-                if (user == null)
+                if (user is null)
                 {
                     return new ServiceResponse<TokenDto>(HttpStatusCode.Unauthorized);
                 }
 
                 var token = await _context.UserTokens.FirstOrDefaultAsync(o => o.UserId == id);
 
-                if (token == null || token.Value != refreshToken || token.ExpirationDate <= DateTime.Now.ToLocalTime())
+                if (token is null || token.Value != refreshToken || token.ExpirationDate <= DateTime.Now.ToLocalTime())
                 {
                     await _userManager.RemoveAuthenticationTokenAsync(user, "RefreshTokenProviderExtension", "RefreshToken");
                     return new ServiceResponse<TokenDto>(HttpStatusCode.Unauthorized);
@@ -184,7 +183,7 @@ namespace localsound.backend.Infrastructure.Repositories
             var principal = tokenHandler.ValidateToken(accessToken, tokenValidationParameters, out securityToken);
             var jwtSecurityToken = securityToken as JwtSecurityToken;
 
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha512, StringComparison.InvariantCultureIgnoreCase))
+            if (jwtSecurityToken is null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha512, StringComparison.InvariantCultureIgnoreCase))
                 throw new SecurityTokenException("Invalid token");
 
             return principal;
@@ -194,7 +193,7 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(emailToken) || claims == null)
+                if (string.IsNullOrWhiteSpace(emailToken) || claims is null)
                     return new ServiceResponse<LoginResponseDto>(HttpStatusCode.Unauthorized);
 
                 var id = Guid.TryParse(claims.FindFirstValue(ClaimTypes.NameIdentifier), out Guid parsedId) ? parsedId : Guid.Empty;
@@ -209,7 +208,7 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 var user = await _userManager.FindByIdAsync(id.ToString());
 
-                if (user == null)
+                if (user is null)
                 {
                     return new ServiceResponse<LoginResponseDto>(HttpStatusCode.BadRequest);
                 }
@@ -224,8 +223,15 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 var returnUser = null as IAppUserDto;
 
+                var accountResult = await _accountRepository.GetAccountFromDbAsync(user.Id);
+
+                if (!accountResult.IsSuccessStatusCode || accountResult.ReturnData is null)
+                {
+                    return new ServiceResponse<LoginResponseDto>(HttpStatusCode.BadRequest, "There was an error confirming your token, please try again...");
+                }
+
                 // Create store or user based on customer type
-                if (user.CustomerType == CustomerTypeEnum.Artist)
+                if (accountResult.ReturnData.CustomerType == CustomerTypeEnum.Artist)
                 {
                     var customer = await _accountRepository.GetArtistFromDbAsync(id);
 
@@ -246,7 +252,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     returnUser.Email = user.Email;
                 }
 
-                var accessToken = CreateToken(GetClaims(user));
+                var accessToken = CreateToken(GetClaims(user, accountResult.ReturnData.CustomerType));
                 var refreshToken = await CreateRefreshToken(user);
 
                 return new ServiceResponse<LoginResponseDto>(HttpStatusCode.OK)
@@ -287,7 +293,7 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 var user = await _userManager.FindByIdAsync(id.ToString());
 
-                if (user == null || string.IsNullOrWhiteSpace(user.Email))
+                if (user is null || string.IsNullOrWhiteSpace(user.Email))
                     return new ServiceResponse(HttpStatusCode.BadRequest);
 
                 // Send email address confirmation token

@@ -27,7 +27,7 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<AccountOnboarding> AccountOnboarding { get; set; }
         public DbSet<AppUser> AppUser { get; set; }
         public DbSet<AppUserToken> AppUserToken { get; set; }
-        public DbSet<Artist> Artist { get; set; }
+        public DbSet<Account> Account { get; set; }
         public DbSet<ArtistBooking> ArtistBooking { get; set; }
         public DbSet<ArtistEquipment> ArtistEquipment { get; set; }
         public DbSet<ArtistEventType> ArtistEventType { get; set; }
@@ -41,7 +41,7 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<EventType> EventType { get; set; }
         public DbSet<FileContent> FileContent { get; set; }
         public DbSet<Genre> Genres { get; set; }
-        public DbSet<NonArtist> NonArtist { get; set; }
+        public DbSet<Account> NonArtist { get; set; }
         public DbSet<Notification> Notification { get; set; }
         
 
@@ -98,20 +98,22 @@ namespace localsound.backend.Persistence.DbContext
             base.OnModelCreating(builder);
 
             builder.HasSequence("MemberId", x => x.StartsAt(100000).IncrementsBy(1));
-            builder.Entity<AppUser>().Property(x => x.MemberId).HasDefaultValueSql("NEXT VALUE FOR MemberId");
-            builder.Entity<AppUser>().HasMany(x => x.Following);
+            builder.Entity<Account>().Property(x => x.MemberId).HasDefaultValueSql("NEXT VALUE FOR MemberId");
+            builder.Entity<Account>().HasMany(x => x.Following);
+            builder.Entity<Account>().HasOne(x => x.AccountOnboarding).WithOne(x => x.Account);
 
-            builder.Entity<AppUser>().HasOne(x => x.AccountOnboarding).WithOne(x => x.AppUser);
+            builder.Entity<Account>().HasMany(x => x.Following).WithOne(x => x.Follower).OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<Account>().HasMany(x => x.Followers).WithOne(x => x.Artist).OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<AppUserToken>().Property(o => o.ExpirationDate).HasDefaultValueSql("DateAdd(week,1,getDate())");
 
             builder.Entity<AccountOnboarding>().HasKey(x => x.AppUserId);
 
-            builder.Entity<Artist>().HasKey(x => x.AppUserId);
-            builder.Entity<Artist>().HasMany(x => x.Genres);
-            builder.Entity<Artist>().HasIndex(x => x.ProfileUrl).IsUnique();
+            builder.Entity<Account>().HasKey(x => x.AppUserId);
+            builder.Entity<Account>().HasMany(x => x.Genres);
+            builder.Entity<Account>().HasIndex(x => x.ProfileUrl).IsUnique();
 
-            builder.Entity<Artist>().HasMany(x => x.Packages).WithOne(x => x.Artist).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Account>().HasMany(x => x.Packages).WithOne(x => x.Artist).OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<ArtistTrackGenre>().HasKey(x => new { x.ArtistTrackUploadId, x.GenreId });
             builder.Entity<ArtistTrackGenre>().HasOne(x => x.Genre);
@@ -157,8 +159,8 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<ArtistPackagePhoto>().HasKey(x => x.ArtistPackagePhotoId).IsClustered(false);
             builder.Entity<ArtistPackagePhoto>().HasIndex(x => x.ArtistPackageId).IsClustered(true);
 
-            builder.Entity<NonArtist>().HasKey(x => x.AppUserId);
-            builder.Entity<NonArtist>().HasIndex(x => x.ProfileUrl).IsUnique();
+            builder.Entity<Account>().HasKey(x => x.AppUserId);
+            builder.Entity<Account>().HasIndex(x => x.ProfileUrl).IsUnique();
 
             builder.Entity<AccountImageType>().HasKey(x => x.AccountImageTypeId);
 
@@ -176,8 +178,8 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<ArtistFollower>(x =>
             {
                 x.HasKey(key => new { key.ArtistId, key.FollowerId });
-                x.HasOne(x => x.Artist).WithMany(x => x.Followers);
-                x.HasOne(x => x.Follower).WithMany(x => x.Following);
+                x.HasOne(x => x.Artist).WithMany(x => x.Followers).OnDelete(DeleteBehavior.NoAction);
+                x.HasOne(x => x.Follower).WithMany(x => x.Following).OnDelete(DeleteBehavior.NoAction);
             });
 
             builder.Entity<Notification>().HasKey(x => x.NotificationId).IsClustered(false);

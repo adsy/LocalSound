@@ -53,7 +53,7 @@ namespace localsound.backend.api.Extensions
 
         public static int GenerateCode(byte[] securityToken, string? modifier = null, TimeSpan? timeStep = null)
         {
-            if (securityToken == null)
+            if (securityToken is null)
             {
                 throw new ArgumentNullException(nameof(securityToken));
             }
@@ -71,7 +71,7 @@ namespace localsound.backend.api.Extensions
 
         public static bool ValidateCode(byte[] securityToken, int code, string? modifier = null, TimeSpan? timeStep = null)
         {
-            if (securityToken == null)
+            if (securityToken is null)
             {
                 throw new ArgumentNullException(nameof(securityToken));
             }

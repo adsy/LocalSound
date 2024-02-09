@@ -27,9 +27,9 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(appUserId, memberId);
+                var appUser = await _accountRepository.GetAccountFromDbAsync(appUserId, memberId);
 
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError)
                     {
@@ -62,9 +62,9 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(appUserId, memberId);
+                var appUser = await _accountRepository.GetAccountFromDbAsync(appUserId, memberId);
 
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError)
                     {
@@ -97,9 +97,9 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(appUserId, memberId);
+                var appUser = await _accountRepository.GetAccountFromDbAsync(appUserId, memberId);
 
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError)
                     {
@@ -135,9 +135,9 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(appUserId, memberId);
+                var appUser = await _accountRepository.GetAccountFromDbAsync(appUserId, memberId);
 
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
                 {
                     return new ServiceResponse<BookingListResponse>(HttpStatusCode.InternalServerError)
                     {
@@ -147,7 +147,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 var userBookingsResult = await _bookingRepository.GetCompletedBookingsAsync(appUserId, page);
 
-                if (!userBookingsResult.IsSuccessStatusCode || userBookingsResult.ReturnData == null)
+                if (!userBookingsResult.IsSuccessStatusCode || userBookingsResult.ReturnData is null)
                 {
                     return new ServiceResponse<BookingListResponse>(HttpStatusCode.InternalServerError)
                     {
@@ -159,7 +159,7 @@ namespace localsound.backend.Infrastructure.Services
                 {
                     BookingId = x.BookingId,
                     BookerId = x.Booker.MemberId,
-                    BookerName = $"{x.Booker.NonArtist.FirstName} {x.Booker.NonArtist.LastName}",
+                    BookerName = $"{x.Booker.FirstName} {x.Booker.LastName}",
                     ArtistId = appUser.ReturnData.CustomerType == CustomerTypeEnum.Artist ? memberId : x.Booker.MemberId,
                     ArtistName = x.Artist.Name,
                     PackageName = x.Package.PackageName,
@@ -202,9 +202,9 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(appUserId, memberId);
+                var appUser = await _accountRepository.GetAccountFromDbAsync(appUserId, memberId);
 
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
                 {
                     return new ServiceResponse<BookingListResponse>(HttpStatusCode.InternalServerError)
                     {
@@ -214,7 +214,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 var userBookingsResult = await _bookingRepository.GetNonCompletedBookingsAsync(appUserId, bookingConfirmed, page);
 
-                if (!userBookingsResult.IsSuccessStatusCode || userBookingsResult.ReturnData == null)
+                if (!userBookingsResult.IsSuccessStatusCode || userBookingsResult.ReturnData is null)
                 {
                     return new ServiceResponse<BookingListResponse>(HttpStatusCode.InternalServerError)
                     {
@@ -226,7 +226,7 @@ namespace localsound.backend.Infrastructure.Services
                 {
                     BookingId = x.BookingId,
                     BookerId = x.Booker.MemberId,
-                    BookerName = $"{x.Booker.NonArtist.FirstName} {x.Booker.NonArtist.LastName}",
+                    BookerName = $"{x.Booker.FirstName} {x.Booker.LastName}",
                     ArtistId = appUser.ReturnData.CustomerType == CustomerTypeEnum.Artist ? memberId : x.Booker.MemberId,
                     ArtistName = x.Artist.Name,
                     PackageName = x.Package.PackageName,

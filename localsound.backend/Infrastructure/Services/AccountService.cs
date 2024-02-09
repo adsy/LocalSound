@@ -55,7 +55,7 @@ namespace localsound.backend.Infrastructure.Services
             {
                 var user = await _userManager.FindByEmailAsync(loginData.Email);
 
-                if (user == null)
+                if (user is null)
                 {
                     return new ServiceResponse<LoginResponseDto>(HttpStatusCode.BadRequest)
                     {
@@ -73,12 +73,21 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var accessToken = _tokenRepository.CreateToken(_tokenRepository.GetClaims(user));
-                var refreshToken = await _tokenRepository.CreateRefreshToken(user);
+                var accountResult = await _accountRepository.GetAccountFromDbAsync(user.Id);
 
+                if (!accountResult.IsSuccessStatusCode || accountResult.ReturnData is null){
+                    return new ServiceResponse<LoginResponseDto>(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured while logging in, please try again..."
+                    };
+                }
+
+                var accessToken = _tokenRepository.CreateToken(_tokenRepository.GetClaims(user, accountResult.ReturnData.CustomerType));
+                var refreshToken = await _tokenRepository.CreateRefreshToken(user);
                 var returnDto = null as IAppUserDto;
 
-                if (user.CustomerType == CustomerTypeEnum.Artist && user.MemberId != null)
+
+                if (accountResult.ReturnData.CustomerType == CustomerTypeEnum.Artist)
                 {
                     var artist = await _accountRepository.GetArtistFromDbAsync(user.Id);
 
@@ -100,7 +109,6 @@ namespace localsound.backend.Infrastructure.Services
 
                     if (nonArtist.IsSuccessStatusCode && nonArtist.ReturnData != null)
                     {
-
                         returnDto = CreateNonArtistDto(nonArtist.ReturnData);
                     }
                     else
@@ -112,10 +120,8 @@ namespace localsound.backend.Infrastructure.Services
                     }
                 }
 
-                if (user.MemberId != null)
+                if (returnDto != null)
                 {
-                    returnDto.MemberId = user.MemberId;
-
                     return new ServiceResponse<LoginResponseDto>(HttpStatusCode.OK)
                     {
                         ReturnData = new LoginResponseDto
@@ -160,7 +166,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 var userDto = await CreateAccountAsync(registrationDetails.CustomerType, registrationDetails.RegistrationDto, userResponse.ReturnData);
 
-                if (!userDto.IsSuccessStatusCode || userDto.ReturnData == null)
+                if (!userDto.IsSuccessStatusCode || userDto.ReturnData is null)
                 {
                     // If we cannot add into the user database, delete the user from the aspUsers table so they can resubmit
                     await _userManager.DeleteAsync(userResponse.ReturnData);
@@ -171,14 +177,14 @@ namespace localsound.backend.Infrastructure.Services
                     return new ServiceResponse<LoginResponseDto>(HttpStatusCode.InternalServerError, userDto.ServiceResponseMessage ?? "Something went wrong while creating your account, please try again.");
                 }
 
-                if (userResponse.ReturnData?.MemberId != null) {
+                if (userDto.ReturnData?.MemberId != null) {
 
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(userResponse.ReturnData);
                     await _emailRepository.SendConfirmEmailTokenMessageAsync(token, userResponse.ReturnData.Email);
 
-                    userDto.ReturnData.MemberId = userResponse.ReturnData.MemberId;
+                    userDto.ReturnData.MemberId = userDto.ReturnData.MemberId;
 
-                    var accessToken = _tokenRepository.CreateToken(_tokenRepository.GetClaims(userResponse.ReturnData));
+                    var accessToken = _tokenRepository.CreateToken(_tokenRepository.GetClaims(userResponse.ReturnData, userDto.ReturnData.CustomerType));
                     var refreshToken = await _tokenRepository.CreateRefreshToken(userResponse.ReturnData);
 
                     return new ServiceResponse<LoginResponseDto>(HttpStatusCode.OK)
@@ -214,7 +220,7 @@ namespace localsound.backend.Infrastructure.Services
             ServiceResponse<CustomerType>? customerDbResult;
             if (customerType == CustomerTypeEnum.Artist)
             {
-                var newArtist = new Artist
+                var newArtist = new Account
                 {
                     Address = registrationDto.Address,
                     Name = registrationDto.Name,
@@ -224,14 +230,15 @@ namespace localsound.backend.Infrastructure.Services
                     AppUserId = user.Id,
                     YoutubeUrl = registrationDto.YoutubeUrl,
                     SpotifyUrl = registrationDto.SpotifyUrl,
-                    SoundcloudUrl = registrationDto.SoundcloudUrl
+                    SoundcloudUrl = registrationDto.SoundcloudUrl,
+                    CustomerType = customerType
                 };
 
                 customerDbResult = await _accountRepository.AddArtistToDbAsync(newArtist);
             }
             else
             {
-                var newNonArtist = new NonArtist
+                var newNonArtist = new Account
                 {
                     Address = registrationDto.Address,
                     FirstName = registrationDto.FirstName,
@@ -239,7 +246,8 @@ namespace localsound.backend.Infrastructure.Services
                     PhoneNumber = registrationDto.PhoneNumber,
                     User = user,
                     AppUserId = user.Id,
-                    ProfileUrl = registrationDto.ProfileUrl
+                    ProfileUrl = registrationDto.ProfileUrl,
+                    CustomerType = customerType
                 };
 
                 customerDbResult = await _accountRepository.AddNonArtistToDbAsync(newNonArtist);
@@ -282,7 +290,6 @@ namespace localsound.backend.Infrastructure.Services
             var newUser = new AppUser
             {
                 Email = registrationDto.Email,
-                CustomerType = customerType,
                 UserName = registrationDto.Email
             };
 
@@ -307,7 +314,7 @@ namespace localsound.backend.Infrastructure.Services
 
             var user = _userManager.Users.FirstOrDefault(o => o.Email == registrationDto.Email);
 
-            if (user == null)
+            if (user is null)
             {
                 return new ServiceResponse<AppUser>(HttpStatusCode.InternalServerError);
             }
@@ -386,7 +393,7 @@ namespace localsound.backend.Infrastructure.Services
                     result = await _accountRepository.GetArtistFollowersFromDbAsync(memberId, page, cancellationToken);
                 }
 
-                if (result.ReturnData == null || !result.IsSuccessStatusCode)
+                if (result.ReturnData is null || !result.IsSuccessStatusCode)
                 {
                     return new ServiceResponse<FollowerListResponseDto>(result.StatusCode);
                 }
@@ -399,16 +406,16 @@ namespace localsound.backend.Infrastructure.Services
                         result.ReturnData.Select(x => new UserSummaryDto
                         {
                             MemberId = x.Follower.MemberId,
-                            ProfileUrl = x.Follower.NonArtist != null ? x.Follower.NonArtist.ProfileUrl : x.Follower.Artist.ProfileUrl,
-                            Name = x.Follower.NonArtist != null ? $"{x.Follower.NonArtist.FirstName} {x.Follower.NonArtist.LastName}" : x.Follower.Artist.Name,
+                            ProfileUrl = x.Follower.ProfileUrl,
+                            Name = string.IsNullOrWhiteSpace(x.Follower.Name) ? $"{x.Follower.FirstName} {x.Follower.LastName}" : x.Follower.Name,
                             Images = _mapper.Map<List<AccountImageDto>>(x.Follower.Images.Where(x => !x.ToBeDeleted))
                         }).ToList() : 
                         result.ReturnData.Select(x => new UserSummaryDto
                         {
-                            MemberId = x.Artist.User.MemberId,
+                            MemberId = x.Artist.MemberId,
                             ProfileUrl = x.Artist.ProfileUrl,
                             Name = x.Artist.Name,
-                            Images = _mapper.Map<List<AccountImageDto>>(x.Artist.User.Images.Where(x => !x.ToBeDeleted))
+                            Images = _mapper.Map<List<AccountImageDto>>(x.Artist.Images.Where(x => !x.ToBeDeleted))
                         }).ToList(),
                         CanLoadMore = result.ReturnData.Count == 30
                     }
@@ -432,7 +439,7 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var accountResult = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
+                var accountResult = await _accountRepository.GetAccountFromDbAsync(userId, memberId);
 
                 if (!accountResult.IsSuccessStatusCode)
                 {
@@ -473,7 +480,7 @@ namespace localsound.backend.Infrastructure.Services
             {
                 var result = await _accountRepository.GetAccountImageFromDbAsync(userId, imageType);
 
-                if (!result.IsSuccessStatusCode || result.ReturnData == null)
+                if (!result.IsSuccessStatusCode || result.ReturnData is null)
                 {
                     return new ServiceResponse<AccountImageDto>(HttpStatusCode.InternalServerError);
                 }
@@ -500,13 +507,24 @@ namespace localsound.backend.Infrastructure.Services
 
                 var user = await _userManager.Users.FirstOrDefaultAsync(o => o.Email == email);
 
+
                 if (user != null)
                 {
                     if (user.EmailConfirmed)
                     {
+                        var accountResult = await _accountRepository.GetAccountFromDbAsync(user.Id);
+
+                        if (!accountResult.IsSuccessStatusCode || accountResult.ReturnData is null)
+                        {
+                            return new ServiceResponse<IAppUserDto>(HttpStatusCode.InternalServerError)
+                            {
+                                ServiceResponseMessage = "An error occured while logging in, please try again..."
+                            };
+                        }
+
                         var returnDto = null as IAppUserDto;
 
-                        if (user.CustomerType == CustomerTypeEnum.Artist && user.MemberId != null)
+                        if (accountResult.ReturnData.CustomerType == CustomerTypeEnum.Artist && accountResult.ReturnData.MemberId != null)
                         {
                             var artist = await _accountRepository.GetArtistFromDbAsync(user.Id);
 
@@ -541,7 +559,7 @@ namespace localsound.backend.Infrastructure.Services
 
                         if (returnDto != null)
                         {
-                            returnDto.MemberId = user.MemberId;
+                            returnDto.MemberId = accountResult.ReturnData.MemberId;
                             return new ServiceResponse<IAppUserDto>(HttpStatusCode.OK)
                             {
                                 ReturnData = returnDto
@@ -566,10 +584,10 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        private IAppUserDto CreateArtistDto(Artist artist)
+        private IAppUserDto CreateArtistDto(Account artist)
         {
             var returnDto = _mapper.Map<ArtistDto>(artist);
-            returnDto.Images = _mapper.Map<List<AccountImageDto>>(artist.User.Images);
+            returnDto.Images = _mapper.Map<List<AccountImageDto>>(artist.Images);
 
             if (artist.Followers != null)
             {
@@ -580,9 +598,9 @@ namespace localsound.backend.Infrastructure.Services
                 returnDto.FollowerCount = 0;
             }
 
-            if (artist.User.Following != null)
+            if (artist.Following != null)
             {
-                returnDto.FollowingCount = artist.User.Following.Count;
+                returnDto.FollowingCount = artist.Following.Count;
             }
             else
             {
@@ -595,14 +613,14 @@ namespace localsound.backend.Infrastructure.Services
             return returnDto;
         }
 
-        private IAppUserDto CreateNonArtistDto(NonArtist nonArtist)
+        private IAppUserDto CreateNonArtistDto(Account nonArtist)
         {
             var returnDto = _mapper.Map<NonArtistDto>(nonArtist);
-            returnDto.Images = _mapper.Map<List<AccountImageDto>>(nonArtist.User.Images);
+            returnDto.Images = _mapper.Map<List<AccountImageDto>>(nonArtist.Images);
 
-            if (nonArtist.User.Following != null)
+            if (nonArtist.Following != null)
             {
-                returnDto.FollowingCount = nonArtist.User.Following.Count;
+                returnDto.FollowingCount = nonArtist.Following.Count;
             }
             else
             {

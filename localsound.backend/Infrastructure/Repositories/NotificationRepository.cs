@@ -25,7 +25,7 @@ namespace localsound.backend.Infrastructure.Repositories
             {
                 var notification = await _dbContext.Notification.FirstOrDefaultAsync(x => x.NotificationReceiverId == userId && x.NotificationId == notificationId);
 
-                if (notification == null)
+                if (notification is null)
                 {
                     return new ServiceResponse(HttpStatusCode.NotFound);
                 }

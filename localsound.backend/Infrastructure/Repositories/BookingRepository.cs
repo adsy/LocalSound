@@ -27,7 +27,7 @@ namespace localsound.backend.Infrastructure.Repositories
             {
                 var booking = await _dbContext.ArtistBooking.FirstOrDefaultAsync(x => x.ArtistId == appUserId && x.BookingId == bookingId);
 
-                if (booking == null)
+                if (booking is null)
                 {
                     return new ServiceResponse(HttpStatusCode.NotFound)
                     {
@@ -64,7 +64,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 else
                     booking = await _dbContext.ArtistBooking.FirstOrDefaultAsync(x => x.BookerId == appUserId && x.BookingId == bookingId);
 
-                if (booking == null)
+                if (booking is null)
                 {
                     return new ServiceResponse(HttpStatusCode.NotFound)
                     {
@@ -94,9 +94,9 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.AppUser.FirstOrDefaultAsync(x => x.MemberId == bookingDto.ArtistId);
+                var artist = await _dbContext.Account.FirstOrDefaultAsync(x => x.MemberId == bookingDto.ArtistId);
 
-                if (artist == null)
+                if (artist is null)
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError)
                     {
@@ -106,7 +106,7 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 await _dbContext.ArtistBooking.AddAsync(new ArtistBooking
                 {
-                    ArtistId = artist.Id,
+                    ArtistId = artist.AppUserId,
                     BookerId = appUserId,
                     PackageId = bookingDto.PackageId,
                     EventTypeId = bookingDto.EventTypeId,
@@ -137,9 +137,9 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var user = await _dbContext.AppUser.FirstOrDefaultAsync(x => x.Id == appUserId);
+                var account = await _dbContext.Account.FirstOrDefaultAsync(x => x.AppUserId == appUserId);
 
-                if (user == null)
+                if (account is null)
                 {
                     return new ServiceResponse<List<ArtistBooking>>(HttpStatusCode.InternalServerError)
                     {
@@ -148,12 +148,11 @@ namespace localsound.backend.Infrastructure.Repositories
                 }
 
                 List<ArtistBooking>? bookings = null;
-                if (user.CustomerType == CustomerTypeEnum.Artist)
+                if (account.CustomerType == CustomerTypeEnum.Artist)
                 {
                     bookings = await _dbContext.ArtistBooking.Where(x => x.ArtistId == appUserId && x.BookingConfirmed == true  && x.BookingCompleted)
                         .Include(x => x.Artist)
                         .Include(x => x.Booker)
-                        .ThenInclude(x => x.NonArtist)
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
@@ -167,7 +166,6 @@ namespace localsound.backend.Infrastructure.Repositories
                     bookings = await _dbContext.ArtistBooking.Where(x => x.BookerId == appUserId && x.BookingConfirmed == true && x.BookingCompleted)
                         .Include(x => x.Artist)
                         .Include(x => x.Booker)
-                        .ThenInclude(x => x.NonArtist)
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
@@ -198,9 +196,9 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var user = await _dbContext.AppUser.FirstOrDefaultAsync(x => x.Id == appUserId);
+                var account = await _dbContext.Account.FirstOrDefaultAsync(x => x.AppUserId == appUserId);
 
-                if (user == null)
+                if (account is null)
                 {
                     return new ServiceResponse<List<ArtistBooking>>(HttpStatusCode.InternalServerError)
                     {
@@ -209,12 +207,11 @@ namespace localsound.backend.Infrastructure.Repositories
                 }
 
                 List<ArtistBooking>? bookings = null;
-                if (user.CustomerType == CustomerTypeEnum.Artist)
+                if (account.CustomerType == CustomerTypeEnum.Artist)
                 {
                     bookings = await _dbContext.ArtistBooking
                         .Include(x => x.Artist)
                         .Include(x => x.Booker)
-                        .ThenInclude(x => x.NonArtist)
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
@@ -229,7 +226,6 @@ namespace localsound.backend.Infrastructure.Repositories
                     bookings = await _dbContext.ArtistBooking
                         .Include(x => x.Artist)
                         .Include(x => x.Booker)
-                        .ThenInclude(x => x.NonArtist)
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)

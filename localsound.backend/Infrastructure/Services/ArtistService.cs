@@ -24,9 +24,9 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
+                var appUser = await _accountRepository.GetAccountFromDbAsync(userId, memberId);
 
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.NotFound, "There was an error while updating your details, please try again.");
                 }
@@ -46,9 +46,9 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
+                var appUser = await _accountRepository.GetAccountFromDbAsync(userId, memberId);
 
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.NotFound, "There was an error while updating your details, please try again.");
                 }
@@ -68,9 +68,9 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var accountResult = await _accountRepository.GetAppUserFromDbAsync(userId, followerId);
+                var accountResult = await _accountRepository.GetAccountFromDbAsync(userId, followerId);
 
-                if (!accountResult.IsSuccessStatusCode || accountResult.ReturnData == null)
+                if (!accountResult.IsSuccessStatusCode || accountResult.ReturnData is null)
                 {
                     return accountResult;
                 }

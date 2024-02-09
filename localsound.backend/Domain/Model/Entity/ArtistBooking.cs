@@ -20,8 +20,8 @@ namespace localsound.backend.Domain.Model.Entity
         public bool? BookingConfirmed { get; set; }
         public bool BookingCompleted { get; set; }
 
-        public virtual Artist Artist { get; set; }
-        public virtual AppUser Booker { get; set; }
+        public virtual Account Artist { get; set; }
+        public virtual Account Booker { get; set; }
         public virtual ArtistPackage Package { get; set; }
         public virtual EventType EventType { get; set; }
     }

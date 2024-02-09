@@ -8,17 +8,17 @@ namespace localsound.backend.Infrastructure.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<NonArtist, NonArtistDto>()
+            CreateMap<Account, NonArtistDto>()
                 .ForMember(dest => dest.Address, source => source.MapFrom(x => x.Address))
                 .ForMember(dest => dest.FirstName, source => source.MapFrom(x => x.FirstName))
                 .ForMember(dest => dest.LastName, source => source.MapFrom(x => x.LastName))
                 .ForMember(dest => dest.PhoneNumber, source => source.MapFrom(x => x.PhoneNumber))
-                .ForMember(dest => dest.CustomerType, source => source.MapFrom(x => x.User.CustomerType))
+                .ForMember(dest => dest.CustomerType, source => source.MapFrom(x => x.CustomerType))
                 .ForMember(dest => dest.EmailConfirmed, source => source.MapFrom(x => x.User.EmailConfirmed))
                 .ForMember(dest => dest.ProfileUrl, source => source.MapFrom(x => x.ProfileUrl))
-                .ForMember(dest => dest.MemberId, source => source.MapFrom(x => x.User.MemberId));
+                .ForMember(dest => dest.MemberId, source => source.MapFrom(x => x.MemberId));
 
-            CreateMap<Artist, ArtistDto>()
+            CreateMap<Account, ArtistDto>()
                 .ForMember(dest => dest.Address, source => source.MapFrom(x => x.Address))
                 .ForMember(dest => dest.Name, source => source.MapFrom(x => x.Name))
                 .ForMember(dest => dest.ProfileUrl, source => source.MapFrom(x => x.ProfileUrl))
@@ -26,12 +26,12 @@ namespace localsound.backend.Infrastructure.Mapping
                 .ForMember(dest => dest.SoundcloudUrl, source => source.MapFrom(x => x.SoundcloudUrl))
                 .ForMember(dest => dest.YoutubeUrl, source => source.MapFrom(x => x.YoutubeUrl))
                 .ForMember(dest => dest.SpotifyUrl, source => source.MapFrom(x => x.SpotifyUrl))
-                .ForMember(dest => dest.CustomerType, source => source.MapFrom(x => x.User.CustomerType))
+                .ForMember(dest => dest.CustomerType, source => source.MapFrom(x => x.CustomerType))
                 .ForMember(dest => dest.AboutSection, source => source.MapFrom(x => x.AboutSection))
                 .ForMember(dest => dest.EmailConfirmed, source => source.MapFrom(x => x.User.EmailConfirmed))
                 .ForMember(dest => dest.FollowerCount, source => source.Ignore())
                 .ForMember(dest => dest.FollowingCount, source => source.Ignore())
-                .ForMember(dest => dest.MemberId, source => source.MapFrom(x => x.User.MemberId));
+                .ForMember(dest => dest.MemberId, source => source.MapFrom(x => x.MemberId));
 
             CreateMap<Genre, GenreDto>()
                 .ForMember(dest => dest.GenreId, source => source.MapFrom(x => x.GenreId))
@@ -68,7 +68,7 @@ namespace localsound.backend.Infrastructure.Mapping
                 .ForMember(dest => dest.Duration, source => source.MapFrom(x => x.Duration))
                 .ForMember(dest => dest.UploadDate, source => source.MapFrom(x => x.UploadDate))
                 .ForMember(dest => dest.ArtistName, source => source.MapFrom(x => x.Artist.Name))
-                .ForMember(dest => dest.ArtistMemberId, source => source.MapFrom(x => x.Artist.User.MemberId))
+                .ForMember(dest => dest.ArtistMemberId, source => source.MapFrom(x => x.Artist.MemberId))
                 .ForMember(dest => dest.ArtistProfile, source => source.MapFrom(x => x.Artist.ProfileUrl));
 
             CreateMap<ArtistTrackGenre, GenreDto>()

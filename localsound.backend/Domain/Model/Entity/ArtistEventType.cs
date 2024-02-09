@@ -10,6 +10,6 @@ namespace localsound.backend.Domain.Model.Entity
         public Guid AppUserId { get; set; }
 
         public virtual EventType EventType { get;set;}
-        public virtual Artist Artist { get; set; }
+        public virtual Account Artist { get; set; }
     }
 }

@@ -10,6 +10,6 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
         Task<ServiceResponse> DeleteTrackAsync(ArtistTrackUpload track);
         Task<ServiceResponse<ArtistTrackUpload>> GetArtistTrackAsync(string memberId, Guid trackId);
         Task<ServiceResponse<List<ArtistTrackUpload>>> GetArtistTracksAsync(string memberId, int page);
-        Task<ServiceResponse> UpdateArtistTrackUploadAsync(AppUser appUser, Guid trackId, string trackName, string trackDescription, List<GenreDto> genres, string? trackImageExt, FileContent? newTrackImage, string newTrackImageUrl);
+        Task<ServiceResponse> UpdateArtistTrackUploadAsync(Account account, Guid trackId, string trackName, string trackDescription, List<GenreDto> genres, string? trackImageExt, FileContent? newTrackImage, string newTrackImageUrl);
     }
 }

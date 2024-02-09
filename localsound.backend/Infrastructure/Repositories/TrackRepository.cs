@@ -71,9 +71,9 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.AppUser.FirstOrDefaultAsync(x => x.MemberId == memberId && x.CustomerType == CustomerTypeEnum.Artist);
+                var artist = await _dbContext.Account.FirstOrDefaultAsync(x => x.MemberId == memberId && x.CustomerType == CustomerTypeEnum.Artist);
 
-                if (artist == null)
+                if (artist is null)
                 {
                     return new ServiceResponse<ArtistTrackUpload>(HttpStatusCode.NotFound);
                 }
@@ -83,9 +83,9 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.TrackImage)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
-                    .FirstOrDefaultAsync(x => x.AppUserId == artist.Id && x.ArtistTrackUploadId == trackId);
+                    .FirstOrDefaultAsync(x => x.AppUserId == artist.AppUserId && x.ArtistTrackUploadId == trackId);
 
-                if (track == null)
+                if (track is null)
                 {
                     return new ServiceResponse<ArtistTrackUpload>(HttpStatusCode.NotFound);
                 }
@@ -108,9 +108,9 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.AppUser.FirstOrDefaultAsync(x => x.MemberId == memberId && x.CustomerType == CustomerTypeEnum.Artist);
+                var artist = await _dbContext.Account.FirstOrDefaultAsync(x => x.MemberId == memberId && x.CustomerType == CustomerTypeEnum.Artist);
 
-                if (artist == null)
+                if (artist is null)
                 {
                     return new ServiceResponse<List<ArtistTrackUpload>>(HttpStatusCode.NotFound);
                 }
@@ -121,7 +121,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.TrackData)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
-                    .Where(x => x.AppUserId == artist.Id)
+                    .Where(x => x.AppUserId == artist.AppUserId)
                     .OrderByDescending(x => x.UploadDate)
                     .Skip(10 * page)
                     .Take(10)
@@ -141,16 +141,16 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> UpdateArtistTrackUploadAsync(AppUser appUser, Guid trackId, string trackName, string trackDescription, List<GenreDto> genres, string? trackImageExt, FileContent? newTrackImage, string newTrackImageUrl)
+        public async Task<ServiceResponse> UpdateArtistTrackUploadAsync(Account account, Guid trackId, string trackName, string trackDescription, List<GenreDto> genres, string? trackImageExt, FileContent? newTrackImage, string newTrackImageUrl)
         {
             try
             {
                 var track = await _dbContext.ArtistTrackUpload
                     .Include(x => x.Genres)
                     .Include(x => x.TrackImage)
-                    .FirstOrDefaultAsync(x => x.AppUserId == appUser.Id && x.ArtistTrackUploadId == trackId);
+                    .FirstOrDefaultAsync(x => x.AppUserId == account.AppUserId && x.ArtistTrackUploadId == trackId);
 
-                if (track == null)
+                if (track is null)
                 {
                     return new ServiceResponse(HttpStatusCode.NotFound);
                 }

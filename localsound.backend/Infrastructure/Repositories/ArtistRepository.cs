@@ -20,23 +20,23 @@ namespace localsound.backend.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public async Task<ServiceResponse> UpdateArtistFollowerAsync(AppUser follower, string artistId, bool startFollowing)
+        public async Task<ServiceResponse> UpdateArtistFollowerAsync(Account follower, string artistId, bool startFollowing)
         {
             var followString = startFollowing ? "following" : "unfollowing";
             try
             {
-                var artist = await _dbContext.Artist
+                var artist = await _dbContext.Account
                     .Include(x => x.User)
-                    .FirstOrDefaultAsync(x => x.User.MemberId == artistId);
+                    .FirstOrDefaultAsync(x => x.MemberId == artistId);
 
-                if (artist == null)
+                if (artist is null)
                 {
                     return new ServiceResponse(HttpStatusCode.NotFound, $"There was an error while {followString} the artist, please try again.");
                 }
 
                 if (startFollowing)
                 {
-                    var artistFollower = await _dbContext.ArtistFollower.FirstOrDefaultAsync(x => x.ArtistId == artist.AppUserId && x.FollowerId == follower.Id);
+                    var artistFollower = await _dbContext.ArtistFollower.FirstOrDefaultAsync(x => x.ArtistId == artist.AppUserId && x.FollowerId == follower.AppUserId);
 
                     if (artistFollower != null)
                     {
@@ -46,14 +46,14 @@ namespace localsound.backend.Infrastructure.Repositories
                     await _dbContext.ArtistFollower.AddAsync(new ArtistFollower
                     {
                         ArtistId = artist.AppUserId,
-                        FollowerId = follower.Id
+                        FollowerId = follower.AppUserId
                     });
                 }
                 else
                 {
-                    var artistFollower = await _dbContext.ArtistFollower.FirstOrDefaultAsync(x => x.ArtistId == artist.AppUserId && x.FollowerId == follower.Id);
+                    var artistFollower = await _dbContext.ArtistFollower.FirstOrDefaultAsync(x => x.ArtistId == artist.AppUserId && x.FollowerId == follower.AppUserId);
 
-                    if (artistFollower == null)
+                    if (artistFollower is null)
                     {
                         return new ServiceResponse(HttpStatusCode.NotFound, $"There was an error while {followString} the artist, please try again.");
                     }
@@ -78,12 +78,12 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.Artist
+                var artist = await _dbContext.Account
                     .Include(x => x.Genres)
                     .FirstOrDefaultAsync(x => x.AppUserId == userId);
 
                 // Artist should not be null here, otherwise its an issue with the artist creation/DB
-                if (artist == null)
+                if (artist is null)
                 {
                     var message = $"{nameof(AccountRepository)} - {nameof(UpdateArtistPersonalDetails)} - Could not find matching artist with userId: {userId}";
                     return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your details, please try again.");
@@ -113,14 +113,14 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.Artist
+                var artist = await _dbContext.Account
                     .Include(x => x.Genres)
                     .Include(x => x.EventTypes)
                     .Include(x => x.Equipment)
                     .FirstOrDefaultAsync(x => x.AppUserId == userId);
 
                 // Artist should not be null here, otherwise its an issue with the artist creation/DB
-                if (artist == null)
+                if (artist is null)
                 {
                     var message = $"{nameof(AccountRepository)} - {nameof(UpdateArtistProfileDetails)} - Could not find matching artist with userId: {userId}";
                     return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your details, please try again.");

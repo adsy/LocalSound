@@ -14,7 +14,7 @@ namespace localsound.backend.Domain.Model.Entity
         public bool NotificationViewed { get; set; }
         public DateTime CreatedOn { get; set; }
 
-        public virtual AppUser NotificationReceiver { get; set; }
-        public virtual AppUser NotificationCreator { get; set; }
+        public virtual Account NotificationReceiver { get; set; }
+        public virtual Account NotificationCreator { get; set; }
     }
 }

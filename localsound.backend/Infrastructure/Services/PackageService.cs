@@ -36,9 +36,9 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(appUserId, memberId);
+                var appUser = await _accountRepository.GetAccountFromDbAsync(appUserId, memberId);
 
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError)
                     {
@@ -91,7 +91,7 @@ namespace localsound.backend.Infrastructure.Services
                     var fileLocation = $"[{appUserId}]/packages/{packageId}/photos/{photo.PhotoId}{ext}";
                     var photoUploadResult = await _blobRepository.UploadBlobAsync(fileLocation, photo.Image);
 
-                    if (!photoUploadResult.IsSuccessStatusCode || photoUploadResult.ReturnData == null)
+                    if (!photoUploadResult.IsSuccessStatusCode || photoUploadResult.ReturnData is null)
                     {
                         return new ServiceResponse(HttpStatusCode.InternalServerError)
                         {
@@ -138,9 +138,9 @@ namespace localsound.backend.Infrastructure.Services
             {
                 await _dbTransactionRepository.BeginTransactionAsync();
 
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(appUserId, memberId);
+                var appUser = await _accountRepository.GetAccountFromDbAsync(appUserId, memberId);
 
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError)
                     {
@@ -150,7 +150,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 var packageResult = await _packageRepository.GetArtistPackageAsync(appUserId, packageId);
 
-                if (!packageResult.IsSuccessStatusCode || packageResult.ReturnData == null)
+                if (!packageResult.IsSuccessStatusCode || packageResult.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError)
                     {
@@ -206,7 +206,7 @@ namespace localsound.backend.Infrastructure.Services
             {
                 var result = await _packageRepository.GetArtistPackagesAsync(memberId);
 
-                if (!result.IsSuccessStatusCode || result.ReturnData == null)
+                if (!result.IsSuccessStatusCode || result.ReturnData is null)
                 {
                     return new ServiceResponse<List<ArtistPackageDto>>(HttpStatusCode.InternalServerError, result.ServiceResponseMessage);
                 }
@@ -252,9 +252,9 @@ namespace localsound.backend.Infrastructure.Services
             {
                 await _dbTransactionRepository.BeginTransactionAsync();
 
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(appUserId, memberId);
+                var appUser = await _accountRepository.GetAccountFromDbAsync(appUserId, memberId);
 
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError)
                     {
@@ -279,7 +279,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 var packageResult = await _packageRepository.GetArtistPackageAsync(appUserId, packageId);
 
-                if (!packageResult.IsSuccessStatusCode || packageResult.ReturnData == null)
+                if (!packageResult.IsSuccessStatusCode || packageResult.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError)
                     {
@@ -344,7 +344,7 @@ namespace localsound.backend.Infrastructure.Services
                         var fileLocation = $"[{appUserId}]/packages/{packageId}/photos/{photo.PhotoId}{ext}";
                         var photoUploadResult = await _blobRepository.UploadBlobAsync(fileLocation, photo.Image);
 
-                        if (!photoUploadResult.IsSuccessStatusCode || photoUploadResult.ReturnData == null)
+                        if (!photoUploadResult.IsSuccessStatusCode || photoUploadResult.ReturnData is null)
                         {
                             return new ServiceResponse(HttpStatusCode.InternalServerError)
                             {

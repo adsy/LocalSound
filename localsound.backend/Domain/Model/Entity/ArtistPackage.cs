@@ -12,7 +12,7 @@ namespace localsound.backend.Domain.Model.Entity
         public string PackagePrice { get; set; }
         public bool IsAvailable { get; set; }
 
-        public virtual Artist Artist { get; set; }
+        public virtual Account Artist { get; set; }
         public virtual ICollection<ArtistPackageEquipment> Equipment { get; set; }
         public virtual ICollection<ArtistPackagePhoto> PackagePhotos { get; set; }
         public virtual ICollection<ArtistBooking> RelatedBookings { get; set; }

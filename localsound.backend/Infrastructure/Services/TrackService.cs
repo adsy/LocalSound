@@ -38,9 +38,9 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
+                var appUser = await _accountRepository.GetAccountFromDbAsync(userId, memberId);
 
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError)
                     {
@@ -50,7 +50,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 var track = await _trackRepository.GetArtistTrackAsync(memberId, trackId);
 
-                if (track == null || track.ReturnData == null)
+                if (track is null || track.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.NotFound)
                     {
@@ -62,7 +62,7 @@ namespace localsound.backend.Infrastructure.Services
                 {
                     var imageDeleteResult = await _blobRepository.DeleteBlobAsync(track.ReturnData.TrackImage.FileLocation);
 
-                    if (imageDeleteResult == null || !imageDeleteResult.IsSuccessStatusCode)
+                    if (imageDeleteResult is null || !imageDeleteResult.IsSuccessStatusCode)
                     {
                         // Push delete operation to a queue so it can be done at a different time
                     }
@@ -70,14 +70,14 @@ namespace localsound.backend.Infrastructure.Services
 
                 var trackDeleteResult = await _blobRepository.DeleteBlobAsync(track.ReturnData.TrackData.FileLocation);
 
-                if (trackDeleteResult == null || !trackDeleteResult.IsSuccessStatusCode)
+                if (trackDeleteResult is null || !trackDeleteResult.IsSuccessStatusCode)
                 {
                     // Push delete operation to a queue so it can be done at a different time
                 }
 
                 var dbDeleteResult = await _trackRepository.DeleteTrackAsync(track.ReturnData);
 
-                if (dbDeleteResult == null || !dbDeleteResult.IsSuccessStatusCode)
+                if (dbDeleteResult is null || !dbDeleteResult.IsSuccessStatusCode)
                     return new ServiceResponse(HttpStatusCode.InternalServerError)
                     {
                         ServiceResponseMessage = "An error occured deleting your track, please try again..."
@@ -101,9 +101,9 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
+                var appUser = await _accountRepository.GetAccountFromDbAsync(userId, memberId);
 
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
                 {
                     return new ServiceResponse<TrackUploadSASDto>(HttpStatusCode.InternalServerError);
                 }
@@ -191,7 +191,7 @@ namespace localsound.backend.Infrastructure.Services
             {
                 var tracks = await _trackRepository.GetArtistTracksAsync(memberId, page);
 
-                if (!tracks.IsSuccessStatusCode || tracks.ReturnData == null)
+                if (!tracks.IsSuccessStatusCode || tracks.ReturnData is null)
 
                 {
                     return new ServiceResponse<TrackListResponseDto>(tracks.StatusCode);
@@ -224,16 +224,16 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
+                var accountResult = await _accountRepository.GetAccountFromDbAsync(userId, memberId);
 
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                if (!accountResult.IsSuccessStatusCode || accountResult.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError);
                 }
 
                 var track = await _trackRepository.GetArtistTrackAsync(memberId, trackId);
 
-                if (track == null || track.ReturnData == null)
+                if (track is null || track.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.NotFound);
                 }
@@ -253,7 +253,7 @@ namespace localsound.backend.Infrastructure.Services
 
                     if (uploadResponse != null && 
                         (!uploadResponse.IsSuccessStatusCode || 
-                        uploadResponse.ReturnData == null || 
+                        uploadResponse.ReturnData is null || 
                         string.IsNullOrWhiteSpace(uploadResponse.ReturnData)))
                     {
                         return new ServiceResponse(HttpStatusCode.InternalServerError)
@@ -284,9 +284,9 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var updateResult = await _trackRepository.UpdateArtistTrackUploadAsync(appUser.ReturnData, trackId, trackData.TrackName, trackData.TrackDescription, trackData.Genres, trackData.TrackImageExt, newTrackImage, newTrackImageUrl);
+                var updateResult = await _trackRepository.UpdateArtistTrackUploadAsync(accountResult.ReturnData, trackId, trackData.TrackName, trackData.TrackDescription, trackData.Genres, trackData.TrackImageExt, newTrackImage, newTrackImageUrl);
 
-                if (updateResult == null || updateResult.StatusCode != HttpStatusCode.OK) 
+                if (updateResult is null || updateResult.StatusCode != HttpStatusCode.OK) 
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError);
                 }
@@ -309,9 +309,9 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                var appUser = await _accountRepository.GetAppUserFromDbAsync(userId, memberId);
+                var appUser = await _accountRepository.GetAccountFromDbAsync(userId, memberId);
 
-                if (!appUser.IsSuccessStatusCode || appUser.ReturnData == null)
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
                 {
                     return new ServiceResponse<TrackUploadSASDto>(HttpStatusCode.InternalServerError);
                 }
@@ -349,7 +349,7 @@ namespace localsound.backend.Infrastructure.Services
 
                     var result = await _blobRepository.UploadBlobAsync(imageFilePath, trackUploadDto.TrackImage);
 
-                    if (!result.IsSuccessStatusCode || result.ReturnData == null)
+                    if (!result.IsSuccessStatusCode || result.ReturnData is null)
                     {
                         return new ServiceResponse(HttpStatusCode.InternalServerError);
                     }

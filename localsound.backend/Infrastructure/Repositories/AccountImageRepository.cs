@@ -28,7 +28,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.FileContent)
                     .FirstOrDefaultAsync(x => x.AccountImageTypeId == imageType && x.AppUserId == appUserId && !x.ToBeDeleted);
 
-                if (accountImage == null)
+                if (accountImage is null)
                 {
                     return new ServiceResponse<AccountImage>(HttpStatusCode.NotFound);
                 }

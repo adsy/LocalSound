@@ -116,7 +116,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     })
                     .FirstOrDefaultAsync(x => x.ArtistPackageId == packageId && x.AppUserId == appUserId);
 
-                if (package == null)
+                if (package is null)
                 {
                     return new ServiceResponse<ArtistPackage>(HttpStatusCode.InternalServerError);
                 }
@@ -142,9 +142,9 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.AppUser.FirstOrDefaultAsync(x => x.MemberId == memberId);
+                var artist = await _dbContext.Account.FirstOrDefaultAsync(x => x.MemberId == memberId);
 
-                if (artist == null)
+                if (artist is null)
                 {
                     return new ServiceResponse<List<ArtistPackage>>(HttpStatusCode.NotFound, "An error occured getting artist packages, please try again...");
                 }
@@ -152,7 +152,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 var packages = await _dbContext.ArtistPackage
                     .Include(x => x.Equipment)
                     .Include(x => x.PackagePhotos)
-                    .Where(x => x.AppUserId == artist.Id && x.IsAvailable)
+                    .Where(x => x.AppUserId == artist.AppUserId && x.IsAvailable)
                     .Select(x => new ArtistPackage
                     {
                         ArtistPackageId = x.ArtistPackageId,
@@ -200,7 +200,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.Equipment)
                     .FirstOrDefaultAsync(x => x.ArtistPackageId == PackageId && x.AppUserId == AppUserId);
 
-                if (package == null)
+                if (package is null)
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError)
                     {
@@ -235,7 +235,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     .ThenInclude(x => x.FileContent)
                     .FirstOrDefaultAsync(x => x.ArtistPackageId == packageId);
 
-                if (package == null)
+                if (package is null)
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError)
                     {

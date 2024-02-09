@@ -152,7 +152,7 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 var data = await blobClient.OpenReadAsync();
 
-                if (data == null)
+                if (data is null)
                 {
                     return new ServiceResponse<Stream>(HttpStatusCode.InternalServerError);
                 }

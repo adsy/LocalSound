@@ -9,6 +9,6 @@ namespace localsound.backend.Domain.Model.Entity
         public Guid EquipmentId { get; set; }
         public string EquipmentName { get; set; }
 
-        public Artist Artist { get; set; }
+        public Account Artist { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace localsound.backend.Domain.Model.Entity
         public DateTime UploadDate { get; set; }
         public int FileSizeInBytes { get; set; }
 
-        public virtual Artist Artist {get;set;}
+        public virtual Account Artist {get;set;}
         public virtual ICollection<ArtistTrackGenre>  Genres { get; set;}
         public virtual FileContent TrackData { get;set;} 
         public virtual FileContent? TrackImage { get;set; }

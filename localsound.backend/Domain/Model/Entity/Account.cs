@@ -1,15 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using localsound.backend.Domain.Model.Interfaces.Entity;
+using localsound.backend.Domain.Enum;
 
 namespace localsound.backend.Domain.Model.Entity
 {
-    public class Artist : CustomerType
+    public class Account : CustomerType
     {
         [Key]
         [ForeignKey("User")]
         public Guid AppUserId { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
         public string ProfileUrl { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
@@ -17,41 +20,49 @@ namespace localsound.backend.Domain.Model.Entity
         public string? SpotifyUrl { get; set; }
         public string? YoutubeUrl { get; set; }
         public string? AboutSection { get; set; }
+        public CustomerTypeEnum CustomerType { get; set; }
+        public string MemberId { get; set; }
 
         public virtual ICollection<ArtistGenre> Genres { get; set; }
         public virtual ICollection<ArtistEventType> EventTypes { get; set; }
         public virtual ICollection<ArtistEquipment> Equipment { get; set; }
-        public virtual ICollection<ArtistFollower> Followers { get; set; }
         public virtual ICollection<ArtistPackage> Packages { get; set; }
         public virtual ICollection<ArtistBooking> Bookings { get; set; }
+        public virtual ICollection<AccountImage> Images { get; set; }
+        public virtual ICollection<ArtistFollower> Following { get; set; }
+        public virtual ICollection<ArtistFollower> Followers { get; set; }
+        public virtual ICollection<ArtistBooking> PartiesBooked { get; set; }
+        public virtual ICollection<Notification> SentNotifications { get; set; }
+        public virtual ICollection<Notification> ReceivedNotifications { get; set; }
 
+        public virtual AccountOnboarding AccountOnboarding { get; set; }
         public virtual AppUser User { get; set; }
 
-        public Artist UpdateName(string name)
+        public Account UpdateName(string name)
         {
             Name = name;
             return this;
         }
 
-        public Artist UpdateProfileUrl(string profileUrl)
+        public Account UpdateProfileUrl(string profileUrl)
         {
             ProfileUrl = profileUrl; 
             return this;
         }
 
-        public Artist UpdateAddress(string address)
+        public Account UpdateAddress(string address)
         {
             Address = address; 
             return this;
         }
 
-        public Artist UpdatePhoneNumber(string phoneNumber)
+        public Account UpdatePhoneNumber(string phoneNumber)
         {
             PhoneNumber = phoneNumber;
             return this;
         }
 
-        public Artist UpdateSocialLinks(string? soundcloud, string? spotify, string? youtube)
+        public Account UpdateSocialLinks(string? soundcloud, string? spotify, string? youtube)
         {
             SoundcloudUrl = soundcloud;
             SpotifyUrl = spotify;
@@ -59,25 +70,25 @@ namespace localsound.backend.Domain.Model.Entity
             return this;
         }
 
-        public Artist UpdateAboutSection(string? aboutSection)
+        public Account UpdateAboutSection(string? aboutSection)
         {
             AboutSection = aboutSection;
             return this;
         }
 
-        public Artist UpdateGenres(ICollection<ArtistGenre> genres)
+        public Account UpdateGenres(ICollection<ArtistGenre> genres)
         {
             Genres = genres;
             return this;
         }
 
-        public Artist UpdateEquipment(ICollection<ArtistEquipment> equipment)
+        public Account UpdateEquipment(ICollection<ArtistEquipment> equipment)
         {
             Equipment = equipment;
             return this;
         }
 
-        public Artist UpdateEventTypes(ICollection<ArtistEventType> eventTypes)
+        public Account UpdateEventTypes(ICollection<ArtistEventType> eventTypes)
         {
             EventTypes = eventTypes;
             return this;

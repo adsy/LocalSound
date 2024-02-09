@@ -7,6 +7,7 @@ using localsound.backend.Persistence.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using System.Text;
 
 namespace localsound.backend.Infrastructure.Repositories
 {
@@ -21,18 +22,18 @@ namespace localsound.backend.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public async Task<ServiceResponse<CustomerType>> AddArtistToDbAsync(Artist artist)
+        public async Task<ServiceResponse<CustomerType>> AddArtistToDbAsync(Account artist)
         {
             try
             {
                 var fnResult = new ServiceResponse<CustomerType>(HttpStatusCode.BadRequest);
 
-                if (artist == null)
+                if (artist is null)
                 {
                     return fnResult;
                 }
 
-                var result = await _dbContext.Artist.FirstOrDefaultAsync(o => o.AppUserId == artist.User.Id);
+                var result = await _dbContext.Account.FirstOrDefaultAsync(o => o.AppUserId == artist.User.Id);
 
                 if (result != null)
                 {
@@ -42,7 +43,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     return fnResult;
                 }
 
-                var existingProfileWithUrl = await _dbContext.Artist.FirstOrDefaultAsync(o => o.ProfileUrl == artist.ProfileUrl);
+                var existingProfileWithUrl = await _dbContext.Account.FirstOrDefaultAsync(o => o.ProfileUrl == artist.ProfileUrl);
 
                 if (existingProfileWithUrl != null)
                 {
@@ -50,7 +51,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 }
                 else
                 {
-                    var artistResult = await _dbContext.Artist.AddAsync(artist);
+                    var artistResult = await _dbContext.Account.AddAsync(artist);
 
                     await _dbContext.SaveChangesAsync();
 
@@ -69,18 +70,18 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<CustomerType>> AddNonArtistToDbAsync(NonArtist nonArtist)
+        public async Task<ServiceResponse<CustomerType>> AddNonArtistToDbAsync(Account nonArtist)
         {
             try
             {
                 var fnResult = new ServiceResponse<CustomerType>(HttpStatusCode.BadRequest);
 
-                if (nonArtist == null)
+                if (nonArtist is null)
                 {
                     return fnResult;
                 }
 
-                var result = await _dbContext.NonArtist.FirstOrDefaultAsync(o => o.AppUserId == nonArtist.User.Id);
+                var result = await _dbContext.Account.FirstOrDefaultAsync(o => o.AppUserId == nonArtist.User.Id);
 
                 if (result != null)
                 {
@@ -90,7 +91,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     return fnResult;
                 }
 
-                var existingProfileWithUrl = await _dbContext.NonArtist.FirstOrDefaultAsync(o => o.ProfileUrl == nonArtist.ProfileUrl);
+                var existingProfileWithUrl = await _dbContext.Account.FirstOrDefaultAsync(o => o.ProfileUrl == nonArtist.ProfileUrl);
 
                 if (existingProfileWithUrl != null)
                 {
@@ -98,7 +99,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 }
                 else
                 {
-                    var nonartistResult = await _dbContext.NonArtist.AddAsync(nonArtist);
+                    var nonartistResult = await _dbContext.Account.AddAsync(nonArtist);
 
                     await _dbContext.SaveChangesAsync();
 
@@ -123,7 +124,7 @@ namespace localsound.backend.Infrastructure.Repositories
             {
                 var accountImage = await _dbContext.AccountImage.FirstOrDefaultAsync(x => x.AppUserId == id && x.AccountImageTypeId == imageType && !x.ToBeDeleted);
 
-                if (accountImage == null)
+                if (accountImage is null)
                 {
                     return new ServiceResponse<AccountImage>(HttpStatusCode.InternalServerError);
                 }
@@ -142,54 +143,78 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<AppUser>> GetAppUserFromDbAsync(Guid id, string memberId)
+        public async Task<ServiceResponse<Account>> GetAccountFromDbAsync(string memberId)
         {
             try
             {
-                var user = await _dbContext.AppUser.FirstOrDefaultAsync(x => x.Id == id && x.MemberId == memberId);
+                var user = await _dbContext.Account.FirstOrDefaultAsync(x => x.MemberId == memberId);
 
-                if (user == null)
+                if (user is null)
                 {
-                    _logger.LogError($"Error matching user: UserId ${id} does not match account with memberId ${memberId}");
-                    return new ServiceResponse<AppUser>(HttpStatusCode.Unauthorized);
+                    return new ServiceResponse<Account>(HttpStatusCode.Unauthorized);
                 }
 
-                return new ServiceResponse<AppUser>(HttpStatusCode.OK)
-                {
-                    ReturnData = user
-                };
-            }
-            catch(Exception e)
-            {
-                var message = $"{nameof(AccountRepository)} - {nameof(GetAppUserFromDbAsync)} - {e.Message}";
-                _logger.LogError(e, message);
-
-                return new ServiceResponse<AppUser>(HttpStatusCode.InternalServerError);
-            }
-        }
-
-        public async Task<ServiceResponse<AppUser>> GetAppUserFromDbAsync(string memberId)
-        {
-            try
-            {
-                var user = await _dbContext.AppUser.FirstOrDefaultAsync(x => x.MemberId == memberId);
-
-                if (user == null)
-                {
-                    return new ServiceResponse<AppUser>(HttpStatusCode.Unauthorized);
-                }
-
-                return new ServiceResponse<AppUser>(HttpStatusCode.OK)
+                return new ServiceResponse<Account>(HttpStatusCode.OK)
                 {
                     ReturnData = user
                 };
             }
             catch (Exception e)
             {
-                var message = $"{nameof(AccountRepository)} - {nameof(GetAppUserFromDbAsync)} - {e.Message}";
+                var message = $"{nameof(Account)} - {nameof(GetAccountFromDbAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<AppUser>(HttpStatusCode.InternalServerError);
+                return new ServiceResponse<Account>(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<ServiceResponse<Account>> GetAccountFromDbAsync(Guid id)
+        {
+            try
+            {
+                var user = await _dbContext.Account.FirstOrDefaultAsync(x => x.AppUserId == id);
+
+                if (user is null)
+                {
+                    return new ServiceResponse<Account>(HttpStatusCode.Unauthorized);
+                }
+
+                return new ServiceResponse<Account>(HttpStatusCode.OK)
+                {
+                    ReturnData = user
+                };
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(Account)} - {nameof(GetAccountFromDbAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<Account>(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<ServiceResponse<Account>> GetAccountFromDbAsync(Guid id, string memberId)
+        {
+            try
+            {
+                var user = await _dbContext.AppUser.Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == id && x.Account.MemberId == memberId);
+
+                if (user is null)
+                {
+                    return new ServiceResponse<Account>(HttpStatusCode.Unauthorized);
+                }
+
+                return new ServiceResponse<Account>(HttpStatusCode.OK)
+                {
+                    ReturnData = user.Account
+                };
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(Account)} - {nameof(GetAccountFromDbAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<Account>(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -197,22 +222,18 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.Artist
-                    .Include(x => x.User)
-                    .Include(x => x.Followers)
-                    .ThenInclude(x => x.Follower)
-                    .ThenInclude(x => x.NonArtist)
-                    .Include(x => x.Followers)
-                    .ThenInclude(x => x.Follower)
-                    .ThenInclude(x => x.Artist)
+                var artist = await _dbContext.Account
                     .Include(x => x.Followers)
                     .ThenInclude(x => x.Follower)
                     .ThenInclude(x => x.Images)
+                    .Include(x => x.Followers)
+                    .ThenInclude(x => x.Artist)
+                    .ThenInclude(x => x.Images)
                     .Skip(page*30)
                     .Take(30)
-                    .FirstOrDefaultAsync(x => x.User.MemberId == memberId);
+                    .FirstOrDefaultAsync(x => x.MemberId == memberId);
 
-                if (artist == null)
+                if (artist is null)
                 {
                     return new ServiceResponse<List<ArtistFollower>>(HttpStatusCode.NotFound);
                 }
@@ -224,7 +245,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
             catch (Exception e)
             {
-                var message = $"{nameof(AccountRepository)} - {nameof(GetAppUserFromDbAsync)} - {e.Message}";
+                var message = $"{nameof(AccountRepository)} - {nameof(GetArtistFollowersFromDbAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<List<ArtistFollower>>(HttpStatusCode.InternalServerError);
@@ -235,62 +256,90 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.Artist
-                    .Include(x => x.User)
-                    .ThenInclude(x => x.Following)
+                var artist = await _dbContext.Account
+                    .Include(x => x.Following)
                     .ThenInclude(x => x.Artist)
-                    .ThenInclude(x => x.User)
                     .ThenInclude(x => x.Images)
                     .Skip(page * 30)
                     .Take(30)
-                    .FirstOrDefaultAsync(x => x.User.MemberId == memberId);
+                    .FirstOrDefaultAsync(x => x.MemberId == memberId);
 
-                if (artist == null)
+                if (artist is null)
                 {
                     return new ServiceResponse<List<ArtistFollower>>(HttpStatusCode.NotFound);
                 }
 
                 return new ServiceResponse<List<ArtistFollower>>(HttpStatusCode.OK)
                 {
-                    ReturnData = artist.User.Following?.Any() == true ? artist.User.Following.Select(x => x).ToList() : new List<ArtistFollower>()
+                    ReturnData = artist.Following?.Any() == true ? artist.Following.Select(x => x).ToList() : new List<ArtistFollower>()
                 };
             }
             catch (Exception e)
             {
-                var message = $"{nameof(AccountRepository)} - {nameof(GetAppUserFromDbAsync)} - {e.Message}";
+                var message = $"{nameof(AccountRepository)} - {nameof(GetArtistFollowingFromDbAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<List<ArtistFollower>>(HttpStatusCode.InternalServerError);
             }
         }
 
-        public async Task<ServiceResponse<Artist>> GetArtistFromDbAsync(Guid id)
+        // Used during login to get artist data from table
+        public async Task<ServiceResponse<Account>> GetArtistFromDbAsync(Guid id)
         {
             try
             {
-                var artist = await _dbContext.Artist
-                    .Include(x => x.User)
-                    .ThenInclude(x => x.Images)
+                var artist = await _dbContext.Account
+                    .Include(x => x.Images)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
                     .Include(x => x.EventTypes)
                     .ThenInclude(x => x.EventType)
                     .Include(x => x.Equipment)
                     .Include(x => x.Followers)
-                    .Include(x => x.User)
-                    .ThenInclude(x => x.Following)
+                    .Include(x => x.Following)
                     .Include(x => x.Packages)
-                    .Select(x => new Artist
+                    .FirstOrDefaultAsync(x => x.AppUserId == id && x.CustomerType == CustomerTypeEnum.Artist);
+
+                artist.Images = artist.Images.Where(x => !x.ToBeDeleted).ToList();
+
+                if (artist is null)
+                {
+                    return new ServiceResponse<Account>(HttpStatusCode.NotFound);
+                }
+
+                return new ServiceResponse<Account>(HttpStatusCode.OK)
+                {
+                    ReturnData = artist
+                };
+            }
+            catch(Exception e)
+            {
+                var message = $"{nameof(AccountRepository)} - {nameof(GetArtistFromDbAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<Account>(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<ServiceResponse<Account>> GetArtistFromDbAsync(string profileUrl)
+        {
+            try
+            {
+                var artist = await _dbContext.Account
+                    .Include(x => x.Images)
+                    .Include(x => x.Following)
+                    .Include(x => x.Followers)
+                    .Include(x => x.Genres)
+                    .ThenInclude(x => x.Genre)
+                    .Include(x => x.EventTypes)
+                    .ThenInclude(x => x.EventType)
+                    .Include(x => x.Equipment)
+                    .Include(x => x.Packages)
+                    .Select(x => new Account
                     {
                         AppUserId = x.AppUserId,
-                        User = new AppUser
-                        {
-                            Id = x.User.Id,
-                            MemberId = x.User.MemberId,
-                            Images = x.User.Images.Where(x => !x.ToBeDeleted).ToList(),
-                            CustomerType = x.User.CustomerType,
-                            EmailConfirmed = x.User.EmailConfirmed
-                        },
+                        User = x.User,
+                        Images = x.Images.Where(x => !x.ToBeDeleted).ToList(),
                         Name = x.Name,
                         ProfileUrl = x.ProfileUrl,
                         Address = x.Address,
@@ -304,79 +353,16 @@ namespace localsound.backend.Infrastructure.Repositories
                         Equipment = x.Equipment,
                         Followers = x.Followers,
                         Packages = x.Packages.Where(x => x.IsAvailable).ToList(),
-                        
-                    })
-                    .FirstOrDefaultAsync(x => x.AppUserId == id);
 
-                if (artist == null)
-                {
-                    return new ServiceResponse<Artist>(HttpStatusCode.NotFound);
-                }
-
-                return new ServiceResponse<Artist>(HttpStatusCode.OK)
-                {
-                    ReturnData = artist
-                };
-            }
-            catch(Exception e)
-            {
-                var message = $"{nameof(AccountRepository)} - {nameof(GetArtistFromDbAsync)} - {e.Message}";
-                _logger.LogError(e, message);
-
-                return new ServiceResponse<Artist>(HttpStatusCode.InternalServerError);
-            }
-        }
-
-        public async Task<ServiceResponse<Artist>> GetArtistFromDbAsync(string profileUrl)
-        {
-            try
-            {
-                var artist = await _dbContext.Artist
-                    .Include(x => x.User)
-                    .ThenInclude(x => x.Images)
-                    .Include(x => x.User)
-                    .ThenInclude(x => x.Following)
-                    .Include(x => x.Genres)
-                    .ThenInclude(x => x.Genre)
-                    .Include(x => x.EventTypes)
-                    .ThenInclude(x => x.EventType)
-                    .Include(x => x.Equipment)
-                    .Include(x => x.Followers)
-                    .Include(x => x.User)
-                    .ThenInclude(x => x.Following)
-                    .Include(x => x.Packages)
-                    .Select(x => new Artist
-                    {
-                        AppUserId = x.AppUserId,
-                        User = new AppUser
-                        {
-                            Id = x.User.Id,
-                            MemberId = x.User.MemberId,
-                            Images = x.User.Images.Where(x => !x.ToBeDeleted).ToList(),
-                            CustomerType = x.User.CustomerType
-                        },
-                        Name = x.Name,
-                        ProfileUrl = x.ProfileUrl,
-                        Address = x.Address,
-                        PhoneNumber = x.PhoneNumber,
-                        SoundcloudUrl = x.SoundcloudUrl,
-                        SpotifyUrl = x.SpotifyUrl,
-                        YoutubeUrl = x.YoutubeUrl, 
-                        AboutSection = x.AboutSection,
-                        Genres = x.Genres,
-                        EventTypes = x.EventTypes,
-                        Equipment = x.Equipment,
-                        Followers = x.Followers,
-                        Packages = x.Packages.Where(x => x.IsAvailable).ToList(),
                     })
                     .FirstOrDefaultAsync(x => x.ProfileUrl == profileUrl);
 
-                if (artist == null)
+                if (artist is null)
                 {
-                    return new ServiceResponse<Artist>(HttpStatusCode.NotFound);
+                    return new ServiceResponse<Account>(HttpStatusCode.NotFound);
                 }
 
-                return new ServiceResponse<Artist>(HttpStatusCode.OK)
+                return new ServiceResponse<Account>(HttpStatusCode.OK)
                 {
                     ReturnData = artist
                 };
@@ -386,30 +372,27 @@ namespace localsound.backend.Infrastructure.Repositories
                 var message = $"{nameof(AccountRepository)} - {nameof(GetArtistFromDbAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<Artist>(HttpStatusCode.InternalServerError);
+                return new ServiceResponse<Account>(HttpStatusCode.InternalServerError);
             }
         }
 
-        public async Task<ServiceResponse<NonArtist>> GetNonArtistFromDbAsync(Guid id)
+        public async Task<ServiceResponse<Account>> GetNonArtistFromDbAsync(Guid id)
         {
             try
             {
-                var nonArtist = await _dbContext.NonArtist
-                    .Include(x => x.User)
-                    .ThenInclude(x => x.Images)
-                    .Include(x => x.User)
-                    .ThenInclude(x => x.Following)
+                var nonArtist = await _dbContext.Account
+                    .Include(x => x.Images)
+                    .Include(x => x.Following)
                     .ThenInclude(x => x.Artist)
-                    .ThenInclude(x => x.User)
                     .ThenInclude(x => x.Images)
                     .FirstOrDefaultAsync(x => x.AppUserId == id);
 
-                if (nonArtist == null)
+                if (nonArtist is null)
                 {
-                    return new ServiceResponse<NonArtist>(HttpStatusCode.NotFound);
+                    return new ServiceResponse<Account>(HttpStatusCode.NotFound);
                 }
 
-                return new ServiceResponse<NonArtist>(HttpStatusCode.OK)
+                return new ServiceResponse<Account>(HttpStatusCode.OK)
                 {
                     ReturnData = nonArtist
                 };
@@ -419,22 +402,22 @@ namespace localsound.backend.Infrastructure.Repositories
                 var message = $"{nameof(AccountRepository)} - {nameof(GetNonArtistFromDbAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<NonArtist>(HttpStatusCode.InternalServerError);
+                return new ServiceResponse<Account>(HttpStatusCode.InternalServerError);
             }
         }
 
-        public async Task<ServiceResponse<NonArtist>> GetNonArtistFromDbAsync(string profileUrl)
+        public async Task<ServiceResponse<Account>> GetNonArtistFromDbAsync(string profileUrl)
         {
             try
             {
-                var nonArtist = await _dbContext.NonArtist.Include(x => x.User).FirstOrDefaultAsync(x => x.ProfileUrl == profileUrl);
+                var nonArtist = await _dbContext.Account.Include(x => x.User).FirstOrDefaultAsync(x => x.ProfileUrl == profileUrl);
 
-                if (nonArtist == null)
+                if (nonArtist is null)
                 {
-                    return new ServiceResponse<NonArtist>(HttpStatusCode.NotFound);
+                    return new ServiceResponse<Account>(HttpStatusCode.NotFound);
                 }
 
-                return new ServiceResponse<NonArtist>(HttpStatusCode.OK)
+                return new ServiceResponse<Account>(HttpStatusCode.OK)
                 {
                     ReturnData = nonArtist
                 };
@@ -444,7 +427,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 var message = $"{nameof(AccountRepository)} - {nameof(GetNonArtistFromDbAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<NonArtist>(HttpStatusCode.InternalServerError);
+                return new ServiceResponse<Account>(HttpStatusCode.InternalServerError);
             }
         }
     }

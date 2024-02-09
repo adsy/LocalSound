@@ -26,7 +26,7 @@ namespace localsound.CoreUpdates.Repository
                     .Include(x => x.FileContent)
                     .FirstOrDefaultAsync(x => x.AppUserId == userId && x.AccountImageId == accountImageId);
 
-                if (accountImage == null || accountImage.FileContent == null)
+                if (accountImage is null || accountImage.FileContent is null)
                     return false;
 
                 _dbContext.FileContent.Remove(accountImage.FileContent);

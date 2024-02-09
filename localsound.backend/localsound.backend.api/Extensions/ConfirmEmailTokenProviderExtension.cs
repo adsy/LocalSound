@@ -17,7 +17,7 @@ namespace localsound.backend.api.Extensions
           UserManager<TUser> manager,
           TUser user)
         {
-            if (manager == null)
+            if (manager is null)
                 throw new ArgumentNullException(nameof(manager));
             byte[] token = await manager.CreateSecurityTokenAsync(user);
             string async = CustomRfc6238AuthenticationService.GenerateCode
@@ -37,7 +37,7 @@ namespace localsound.backend.api.Extensions
           UserManager<TUser> manager,
           TUser user)
         {
-            if (manager == null)
+            if (manager is null)
                 throw new ArgumentNullException(nameof(manager));
             int code;
             if (!int.TryParse(token, out code))

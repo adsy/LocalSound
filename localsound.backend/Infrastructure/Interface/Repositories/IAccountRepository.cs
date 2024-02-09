@@ -7,14 +7,15 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
 {
     public interface IAccountRepository
     {
-        Task<ServiceResponse<CustomerType>> AddNonArtistToDbAsync(NonArtist nonArtist);
-        Task<ServiceResponse<CustomerType>> AddArtistToDbAsync(Artist artist);
-        Task<ServiceResponse<Artist>> GetArtistFromDbAsync(Guid id);
-        Task<ServiceResponse<Artist>> GetArtistFromDbAsync(string profileUrl);
-        Task<ServiceResponse<NonArtist>> GetNonArtistFromDbAsync(Guid id);
-        Task<ServiceResponse<NonArtist>> GetNonArtistFromDbAsync(string profileUrl);
-        Task<ServiceResponse<AppUser>> GetAppUserFromDbAsync(Guid id, string memberId);
-        Task<ServiceResponse<AppUser>> GetAppUserFromDbAsync(string memberId);
+        Task<ServiceResponse<CustomerType>> AddNonArtistToDbAsync(Account nonArtist);
+        Task<ServiceResponse<CustomerType>> AddArtistToDbAsync(Account artist);
+        Task<ServiceResponse<Account>> GetArtistFromDbAsync(Guid id);
+        Task<ServiceResponse<Account>> GetArtistFromDbAsync(string profileUrl);
+        Task<ServiceResponse<Account>> GetNonArtistFromDbAsync(Guid id);
+        Task<ServiceResponse<Account>> GetNonArtistFromDbAsync(string profileUrl);
+        Task<ServiceResponse<Account>> GetAccountFromDbAsync(Guid id);
+        Task<ServiceResponse<Account>> GetAccountFromDbAsync(string memberId);
+        Task<ServiceResponse<Account>> GetAccountFromDbAsync(Guid id, string memberId);
         Task<ServiceResponse<AccountImage>> GetAccountImageFromDbAsync(Guid id, AccountImageTypeEnum imageType);
         Task<ServiceResponse<List<ArtistFollower>>> GetArtistFollowersFromDbAsync(string memberId, int page, CancellationToken cancellationToken);
         Task<ServiceResponse<List<ArtistFollower>>> GetArtistFollowingFromDbAsync(string memberId, int page, CancellationToken cancellationToken);
