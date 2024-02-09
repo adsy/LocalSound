@@ -219,7 +219,7 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 if (!result.Succeeded)
                 {
-                    return new ServiceResponse<LoginResponseDto>(HttpStatusCode.BadRequest, "The email confirmation token entered is incorrect, please try again..");
+                    return new ServiceResponse<LoginResponseDto>(HttpStatusCode.BadRequest, "The email confirmation token entered is incorrect.");
                 }
 
                 var returnUser = null as IAppUserDto;

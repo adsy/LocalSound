@@ -76,7 +76,6 @@ const AddArtistPackage = ({ userDetails, setPackages }: Props) => {
 
                 dispatch(handleResetModal());
               } catch (err: any) {
-                console.log(err);
                 setSubmittingError(err);
               }
               setSubmitting(false);

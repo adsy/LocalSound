@@ -755,7 +755,7 @@ i.large.icon {
 .black-button:active,
 .black-button:focus {
   background-color: $black200 !important;
-  border: 1px solid white;
+  border: 1px solid $purple100;
   color: $black100;
 }
 
@@ -802,6 +802,10 @@ i.large.icon {
 }
 
 .youtube-button {
+  h4 {
+    color: $black100;
+  }
+  @include text-shadow;
   @include button-style;
   transition: background-color 0.5s ease;
   background-color: #ff0000;

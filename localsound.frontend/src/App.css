@@ -870,7 +870,7 @@ i.large.icon {
 .black-button:active,
 .black-button:focus {
   background-color: #001514 !important;
-  border: 1px solid white;
+  border: 1px solid #6d69fa;
   color: #232323;
 }
 
@@ -927,6 +927,7 @@ i.large.icon {
 }
 
 .youtube-button {
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   color: #232323;
   font-size: 16px;
   letter-spacing: 2px;
@@ -936,6 +937,9 @@ i.large.icon {
   transition: background-color 0.5s ease;
   background-color: #ff0000;
   border: black 1px solid;
+}
+.youtube-button h4 {
+  color: #232323;
 }
 
 .youtube-button:hover,

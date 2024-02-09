@@ -68,18 +68,25 @@ const Register = () => {
         </h2>
       </div>
       {!showRegisterForm ? (
-        <div className="d-flex header justify-content-end mt-2">
+        <div className="d-flex flex-column header justify-content-end mt-2">
+          <h5>What type of account do you want to sign up for?</h5>
           <Button
-            className="black-button mr-2"
+            className="white-button mb-2"
             onClick={() => handleUserTypeSelection(CustomerTypes.Artist)}
           >
-            <h4>I play the music</h4>
+            <h4>I play the music.</h4>
           </Button>
           <Button
-            className="black-button"
+            className="white-button mb-2"
             onClick={() => handleUserTypeSelection(CustomerTypes.NonArtist)}
           >
-            <h4>I listen to the music</h4>
+            <h4>I listen to the music.</h4>
+          </Button>
+          <Button
+            className="white-button"
+            onClick={() => handleUserTypeSelection(CustomerTypes.NonArtist)}
+          >
+            <h4>I am a business looking for an artist.</h4>
           </Button>
         </div>
       ) : customerType === CustomerTypes.Artist ? (

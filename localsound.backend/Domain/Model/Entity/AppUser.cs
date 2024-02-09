@@ -16,5 +16,7 @@ namespace localsound.backend.Domain.Model.Entity
         public virtual ICollection<ArtistBooking> PartiesBooked { get; set; }
         public virtual ICollection<Notification> SentNotifications { get; set; }
         public virtual ICollection<Notification> ReceivedNotifications { get; set; }
+
+        public virtual AccountOnboarding AccountOnboarding { get; set; }
     }
 }

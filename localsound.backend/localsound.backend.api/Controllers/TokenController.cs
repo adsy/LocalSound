@@ -60,7 +60,7 @@ namespace localsound.backend.api.Controllers
                 return Ok(result.ReturnData.UserDetails);
             }
 
-            return StatusCode((int)result.StatusCode, result);
+            return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
         }
 
         [Authorize]

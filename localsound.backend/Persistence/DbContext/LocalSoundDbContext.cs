@@ -24,6 +24,7 @@ namespace localsound.backend.Persistence.DbContext
 
         public DbSet<AccountImage> AccountImage { get; set; }
         public DbSet<AccountImageType> AccountImageType { get; set; }
+        public DbSet<AccountOnboarding> AccountOnboarding { get; set; }
         public DbSet<AppUser> AppUser { get; set; }
         public DbSet<AppUserToken> AppUserToken { get; set; }
         public DbSet<Artist> Artist { get; set; }
@@ -100,7 +101,11 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<AppUser>().Property(x => x.MemberId).HasDefaultValueSql("NEXT VALUE FOR MemberId");
             builder.Entity<AppUser>().HasMany(x => x.Following);
 
+            builder.Entity<AppUser>().HasOne(x => x.AccountOnboarding).WithOne(x => x.AppUser);
+
             builder.Entity<AppUserToken>().Property(o => o.ExpirationDate).HasDefaultValueSql("DateAdd(week,1,getDate())");
+
+            builder.Entity<AccountOnboarding>().HasKey(x => x.AppUserId);
 
             builder.Entity<Artist>().HasKey(x => x.AppUserId);
             builder.Entity<Artist>().HasMany(x => x.Genres);
