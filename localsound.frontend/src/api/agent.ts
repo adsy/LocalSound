@@ -163,7 +163,7 @@ const Profile = {
     accountImageType: AccountImageTypes
   ) =>
     requests.put<AccountImageModel>(
-      `account/update-account-image/${memberId}/image-type/${accountImageType}`,
+      `account/update-account-image/member/${memberId}/image-type/${accountImageType}`,
       formData
     ),
   getProfileFollowers: (memberId: string, page: number) =>

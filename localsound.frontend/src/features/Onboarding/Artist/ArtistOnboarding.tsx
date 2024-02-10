@@ -105,10 +105,12 @@ const ArtistOnboarding = () => {
               >
                 <div className="form-body">
                   <UpdateProfilePhoto />
-                  <div className="d-flex">
-                    <p className="form-label">ABOUT</p>
+                  <div className="px-3 mb-3">
+                    <div className="d-flex">
+                      <p className="form-label">ABOUT</p>
+                    </div>
+                    <TextArea name="aboutSection" placeholder="" rows={5} />
                   </div>
-                  <TextArea name="aboutSection" placeholder="" rows={5} />
                   <div className="d-flex flex-row flex-wrap justify-content-between">
                     <div className="d-flex flex-column col-12 col-md-6 px-3">
                       <SearchGenreTypes
@@ -132,7 +134,7 @@ const ArtistOnboarding = () => {
                       />
                     </div>
                   </div>
-                  <div className="d-flex flex-row px-3">
+                  <div className="px-3">
                     <EquipmentEntry
                       title={"PARTY EQUIPMENT"}
                       description={

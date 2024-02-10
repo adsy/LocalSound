@@ -125,7 +125,7 @@ const EditArtistProfile = ({ userDetails }: Props) => {
                       />
                     </div>
                   </div>
-                  <div className="d-flex flex-row px-3">
+                  <div className="px-3">
                     <EquipmentEntry
                       title={"PARTY EQUIPMENT"}
                       description={

@@ -116,7 +116,7 @@ namespace localsound.backend.api.Controllers
         }
 
         [HttpPut]
-        [Route("update-account-image/{memberId}/image-type/{imageType}")]
+        [Route("update-account-image/member/{memberId}/image-type/{imageType}")]
         public async Task<ActionResult> UpdateAccountImage([FromForm] FileUploadDto formData, string memberId, AccountImageTypeEnum imageType)
         {
             var updateResult = await Mediator.Send(new UpdateAccountImageCommand
@@ -145,6 +145,13 @@ namespace localsound.backend.api.Controllers
             }
 
             return StatusCode((int)updateResult.StatusCode, updateResult.ServiceResponseMessage);
+        }
+
+        [Route("onboading/member/{memberId}")]
+        [HttpPost]
+        public async Task<ActionResult> SaveOnboardingData(string memberId)
+        {
+            return Ok();
         }
 
         [HttpGet]

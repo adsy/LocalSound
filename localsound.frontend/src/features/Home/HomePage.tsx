@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../app/model/redux/state";
-import { useEffect } from "react";
 import InfoBanner from "../../common/banner/InfoBanner";
 import { Icon } from "semantic-ui-react";
 import { CustomerTypes } from "../../app/model/enums/customerTypes";
@@ -11,12 +10,6 @@ import NonArtistOnboarding from "../Onboarding/NonArtist/NonArtistOnboarding";
 const HomePage = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!userDetails?.accountSetupCompleted) {
-      openOnboardingModal();
-    }
-  }, []);
 
   const openOnboardingModal = () => {
     if (userDetails?.customerType === CustomerTypes.Artist) {

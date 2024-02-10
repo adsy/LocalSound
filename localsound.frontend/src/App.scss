@@ -1406,8 +1406,8 @@ i.large.icon {
 
 #multi-cropper {
   .multi-image-placeholder {
-    height: 315px;
-    width: 315px;
+    height: 250px;
+    width: 250px;
     background: linear-gradient(20deg, $white100, $white300);
     border: 1px solid $white100;
     border-radius: 5px;
@@ -1462,7 +1462,7 @@ i.large.icon {
   }
 
   .ui.medium.image {
-    width: 315px !important;
+    width: 250px !important;
   }
 
   .photo-icon {

@@ -76,8 +76,8 @@ const ImageCropper = ({
           <Cropper
             ref={cropperRef}
             style={{
-              height: "315px",
-              width: "315px",
+              height: "250px",
+              width: "250px",
               alignSelf: "center",
             }}
             zoomTo={0.5}

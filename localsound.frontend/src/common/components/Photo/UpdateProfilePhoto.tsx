@@ -42,7 +42,7 @@ const UpdateProfilePhoto = () => {
 
         dispatch(handleUpdateUserProfilePhoto(result));
         dispatch(handleUpdateProfilePhoto(result));
-        dispatch(handleResetModal());
+        cancelCrop();
       } catch (err: any) {
         setPhotoUpdateError(err);
         setSubmittingPhotoUpdate(false);
@@ -53,10 +53,11 @@ const UpdateProfilePhoto = () => {
   const cancelCrop = () => {
     setFile(null);
     setUpdatingProfilePhoto(false);
+    setSubmittingPhotoUpdate(false);
   };
 
   return (
-    <div className="d-flex flex-column px-3 mb-3">
+    <div className="d-flex flex-column px-3">
       <div className="d-flex mb-1">
         <p className="form-label">PROFILE PHOTO</p>
       </div>

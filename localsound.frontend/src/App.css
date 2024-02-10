@@ -1458,8 +1458,8 @@ i.large.icon {
 }
 
 #multi-cropper .multi-image-placeholder {
-  height: 315px;
-  width: 315px;
+  height: 250px;
+  width: 250px;
   background: linear-gradient(20deg, #f1f1f1, #e2e8f0);
   border: 1px solid #f1f1f1;
   border-radius: 5px;
@@ -1518,7 +1518,7 @@ i.large.icon {
 #modal-popup .ui.medium.image,
 #edit-artist .ui.medium.image,
 #artist-profile .ui.medium.image {
-  width: 315px !important;
+  width: 250px !important;
 }
 #modal-popup .photo-icon,
 #edit-artist .photo-icon,
