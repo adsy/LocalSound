@@ -393,8 +393,11 @@ h6 .purple-highlight:before {
   background-color: #232323 !important;
   letter-spacing: 1px;
   color: #fcfcfd;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
+}
+.alert.alert-info .info-banner-text {
+  white-space: pre-wrap;
 }
 
 .alert.alert-success {
@@ -879,6 +882,19 @@ i.large.icon {
   background-color: #232323;
   border: 1px solid #232323;
   color: white;
+}
+
+.link-button {
+  color: #6d69fa;
+  text-decoration: unset;
+  cursor: pointer;
+}
+
+.link-button:hover,
+.link-button:active,
+.link-button:focus {
+  text-decoration: underline;
+  font-weight: 800;
 }
 
 .soundcloud-button {

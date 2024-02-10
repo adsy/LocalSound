@@ -27,4 +27,5 @@ export interface UserModel {
   followingCount: number;
   isFollowing?: boolean;
   canAddPackage: boolean;
+  accountSetupCompleted: boolean;
 }

@@ -32,7 +32,7 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<ArtistEquipment> ArtistEquipment { get; set; }
         public DbSet<ArtistEventType> ArtistEventType { get; set; }
         public DbSet<ArtistFollower> ArtistFollower { get; set; }
-        public DbSet<ArtistGenre> ArtistGenre { get; set; }
+        public DbSet<AccountGenre> AccountGenre { get; set; }
         public DbSet<ArtistPackage> ArtistPackage { get; set; }
         public DbSet<ArtistPackageEquipment> ArtistPackageEquipment { get; set; }
         public DbSet<ArtistPackagePhoto> ArtistPackagePhoto { get; set; }
@@ -139,9 +139,9 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<ArtistEventType>().HasOne(x => x.EventType);
             builder.Entity<ArtistEventType>().HasOne(x => x.Artist);
 
-            builder.Entity<ArtistGenre>().HasKey(x => new { x.AppUserId, x.GenreId });
-            builder.Entity<ArtistGenre>().HasOne(x => x.Genre);
-            builder.Entity<ArtistGenre>().HasOne(x => x.Artist);
+            builder.Entity<AccountGenre>().HasKey(x => new { x.AppUserId, x.GenreId });
+            builder.Entity<AccountGenre>().HasOne(x => x.Genre);
+            builder.Entity<AccountGenre>().HasOne(x => x.Artist);
 
             builder.Entity<ArtistEquipment>().HasKey(x => new { x.AppUserId, x.EquipmentId }).IsClustered(false);
             builder.Entity<ArtistEquipment>().HasOne(x => x.Artist);

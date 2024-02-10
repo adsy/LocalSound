@@ -18,6 +18,7 @@ namespace localsound.backend.Domain.Model.Dto.Entity
         public CustomerTypeEnum CustomerType { get; set; }
         public string? AboutSection { get; set; }
         public bool EmailConfirmed { get; set; }
+        public bool AccountSetupCompleted { get; set; }
 
         public List<GenreDto> Genres { get; set; }
         public List<EquipmentDto> Equipment { get; set; }

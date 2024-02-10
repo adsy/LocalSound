@@ -2,19 +2,7 @@ import TextInput from "../../../../../common/form/TextInput";
 import AddressInput from "../../../../../common/form/AddressInput";
 import { UpdateArtistPersonalDetailsModel } from "../../../../../app/model/dto/update-artist-personal.model";
 import TextArea from "../../../../../common/form/TextArea";
-import { Image } from "semantic-ui-react";
-import { AccountImageTypes } from "../../../../../app/model/enums/accountImageTypes";
-import userImg from "../../../../../assets/placeholder.png";
-import { useState } from "react";
-import agent from "../../../../../api/agent";
-import { useDispatch, useSelector } from "react-redux";
-import { handleUpdateUserProfilePhoto } from "../../../../../app/redux/actions/userSlice";
-import { State } from "../../../../../app/model/redux/state";
-import { CropTypes } from "../../../../../app/model/enums/cropTypes";
-import ImageCropper from "../../../../../common/components/Cropper/ImageCropper";
-import { handleResetModal } from "../../../../../app/redux/actions/modalSlice";
-import ErrorBanner from "../../../../../common/banner/ErrorBanner";
-import { handleUpdateProfilePhoto } from "../../../../../app/redux/actions/pageDataSlice";
+import UpdateProfilePhoto from "../../../../../common/components/Photo/UpdateProfilePhoto";
 
 interface Props {
   disabled?: boolean;
@@ -35,16 +23,6 @@ const EditArtistDetailsForm = ({
   setAddressError,
   values,
 }: Props) => {
-  const [file, setFile] = useState<File | null>(null);
-  const [updatingProfilePhoto, setUpdatingProfilePhoto] = useState(false);
-  const [photoUpdateError, setPhotoUpdateError] = useState<string | null>();
-  const dispatch = useDispatch();
-  const userDetails = useSelector((state: State) => state.user.userDetails);
-  const [submittingPhotoUpdate, setSubmittingPhotoUpdate] = useState(false);
-  const userPhoto = userDetails!.images.find(
-    (x) => x.accountImageTypeId == AccountImageTypes.ProfileImage
-  );
-
   const handleMobileNumberChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -74,38 +52,6 @@ const EditArtistDetailsForm = ({
         setFieldValue("phoneNumber", value);
       }
     }
-  };
-
-  const onFileUpload = async (file: Blob) => {
-    const formData = new FormData();
-
-    if (file) {
-      formData.append("fileName", file.name);
-      formData.append("formFile", file);
-      formData.append("fileExt", `.png`);
-
-      try {
-        setSubmittingPhotoUpdate(true);
-        setPhotoUpdateError(null);
-        var result = await agent.Profile.uploadProfileImage(
-          userDetails?.memberId!,
-          formData,
-          AccountImageTypes.ProfileImage
-        );
-
-        dispatch(handleUpdateUserProfilePhoto(result));
-        dispatch(handleUpdateProfilePhoto(result));
-        dispatch(handleResetModal());
-      } catch (err: any) {
-        setPhotoUpdateError(err);
-        setSubmittingPhotoUpdate(false);
-      }
-    }
-  };
-
-  const cancelCrop = () => {
-    setFile(null);
-    setUpdatingProfilePhoto(false);
   };
 
   return (
@@ -170,60 +116,7 @@ const EditArtistDetailsForm = ({
           </div>
         </div>
         <div className="col-12 col-md-6 px-3 mb-3">
-          <div className="d-flex mb-1">
-            <p className="form-label">PROFILE PHOTO</p>
-          </div>
-          <div
-            id="profile-photo-update"
-            className="d-flex justify-content-center flex-column align-content-center mb-4"
-          >
-            {!updatingProfilePhoto ? (
-              <>
-                <Image
-                  src={
-                    !updatingProfilePhoto && userPhoto
-                      ? userPhoto.accountImageUrl
-                      : !updatingProfilePhoto && !userPhoto
-                      ? userImg
-                      : updatingProfilePhoto
-                      ? URL.createObjectURL(file!)
-                      : null
-                  }
-                  size="medium"
-                  circular
-                  className="align-self-center mb-2"
-                />
-                <label
-                  htmlFor="profilePhotoInput"
-                  className="btn mt-2 white-button align-self-center w-fit-content align-self-center px-5"
-                >
-                  <h4>Update profile photo</h4>
-                </label>
-                <input
-                  type="file"
-                  id="profilePhotoInput"
-                  style={{ display: "none" }}
-                  onChange={(event) => {
-                    if (event && event.target && event.target.files) {
-                      setFile(event.target.files[0]);
-                      setUpdatingProfilePhoto(true);
-                    }
-                  }}
-                />
-              </>
-            ) : file ? (
-              <ImageCropper
-                file={file}
-                onFileUpload={onFileUpload}
-                cancelCrop={cancelCrop}
-                cropType={CropTypes.Circle}
-                submittingPhoto={submittingPhotoUpdate}
-              />
-            ) : null}
-          </div>
-          {photoUpdateError ? (
-            <ErrorBanner children={photoUpdateError} />
-          ) : null}
+          <UpdateProfilePhoto />
           <div className="d-flex">
             <p className="form-label">ABOUT</p>
           </div>

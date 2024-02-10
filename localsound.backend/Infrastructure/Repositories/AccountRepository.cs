@@ -282,6 +282,7 @@ namespace localsound.backend.Infrastructure.Repositories
             try
             {
                 var artist = await _dbContext.Account
+                    .Include(x => x.AccountOnboarding)
                     .Include(x => x.Images)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
@@ -358,6 +359,7 @@ namespace localsound.backend.Infrastructure.Repositories
             {
                 var nonArtist = await _dbContext.Account
                     .Include(x => x.Images)
+                    .Include(x => x.AccountOnboarding)
                     .Include(x => x.Following)
                     .ThenInclude(x => x.Artist)
                     .ThenInclude(x => x.Images)

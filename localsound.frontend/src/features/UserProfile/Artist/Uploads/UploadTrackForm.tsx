@@ -14,7 +14,7 @@ import SuccessBanner from "../../../../common/banner/SuccessBanner";
 import UploadTrackSelection from "./UploadTrackSelection";
 import TextInput from "../../../../common/form/TextInput";
 import TextArea from "../../../../common/form/TextArea";
-import SearchGenreTypes from "../Edit/Search/SearchGenreTypes";
+import SearchGenreTypes from "../../../../common/components/Search/SearchGenreTypes";
 import { GenreModel } from "../../../../app/model/dto/genre.model";
 import PlaceholderImg from "../../../../assets/placeholder.png";
 import { Image } from "semantic-ui-react";

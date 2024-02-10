@@ -2,7 +2,7 @@
 
 namespace localsound.backend.Domain.Model.Entity
 {
-    public class ArtistGenre
+    public class AccountGenre
     {
         [ForeignKey("Artist")]
         public Guid AppUserId { get; set; }

@@ -257,8 +257,12 @@ $end: 10;
   background-color: $black100 !important;
   letter-spacing: 1px;
   color: $white200;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
+
+  .info-banner-text {
+    white-space: pre-wrap;
+  }
 }
 
 .alert.alert-success {
@@ -764,6 +768,19 @@ i.large.icon {
   background-color: $black100;
   border: 1px solid $black100;
   color: white;
+}
+
+.link-button {
+  color: $purple100;
+  text-decoration: unset;
+  cursor: pointer;
+}
+
+.link-button:hover,
+.link-button:active,
+.link-button:focus {
+  text-decoration: underline;
+  font-weight: 800;
 }
 
 .soundcloud-button {

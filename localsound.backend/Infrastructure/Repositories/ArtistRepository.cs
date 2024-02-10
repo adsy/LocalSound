@@ -126,7 +126,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your details, please try again.");
                 }
 
-                var artistGenres = updateArtistDto.Genres.Select(x => new ArtistGenre
+                var artistGenres = updateArtistDto.Genres.Select(x => new AccountGenre
                 {
                     AppUserId = artist.AppUserId,
                     GenreId = x.GenreId

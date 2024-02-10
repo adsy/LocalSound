@@ -1,25 +1,24 @@
 import { useEffect, useState } from "react";
-import { GenreModel } from "../../../../../app/model/dto/genre.model";
-import { UserModel } from "../../../../../app/model/dto/user.model";
-import { Button, Form } from "react-bootstrap";
-import { Formik } from "formik";
-import { useDispatch } from "react-redux";
-import agent from "../../../../../api/agent";
-import { handleSetUserDetails } from "../../../../../app/redux/actions/userSlice";
-import ErrorBanner from "../../../../../common/banner/ErrorBanner";
-import InPageLoadingComponent from "../../../../../app/layout/InPageLoadingComponent";
-import { EquipmentModel } from "../../../../../app/model/dto/equipment.model";
-import { EventTypeModel } from "../../../../../app/model/dto/eventType.model";
-import SearchEventTypes from "../../../../../common/components/Search/SearchEventTypes";
-import SuccessBanner from "../../../../../common/banner/SuccessBanner";
-import EquipmentEntry from "./EquipmentEntry";
-import SearchGenreTypes from "../../../../../common/components/Search/SearchGenreTypes";
+import { useDispatch, useSelector } from "react-redux";
+import { State } from "../../../app/model/redux/state";
+import { EquipmentModel } from "../../../app/model/dto/equipment.model";
+import { GenreModel } from "../../../app/model/dto/genre.model";
+import { EventTypeModel } from "../../../app/model/dto/eventType.model";
+import { Form, Formik } from "formik";
+import { handleSetUserDetails } from "../../../app/redux/actions/userSlice";
+import SearchGenreTypes from "../../../common/components/Search/SearchGenreTypes";
+import SearchEventTypes from "../../../common/components/Search/SearchEventTypes";
+import EquipmentEntry from "../../UserProfile/Artist/Edit/EditArtistProfile/EquipmentEntry";
+import ErrorBanner from "../../../common/banner/ErrorBanner";
+import SuccessBanner from "../../../common/banner/SuccessBanner";
+import { Button } from "react-bootstrap";
+import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
+import agent from "../../../api/agent";
+import UpdateProfilePhoto from "../../../common/components/Photo/UpdateProfilePhoto";
+import { TextArea } from "semantic-ui-react";
 
-interface Props {
-  userDetails: UserModel;
-}
-
-const EditArtistProfile = ({ userDetails }: Props) => {
+const ArtistOnboarding = () => {
+  const userDetails = useSelector((state: State) => state.user.userDetails)!;
   const [selectedGenres, setSelectedGenres] = useState<GenreModel[]>([]);
   const [equipment, setEquipment] = useState<EquipmentModel[]>([]);
   const [eventTypes, setEventTypes] = useState<EventTypeModel[]>([]);
@@ -55,8 +54,11 @@ const EditArtistProfile = ({ userDetails }: Props) => {
   };
 
   return (
-    <div className="fade-in pb-4 mt-4">
-      <div className="w-100 fade-in">
+    <div id="modal-popup" className="fade-in">
+      <div className="d-flex flex-row">
+        <h2 className="header-title align-self-center">Lets get you setup!</h2>
+      </div>
+      <div className="w-100 fade-in mt-3">
         <Formik
           initialValues={{}}
           onSubmit={async (values, { setStatus }) => {
@@ -102,6 +104,11 @@ const EditArtistProfile = ({ userDetails }: Props) => {
                 autoComplete="off"
               >
                 <div className="form-body">
+                  <UpdateProfilePhoto />
+                  <div className="d-flex">
+                    <p className="form-label">ABOUT</p>
+                  </div>
+                  <TextArea name="aboutSection" placeholder="" rows={5} />
                   <div className="d-flex flex-row flex-wrap justify-content-between">
                     <div className="d-flex flex-column col-12 col-md-6 px-3">
                       <SearchGenreTypes
@@ -168,4 +175,4 @@ const EditArtistProfile = ({ userDetails }: Props) => {
   );
 };
 
-export default EditArtistProfile;
+export default ArtistOnboarding;

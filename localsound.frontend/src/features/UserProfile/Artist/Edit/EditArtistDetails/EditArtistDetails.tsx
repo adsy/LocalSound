@@ -144,7 +144,7 @@ const EditArtistDetails = ({ userDetails }: Props) => {
                         submitForm();
                       }}
                     >
-                      <h4>Update personal details</h4>
+                      <h4>Save details</h4>
                     </Button>
                   ) : (
                     <InPageLoadingComponent />

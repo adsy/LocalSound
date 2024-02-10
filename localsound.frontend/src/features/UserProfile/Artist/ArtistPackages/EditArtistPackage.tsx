@@ -9,7 +9,7 @@ import agent from "../../../../api/agent";
 import TextInput from "../../../../common/form/TextInput";
 import EquipmentEntry from "../Edit/EditArtistProfile/EquipmentEntry";
 import TextArea from "../../../../common/form/TextArea";
-import MultiImageCropper from "../../../../common/components/MultiImageCropper/MultiImageCropper";
+import MultiImageCropper from "../../../../common/components/Cropper/MultiImageCropper";
 import { Button } from "react-bootstrap";
 import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
 import ErrorBanner from "../../../../common/banner/ErrorBanner";

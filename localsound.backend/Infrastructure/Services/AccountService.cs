@@ -231,7 +231,11 @@ namespace localsound.backend.Infrastructure.Services
                     YoutubeUrl = registrationDto.YoutubeUrl,
                     SpotifyUrl = registrationDto.SpotifyUrl,
                     SoundcloudUrl = registrationDto.SoundcloudUrl,
-                    CustomerType = customerType
+                    CustomerType = customerType,
+                    AccountOnboarding = new AccountOnboarding
+                    {
+                        AccountSetupCompleted = false
+                    }
                 };
 
                 customerDbResult = await _accountRepository.AddArtistToDbAsync(newArtist);
@@ -247,7 +251,11 @@ namespace localsound.backend.Infrastructure.Services
                     User = user,
                     AppUserId = user.Id,
                     ProfileUrl = registrationDto.ProfileUrl,
-                    CustomerType = customerType
+                    CustomerType = customerType,
+                    AccountOnboarding = new AccountOnboarding
+                    {
+                        AccountSetupCompleted = false
+                    }
                 };
 
                 customerDbResult = await _accountRepository.AddNonArtistToDbAsync(newNonArtist);

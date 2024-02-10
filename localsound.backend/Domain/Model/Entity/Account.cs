@@ -23,7 +23,7 @@ namespace localsound.backend.Domain.Model.Entity
         public CustomerTypeEnum CustomerType { get; set; }
         public string MemberId { get; set; }
 
-        public virtual ICollection<ArtistGenre> Genres { get; set; }
+        public virtual ICollection<AccountGenre> Genres { get; set; }
         public virtual ICollection<ArtistEventType> EventTypes { get; set; }
         public virtual ICollection<ArtistEquipment> Equipment { get; set; }
         public virtual ICollection<ArtistPackage> Packages { get; set; }
@@ -76,7 +76,7 @@ namespace localsound.backend.Domain.Model.Entity
             return this;
         }
 
-        public Account UpdateGenres(ICollection<ArtistGenre> genres)
+        public Account UpdateGenres(ICollection<AccountGenre> genres)
         {
             Genres = genres;
             return this;

@@ -8,7 +8,7 @@ import { useState } from "react";
 import TextArea from "../../../../common/form/TextArea";
 import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
 import { EquipmentModel } from "../../../../app/model/dto/equipment.model";
-import MultiImageCropper from "../../../../common/components/MultiImageCropper/MultiImageCropper";
+import MultiImageCropper from "../../../../common/components/Cropper/MultiImageCropper";
 import agent from "../../../../api/agent";
 import { handleResetModal } from "../../../../app/redux/actions/modalSlice";
 import ErrorBanner from "../../../../common/banner/ErrorBanner";
