@@ -680,7 +680,7 @@ i.large.icon {
 .white-button {
   @include button-style;
   background-color: $white200 !important;
-  border: 2px solid $black200;
+  border: 2px solid $white300;
   padding: 5px;
   color: $black200 !important;
   background-color: unset;
@@ -1986,6 +1986,7 @@ i.large.icon {
       font-weight: 800;
       font-size: 12px;
       color: gray;
+      padding-bottom: 5px;
     }
 
     .notification-image {

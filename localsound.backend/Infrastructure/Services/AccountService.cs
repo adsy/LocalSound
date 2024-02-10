@@ -386,7 +386,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 if (retrieveFollowing)
                 {
-                    result = await _accountRepository.GetArtistFollowingFromDbAsync(memberId, page, cancellationToken);
+                    result = await _accountRepository.GetProfileFollowingFromDbAsync(memberId, page, cancellationToken);
                 }
                 else
                 {

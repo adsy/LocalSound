@@ -222,25 +222,20 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.Account
-                    .Include(x => x.Followers)
-                    .ThenInclude(x => x.Follower)
+                var artistFollowers = await _dbContext.ArtistFollower
+                    .Include(x => x.Follower)
                     .ThenInclude(x => x.Images)
-                    .Include(x => x.Followers)
-                    .ThenInclude(x => x.Artist)
-                    .ThenInclude(x => x.Images)
-                    .Skip(page*30)
-                    .Take(30)
-                    .FirstOrDefaultAsync(x => x.MemberId == memberId);
+                    .Where(x => x.Artist.MemberId == memberId)
+                    .ToListAsync(cancellationToken);
 
-                if (artist is null)
+                if (artistFollowers is null)
                 {
                     return new ServiceResponse<List<ArtistFollower>>(HttpStatusCode.NotFound);
                 }
 
                 return new ServiceResponse<List<ArtistFollower>>(HttpStatusCode.OK)
                 {
-                    ReturnData = artist.Followers?.Any() == true ? artist.Followers.Select(x => x).ToList() : new List<ArtistFollower>()
+                    ReturnData = artistFollowers
                 };
             }
             catch (Exception e)
@@ -252,31 +247,29 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<List<ArtistFollower>>> GetArtistFollowingFromDbAsync(string memberId, int page, CancellationToken cancellationToken)
+        public async Task<ServiceResponse<List<ArtistFollower>>> GetProfileFollowingFromDbAsync(string memberId, int page, CancellationToken cancellationToken)
         {
             try
             {
-                var artist = await _dbContext.Account
-                    .Include(x => x.Following)
-                    .ThenInclude(x => x.Artist)
+                var followingList = await _dbContext.ArtistFollower
+                    .Include(x => x.Artist)
                     .ThenInclude(x => x.Images)
-                    .Skip(page * 30)
-                    .Take(30)
-                    .FirstOrDefaultAsync(x => x.MemberId == memberId);
+                    .Where(x => x.Follower.MemberId == memberId)
+                    .ToListAsync();
 
-                if (artist is null)
+                if (followingList is null)
                 {
                     return new ServiceResponse<List<ArtistFollower>>(HttpStatusCode.NotFound);
                 }
 
                 return new ServiceResponse<List<ArtistFollower>>(HttpStatusCode.OK)
                 {
-                    ReturnData = artist.Following?.Any() == true ? artist.Following.Select(x => x).ToList() : new List<ArtistFollower>()
+                    ReturnData = followingList
                 };
             }
             catch (Exception e)
             {
-                var message = $"{nameof(AccountRepository)} - {nameof(GetArtistFollowingFromDbAsync)} - {e.Message}";
+                var message = $"{nameof(AccountRepository)} - {nameof(GetProfileFollowingFromDbAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<List<ArtistFollower>>(HttpStatusCode.InternalServerError);
@@ -300,12 +293,13 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.Packages)
                     .FirstOrDefaultAsync(x => x.AppUserId == id && x.CustomerType == CustomerTypeEnum.Artist);
 
-                artist.Images = artist.Images.Where(x => !x.ToBeDeleted).ToList();
 
                 if (artist is null)
                 {
                     return new ServiceResponse<Account>(HttpStatusCode.NotFound);
                 }
+
+                artist.Images = artist.Images.Where(x => !x.ToBeDeleted).ToList();
 
                 return new ServiceResponse<Account>(HttpStatusCode.OK)
                 {
@@ -335,32 +329,14 @@ namespace localsound.backend.Infrastructure.Repositories
                     .ThenInclude(x => x.EventType)
                     .Include(x => x.Equipment)
                     .Include(x => x.Packages)
-                    .Select(x => new Account
-                    {
-                        AppUserId = x.AppUserId,
-                        User = x.User,
-                        Images = x.Images.Where(x => !x.ToBeDeleted).ToList(),
-                        Name = x.Name,
-                        ProfileUrl = x.ProfileUrl,
-                        Address = x.Address,
-                        PhoneNumber = x.PhoneNumber,
-                        SoundcloudUrl = x.SoundcloudUrl,
-                        SpotifyUrl = x.SpotifyUrl,
-                        YoutubeUrl = x.YoutubeUrl,
-                        AboutSection = x.AboutSection,
-                        Genres = x.Genres,
-                        EventTypes = x.EventTypes,
-                        Equipment = x.Equipment,
-                        Followers = x.Followers,
-                        Packages = x.Packages.Where(x => x.IsAvailable).ToList(),
-
-                    })
                     .FirstOrDefaultAsync(x => x.ProfileUrl == profileUrl);
 
                 if (artist is null)
                 {
                     return new ServiceResponse<Account>(HttpStatusCode.NotFound);
                 }
+
+                artist.Images = artist.Images.Where(x => !x.ToBeDeleted).ToList();
 
                 return new ServiceResponse<Account>(HttpStatusCode.OK)
                 {

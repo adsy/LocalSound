@@ -438,19 +438,36 @@ const ArtistProfile = ({
                   viewingOwnProfile={viewingOwnProfile}
                 />
               </Tab>
-              <Tab
-                eventKey={ArtistProfileTabs.Packages}
-                title="PACKAGES"
-                className=""
-              >
-                <ArtistPackages
-                  artistDetails={artistDetails}
-                  currentTab={currentTab}
-                  viewingOwnProfile={viewingOwnProfile}
-                  packages={packages}
-                  setPackages={setPackages}
-                />
-              </Tab>
+              {viewingOwnProfile ? (
+                <Tab
+                  eventKey={ArtistProfileTabs.Packages}
+                  title="PACKAGES"
+                  className=""
+                >
+                  <ArtistPackages
+                    artistDetails={artistDetails}
+                    currentTab={currentTab}
+                    viewingOwnProfile={viewingOwnProfile}
+                    packages={packages}
+                    setPackages={setPackages}
+                  />
+                </Tab>
+              ) : !viewingOwnProfile &&
+                loggedInUser.customerType == CustomerTypes.NonArtist ? (
+                <Tab
+                  eventKey={ArtistProfileTabs.Packages}
+                  title="PACKAGES"
+                  className=""
+                >
+                  <ArtistPackages
+                    artistDetails={artistDetails}
+                    currentTab={currentTab}
+                    viewingOwnProfile={viewingOwnProfile}
+                    packages={packages}
+                    setPackages={setPackages}
+                  />
+                </Tab>
+              ) : null}
             </Tabs>
           </div>
         </div>

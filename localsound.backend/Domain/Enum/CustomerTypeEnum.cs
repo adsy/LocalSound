@@ -2,7 +2,7 @@
 {
     public enum CustomerTypeEnum
     {
-        NonArtist,
-        Artist
+        NonArtist = 0,
+        Artist = 1
     }
 }
