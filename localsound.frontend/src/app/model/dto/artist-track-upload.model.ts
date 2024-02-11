@@ -15,4 +15,5 @@ export interface ArtistTrackUploadModel {
   artistName: string;
   artistMemberId: string;
   songLiked: boolean;
+  likeCount: number;
 }

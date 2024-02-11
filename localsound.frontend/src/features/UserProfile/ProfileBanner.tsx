@@ -310,7 +310,9 @@ const ProfileBanner = ({
                             await updateArtistFollow(true);
                           }
                         }}
-                        className="btn white-button edit-profile-button w-fit-content d-flex flex-row follow-btn"
+                        className={`btn edit-profile-button w-fit-content d-flex flex-row follow-btn ${
+                          isFollowing ? "purple-button" : "white-button"
+                        }`}
                         title="update-following"
                       >
                         {!updatingFollowingStatus ? (

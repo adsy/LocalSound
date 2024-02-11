@@ -45,6 +45,8 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
+                _dbContext.SongLike.RemoveRange(track.SongLikes);
+
                 _dbContext.FileContent.Remove(track.TrackData);
 
                 if (track.TrackImage != null)
@@ -83,6 +85,8 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.TrackImage)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
+                    .Include(x => x.SongLikes)
+                    .Include(x => x.ArtistTrackLikeCount)
                     .FirstOrDefaultAsync(x => x.AppUserId == artist.AppUserId && x.ArtistTrackUploadId == trackId);
 
                 if (track is null)
@@ -121,6 +125,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.TrackData)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
+                    .Include(x => x.ArtistTrackLikeCount)
                     .Where(x => x.AppUserId == artist.AppUserId)
                     .OrderByDescending(x => x.UploadDate)
                     .Skip(10 * page)

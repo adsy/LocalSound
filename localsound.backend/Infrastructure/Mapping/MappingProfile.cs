@@ -69,6 +69,7 @@ namespace localsound.backend.Infrastructure.Mapping
                 .ForMember(dest => dest.UploadDate, source => source.MapFrom(x => x.UploadDate))
                 .ForMember(dest => dest.ArtistName, source => source.MapFrom(x => x.Artist.Name))
                 .ForMember(dest => dest.ArtistMemberId, source => source.MapFrom(x => x.Artist.MemberId))
+                .ForMember(dest => dest.LikeCount, source => source.MapFrom(x => x.ArtistTrackLikeCount.LikeCount))
                 .ForMember(dest => dest.ArtistProfile, source => source.MapFrom(x => x.Artist.ProfileUrl));
 
             CreateMap<ArtistTrackGenre, GenreDto>()

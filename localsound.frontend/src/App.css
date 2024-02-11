@@ -913,6 +913,36 @@ i.large.icon {
   font-weight: 800;
 }
 
+.purple-button {
+  color: #232323;
+  letter-spacing: 2px;
+  transition: border-color 0.3s ease;
+  transition: background-color 0.3s ease;
+  border-radius: 10px 10px;
+  border: 2px solid #001514;
+  background-color: #6d69fa;
+  padding: 5px;
+  transition: border 0.3s ease-in-out, background-color 0.3s ease-in-out !important;
+}
+.purple-button h4 {
+  font-size: 12px !important;
+}
+.purple-button h4 {
+  font-weight: 800 !important;
+}
+
+.purple-button:hover,
+.purple-button:active,
+.purple-button:focus {
+  background-color: #f1f1f1;
+  border: 2px solid #e2e8f0;
+}
+.purple-button:hover h4,
+.purple-button:active h4,
+.purple-button:focus h4 {
+  color: #232323;
+}
+
 .soundcloud-button {
   color: #232323;
   letter-spacing: 2px;

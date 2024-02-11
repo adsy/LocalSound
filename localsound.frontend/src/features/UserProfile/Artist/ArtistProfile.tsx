@@ -116,7 +116,7 @@ const ArtistProfile = ({
               </Tab>
               {viewingOwnProfile ||
               (!viewingOwnProfile &&
-                loggedInUser.customerType == CustomerTypes.NonArtist) ? (
+                loggedInUser?.customerType == CustomerTypes.NonArtist) ? (
                 <Tab
                   eventKey={ProfileTabs.Packages}
                   title="PACKAGES"

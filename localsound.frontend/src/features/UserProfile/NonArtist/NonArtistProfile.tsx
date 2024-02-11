@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import { UserModel } from "../../../app/model/dto/user.model";
-import Followers from "../Followers/Followers";
 import { ProfileTabs } from "../../../app/model/enums/ProfileTabTypes";
 import Following from "../Followers/Following";
 import NonArtistDetails from "./NonArtistDetails";
 import ProfileBanner from "../ProfileBanner";
-import { Divider } from "semantic-ui-react";
 
 interface Props {
   loggedInUser: UserModel;

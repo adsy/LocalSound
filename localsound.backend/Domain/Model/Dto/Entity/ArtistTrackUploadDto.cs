@@ -16,6 +16,7 @@
         public DateTime UploadDate { get; set; }
 
         public bool SongLiked { get; set; }
+        public int LikeCount { get; set; }
 
         public List<GenreDto> Genres { get; set; }
     }

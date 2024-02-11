@@ -794,6 +794,27 @@ i.large.icon {
   font-weight: 800;
 }
 
+.purple-button {
+  @include button-style;
+  border: 2px solid $black200;
+  background-color: $purple100;
+  padding: 5px;
+  transition: border 0.3s ease-in-out, background-color 0.3s ease-in-out !important;
+  h4 {
+    font-weight: 800 !important;
+  }
+}
+
+.purple-button:hover,
+.purple-button:active,
+.purple-button:focus {
+  background-color: $white100;
+  border: 2px solid $white300;
+  h4 {
+    color: $black100;
+  }
+}
+
 .soundcloud-button {
   h4 {
     color: $black100;

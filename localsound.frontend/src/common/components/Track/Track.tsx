@@ -25,6 +25,7 @@ import DeleteTrackConfirmation from "../../../features/UserProfile/Artist/Upload
 import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
 import PlaceholderImg from "../../../assets/placeholder.png";
 import agent from "../../../api/agent";
+import Login from "../../../features/Authentication/Login/Login";
 
 interface Props {
   track: ArtistTrackUploadModel;
@@ -164,21 +165,49 @@ const Track = ({
   };
 
   const likeSong = async () => {
-    // TODO: Fix this function
-    try {
-      if (track.songLiked) {
-        await agent.Tracks.unlikeSong(
-          loggedInUser?.memberId!,
-          track.artistTrackUploadId
-        );
-      } else {
-        await agent.Tracks.likeSong(
-          loggedInUser?.memberId!,
-          track.artistTrackUploadId
-        );
+    if (loggedInUser?.memberId) {
+      // TODO: Fix this function
+      try {
+        if (track.songLiked) {
+          await agent.Tracks.unlikeSong(
+            loggedInUser?.memberId,
+            track.artistTrackUploadId
+          );
+          var clone = [...tracks];
+          var currentTrack = clone.find(
+            (x) => x.artistTrackUploadId === track.artistTrackUploadId
+          );
+          if (currentTrack) {
+            currentTrack.songLiked = false;
+            currentTrack.likeCount--;
+          }
+          setTracks(clone);
+        } else {
+          await agent.Tracks.likeSong(
+            loggedInUser?.memberId,
+            track.artistTrackUploadId
+          );
+          var clone = [...tracks];
+          var currentTrack = clone.find(
+            (x) => x.artistTrackUploadId === track.artistTrackUploadId
+          );
+          if (currentTrack) {
+            currentTrack.songLiked = true;
+            currentTrack.likeCount++;
+          }
+          setTracks(clone);
+        }
+      } catch (err) {
+        //TODO: do something on error
       }
-    } catch (err) {
-      //TODO: do something on error
+    } else {
+      dispatch(
+        handleToggleModal({
+          open: true,
+          body: <Login />,
+          size: "tiny",
+        })
+      );
     }
   };
 
@@ -237,14 +266,16 @@ const Track = ({
                   </h4>
                 </Button>
               ) : null}
-              {artistDetails.memberId !== loggedInUser?.memberId &&
-              loggedInUser !== null ? (
+              {artistDetails.memberId !== loggedInUser?.memberId ? (
                 <Button
-                  className="white-button track-button "
+                  className={`track-button ${
+                    !track.songLiked ? "white-button" : "purple-button"
+                  }`}
                   onClick={async () => await likeSong()}
                 >
-                  <h4>
+                  <h4 className="d-flex flex-row align-items-center">
                     <Icon name="heart" size="small" className="pr-1" />
+                    <span className="ml-1">{track.likeCount}</span>
                   </h4>
                 </Button>
               ) : null}

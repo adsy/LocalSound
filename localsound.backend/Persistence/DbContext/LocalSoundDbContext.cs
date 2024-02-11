@@ -197,6 +197,7 @@ namespace localsound.backend.Persistence.DbContext
 
             builder.Entity<SongLike>().HasKey(x => x.ArtistTrackId).IsClustered(false);
             builder.Entity<SongLike>().HasIndex(x => x.AppUserId).IsUnique(false).IsClustered(true);
+            builder.Entity<SongLike>().HasIndex(x => x.ArtistTrackId).IsUnique(false).IsClustered(false);
             builder.Entity<SongLike>().HasOne(x => x.ArtistTrackUpload).WithMany(x => x.SongLikes).OnDelete(DeleteBehavior.NoAction);
         }
 
