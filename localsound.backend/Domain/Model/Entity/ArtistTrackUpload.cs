@@ -24,5 +24,8 @@ namespace localsound.backend.Domain.Model.Entity
         public virtual ICollection<ArtistTrackGenre>  Genres { get; set;}
         public virtual FileContent TrackData { get;set;} 
         public virtual FileContent? TrackImage { get;set; }
+
+        public virtual List<SongLike> SongLikes { get; set; }
+        public virtual ArtistTrackLikeCount ArtistTrackLikeCount { get; set; }
     }
 }

@@ -24,6 +24,7 @@ import EditTrackForm from "../../../features/UserProfile/Artist/Uploads/EditTrac
 import DeleteTrackConfirmation from "../../../features/UserProfile/Artist/Uploads/DeleteTrackConfirmation";
 import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
 import PlaceholderImg from "../../../assets/placeholder.png";
+import agent from "../../../api/agent";
 
 interface Props {
   track: ArtistTrackUploadModel;
@@ -162,6 +163,25 @@ const Track = ({
     );
   };
 
+  const likeSong = async () => {
+    // TODO: Fix this function
+    try {
+      if (track.songLiked) {
+        await agent.Tracks.unlikeSong(
+          loggedInUser?.memberId!,
+          track.artistTrackUploadId
+        );
+      } else {
+        await agent.Tracks.likeSong(
+          loggedInUser?.memberId!,
+          track.artistTrackUploadId
+        );
+      }
+    } catch (err) {
+      //TODO: do something on error
+    }
+  };
+
   return (
     <div id="track" className="mt-3">
       <div className="d-flex flex-row w-100">
@@ -214,6 +234,17 @@ const Track = ({
                 >
                   <h4>
                     <Icon name="trash" size="small" className="mr-0" />
+                  </h4>
+                </Button>
+              ) : null}
+              {artistDetails.memberId !== loggedInUser?.memberId &&
+              loggedInUser !== null ? (
+                <Button
+                  className="white-button track-button "
+                  onClick={async () => await likeSong()}
+                >
+                  <h4>
+                    <Icon name="heart" size="small" className="pr-1" />
                   </h4>
                 </Button>
               ) : null}

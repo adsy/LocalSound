@@ -82,7 +82,9 @@ builder.Services.AddTransient<INotificationService, NotificationService>();
 builder.Services.AddTransient<INotificationRepository, NotificationRepository>();
 builder.Services.AddTransient<IMessageRepository, MessageRepository>();
 builder.Services.AddTransient<IMessageService, MessageService>();
+
 builder.Services.AddTransient<IAccountHelper, AccountHelper>();
+builder.Services.AddTransient<ISearchHelper, SearchHelper>();
 
 builder.Services.AddHttpContextAccessor();
 

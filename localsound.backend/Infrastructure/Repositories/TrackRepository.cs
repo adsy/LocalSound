@@ -141,6 +141,139 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
+        public async Task<ServiceResponse> GetLikedSongsAsync(Guid userId, string memberId, int page)
+        {
+            try
+            {
+                var tracks = await _dbContext.SongLike
+                    .Include(x => x.ArtistTrackUpload)
+                    .Where(x => x.AppUserId == userId)
+                    .Select(x => x.ArtistTrackUpload)
+                    .OrderByDescending(x => x.UploadDate)
+                    .Skip(10 * page)
+                    .Take(10)
+                    .ToListAsync();
+
+
+                //TODO: Complete this function
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(TrackRepository)} - {nameof(GetLikedSongsAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<List<ArtistTrackUpload>>(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<ServiceResponse<List<Guid>>> GetLikedSongsIdsAsync(Guid? userId)
+        {
+            try
+            {
+                var songLikes = await _dbContext.SongLike.Where(x => x.AppUserId == userId).Select(x => x.ArtistTrackId).ToListAsync();
+
+                return new ServiceResponse<List<Guid>>(HttpStatusCode.OK)
+                {
+                    ReturnData = songLikes
+                };
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(TrackRepository)} - {nameof(GetLikedSongsIdsAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<List<Guid>>(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<ServiceResponse> LikeArtistTrackAsync(Guid userId, Guid trackId)
+        {
+            try
+            {
+                var track = await _dbContext.SongLike.AddAsync(new SongLike
+                {
+                    ArtistTrackId = trackId,
+                    AppUserId = userId
+                });
+
+                await _dbContext.SaveChangesAsync();
+
+                var trackLikeCount = await _dbContext.ArtistTrackLikeCount.FirstOrDefaultAsync(x => x.ArtistTrackId == trackId);
+                if (trackLikeCount != null)
+                {
+                    bool saveFailed = false;
+                    do
+                    {
+                        trackLikeCount.LikeCount++;
+
+                        try
+                        {
+                            await _dbContext.SaveChangesAsync();
+                        }
+                        catch (DbUpdateConcurrencyException e)
+                        {
+                            saveFailed = true;
+                            e.Entries.Single().Reload();
+                        }
+                    } while (saveFailed);
+                }
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(TrackRepository)} - {nameof(LikeArtistTrackAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<ServiceResponse> UnlikeArtistTrackAsync(Guid userId, Guid trackId)
+        {
+            try
+            {
+                var songLike = await _dbContext.SongLike.FirstOrDefaultAsync(x => x.ArtistTrackId == trackId);
+
+                if (songLike is null)
+                    return new ServiceResponse(HttpStatusCode.InternalServerError);
+
+                _dbContext.SongLike.Remove(songLike);
+
+                await _dbContext.SaveChangesAsync();
+
+                var trackLikeCount = await _dbContext.ArtistTrackLikeCount.FirstOrDefaultAsync(x => x.ArtistTrackId == trackId);
+                if (trackLikeCount != null)
+                {
+                    bool saveFailed = false;
+                    do
+                    {
+                        trackLikeCount.LikeCount--;
+
+                        try
+                        {
+                            await _dbContext.SaveChangesAsync();
+                        }
+                        catch (DbUpdateConcurrencyException e)
+                        {
+                            saveFailed = true;
+                            e.Entries.Single().Reload();
+                        }
+                    } while (saveFailed);
+                }
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(TrackRepository)} - {nameof(UnlikeArtistTrackAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError);
+            }
+        }
+
         public async Task<ServiceResponse> UpdateArtistTrackUploadAsync(Account account, Guid trackId, string trackName, string trackDescription, List<GenreDto> genres, string? trackImageExt, FileContent? newTrackImage, string newTrackImageUrl)
         {
             try

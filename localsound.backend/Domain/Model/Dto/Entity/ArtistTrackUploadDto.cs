@@ -15,6 +15,8 @@
         public double Duration { get; set; }
         public DateTime UploadDate { get; set; }
 
+        public bool SongLiked { get; set; }
+
         public List<GenreDto> Genres { get; set; }
     }
 }

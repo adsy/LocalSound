@@ -238,6 +238,13 @@ const Tracks = {
     ),
   deleteTrack: (memberId: string, trackId: string) =>
     requests.delete(`track/member/${memberId}/track/${trackId}`),
+  likeSong: (memberId: string, trackId: string) =>
+    requests.put(`track/member/${memberId}/track/${trackId}/track-likes`, {}),
+  unlikeSong: (memberId: string, trackId: string) =>
+    requests.delete(
+      `track/member/${memberId}/track/${trackId}/track-likes`,
+      {}
+    ),
 };
 
 const Packages = {

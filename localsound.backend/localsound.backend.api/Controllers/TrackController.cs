@@ -1,9 +1,11 @@
-﻿using localsound.backend.api.Commands.Track;
+﻿using Azure.Storage.Blobs.Models;
+using localsound.backend.api.Commands.Track;
 using localsound.backend.api.Queries.Track;
 using localsound.backend.Domain.Model.Dto.Submission;
 using localsound.backend.Domain.ModelAdaptor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.CompilerServices;
 
 namespace localsound.backend.api.Controllers
 {
@@ -83,6 +85,7 @@ namespace localsound.backend.api.Controllers
         {
             var result = await Mediator.Send(new GetArtistTracksQuery
             {
+                UserId = CurrentUser?.AppUserId,
                 MemberId = memberId,
                 Page = page
             });
@@ -131,6 +134,42 @@ namespace localsound.backend.api.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpPut]
+        [Route("member/{memberId}/track/{trackId}/track-likes")]
+        public async Task<ActionResult> LikeArtistTrack(string memberId, Guid trackId)
+        {
+            var result = await Mediator.Send(new LikeArtistTrackCommand
+            {
+                UserId = CurrentUser.AppUserId,
+                MemberId = memberId,
+                TrackId = trackId
+            });
+            if (result.IsSuccessStatusCode)
+            {
+                return Ok();
+            }
+
+            return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
+        }
+
+        [HttpDelete]
+        [Route("member/{memberId}/track/{trackId}/track-likes")]
+        public async Task<ActionResult> UnlikeArtistTrack(string memberId, Guid trackId)
+        {
+            var result = await Mediator.Send(new UnlikeArtistTrackCommand
+            {
+                UserId = CurrentUser.AppUserId,
+                MemberId = memberId,
+                TrackId = trackId
+            });
+            if (result.IsSuccessStatusCode)
+            {
+                return Ok();
+            }
+
+            return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
         }
     }
 }

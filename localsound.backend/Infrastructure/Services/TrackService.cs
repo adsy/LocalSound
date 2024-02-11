@@ -8,6 +8,7 @@ using localsound.backend.Domain.Model.Dto.Response;
 using localsound.backend.Domain.Model.Dto.Submission;
 using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Domain.ModelAdaptor;
+using localsound.backend.Infrastructure.Interface.Helper;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
 using Microsoft.Extensions.Logging;
@@ -23,8 +24,9 @@ namespace localsound.backend.Infrastructure.Services
         private readonly BlobStorageSettingsAdaptor _blobStorageSettings;
         private readonly ILogger<TrackService> _logger;
         private readonly IMapper _mapper;
+        private readonly ISearchHelper _searchHelper;
 
-        public TrackService(IBlobRepository blobRepository, IAccountRepository accountRepository, ITrackRepository trackRepository, BlobStorageSettingsAdaptor blobStorageSettings, ILogger<TrackService> logger, IMapper mapper)
+        public TrackService(IBlobRepository blobRepository, IAccountRepository accountRepository, ITrackRepository trackRepository, BlobStorageSettingsAdaptor blobStorageSettings, ILogger<TrackService> logger, IMapper mapper, ISearchHelper searchHelper)
         {
             _blobRepository = blobRepository;
             _accountRepository = accountRepository;
@@ -32,9 +34,10 @@ namespace localsound.backend.Infrastructure.Services
             _blobStorageSettings = blobStorageSettings;
             _logger = logger;
             _mapper = mapper;
+            _searchHelper = searchHelper;
         }
 
-        public async Task<ServiceResponse> DeleteArtistTrack(Guid userId, string memberId, Guid trackId)
+        public async Task<ServiceResponse> DeleteArtistTrackAsync(Guid userId, string memberId, Guid trackId)
         {
             try
             {
@@ -87,7 +90,7 @@ namespace localsound.backend.Infrastructure.Services
             }
             catch(Exception e)
             {
-                var message = $"{nameof(TrackService)} - {nameof(DeleteArtistTrack)} - {e.Message}";
+                var message = $"{nameof(TrackService)} - {nameof(DeleteArtistTrackAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse(HttpStatusCode.InternalServerError)
@@ -97,7 +100,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<TrackUploadSASDto>> GenerateTrackUploadSASDto(Guid userId, string memberId)
+        public async Task<ServiceResponse<TrackUploadSASDto>> GenerateTrackUploadSASDtoAsync(Guid userId, string memberId)
         {
             try
             {
@@ -150,7 +153,7 @@ namespace localsound.backend.Infrastructure.Services
             }
             catch(Exception e)
             {
-                var message = $"{nameof(TrackService)} - {nameof(GenerateTrackUploadSASDto)} - {e.Message}";
+                var message = $"{nameof(TrackService)} - {nameof(GenerateTrackUploadSASDtoAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<TrackUploadSASDto>(HttpStatusCode.InternalServerError)
@@ -160,7 +163,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<ArtistTrackUploadDto>> GetArtistTrack(string memberId, Guid trackId)
+        public async Task<ServiceResponse<ArtistTrackUploadDto>> GetArtistTrackAsync(string memberId, Guid trackId)
         {
             try
             {
@@ -175,7 +178,7 @@ namespace localsound.backend.Infrastructure.Services
             }
             catch (Exception e)
             {
-                var message = $"{nameof(TrackService)} - {nameof(GetArtistTrack)} - {e.Message}";
+                var message = $"{nameof(TrackService)} - {nameof(GetArtistTrackAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<ArtistTrackUploadDto>(HttpStatusCode.InternalServerError)
@@ -185,19 +188,31 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<TrackListResponseDto>> GetArtistTracks(string memberId, int page)
+        public async Task<ServiceResponse<TrackListResponseDto>> GetArtistTracksAsync(Guid? userId, string memberId, int page)
         {
             try
             {
-                var tracks = await _trackRepository.GetArtistTracksAsync(memberId, page);
+                var tracksResult = await _trackRepository.GetArtistTracksAsync(memberId, page);
 
-                if (!tracks.IsSuccessStatusCode || tracks.ReturnData is null)
-
+                if (!tracksResult.IsSuccessStatusCode || tracksResult.ReturnData is null)
                 {
-                    return new ServiceResponse<TrackListResponseDto>(tracks.StatusCode);
+                    return new ServiceResponse<TrackListResponseDto>(tracksResult.StatusCode);
                 }
 
-                var trackList = _mapper.Map<List<ArtistTrackUploadDto>>(tracks.ReturnData);
+                var trackList = _mapper.Map<List<ArtistTrackUploadDto>>(tracksResult.ReturnData);
+
+                if (userId is not null)
+                {
+                    var songIds = await _trackRepository.GetLikedSongsIdsAsync(userId);
+
+                    if (songIds.IsSuccessStatusCode && songIds.ReturnData is not null && songIds.ReturnData.Any())
+                    {
+                        foreach (var song in trackList)
+                        {
+                            song.SongLiked = _searchHelper.GuidBinarySearch(songIds.ReturnData, song.ArtistTrackUploadId) != -1 ? true : false;
+                        }
+                    }
+                }
 
                 return new ServiceResponse<TrackListResponseDto>(HttpStatusCode.OK)
                 {
@@ -210,7 +225,7 @@ namespace localsound.backend.Infrastructure.Services
             }
             catch(Exception e)
             {
-                var message = $"{nameof(TrackService)} - {nameof(GetArtistTracks)} - {e.Message}";
+                var message = $"{nameof(TrackService)} - {nameof(GetArtistTracksAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<TrackListResponseDto>(HttpStatusCode.InternalServerError)
@@ -220,7 +235,83 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse> UpdateTrackSupportingDetails(Guid userId, string memberId, Guid trackId, TrackUpdateDto trackData)
+        public async Task<ServiceResponse> LikeArtistTrackAsync(Guid trackId, Guid userId, string memberId)
+        {
+            try
+            {
+                var accountResult = await _accountRepository.GetAccountFromDbAsync(userId, memberId);
+
+                if (!accountResult.IsSuccessStatusCode || accountResult.ReturnData is null)
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured liking artist track, please try again..."
+                    };
+                }
+
+                var likeResult = await _trackRepository.LikeArtistTrackAsync(userId, trackId);
+
+                if (!likeResult.IsSuccessStatusCode)
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured liking artist track, please try again..."
+                    };
+                }
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(TrackService)} - {nameof(LikeArtistTrackAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured liking artist track, please try again..."
+                };
+            }
+        }
+
+        public async Task<ServiceResponse> UnikeArtistTrackAsync(Guid trackId, Guid userId, string memberId)
+        {
+            try
+            {
+                var accountResult = await _accountRepository.GetAccountFromDbAsync(userId, memberId);
+
+                if (!accountResult.IsSuccessStatusCode || accountResult.ReturnData is null)
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured liking artist track, please try again..."
+                    };
+                }
+
+                var unlikeResult = await _trackRepository.UnlikeArtistTrackAsync(userId, trackId);
+
+                if (!unlikeResult.IsSuccessStatusCode)
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured liking artist track, please try again..."
+                    };
+                }
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(TrackService)} - {nameof(LikeArtistTrackAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError)
+                {
+                    ServiceResponseMessage = "An error occured unliking artist track, please try again..."
+                };
+            }
+        }
+
+        public async Task<ServiceResponse> UpdateTrackSupportingDetailsAsync(Guid userId, string memberId, Guid trackId, TrackUpdateDto trackData)
         {
             try
             {
@@ -295,7 +386,7 @@ namespace localsound.backend.Infrastructure.Services
             }
             catch(Exception e)
             {
-                var message = $"{nameof(TrackService)} - {nameof(UpdateTrackSupportingDetails)} - {e.Message}";
+                var message = $"{nameof(TrackService)} - {nameof(UpdateTrackSupportingDetailsAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse(HttpStatusCode.InternalServerError)
@@ -305,7 +396,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse> UploadTrackSupportingDetails(Guid userId, string memberId, Guid trackId, TrackUploadDto trackUploadDto)
+        public async Task<ServiceResponse> UploadTrackSupportingDetailsAsync(Guid userId, string memberId, Guid trackId, TrackUploadDto trackUploadDto)
         {
             try
             {
@@ -338,7 +429,11 @@ namespace localsound.backend.Infrastructure.Services
                     WaveformUrl = trackUploadDto.WaveformUrl,
                     Duration = double.TryParse(trackUploadDto.Duration, out var duration) ? duration : 0,
                     UploadDate = DateTime.Now.ToLocalTime(),
-                    FileSizeInBytes = int.Parse(trackUploadDto.FileSize)
+                    FileSizeInBytes = int.Parse(trackUploadDto.FileSize),
+                    ArtistTrackLikeCount = new ArtistTrackLikeCount
+                    {
+                        ArtistTrackId = trackId,
+                    }
                 };
 
                 // If they have uploaded a custom image against a track, add it to container and db
@@ -375,7 +470,7 @@ namespace localsound.backend.Infrastructure.Services
             }
             catch(Exception e)
             {
-                var message = $"{nameof(TrackService)} - {nameof(UploadTrackSupportingDetails)} - {e.Message}";
+                var message = $"{nameof(TrackService)} - {nameof(UploadTrackSupportingDetailsAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse(HttpStatusCode.InternalServerError)

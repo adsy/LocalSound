@@ -38,10 +38,11 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<ArtistPackagePhoto> ArtistPackagePhoto { get; set; }
         public DbSet<ArtistTrackGenre> ArtistTrackGenre { get; set; }
         public DbSet<ArtistTrackUpload> ArtistTrackUpload { get; set; }
+        public DbSet<ArtistTrackLikeCount> ArtistTrackLikeCount { get; set; }
         public DbSet<EventType> EventType { get; set; }
         public DbSet<FileContent> FileContent { get; set; }
         public DbSet<Genre> Genres { get; set; }
-        public DbSet<Account> NonArtist { get; set; }
+        public DbSet<SongLike> SongLike { get; set; }
         public DbSet<Notification> Notification { get; set; }
         
 
@@ -124,6 +125,12 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<ArtistTrackUpload>().HasIndex(x => x.AppUserId).IsClustered(true);
             builder.Entity<ArtistTrackUpload>().HasMany(x => x.Genres);
             builder.Entity<ArtistTrackUpload>().HasOne(x => x.TrackData).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<ArtistTrackUpload>().HasMany(x => x.SongLikes).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<ArtistTrackUpload>().HasOne(x => x.ArtistTrackLikeCount).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<ArtistTrackLikeCount>().HasKey(x => x.ArtistTrackId);
+            builder.Entity<ArtistTrackLikeCount>().HasOne(x => x.ArtistTrackUpload).WithOne(x => x.ArtistTrackLikeCount);
+            builder.Entity<ArtistTrackLikeCount>().Property(x => x.LikeCount).HasDefaultValue(0).IsConcurrencyToken();
 
             builder.Entity<Genre>().HasKey(x => x.GenreId);
             builder.Entity<EventType>().HasKey(x => x.EventTypeId);
@@ -187,6 +194,10 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<Notification>().HasIndex(x => x.NotificationReceiverId).IsUnique(false).IsClustered(true);
             builder.Entity<Notification>().HasOne(x => x.NotificationReceiver).WithMany(x => x.ReceivedNotifications).OnDelete(DeleteBehavior.NoAction);
             builder.Entity<Notification>().HasOne(x => x.NotificationCreator).WithMany(x => x.SentNotifications).OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<SongLike>().HasKey(x => x.ArtistTrackId).IsClustered(false);
+            builder.Entity<SongLike>().HasIndex(x => x.AppUserId).IsUnique(false).IsClustered(true);
+            builder.Entity<SongLike>().HasOne(x => x.ArtistTrackUpload).WithMany(x => x.SongLikes).OnDelete(DeleteBehavior.NoAction);
         }
 
         public async Task<ServiceResponse> HandleSavingDB()
