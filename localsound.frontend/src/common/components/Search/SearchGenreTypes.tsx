@@ -10,7 +10,7 @@ interface Props {
   setSelectedGenres: (genres: GenreModel[]) => void;
   placeholder: string;
   title: string;
-  description: string;
+  description?: string;
 }
 
 const SearchGenreTypes = ({
@@ -68,7 +68,7 @@ const SearchGenreTypes = ({
       <div className="d-flex mb-1">
         <p className="form-label">{title}</p>
       </div>
-      <p className="text-justify">{description}</p>
+      {description ? <p className="text-justify mb-0">{description}</p> : null}
       <div id="search-label-component">
         <div className="box d-flex flex-column justify-content-between">
           <div className="container">

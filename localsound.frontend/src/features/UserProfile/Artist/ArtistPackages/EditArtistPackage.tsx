@@ -7,7 +7,7 @@ import { Form, Formik } from "formik";
 import { handleResetModal } from "../../../../app/redux/actions/modalSlice";
 import agent from "../../../../api/agent";
 import TextInput from "../../../../common/form/TextInput";
-import EquipmentEntry from "../Edit/EditArtistProfile/EquipmentEntry";
+import EquipmentEntry from "../../../../common/components/Equipment/EquipmentEntry";
 import TextArea from "../../../../common/form/TextArea";
 import MultiImageCropper from "../../../../common/components/Cropper/MultiImageCropper";
 import { Button } from "react-bootstrap";

@@ -35,7 +35,7 @@ namespace localsound.backend.Domain.Model.Entity
         public virtual ICollection<Notification> SentNotifications { get; set; }
         public virtual ICollection<Notification> ReceivedNotifications { get; set; }
 
-        public virtual AccountOnboarding AccountOnboarding { get; set; }
+        public virtual AccountMessages AccountMessages { get; set; }
         public virtual AppUser User { get; set; }
 
         public Account UpdateName(string name)
@@ -91,12 +91,6 @@ namespace localsound.backend.Domain.Model.Entity
         public Account UpdateEventTypes(ICollection<ArtistEventType> eventTypes)
         {
             EventTypes = eventTypes;
-            return this;
-        }
-
-        public Account UpdateAccountSetupCompleted()
-        {
-            AccountOnboarding.AccountSetupCompleted = true;
             return this;
         }
     }

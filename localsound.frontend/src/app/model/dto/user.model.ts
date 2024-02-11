@@ -3,6 +3,7 @@ import { AccountImageModel } from "./account-image.model";
 import { EquipmentModel } from "./equipment.model";
 import { EventTypeModel } from "./eventType.model";
 import { GenreModel } from "./genre.model";
+import { MessagesModel } from "./messages.model";
 
 export interface UserModel {
   customerType: CustomerTypes;
@@ -27,5 +28,5 @@ export interface UserModel {
   followingCount: number;
   isFollowing?: boolean;
   canAddPackage: boolean;
-  accountSetupCompleted: boolean;
+  messages?: MessagesModel;
 }

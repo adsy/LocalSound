@@ -232,9 +232,9 @@ namespace localsound.backend.Infrastructure.Services
                     SpotifyUrl = registrationDto.SpotifyUrl,
                     SoundcloudUrl = registrationDto.SoundcloudUrl,
                     CustomerType = customerType,
-                    AccountOnboarding = new AccountOnboarding
+                    AccountMessages = new AccountMessages
                     {
-                        AccountSetupCompleted = false
+                        OnboardingMessageClosed = false
                     }
                 };
 
@@ -252,9 +252,9 @@ namespace localsound.backend.Infrastructure.Services
                     AppUserId = user.Id,
                     ProfileUrl = registrationDto.ProfileUrl,
                     CustomerType = customerType,
-                    AccountOnboarding = new AccountOnboarding
+                    AccountMessages = new AccountMessages
                     {
-                        AccountSetupCompleted = false
+                        OnboardingMessageClosed = false
                     }
                 };
 
@@ -697,6 +697,14 @@ namespace localsound.backend.Infrastructure.Services
         {
             var returnDto = _mapper.Map<ArtistDto>(artist);
             returnDto.Images = _mapper.Map<List<AccountImageDto>>(artist.Images);
+            
+            if (artist.AccountMessages != null)
+            {
+                if (!artist.AccountMessages.OnboardingMessageClosed)
+                {
+                    returnDto.Messages.Add("onboardingMessageClosed", false);
+                }
+            }
 
             if (artist.Followers != null)
             {
@@ -726,6 +734,14 @@ namespace localsound.backend.Infrastructure.Services
         {
             var returnDto = _mapper.Map<NonArtistDto>(nonArtist);
             returnDto.Images = _mapper.Map<List<AccountImageDto>>(nonArtist.Images);
+
+            if (nonArtist.AccountMessages != null)
+            {
+                if (!nonArtist.AccountMessages.OnboardingMessageClosed)
+                {
+                    returnDto.Messages.Add("onboardingMessageClosed", false);
+                }
+            }
 
             if (nonArtist.Following != null)
             {

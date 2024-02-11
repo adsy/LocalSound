@@ -192,16 +192,12 @@ const EditTrackForm = ({
                               disabled={isSubmitting}
                             />
                           </div>
-                          <div className="mb-3">
-                            <div className="d-flex">
-                              <p className="form-label">GENRES</p>
-                            </div>
-                            <SearchGenreTypes
-                              selectedGenres={selectedGenres}
-                              setSelectedGenres={setSelectedGenres}
-                              placeholder={"Add up to 10 genres for your track"}
-                            />
-                          </div>
+                          <SearchGenreTypes
+                            title={"GENRES"}
+                            selectedGenres={selectedGenres}
+                            setSelectedGenres={setSelectedGenres}
+                            placeholder={"Add up to 10 genres for your track"}
+                          />
                           <div className="mb-3">
                             <div className="d-flex">
                               <p className="form-label">TRACK DESCRIPTION</p>

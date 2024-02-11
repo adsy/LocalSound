@@ -78,6 +78,8 @@ builder.Services.AddTransient<IBookingRepository, BookingRepository>();
 builder.Services.AddTransient<IBookingService, BookingService>();
 builder.Services.AddTransient<INotificationService, NotificationService>();
 builder.Services.AddTransient<INotificationRepository, NotificationRepository>();
+builder.Services.AddTransient<IMessageRepository, MessageRepository>();
+builder.Services.AddTransient<IMessageService, MessageService>();
 
 builder.Services.AddHttpContextAccessor();
 

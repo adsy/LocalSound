@@ -43,11 +43,13 @@ $purple100: #6d69fa;
 
 @mixin button-style {
   color: $black100;
-  font-size: 16px;
   letter-spacing: 2px;
   transition: border-color 0.3s ease;
   transition: background-color 0.3s ease;
   border-radius: 10px 10px;
+  h4 {
+    font-size: 12px !important;
+  }
 }
 
 @mixin small-icon {
@@ -97,6 +99,10 @@ body {
   font-family: "Afacad", serif !important;
   overflow: auto;
   background-color: $white200 !important;
+}
+
+input {
+  font-size: 16px !important;
 }
 
 #root {
@@ -260,6 +266,12 @@ $end: 10;
   font-size: 13px;
   font-weight: 800;
 
+  .close-icon {
+    position: absolute;
+    top: 5px;
+    right: 0;
+    cursor: pointer;
+  }
   .info-banner-text {
     white-space: pre-wrap;
   }
@@ -742,7 +754,6 @@ i.large.icon {
 }
 
 .black-button {
-  // text-transform: uppercase;
   @include button-style;
   background-color: $black100;
   border: 1px solid $black200;
@@ -1444,12 +1455,12 @@ i.large.icon {
   }
 
   .badge-container {
-    margin-left: 0.25rem;
+    margin-right: 0.25rem;
   }
 
-  .badge-container:first-of-type {
-    margin-left: 0px;
-  }
+  // .badge-container:first-of-type {
+  //   margin-left: 0px;
+  // }
 
   .react-datepicker-wrapper {
     width: 100%;

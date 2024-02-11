@@ -5,13 +5,10 @@ import { EquipmentModel } from "../../../app/model/dto/equipment.model";
 import { GenreModel } from "../../../app/model/dto/genre.model";
 import { EventTypeModel } from "../../../app/model/dto/eventType.model";
 import { Form, Formik } from "formik";
-import {
-  handleSaveOnboardingData,
-  handleSetUserDetails,
-} from "../../../app/redux/actions/userSlice";
+import { handleSaveProfileData } from "../../../app/redux/actions/userSlice";
 import SearchGenreTypes from "../../../common/components/Search/SearchGenreTypes";
 import SearchEventTypes from "../../../common/components/Search/SearchEventTypes";
-import EquipmentEntry from "../../UserProfile/Artist/Edit/EditArtistProfile/EquipmentEntry";
+import EquipmentEntry from "../../../common/components/Equipment/EquipmentEntry";
 import ErrorBanner from "../../../common/banner/ErrorBanner";
 import SuccessBanner from "../../../common/banner/SuccessBanner";
 import { Button } from "react-bootstrap";
@@ -89,7 +86,7 @@ const ArtistOnboarding = () => {
               );
 
               dispatch(
-                handleSaveOnboardingData({
+                handleSaveProfileData({
                   ...userDetails,
                   ...submissionData,
                 })

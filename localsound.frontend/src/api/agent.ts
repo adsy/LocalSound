@@ -23,6 +23,7 @@ import { BookingListResponse } from "../app/model/dto/booking-list.-response.mod
 import { NotificationListResponseModel } from "../app/model/dto/notification-list-response.model";
 import { toast } from "react-toastify";
 import { OnboardingDataModel } from "../app/model/dto/onboarding-data.model";
+import { MessageTypes } from "../app/model/enums/messageTypes";
 
 const axiosApiInstance = axios.create();
 
@@ -191,7 +192,7 @@ const Account = {
   updateProfileDetails: (
     memberId: string,
     editArtist: UpdateArtistProfileDetailsModel
-  ) => requests.put(`artist/member/${memberId}/profile-details`, editArtist),
+  ) => requests.put(`account/member/${memberId}/profile-details`, editArtist),
   followArtist: (userId: string, artistId: string) =>
     requests.post<null>(
       `account/follow-artist/member/${userId}/artist/${artistId}`,
@@ -294,6 +295,14 @@ const Notifications = {
     ),
 };
 
+const Messages = {
+  dismissMessage: (memberId: string, messageType: MessageTypes) =>
+    requests.post(
+      `message/member/${memberId}/dismiss-message/${messageType}`,
+      {}
+    ),
+};
+
 const agent = {
   Authentication,
   Account,
@@ -303,6 +312,7 @@ const agent = {
   Packages,
   Bookings,
   Notifications,
+  Messages,
 };
 
 export default agent;

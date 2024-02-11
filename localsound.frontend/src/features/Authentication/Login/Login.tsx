@@ -98,7 +98,7 @@ const Login = () => {
                     name="password"
                     placeholder=""
                     type="password"
-                    fieldClassName="mb-1"
+                    fieldClassName="mt-2"
                     disabled={isSubmitting}
                   />
                 </div>
@@ -110,7 +110,7 @@ const Login = () => {
                 {!isSubmitting ? (
                   <Button
                     className={`white-button w-100 align-self-center ${
-                      status?.error ? "mt-3" : "mt-5"
+                      status?.error ? "mt-3" : "mt-4"
                     }`}
                     type="submit"
                     disabled={

@@ -18,7 +18,6 @@ namespace localsound.backend.Domain.Model.Dto.Entity
         public CustomerTypeEnum CustomerType { get; set; }
         public string? AboutSection { get; set; }
         public bool EmailConfirmed { get; set; }
-        public bool AccountSetupCompleted { get; set; }
 
         public List<GenreDto> Genres { get; set; }
         public List<EquipmentDto> Equipment { get; set; }
@@ -26,6 +25,9 @@ namespace localsound.backend.Domain.Model.Dto.Entity
         public List<AccountImageDto> Images { get; set; }
         public int FollowingCount { get; set; }
         public int FollowerCount { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Dictionary<string, bool> Messages { get; set; } = new Dictionary<string, bool>();
 
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

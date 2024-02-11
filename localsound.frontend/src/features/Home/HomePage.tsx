@@ -6,6 +6,9 @@ import { CustomerTypes } from "../../app/model/enums/customerTypes";
 import { handleToggleModal } from "../../app/redux/actions/modalSlice";
 import ArtistOnboarding from "../Onboarding/Artist/ArtistOnboarding";
 import NonArtistOnboarding from "../Onboarding/NonArtist/NonArtistOnboarding";
+import agent from "../../api/agent";
+import { MessageTypes } from "../../app/model/enums/messageTypes";
+import { handleCloseMessage } from "../../app/redux/actions/userSlice";
 
 const HomePage = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
@@ -31,10 +34,26 @@ const HomePage = () => {
     }
   };
 
+  const dismissOnboardBanner = async () => {
+    try {
+      await agent.Messages.dismissMessage(
+        userDetails?.memberId!,
+        MessageTypes.onboardingClosedMessage
+      );
+      dispatch(handleCloseMessage(MessageTypes.onboardingClosedMessage));
+    } catch (err) {
+      // TODO
+    }
+  };
+
   return (
     <div id="home-page" className="fade-in">
-      {!userDetails?.accountSetupCompleted ? (
-        <InfoBanner className="fade-in mb-2 mx-3 mt-3">
+      {userDetails?.messages?.onboardingMessageClosed === false ? (
+        <InfoBanner
+          className="fade-in mb-2 mx-3 mt-3 justify-content-between"
+          closable={true}
+          closeFunc={dismissOnboardBanner}
+        >
           <div className="d-flex flex-row align-items-center justify-content-center">
             <Icon
               name="user"

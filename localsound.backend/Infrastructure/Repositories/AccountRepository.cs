@@ -1,5 +1,6 @@
 ﻿using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model;
+using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Domain.Model.Dto.Submission;
 using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Domain.Model.Interfaces.Entity;
@@ -15,11 +16,13 @@ namespace localsound.backend.Infrastructure.Repositories
     {
         private readonly LocalSoundDbContext _dbContext;
         private readonly ILogger<AccountRepository> _logger;
+        private readonly IMessageRepository _messageRepository;
 
-        public AccountRepository(LocalSoundDbContext dbContext, ILogger<AccountRepository> logger)
+        public AccountRepository(LocalSoundDbContext dbContext, ILogger<AccountRepository> logger, IMessageRepository messageRepository)
         {
             _dbContext = dbContext;
             _logger = logger;
+            _messageRepository = messageRepository;
         }
 
         public async Task<ServiceResponse<CustomerType>> AddArtistToDbAsync(Account artist)
@@ -282,7 +285,7 @@ namespace localsound.backend.Infrastructure.Repositories
             try
             {
                 var artist = await _dbContext.Account
-                    .Include(x => x.AccountOnboarding)
+                    .Include(x => x.AccountMessages)
                     .Include(x => x.Images)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
@@ -359,7 +362,7 @@ namespace localsound.backend.Infrastructure.Repositories
             {
                 var nonArtist = await _dbContext.Account
                     .Include(x => x.Images)
-                    .Include(x => x.AccountOnboarding)
+                    .Include(x => x.AccountMessages)
                     .Include(x => x.Following)
                     .ThenInclude(x => x.Artist)
                     .ThenInclude(x => x.Images)
@@ -413,7 +416,7 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var account = await _dbContext.Account.Include(x => x.AccountOnboarding).Include(x => x.Genres).Include(x => x.EventTypes).Include(x => x.Equipment).FirstOrDefaultAsync(x => x.AppUserId == userId);
+                var account = await _dbContext.Account.Include(x => x.AccountMessages).Include(x => x.Genres).Include(x => x.EventTypes).Include(x => x.Equipment).FirstOrDefaultAsync(x => x.AppUserId == userId);
 
                 if (account is null)
                 {
@@ -423,37 +426,13 @@ namespace localsound.backend.Infrastructure.Repositories
                     };
                 }
 
-                account.UpdateAboutSection(onboardingData.AboutSection).UpdateAccountSetupCompleted();
+                account.UpdateAboutSection(onboardingData.AboutSection);
 
-                if (onboardingData.Genres.Any())
-                {
-                    account.UpdateGenres(onboardingData.Genres.Select(x => new AccountGenre
-                    {
-                        AppUserId = userId,
-                        GenreId = x.GenreId
-                    }).ToList());
-                }
-
-                if (onboardingData.Equipment is not null && onboardingData.Equipment.Any())
-                {
-                    account.UpdateEquipment(onboardingData.Equipment.Select(x => new ArtistEquipment
-                    {
-                        AppUserId = userId,
-                        EquipmentId = x.EquipmentId,
-                        EquipmentName = x.EquipmentName
-                    }).ToList());
-                }
-
-                if (onboardingData.EventTypes is not null && onboardingData.EventTypes.Any())
-                {
-                    account.UpdateEventTypes(onboardingData.EventTypes.Select(x => new ArtistEventType
-                    {
-                        AppUserId = userId,
-                        EventTypeId = x.EventTypeId
-                    }).ToList());
-                }
+                UpdateAccountProfileData(account, onboardingData.Genres, onboardingData.EventTypes, onboardingData.Equipment);
 
                 await _dbContext.SaveChangesAsync();
+
+                await _messageRepository.DismissMessageAsync(userId, MessageEnum.Onboarding);
 
                 return new ServiceResponse(HttpStatusCode.OK);
             }
@@ -465,6 +444,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 return new ServiceResponse<Account>(HttpStatusCode.InternalServerError);
             }
         }
+
         public async Task<ServiceResponse> UpdateArtistFollowerAsync(Account follower, string artistId, bool startFollowing)
         {
             var followString = startFollowing ? "following" : "unfollowing";
@@ -558,41 +538,24 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.Account
+                var account = await _dbContext.Account
+                    .Include(x => x.AccountMessages)
                     .Include(x => x.Genres)
                     .Include(x => x.EventTypes)
                     .Include(x => x.Equipment)
                     .FirstOrDefaultAsync(x => x.AppUserId == userId);
 
                 // Artist should not be null here, otherwise its an issue with the artist creation/DB
-                if (artist is null)
+                if (account is null)
                 {
                     var message = $"{nameof(AccountRepository)} - {nameof(UpdateArtistProfileDetails)} - Could not find matching artist with userId: {userId}";
                     return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your details, please try again.");
                 }
 
-                var artistGenres = updateArtistDto.Genres.Select(x => new AccountGenre
-                {
-                    AppUserId = artist.AppUserId,
-                    GenreId = x.GenreId
-                }).ToList();
+                if (!account.AccountMessages.OnboardingMessageClosed)
+                    await _messageRepository.DismissMessageAsync(userId, MessageEnum.Onboarding);
 
-                var eventTypes = updateArtistDto.EventTypes.Select(x => new ArtistEventType
-                {
-                    AppUserId = artist.AppUserId,
-                    EventTypeId = x.EventTypeId
-                }).ToList();
-
-                var equipment = updateArtistDto.Equipment.Select(x => new ArtistEquipment
-                {
-                    AppUserId = artist.AppUserId,
-                    EquipmentId = x.EquipmentId,
-                    EquipmentName = x.EquipmentName
-                }).ToList();
-
-                artist.UpdateGenres(artistGenres)
-                    .UpdateEventTypes(eventTypes)
-                    .UpdateEquipment(equipment);
+                UpdateAccountProfileData(account, updateArtistDto.Genres, updateArtistDto.EventTypes, updateArtistDto.Equipment);
 
                 await _dbContext.SaveChangesAsync();
 
@@ -604,6 +567,38 @@ namespace localsound.backend.Infrastructure.Repositories
                 _logger.LogError(e, message);
 
                 return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your details, please try again.");
+            }
+        }
+
+
+        private void UpdateAccountProfileData(Account account, List<GenreDto> genres, List<EventTypeDto>? eventTypes, List<EquipmentDto>? equipment)
+        {
+            if (genres.Any())
+            {
+                account.UpdateGenres(genres.Select(x => new AccountGenre
+                {
+                    AppUserId = account.AppUserId,
+                    GenreId = x.GenreId
+                }).ToList());
+            }
+
+            if (equipment is not null && equipment.Any())
+            {
+                account.UpdateEquipment(equipment.Select(x => new ArtistEquipment
+                {
+                    AppUserId = account.AppUserId,
+                    EquipmentId = x.EquipmentId,
+                    EquipmentName = x.EquipmentName
+                }).ToList());
+            }
+
+            if (eventTypes is not null && eventTypes.Any())
+            {
+                account.UpdateEventTypes(eventTypes.Select(x => new ArtistEventType
+                {
+                    AppUserId = account.AppUserId,
+                    EventTypeId = x.EventTypeId
+                }).ToList());
             }
         }
     }

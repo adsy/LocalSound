@@ -5,14 +5,14 @@ import { Button, Form } from "react-bootstrap";
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
 import agent from "../../../../../api/agent";
-import { handleSetUserDetails } from "../../../../../app/redux/actions/userSlice";
+import { handleSaveProfileData } from "../../../../../app/redux/actions/userSlice";
 import ErrorBanner from "../../../../../common/banner/ErrorBanner";
 import InPageLoadingComponent from "../../../../../app/layout/InPageLoadingComponent";
 import { EquipmentModel } from "../../../../../app/model/dto/equipment.model";
 import { EventTypeModel } from "../../../../../app/model/dto/eventType.model";
 import SearchEventTypes from "../../../../../common/components/Search/SearchEventTypes";
 import SuccessBanner from "../../../../../common/banner/SuccessBanner";
-import EquipmentEntry from "./EquipmentEntry";
+import EquipmentEntry from "../../../../../common/components/Equipment/EquipmentEntry";
 import SearchGenreTypes from "../../../../../common/components/Search/SearchGenreTypes";
 
 interface Props {
@@ -78,7 +78,7 @@ const EditArtistProfile = ({ userDetails }: Props) => {
               );
 
               dispatch(
-                handleSetUserDetails({
+                handleSaveProfileData({
                   ...userDetails,
                   ...submissionData,
                 })

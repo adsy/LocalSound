@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserState } from "../../model/redux/userState";
 import { AccountImageTypes } from "../../model/enums/accountImageTypes";
+import { MessageTypes } from "../../model/enums/messageTypes";
 
 const initialState: UserState = {
   userDetails: null,
@@ -42,10 +43,22 @@ export const userSlice = createSlice({
 
       state.userDetails = user;
     },
-    handleSaveOnboardingData: (state, { payload }) => {
+    handleSaveProfileData: (state, { payload }) => {
       state.userDetails = payload;
       if (state.userDetails) {
-        state.userDetails.accountSetupCompleted = true;
+        state.userDetails.messages.onboardingMessageClosed = true;
+      }
+    },
+    handleCloseMessage: (state, { payload }) => {
+      if (state.userDetails && state.userDetails.messages) {
+        switch (payload) {
+          case MessageTypes.onboardingClosedMessage: {
+            state.userDetails.messages.onboardingMessageClosed = true;
+            break;
+          }
+          default:
+            break;
+        }
       }
     },
   },
@@ -56,7 +69,8 @@ export const {
   handleSetUserDetails,
   handleUpdateUserCoverPhoto,
   handleUpdateUserProfilePhoto,
-  handleSaveOnboardingData,
+  handleSaveProfileData,
+  handleCloseMessage,
 } = userSlice.actions;
 
 export default userSlice.reducer;

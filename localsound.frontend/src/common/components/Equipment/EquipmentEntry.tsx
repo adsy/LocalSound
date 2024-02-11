@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Label from "../../../../../common/components/Label/Label";
-import { EquipmentModel } from "../../../../../app/model/dto/equipment.model";
+import Label from "../Label/Label";
+import { EquipmentModel } from "../../../app/model/dto/equipment.model";
 import { v4 as uuidv4 } from "uuid";
 
 interface Props {
@@ -36,7 +36,7 @@ const EquipmentEntry = ({
       <div className="d-flex mb-1">
         <p className="form-label">{title}</p>
       </div>
-      <p className="text-justify">{description}</p>
+      <p className="text-justify mb-0">{description}</p>
       <div id="search-label-component">
         <div className="box d-flex flex-column justify-content-between">
           <div className="container">

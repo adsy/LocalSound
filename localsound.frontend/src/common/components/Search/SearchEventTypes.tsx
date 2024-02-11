@@ -66,7 +66,7 @@ const SearchEventTypes = ({
       <div className="d-flex mb-1">
         <p className="form-label">{title}</p>
       </div>
-      <p className="text-justify">{description}</p>
+      <p className="text-justify mb-0">{description}</p>
       <div id="search-label-component">
         <div className="box d-flex flex-column justify-content-between">
           <div className="container">

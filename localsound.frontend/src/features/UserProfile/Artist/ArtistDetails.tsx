@@ -23,7 +23,7 @@ const ArtistDetails = ({
   );
 
   return (
-    <div className="d-flex flex-row flex-wrap">
+    <div className="d-flex flex-row justify-content-center flex-wrap">
       <Col md={12} lg={4} className="p-0 left-col">
         <div className="d-flex flex-column p-2 py-0">
           {photoUpdateError ? (

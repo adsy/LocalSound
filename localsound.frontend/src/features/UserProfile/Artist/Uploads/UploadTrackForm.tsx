@@ -252,24 +252,18 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                                   disabled={disabled}
                                 />
                               </div>
-                              <div className="mb-3">
-                                <div className="d-flex">
-                                  <p className="form-label">GENRES</p>
-                                </div>
-                                <p className="text-justify">
-                                  Start typing a genre you play to attach to
+                              <SearchGenreTypes
+                                title={"GENRES"}
+                                description="Start typing a genre you play to attach to
                                   your profile. Attaching genres to your tracks
                                   allow people to find you specifically for
-                                  their next event.
-                                </p>
-                                <SearchGenreTypes
-                                  selectedGenres={selectedGenres}
-                                  setSelectedGenres={setSelectedGenres}
-                                  placeholder={
-                                    "Add up to 10 genres for your track"
-                                  }
-                                />
-                              </div>
+                                  their next event."
+                                selectedGenres={selectedGenres}
+                                setSelectedGenres={setSelectedGenres}
+                                placeholder={
+                                  "Add up to 10 genres for your track"
+                                }
+                              />
                               <div className="mb-3">
                                 <div className="d-flex">
                                   <p className="form-label">

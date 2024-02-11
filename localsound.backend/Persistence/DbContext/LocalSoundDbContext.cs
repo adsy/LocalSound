@@ -24,7 +24,7 @@ namespace localsound.backend.Persistence.DbContext
 
         public DbSet<AccountImage> AccountImage { get; set; }
         public DbSet<AccountImageType> AccountImageType { get; set; }
-        public DbSet<AccountOnboarding> AccountOnboarding { get; set; }
+        public DbSet<AccountMessages> AccountMessages { get; set; }
         public DbSet<AppUser> AppUser { get; set; }
         public DbSet<AppUserToken> AppUserToken { get; set; }
         public DbSet<Account> Account { get; set; }
@@ -100,14 +100,15 @@ namespace localsound.backend.Persistence.DbContext
             builder.HasSequence("MemberId", x => x.StartsAt(100000).IncrementsBy(1));
             builder.Entity<Account>().Property(x => x.MemberId).HasDefaultValueSql("NEXT VALUE FOR MemberId");
             builder.Entity<Account>().HasMany(x => x.Following);
-            builder.Entity<Account>().HasOne(x => x.AccountOnboarding).WithOne(x => x.Account);
+            builder.Entity<Account>().HasOne(x => x.AccountMessages).WithOne(x => x.Account);
 
             builder.Entity<Account>().HasMany(x => x.Following).WithOne(x => x.Follower).OnDelete(DeleteBehavior.NoAction);
             builder.Entity<Account>().HasMany(x => x.Followers).WithOne(x => x.Artist).OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<AppUserToken>().Property(o => o.ExpirationDate).HasDefaultValueSql("DateAdd(week,1,getDate())");
 
-            builder.Entity<AccountOnboarding>().HasKey(x => x.AppUserId);
+            builder.Entity<AccountMessages>().HasKey(x => x.AppUserId);
+            builder.Entity<AccountMessages>().Property(x => x.OnboardingMessageClosed).HasDefaultValue(false);
 
             builder.Entity<Account>().HasKey(x => x.AppUserId);
             builder.Entity<Account>().HasMany(x => x.Genres);

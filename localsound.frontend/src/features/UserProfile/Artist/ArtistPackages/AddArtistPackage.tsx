@@ -3,7 +3,7 @@ import { UserModel } from "../../../../app/model/dto/user.model";
 import { Formik } from "formik";
 import { Button, Form } from "react-bootstrap";
 import TextInput from "../../../../common/form/TextInput";
-import EquipmentEntry from "../Edit/EditArtistProfile/EquipmentEntry";
+import EquipmentEntry from "../../../../common/components/Equipment/EquipmentEntry";
 import { useState } from "react";
 import TextArea from "../../../../common/form/TextArea";
 import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
@@ -110,20 +110,15 @@ const AddArtistPackage = ({ userDetails, setPackages }: Props) => {
                               disabled={disabled}
                             />
                           </div>
-                          <div className="mb-3">
-                            <div className="d-flex">
-                              <p className="form-label">PACKAGE EQUIPMENT</p>
-                            </div>
-                            <p className="text-justify">
-                              Add the list of equipment you will provide with
-                              this package. Type your equipment name and press
-                              enter to add it to the list.
-                            </p>
-                            <EquipmentEntry
-                              equipment={equipment}
-                              setEquipment={setEquipment}
-                            />
-                          </div>
+
+                          <EquipmentEntry
+                            title={"PACKAGE EQUIPMENT"}
+                            description={
+                              "Add the list of equipment you will provide with this package. Type your equipment name and press enter to add it to the list."
+                            }
+                            equipment={equipment}
+                            setEquipment={setEquipment}
+                          />
                           <div className="mb-3">
                             <div className="d-flex">
                               <p className="form-label">PACKAGE DESCRIPTION</p>

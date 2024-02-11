@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using localsound.backend.Persistence.DbContext;
 
@@ -11,9 +12,11 @@ using localsound.backend.Persistence.DbContext;
 namespace localsound.backend.Persistence.Migrations
 {
     [DbContext(typeof(LocalSoundDbContext))]
-    partial class LocalSoundDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240211023925_updatedTableName")]
+    partial class updatedTableName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -262,10 +265,8 @@ namespace localsound.backend.Persistence.Migrations
                     b.Property<Guid>("AppUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("OnboardingMessageClosed")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                    b.Property<bool>("AccountSetupCompleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("AppUserId");
 
@@ -826,7 +827,7 @@ namespace localsound.backend.Persistence.Migrations
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AccountMessages", b =>
                 {
                     b.HasOne("localsound.backend.Domain.Model.Entity.Account", "Account")
-                        .WithOne("AccountMessages")
+                        .WithOne("AccountOnboarding")
                         .HasForeignKey("localsound.backend.Domain.Model.Entity.AccountMessages", "AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1033,7 +1034,7 @@ namespace localsound.backend.Persistence.Migrations
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.Account", b =>
                 {
-                    b.Navigation("AccountMessages")
+                    b.Navigation("AccountOnboarding")
                         .IsRequired();
 
                     b.Navigation("Bookings");
