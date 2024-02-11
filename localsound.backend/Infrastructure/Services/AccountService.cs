@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
@@ -7,6 +6,7 @@ using localsound.backend.Domain.Model.Dto.Response;
 using localsound.backend.Domain.Model.Dto.Submission;
 using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Domain.Model.Interfaces.Entity;
+using localsound.backend.Infrastructure.Interface.Helper;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
 using Microsoft.AspNetCore.Http;
@@ -28,6 +28,7 @@ namespace localsound.backend.Infrastructure.Services
         private readonly SignInManager<AppUser> _signInManger;
         private readonly IAccountImageService _accountImageService;
         private readonly IEmailRepository _emailRepository;
+        private readonly IAccountHelper _accountHelper;
 
         public AccountService(
             IAccountRepository accountRepository,
@@ -37,7 +38,8 @@ namespace localsound.backend.Infrastructure.Services
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManger,
             IAccountImageService accountImageService,
-            IEmailRepository emailRepository)
+            IEmailRepository emailRepository,
+            IAccountHelper accountHelper)
         {
             _accountRepository = accountRepository;
             _tokenRepository = tokenRepository;
@@ -47,6 +49,7 @@ namespace localsound.backend.Infrastructure.Services
             _signInManger = signInManger;
             _accountImageService = accountImageService;
             _emailRepository = emailRepository;
+            _accountHelper = accountHelper;
         }
 
         public async Task<ServiceResponse<LoginResponseDto>> LoginAsync(LoginSubmissionDto loginData)
@@ -86,14 +89,13 @@ namespace localsound.backend.Infrastructure.Services
                 var refreshToken = await _tokenRepository.CreateRefreshToken(user);
                 var returnDto = null as IAppUserDto;
 
-
                 if (accountResult.ReturnData.CustomerType == CustomerTypeEnum.Artist)
                 {
                     var artist = await _accountRepository.GetArtistFromDbAsync(user.Id);
 
                     if (artist.IsSuccessStatusCode && artist.ReturnData != null)
                     {
-                        returnDto = CreateArtistDto(artist.ReturnData);
+                        returnDto = _accountHelper.CreateArtistDto(artist.ReturnData);
                     }
                     else
                     {
@@ -109,7 +111,7 @@ namespace localsound.backend.Infrastructure.Services
 
                     if (nonArtist.IsSuccessStatusCode && nonArtist.ReturnData != null)
                     {
-                        returnDto = CreateNonArtistDto(nonArtist.ReturnData);
+                        returnDto = _accountHelper.CreateNonArtistDto(nonArtist.ReturnData);
                     }
                     else
                     {
@@ -342,7 +344,7 @@ namespace localsound.backend.Infrastructure.Services
                 var artistResponse = await _accountRepository.GetArtistFromDbAsync(profileUrl);
                 if (artistResponse?.ReturnData != null && artistResponse.IsSuccessStatusCode)
                 {
-                    returnDto = CreateArtistDto(artistResponse.ReturnData);
+                    returnDto = _accountHelper.CreateArtistDto(artistResponse.ReturnData);
                     if (artistResponse.ReturnData.Followers.Any(x => x.FollowerId == currentUser))
                     {
                         returnDto.IsFollowing = true;
@@ -363,7 +365,7 @@ namespace localsound.backend.Infrastructure.Services
                 var nonArtistResponse = await _accountRepository.GetNonArtistFromDbAsync(profileUrl);
                 if (nonArtistResponse?.ReturnData != null && nonArtistResponse.IsSuccessStatusCode)
                 {
-                    returnDto = CreateNonArtistDto(nonArtistResponse.ReturnData);
+                    returnDto = _accountHelper.CreateNonArtistDto(nonArtistResponse.ReturnData);
 
                     return new ServiceResponse<IAppUserDto>(HttpStatusCode.OK)
                     {
@@ -538,7 +540,7 @@ namespace localsound.backend.Infrastructure.Services
 
                             if (artist.IsSuccessStatusCode && artist?.ReturnData != null)
                             {
-                                returnDto = CreateArtistDto(artist.ReturnData);
+                                returnDto = _accountHelper.CreateArtistDto(artist.ReturnData);
                             }
                             else
                             {
@@ -554,7 +556,7 @@ namespace localsound.backend.Infrastructure.Services
 
                             if (nonArtist.IsSuccessStatusCode && nonArtist?.ReturnData != null)
                             {
-                                returnDto = CreateNonArtistDto(nonArtist.ReturnData);
+                                returnDto = _accountHelper.CreateNonArtistDto(nonArtist.ReturnData);
                             }
                             else
                             {
@@ -693,66 +695,6 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        private IAppUserDto CreateArtistDto(Account artist)
-        {
-            var returnDto = _mapper.Map<ArtistDto>(artist);
-            returnDto.Images = _mapper.Map<List<AccountImageDto>>(artist.Images);
-            
-            if (artist.AccountMessages != null)
-            {
-                if (!artist.AccountMessages.OnboardingMessageClosed)
-                {
-                    returnDto.Messages.Add("onboardingMessageClosed", false);
-                }
-            }
-
-            if (artist.Followers != null)
-            {
-                returnDto.FollowerCount = artist.Followers.Count;
-            }
-            else
-            {
-                returnDto.FollowerCount = 0;
-            }
-
-            if (artist.Following != null)
-            {
-                returnDto.FollowingCount = artist.Following.Count;
-            }
-            else
-            {
-                returnDto.FollowingCount = 0;
-            }
-
-            returnDto.CanAddPackage = artist.Packages.Count < 3;
-
-
-            return returnDto;
-        }
-
-        private IAppUserDto CreateNonArtistDto(Account nonArtist)
-        {
-            var returnDto = _mapper.Map<NonArtistDto>(nonArtist);
-            returnDto.Images = _mapper.Map<List<AccountImageDto>>(nonArtist.Images);
-
-            if (nonArtist.AccountMessages != null)
-            {
-                if (!nonArtist.AccountMessages.OnboardingMessageClosed)
-                {
-                    returnDto.Messages.Add("onboardingMessageClosed", false);
-                }
-            }
-
-            if (nonArtist.Following != null)
-            {
-                returnDto.FollowingCount = nonArtist.Following.Count;
-            }
-            else
-            {
-                returnDto.FollowingCount = 0;
-            }
-
-            return returnDto;
-        }
+        
     }
 }

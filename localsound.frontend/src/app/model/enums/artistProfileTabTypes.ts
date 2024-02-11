@@ -1,5 +1,5 @@
 export enum ArtistProfileTabs {
-  ArtistDetails,
+  ProfileDetails,
   Uploads,
   Followers,
   Following,

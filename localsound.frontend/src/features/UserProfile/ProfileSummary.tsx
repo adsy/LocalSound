@@ -1,24 +1,29 @@
-import { Image } from "semantic-ui-react";
-import { UserModel } from "../../../app/model/dto/user.model";
-import Label from "../../../common/components/Label/Label";
-import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
-import userImg from "../../../assets/placeholder.png";
+import { UserModel } from "../../app/model/dto/user.model";
+import Label from "../../common/components/Label/Label";
 
 interface Props {
   userDetails: UserModel;
   addLeftSpacing?: boolean;
+  isArtist: boolean;
 }
 
-const ArtistSummary = ({ userDetails, addLeftSpacing = true }: Props) => {
-  const userPhoto = userDetails.images.find(
-    (x) => x.accountImageTypeId == AccountImageTypes.ProfileImage
-  );
+const ProfileSummary = ({
+  userDetails,
+  isArtist,
+  addLeftSpacing = true,
+}: Props) => {
   return (
     <div className={`d-flex flex-row ${addLeftSpacing ? "ml-2" : ""}`}>
       <div className="d-flex flex-column">
         <div className="d-flex flex-row flex-wrap mb-1">
           <div className="d-flex flex-column justify-content-end">
-            <span className="user-name mb-0">{userDetails?.name}</span>
+            {isArtist ? (
+              <span className="user-name mb-0">{userDetails?.name}</span>
+            ) : (
+              <span className="user-name mb-0">
+                {userDetails?.firstName} {userDetails?.lastName}
+              </span>
+            )}
           </div>
         </div>
 
@@ -36,4 +41,4 @@ const ArtistSummary = ({ userDetails, addLeftSpacing = true }: Props) => {
   );
 };
 
-export default ArtistSummary;
+export default ProfileSummary;

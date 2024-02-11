@@ -1,8 +1,6 @@
 ﻿using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model;
-using localsound.backend.Domain.Model.Dto.Response;
 using localsound.backend.Infrastructure.Interface.Repositories;
-using localsound.backend.Infrastructure.Services;
 using localsound.backend.Persistence.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

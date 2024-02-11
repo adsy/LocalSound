@@ -4,6 +4,8 @@ using localsound.backend.api.Extensions;
 using localsound.backend.api.Middleware;
 using localsound.backend.api.SignalR;
 using localsound.backend.Domain.ModelAdaptor;
+using localsound.backend.Infrastructure.Helper;
+using localsound.backend.Infrastructure.Interface.Helper;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
 using localsound.backend.Infrastructure.Repositories;
@@ -80,6 +82,7 @@ builder.Services.AddTransient<INotificationService, NotificationService>();
 builder.Services.AddTransient<INotificationRepository, NotificationRepository>();
 builder.Services.AddTransient<IMessageRepository, MessageRepository>();
 builder.Services.AddTransient<IMessageService, MessageService>();
+builder.Services.AddTransient<IAccountHelper, AccountHelper>();
 
 builder.Services.AddHttpContextAccessor();
 

@@ -12,11 +12,16 @@ namespace localsound.backend.Domain.Model.Interfaces.Entity
         public string PhoneNumber { get; set; }
         public CustomerTypeEnum CustomerType { get; set; }
         public bool EmailConfirmed { get; set; }
-        //public bool EmailConfirmed { get; set; }
 
         public List<AccountImageDto> Images { get; set; }
         public int FollowingCount { get; set; }
         public int FollowerCount { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Dictionary<string, bool> Messages { get; set; }
+
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? IsFollowing { get; set; }
     }
 }

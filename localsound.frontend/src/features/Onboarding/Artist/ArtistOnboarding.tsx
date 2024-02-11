@@ -119,11 +119,15 @@ const ArtistOnboarding = () => {
               >
                 <div className="form-body">
                   <UpdateProfilePhoto />
-                  <div className="px-3 mb-3">
-                    <div className="d-flex">
+                  <div className="d-flex flex-column col-12 col-md-6 px-3">
+                    <div className="d-flex mb-1">
                       <p className="form-label">ABOUT</p>
                     </div>
-                    <TextArea name="about" placeholder="" rows={5} />
+                    <p className="text-justify mb-0">
+                      Lets get to know you. Add a little bit about yourself here
+                      which will appear on your profile!
+                    </p>
+                    <TextArea name="about" placeholder="" rows={4} />
                   </div>
                   <div className="d-flex flex-row flex-wrap justify-content-between">
                     <div className="d-flex flex-column col-12 col-md-6 px-3">

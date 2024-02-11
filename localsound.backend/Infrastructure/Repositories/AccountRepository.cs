@@ -366,12 +366,16 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.Following)
                     .ThenInclude(x => x.Artist)
                     .ThenInclude(x => x.Images)
+                    .Include(x => x.Genres)
+                    .ThenInclude(x => x.Genre)
                     .FirstOrDefaultAsync(x => x.AppUserId == id);
 
                 if (nonArtist is null)
                 {
                     return new ServiceResponse<Account>(HttpStatusCode.NotFound);
                 }
+
+                nonArtist.Images = nonArtist.Images.Where(x => !x.ToBeDeleted).ToList();
 
                 return new ServiceResponse<Account>(HttpStatusCode.OK)
                 {

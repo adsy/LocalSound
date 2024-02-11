@@ -1,15 +1,10 @@
 import { useState } from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import { UserModel } from "../../../app/model/dto/user.model";
-import ArtistDetails from "./ArtistDetails";
-import UploadList from "./Uploads/UploadList";
-import { ArtistTrackUploadModel } from "../../../app/model/dto/artist-track-upload.model";
 import Followers from "../Followers/Followers";
 import { ArtistProfileTabs } from "../../../app/model/enums/artistProfileTabTypes";
 import Following from "../Followers/Following";
-import ArtistPackages from "./ArtistPackages/ArtistPackages";
-import { ArtistPackageModel } from "../../../app/model/dto/artist-package.model";
-import { CustomerTypes } from "../../../app/model/enums/customerTypes";
+import NonArtistDetails from "./NonArtistDetails";
 import ProfileBanner from "../ProfileBanner";
 
 interface Props {
@@ -18,7 +13,7 @@ interface Props {
   viewingOwnProfile: boolean;
 }
 
-const ArtistProfile = ({
+const NonArtistProfile = ({
   loggedInUser,
   artistDetails,
   viewingOwnProfile,
@@ -26,8 +21,6 @@ const ArtistProfile = ({
   const [currentTab, setCurrentTab] = useState(
     ArtistProfileTabs.ProfileDetails
   );
-  const [tracks, setTracks] = useState<ArtistTrackUploadModel[]>([]);
-  const [packages, setPackages] = useState<ArtistPackageModel[]>([]);
   const [photoUpdateError, setPhotoUpdateError] = useState<string | null>(null);
 
   return (
@@ -39,9 +32,6 @@ const ArtistProfile = ({
             profileDetails={artistDetails}
             viewingOwnProfile={viewingOwnProfile}
             setCurrentTab={setCurrentTab}
-            tracks={tracks}
-            setTracks={setTracks}
-            setPackages={setPackages}
             setPhotoUpdateError={setPhotoUpdateError}
           />
           <div className="component-container">
@@ -76,26 +66,13 @@ const ArtistProfile = ({
             >
               <Tab
                 eventKey={ArtistProfileTabs.ProfileDetails}
-                title="ARTIST DETAILS"
+                title="PROFILE DETAILS"
                 className=""
               >
-                <ArtistDetails
+                <NonArtistDetails
                   userDetails={artistDetails}
                   photoUpdateError={photoUpdateError}
                   setCurrentTab={setCurrentTab}
-                />
-              </Tab>
-              <Tab
-                eventKey={ArtistProfileTabs.Uploads}
-                title="UPLOADS"
-                className=""
-              >
-                <UploadList
-                  userDetails={artistDetails}
-                  currentTab={currentTab}
-                  tracks={tracks}
-                  setTracks={setTracks}
-                  viewingOwnProfile={viewingOwnProfile}
                 />
               </Tab>
               <Tab
@@ -120,23 +97,6 @@ const ArtistProfile = ({
                   viewingOwnProfile={viewingOwnProfile}
                 />
               </Tab>
-              {viewingOwnProfile ||
-              (!viewingOwnProfile &&
-                loggedInUser.customerType == CustomerTypes.NonArtist) ? (
-                <Tab
-                  eventKey={ArtistProfileTabs.Packages}
-                  title="PACKAGES"
-                  className=""
-                >
-                  <ArtistPackages
-                    artistDetails={artistDetails}
-                    currentTab={currentTab}
-                    viewingOwnProfile={viewingOwnProfile}
-                    packages={packages}
-                    setPackages={setPackages}
-                  />
-                </Tab>
-              ) : null}
             </Tabs>
           </div>
         </div>
@@ -145,4 +105,4 @@ const ArtistProfile = ({
   );
 };
 
-export default ArtistProfile;
+export default NonArtistProfile;

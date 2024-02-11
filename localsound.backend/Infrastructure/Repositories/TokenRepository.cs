@@ -6,6 +6,7 @@ using localsound.backend.Domain.Model.Dto.Response;
 using localsound.backend.Domain.Model.Entity;
 using localsound.backend.Domain.Model.Interfaces.Entity;
 using localsound.backend.Domain.ModelAdaptor;
+using localsound.backend.Infrastructure.Interface.Helper;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Persistence.DbContext;
 using Microsoft.AspNetCore.Identity;
@@ -30,6 +31,7 @@ namespace localsound.backend.Infrastructure.Repositories
         private readonly IAccountRepository _accountRepository;
         private readonly IMapper _mapper;
         private readonly IEmailRepository _emailRepository;
+        private readonly IAccountHelper _accountHelper;
 
         public TokenRepository(UserManager<AppUser> userManager,
             IOptions<JwtSettingsAdaptor> settings,
@@ -37,7 +39,8 @@ namespace localsound.backend.Infrastructure.Repositories
             LocalSoundDbContext context,
             IAccountRepository accountRepository,
             IMapper mapper,
-            IEmailRepository emailRepository)
+            IEmailRepository emailRepository,
+            IAccountHelper accountHelper)
         {
             _userManager = userManager;
             _settings = settings.Value;
@@ -46,6 +49,7 @@ namespace localsound.backend.Infrastructure.Repositories
             _accountRepository = accountRepository;
             _mapper = mapper;
             _emailRepository = emailRepository;
+            _accountHelper = accountHelper;
         }
 
         // Create new Access Token
@@ -230,27 +234,26 @@ namespace localsound.backend.Infrastructure.Repositories
                     return new ServiceResponse<LoginResponseDto>(HttpStatusCode.BadRequest, "There was an error confirming your token, please try again...");
                 }
 
-                // Create store or user based on customer type
+                // Create artist or non artist based on customer type
                 if (accountResult.ReturnData.CustomerType == CustomerTypeEnum.Artist)
                 {
-                    var customer = await _accountRepository.GetArtistFromDbAsync(id);
+                    var artistResult = await _accountRepository.GetArtistFromDbAsync(id);
 
-                    if (!customer.IsSuccessStatusCode)
+                    if (!artistResult.IsSuccessStatusCode || artistResult.ReturnData is null)
                         return new ServiceResponse<LoginResponseDto>(HttpStatusCode.InternalServerError);
 
-                    returnUser = _mapper.Map<ArtistDto>(customer.ReturnData);
-                    returnUser.Email = user.Email;
+                    returnUser = _accountHelper.CreateArtistDto(artistResult.ReturnData);
                 }
                 else
                 {
-                    var store = await _accountRepository.GetNonArtistFromDbAsync(id);
+                    var nonArtistResult = await _accountRepository.GetNonArtistFromDbAsync(id);
 
-                    if (!store.IsSuccessStatusCode)
+                    if (!nonArtistResult.IsSuccessStatusCode || nonArtistResult.ReturnData is null)
                         return new ServiceResponse<LoginResponseDto>(HttpStatusCode.InternalServerError);
 
-                    returnUser = _mapper.Map<NonArtistDto>(store.ReturnData);
-                    returnUser.Email = user.Email;
+                    returnUser = _accountHelper.CreateArtistDto(nonArtistResult.ReturnData);
                 }
+                returnUser.Email = user.Email;
 
                 var accessToken = CreateToken(GetClaims(user, accountResult.ReturnData.CustomerType));
                 var refreshToken = await CreateRefreshToken(user);

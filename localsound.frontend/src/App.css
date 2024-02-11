@@ -1769,6 +1769,9 @@ i.large.icon {
 }
 
 /** MODAL STYLES **/
+.modal {
+  overflow: visible;
+}
 .modal .content {
   border: 1px solid #001514;
   padding-top: 5px !important;

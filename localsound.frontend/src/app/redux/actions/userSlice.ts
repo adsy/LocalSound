@@ -45,20 +45,24 @@ export const userSlice = createSlice({
     },
     handleSaveProfileData: (state, { payload }) => {
       state.userDetails = payload;
-      if (state.userDetails) {
-        state.userDetails.messages.onboardingMessageClosed = true;
+      if (state.userDetails && state.userDetails.messages) {
+        var clone = { ...state.userDetails.messages };
+        clone.onboardingMessageClosed = true;
+        state.userDetails.messages = clone;
       }
     },
     handleCloseMessage: (state, { payload }) => {
       if (state.userDetails && state.userDetails.messages) {
+        var clone = { ...state.userDetails.messages };
         switch (payload) {
           case MessageTypes.onboardingClosedMessage: {
-            state.userDetails.messages.onboardingMessageClosed = true;
+            clone.onboardingMessageClosed = true;
             break;
           }
           default:
             break;
         }
+        state.userDetails.messages = clone;
       }
     },
   },

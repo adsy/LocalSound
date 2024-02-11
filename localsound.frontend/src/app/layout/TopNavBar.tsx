@@ -31,15 +31,23 @@ const TopNavbar = () => {
 
   const [show, setShow] = useState(false);
 
-  const handleSignout = async () => {
-    setSigningOut(true);
-    await agent.Authentication.signOut();
-    history.push("/");
+  const resetAppState = () => {
     signalHub.disconnectConnection();
     dispatch(handleResetUserState());
     dispatch(handleResetAppState());
     dispatch(handleResetNotificationState());
-    setShow(false);
+  };
+
+  const handleSignout = async () => {
+    setSigningOut(true);
+    try {
+      await agent.Authentication.signOut();
+      history.push("/");
+      resetAppState();
+      setShow(false);
+    } catch (err) {
+      // TODO: do something with error
+    }
     setSigningOut(false);
   };
 

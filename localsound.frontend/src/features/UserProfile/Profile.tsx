@@ -8,6 +8,7 @@ import agent from "../../api/agent";
 import ProfileNotFound from "./ProfileNotFound";
 import InPageLoadingComponent from "../../app/layout/InPageLoadingComponent";
 import { handleSetProfile } from "../../app/redux/actions/pageDataSlice";
+import NonArtistProfile from "./NonArtist/NonArtistProfile";
 
 const UserProfileSummary = () => {
   const dispatch = useDispatch();
@@ -78,6 +79,17 @@ const UserProfileSummary = () => {
       profile?.customerType === CustomerTypes.Artist ? (
         <div id="user-profile">
           <ArtistProfile
+            loggedInUser={userDetail!}
+            artistDetails={profile}
+            viewingOwnProfile={viewingOwnProfile}
+          />
+        </div>
+      ) : null}
+      {!noMatch &&
+      !loading &&
+      profile?.customerType === CustomerTypes.NonArtist ? (
+        <div id="user-profile">
+          <NonArtistProfile
             loggedInUser={userDetail!}
             artistDetails={profile}
             viewingOwnProfile={viewingOwnProfile}

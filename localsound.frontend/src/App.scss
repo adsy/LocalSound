@@ -1607,6 +1607,7 @@ i.large.icon {
 
 /** MODAL STYLES **/
 .modal {
+  overflow: visible;
   .content {
     border: 1px solid $black200;
     padding-top: 5px !important;

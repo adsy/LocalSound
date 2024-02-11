@@ -3,7 +3,7 @@ import { EventTypeModel } from "./eventType.model";
 import { GenreModel } from "./genre.model";
 
 export interface OnboardingDataModel {
-  aboutSection: string;
+  aboutSection?: string;
   genres: GenreModel[];
   eventTypes?: EventTypeModel[];
   equipment?: EquipmentModel[];
