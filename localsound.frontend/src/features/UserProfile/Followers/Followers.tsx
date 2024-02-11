@@ -2,14 +2,14 @@ import { UserModel } from "../../../app/model/dto/user.model";
 import { useLayoutEffect, useState } from "react";
 import { UserSummaryModel } from "./../../../app/model/dto/user-summary.model";
 import agent from "../../../api/agent";
-import { ArtistProfileTabs } from "../../../app/model/enums/artistProfileTabTypes";
+import { ProfileTabs } from "../../../app/model/enums/ProfileTabTypes";
 import FollowerList from "./FollowerList";
 import ErrorBanner from "../../../common/banner/ErrorBanner";
 import useFixMissingScroll from "../../../common/hooks/UseLoadMoreWithoutScroll";
 
 interface Props {
   artistDetails: UserModel;
-  currentTab: ArtistProfileTabs;
+  currentTab: ProfileTabs;
   viewingOwnProfile: boolean;
 }
 
@@ -21,7 +21,7 @@ const Followers = ({ artistDetails, currentTab, viewingOwnProfile }: Props) => {
   const [loadError, setLoadError] = useState<string | null>();
 
   const getMoreFollowers = async () => {
-    if (currentTab === ArtistProfileTabs.Followers && canLoadMore) {
+    if (currentTab === ProfileTabs.Followers && canLoadMore) {
       try {
         setLoading(true);
 
@@ -48,7 +48,7 @@ const Followers = ({ artistDetails, currentTab, viewingOwnProfile }: Props) => {
   useLayoutEffect(() => {
     setLoadError(null);
     (async () => {
-      if (currentTab === ArtistProfileTabs.Followers && canLoadMore) {
+      if (currentTab === ProfileTabs.Followers && canLoadMore) {
         try {
           setLoading(true);
 

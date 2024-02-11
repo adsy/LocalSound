@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { handleAppLoading } from "../../app/redux/actions/applicationSlice";
 import { UserModel } from "../../app/model/dto/user.model";
 import { AccountImageModel } from "../../app/model/dto/account-image.model";
-import { ArtistProfileTabs } from "../../app/model/enums/artistProfileTabTypes";
+import { ProfileTabs } from "../../app/model/enums/ProfileTabTypes";
 import { AccountImageTypes } from "../../app/model/enums/accountImageTypes";
 import { handleToggleModal } from "../../app/redux/actions/modalSlice";
 import EditArtist from "./Artist/Edit/EditArtist";
@@ -27,7 +27,7 @@ interface Props {
   loggedInUser: UserModel;
   profileDetails: UserModel;
   viewingOwnProfile: boolean;
-  setCurrentTab: (tab: ArtistProfileTabs) => void;
+  setCurrentTab: (tab: ProfileTabs) => void;
   tracks?: ArtistTrackUploadModel[];
   setTracks?: (tracks: ArtistTrackUploadModel[]) => void;
   setPackages?: (packages: ArtistPackageModel[]) => void;
@@ -80,7 +80,7 @@ const ProfileBanner = ({
           size: "large",
         })
       );
-      setCurrentTab(ArtistProfileTabs.Uploads);
+      setCurrentTab(ProfileTabs.Uploads);
     }
   };
 
@@ -98,7 +98,7 @@ const ProfileBanner = ({
           size: "large",
         })
       );
-      setCurrentTab(ArtistProfileTabs.Packages);
+      setCurrentTab(ProfileTabs.Packages);
     }
   };
 
@@ -143,7 +143,7 @@ const ProfileBanner = ({
   };
 
   useLayoutEffect(() => {
-    setCurrentTab(ArtistProfileTabs.ProfileDetails);
+    setCurrentTab(ProfileTabs.ProfileDetails);
     if (profileDetails?.images?.length > 0) {
       const IMAGES = [...profileDetails.images];
       Promise.all(IMAGES.map((image) => loadImage(image)))

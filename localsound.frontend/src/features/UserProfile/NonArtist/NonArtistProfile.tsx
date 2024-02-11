@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import { UserModel } from "../../../app/model/dto/user.model";
 import Followers from "../Followers/Followers";
-import { ArtistProfileTabs } from "../../../app/model/enums/artistProfileTabTypes";
+import { ProfileTabs } from "../../../app/model/enums/ProfileTabTypes";
 import Following from "../Followers/Following";
 import NonArtistDetails from "./NonArtistDetails";
 import ProfileBanner from "../ProfileBanner";
+import { Divider } from "semantic-ui-react";
 
 interface Props {
   loggedInUser: UserModel;
@@ -18,9 +19,7 @@ const NonArtistProfile = ({
   artistDetails,
   viewingOwnProfile,
 }: Props) => {
-  const [currentTab, setCurrentTab] = useState(
-    ArtistProfileTabs.ProfileDetails
-  );
+  const [currentTab, setCurrentTab] = useState(ProfileTabs.ProfileDetails);
   const [photoUpdateError, setPhotoUpdateError] = useState<string | null>(null);
 
   return (
@@ -41,31 +40,34 @@ const NonArtistProfile = ({
               onSelect={(k) => {
                 switch (k) {
                   case "0": {
-                    setCurrentTab(ArtistProfileTabs.ProfileDetails);
+                    setCurrentTab(ProfileTabs.ProfileDetails);
                     break;
                   }
                   case "1": {
-                    setCurrentTab(ArtistProfileTabs.Uploads);
+                    setCurrentTab(ProfileTabs.Uploads);
                     break;
                   }
                   case "2": {
-                    setCurrentTab(ArtistProfileTabs.Followers);
+                    setCurrentTab(ProfileTabs.Followers);
                     break;
                   }
                   case "3": {
-                    setCurrentTab(ArtistProfileTabs.Following);
+                    setCurrentTab(ProfileTabs.Following);
                     break;
                   }
                   case "4": {
-                    setCurrentTab(ArtistProfileTabs.Packages);
+                    setCurrentTab(ProfileTabs.Packages);
                     break;
+                  }
+                  case "5": {
+                    setCurrentTab(ProfileTabs.LikedSongs);
                   }
                 }
               }}
               className="mb-4"
             >
               <Tab
-                eventKey={ArtistProfileTabs.ProfileDetails}
+                eventKey={ProfileTabs.ProfileDetails}
                 title="PROFILE DETAILS"
                 className=""
               >
@@ -76,26 +78,22 @@ const NonArtistProfile = ({
                 />
               </Tab>
               <Tab
-                eventKey={ArtistProfileTabs.Followers}
-                title="FOLLOWERS"
+                eventKey={ProfileTabs.Following}
+                title="FOLLOWING"
                 className=""
               >
-                <Followers
-                  artistDetails={artistDetails}
+                <Following
+                  profileDetails={artistDetails}
                   currentTab={currentTab}
                   viewingOwnProfile={viewingOwnProfile}
                 />
               </Tab>
               <Tab
-                eventKey={ArtistProfileTabs.Following}
-                title="FOLLOWING"
+                eventKey={ProfileTabs.LikedSongs}
+                title="FAVOURITES"
                 className=""
               >
-                <Following
-                  artistDetails={artistDetails}
-                  currentTab={currentTab}
-                  viewingOwnProfile={viewingOwnProfile}
-                />
+                <div>need to add a liked songs component</div>
               </Tab>
             </Tabs>
           </div>

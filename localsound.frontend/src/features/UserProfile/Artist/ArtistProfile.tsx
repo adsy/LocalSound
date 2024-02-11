@@ -5,7 +5,7 @@ import ArtistDetails from "./ArtistDetails";
 import UploadList from "./Uploads/UploadList";
 import { ArtistTrackUploadModel } from "../../../app/model/dto/artist-track-upload.model";
 import Followers from "../Followers/Followers";
-import { ArtistProfileTabs } from "../../../app/model/enums/artistProfileTabTypes";
+import { ProfileTabs } from "../../../app/model/enums/ProfileTabTypes";
 import Following from "../Followers/Following";
 import ArtistPackages from "./ArtistPackages/ArtistPackages";
 import { ArtistPackageModel } from "../../../app/model/dto/artist-package.model";
@@ -23,9 +23,7 @@ const ArtistProfile = ({
   artistDetails,
   viewingOwnProfile,
 }: Props) => {
-  const [currentTab, setCurrentTab] = useState(
-    ArtistProfileTabs.ProfileDetails
-  );
+  const [currentTab, setCurrentTab] = useState(ProfileTabs.ProfileDetails);
   const [tracks, setTracks] = useState<ArtistTrackUploadModel[]>([]);
   const [packages, setPackages] = useState<ArtistPackageModel[]>([]);
   const [photoUpdateError, setPhotoUpdateError] = useState<string | null>(null);
@@ -51,23 +49,23 @@ const ArtistProfile = ({
               onSelect={(k) => {
                 switch (k) {
                   case "0": {
-                    setCurrentTab(ArtistProfileTabs.ProfileDetails);
+                    setCurrentTab(ProfileTabs.ProfileDetails);
                     break;
                   }
                   case "1": {
-                    setCurrentTab(ArtistProfileTabs.Uploads);
+                    setCurrentTab(ProfileTabs.Uploads);
                     break;
                   }
                   case "2": {
-                    setCurrentTab(ArtistProfileTabs.Followers);
+                    setCurrentTab(ProfileTabs.Followers);
                     break;
                   }
                   case "3": {
-                    setCurrentTab(ArtistProfileTabs.Following);
+                    setCurrentTab(ProfileTabs.Following);
                     break;
                   }
                   case "4": {
-                    setCurrentTab(ArtistProfileTabs.Packages);
+                    setCurrentTab(ProfileTabs.Packages);
                     break;
                   }
                 }
@@ -75,7 +73,7 @@ const ArtistProfile = ({
               className="mb-4"
             >
               <Tab
-                eventKey={ArtistProfileTabs.ProfileDetails}
+                eventKey={ProfileTabs.ProfileDetails}
                 title="ARTIST DETAILS"
                 className=""
               >
@@ -85,11 +83,7 @@ const ArtistProfile = ({
                   setCurrentTab={setCurrentTab}
                 />
               </Tab>
-              <Tab
-                eventKey={ArtistProfileTabs.Uploads}
-                title="UPLOADS"
-                className=""
-              >
+              <Tab eventKey={ProfileTabs.Uploads} title="UPLOADS" className="">
                 <UploadList
                   userDetails={artistDetails}
                   currentTab={currentTab}
@@ -99,7 +93,7 @@ const ArtistProfile = ({
                 />
               </Tab>
               <Tab
-                eventKey={ArtistProfileTabs.Followers}
+                eventKey={ProfileTabs.Followers}
                 title="FOLLOWERS"
                 className=""
               >
@@ -110,12 +104,12 @@ const ArtistProfile = ({
                 />
               </Tab>
               <Tab
-                eventKey={ArtistProfileTabs.Following}
+                eventKey={ProfileTabs.Following}
                 title="FOLLOWING"
                 className=""
               >
                 <Following
-                  artistDetails={artistDetails}
+                  profileDetails={artistDetails}
                   currentTab={currentTab}
                   viewingOwnProfile={viewingOwnProfile}
                 />
@@ -124,7 +118,7 @@ const ArtistProfile = ({
               (!viewingOwnProfile &&
                 loggedInUser.customerType == CustomerTypes.NonArtist) ? (
                 <Tab
-                  eventKey={ArtistProfileTabs.Packages}
+                  eventKey={ProfileTabs.Packages}
                   title="PACKAGES"
                   className=""
                 >

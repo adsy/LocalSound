@@ -5,12 +5,12 @@ import Label from "../../../common/components/Label/Label";
 import { Image } from "semantic-ui-react";
 import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
 import userImg from "../../../assets/placeholder.png";
-import { ArtistProfileTabs } from "../../../app/model/enums/artistProfileTabTypes";
+import { ProfileTabs } from "../../../app/model/enums/ProfileTabTypes";
 
 interface Props {
   photoUpdateError: string | null;
   userDetails: UserModel;
-  setCurrentTab: (tab: ArtistProfileTabs) => void;
+  setCurrentTab: (tab: ProfileTabs) => void;
 }
 
 const NonArtistDetails = ({
@@ -44,7 +44,7 @@ const NonArtistDetails = ({
                 <div
                   className="about-text m-0 px-3 left-col text-right"
                   onClick={() => {
-                    setCurrentTab(ArtistProfileTabs.Followers);
+                    setCurrentTab(ProfileTabs.Followers);
                   }}
                 >
                   <a className="follow-text">
@@ -57,7 +57,7 @@ const NonArtistDetails = ({
                 <div
                   className="about-text m-0 px-3 text-left "
                   onClick={() => {
-                    setCurrentTab(ArtistProfileTabs.Following);
+                    setCurrentTab(ProfileTabs.Following);
                   }}
                 >
                   <a className="follow-text">

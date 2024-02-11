@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from "react";
-import { ArtistProfileTabs } from "../../../../app/model/enums/artistProfileTabTypes";
+import { ProfileTabs } from "../../../../app/model/enums/ProfileTabTypes";
 import agent from "../../../../api/agent";
 import { UserModel } from "../../../../app/model/dto/user.model";
 import { ArtistPackageModel } from "../../../../app/model/dto/artist-package.model";
@@ -10,7 +10,7 @@ import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponen
 import ArtistPackageDisplay from "./ArtistPackageDisplay";
 
 interface Props {
-  currentTab: ArtistProfileTabs;
+  currentTab: ProfileTabs;
   artistDetails: UserModel;
   viewingOwnProfile: boolean;
   packages: ArtistPackageModel[];
@@ -32,7 +32,7 @@ const ArtistPackages = ({
 
   useLayoutEffect(() => {
     (async () => {
-      if (currentTab === ArtistProfileTabs.Packages) {
+      if (currentTab === ProfileTabs.Packages) {
         try {
           setLoading(true);
           var result = await agent.Packages.getPackages(

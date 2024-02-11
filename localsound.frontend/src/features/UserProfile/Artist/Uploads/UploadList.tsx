@@ -4,7 +4,7 @@ import agent from "../../../../api/agent";
 import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-upload.model";
 import Track from "../../../../common/components/Track/Track";
 import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
-import { ArtistProfileTabs } from "../../../../app/model/enums/artistProfileTabTypes";
+import { ProfileTabs } from "../../../../app/model/enums/ProfileTabTypes";
 import { Image } from "react-bootstrap";
 import wavePulse from "../../../../assets/wave-pulse-1-svgrepo-com.svg";
 import SuccessBanner from "../../../../common/banner/SuccessBanner";
@@ -19,7 +19,7 @@ import { handleSetTrackList } from "../../../../app/redux/actions/playerSlice";
 
 interface Props {
   userDetails: UserModel;
-  currentTab: ArtistProfileTabs;
+  currentTab: ProfileTabs;
   tracks: ArtistTrackUploadModel[];
   setTracks: (tracks: ArtistTrackUploadModel[]) => void;
   viewingOwnProfile: boolean;
@@ -43,7 +43,7 @@ const UploadList = ({
   const dispatch = useDispatch();
 
   const getMoreTracks = async () => {
-    if (currentTab === ArtistProfileTabs.Uploads) {
+    if (currentTab === ProfileTabs.Uploads) {
       try {
         setLoading(true);
         var result = await agent.Tracks.getArtistUploads(
@@ -78,7 +78,7 @@ const UploadList = ({
   useLayoutEffect(() => {
     (async () => {
       if (userDetails.profileUrl !== playerState.artistProfile) {
-        if (currentTab === ArtistProfileTabs.Uploads && canLoadMore) {
+        if (currentTab === ProfileTabs.Uploads && canLoadMore) {
           try {
             setLoading(true);
             var result = await agent.Tracks.getArtistUploads(

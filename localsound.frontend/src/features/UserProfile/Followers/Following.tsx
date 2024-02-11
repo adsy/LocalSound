@@ -2,18 +2,22 @@ import { UserModel } from "../../../app/model/dto/user.model";
 import { useLayoutEffect, useState } from "react";
 import { UserSummaryModel } from "./../../../app/model/dto/user-summary.model";
 import agent from "../../../api/agent";
-import { ArtistProfileTabs } from "../../../app/model/enums/artistProfileTabTypes";
+import { ProfileTabs } from "../../../app/model/enums/ProfileTabTypes";
 import FollowerList from "./FollowerList";
 import ErrorBanner from "./../../../common/banner/ErrorBanner";
 import useFixMissingScroll from "../../../common/hooks/UseLoadMoreWithoutScroll";
 
 interface Props {
-  artistDetails: UserModel;
-  currentTab: ArtistProfileTabs;
+  profileDetails: UserModel;
+  currentTab: ProfileTabs;
   viewingOwnProfile: boolean;
 }
 
-const Following = ({ artistDetails, currentTab, viewingOwnProfile }: Props) => {
+const Following = ({
+  profileDetails,
+  currentTab,
+  viewingOwnProfile,
+}: Props) => {
   const [followers, setFollowers] = useState<UserSummaryModel[]>([]);
   const [loadError, setLoadError] = useState<string | null>();
   const [page, setPage] = useState(0);
@@ -21,12 +25,12 @@ const Following = ({ artistDetails, currentTab, viewingOwnProfile }: Props) => {
   const [canLoadMore, setCanLoadMore] = useState(true);
 
   const getMoreFollowing = async () => {
-    if (currentTab === ArtistProfileTabs.Following && canLoadMore) {
+    if (currentTab === ProfileTabs.Following && canLoadMore) {
       try {
         setLoading(true);
 
         var result = await agent.Account.getProfileFollowing(
-          artistDetails.memberId,
+          profileDetails.memberId,
           page
         );
 
@@ -48,12 +52,12 @@ const Following = ({ artistDetails, currentTab, viewingOwnProfile }: Props) => {
   useLayoutEffect(() => {
     setLoadError(null);
     (async () => {
-      if (currentTab === ArtistProfileTabs.Following && canLoadMore) {
+      if (currentTab === ProfileTabs.Following && canLoadMore) {
         try {
           setLoading(true);
 
           var result = await agent.Account.getProfileFollowing(
-            artistDetails.memberId,
+            profileDetails.memberId,
             page
           );
 
