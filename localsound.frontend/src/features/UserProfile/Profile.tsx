@@ -35,7 +35,7 @@ const UserProfileSummary = () => {
         setLoading(true);
         if (!userDetail || userDetail?.profileUrl !== profileUrl) {
           if (profileUrl?.length > 0) {
-            var result = await agent.Profile.getProfile(profileUrl);
+            var result = await agent.Account.getProfile(profileUrl);
             dispatch(handleSetProfile(result));
             setViewingOwnProfile(false);
           }

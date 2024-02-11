@@ -72,7 +72,7 @@ const EditArtistProfile = ({ userDetails }: Props) => {
                 eventTypes: [...eventTypes],
               };
 
-              await agent.Artist.updateArtistProfileDetails(
+              await agent.Account.updateProfileDetails(
                 userDetails?.memberId!,
                 submissionData
               );

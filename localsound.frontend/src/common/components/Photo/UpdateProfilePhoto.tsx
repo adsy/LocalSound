@@ -34,7 +34,7 @@ const UpdateProfilePhoto = () => {
       try {
         setSubmittingPhotoUpdate(true);
         setPhotoUpdateError(null);
-        var result = await agent.Profile.uploadProfileImage(
+        var result = await agent.Account.uploadProfileImage(
           userDetails?.memberId!,
           formData,
           AccountImageTypes.ProfileImage
@@ -80,6 +80,7 @@ const UpdateProfilePhoto = () => {
               size="medium"
               circular
               className="align-self-center mb-2"
+              style={{ height: "250px", width: "250px" }}
             />
             <label
               htmlFor="profilePhotoInput"

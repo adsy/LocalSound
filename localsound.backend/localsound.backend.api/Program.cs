@@ -58,8 +58,6 @@ builder.Services.AddSingleton<BlobServiceClient>(x =>
 
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
-builder.Services.AddTransient<IArtistService, ArtistService>();
-builder.Services.AddTransient<IArtistRepository, ArtistRepository>();
 builder.Services.AddTransient<ICurrentUserService, CurrentUserService>();
 builder.Services.AddTransient<ITokenRepository, TokenRepository>();
 builder.Services.AddTransient<IGenreService, GenreService>();

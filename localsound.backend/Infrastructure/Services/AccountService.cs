@@ -443,7 +443,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<string>> UpdateAccountImage(Guid userId, string memberId, IFormFile photo, AccountImageTypeEnum imageType, string fileExt)
+        public async Task<ServiceResponse<string>> UpdateAccountImageAsync(Guid userId, string memberId, IFormFile photo, AccountImageTypeEnum imageType, string fileExt)
         {
             try
             {
@@ -482,7 +482,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<AccountImageDto>> GetAccountImage(Guid userId, string memberId, AccountImageTypeEnum imageType)
+        public async Task<ServiceResponse<AccountImageDto>> GetAccountImageAsync(Guid userId, string memberId, AccountImageTypeEnum imageType)
         {
             try
             {
@@ -500,14 +500,14 @@ namespace localsound.backend.Infrastructure.Services
             }
             catch(Exception e)
             {
-                var message = $"{nameof(AccountService)} - {nameof(GetAccountImage)} - {e.Message}";
+                var message = $"{nameof(AccountService)} - {nameof(GetAccountImageAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<AccountImageDto>(HttpStatusCode.InternalServerError);
             }
         }
 
-        public async Task<ServiceResponse<IAppUserDto>> CheckCurrentUserToken(ClaimsPrincipal claimsPrincipal)
+        public async Task<ServiceResponse<IAppUserDto>> CheckCurrentUserTokenAsync(ClaimsPrincipal claimsPrincipal)
         {
             try
             {
@@ -577,7 +577,7 @@ namespace localsound.backend.Infrastructure.Services
 
                     return new ServiceResponse<IAppUserDto>(HttpStatusCode.Unauthorized);
                 }
-                var message = $"{nameof(AccountService)} - {nameof(CheckCurrentUserToken)} - Login was attempted with user token which didnt match any registered email using: {email}";
+                var message = $"{nameof(AccountService)} - {nameof(CheckCurrentUserTokenAsync)} - Login was attempted with user token which didnt match any registered email using: {email}";
                 _logger.LogError(message);
 
 
@@ -585,10 +585,111 @@ namespace localsound.backend.Infrastructure.Services
             }
             catch (Exception e)
             {
-                var message = $"{nameof(AccountService)} - {nameof(CheckCurrentUserToken)} - {e.Message}";
+                var message = $"{nameof(AccountService)} - {nameof(CheckCurrentUserTokenAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<IAppUserDto>(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<ServiceResponse> SaveOnboardingDataAsync(Guid userId, string memberId, SaveOnboardingDataDto onboardingData)
+        {
+            try
+            {
+                var accountResult = await _accountRepository.GetAccountFromDbAsync(userId, memberId);
+
+                if (!accountResult.IsSuccessStatusCode)
+                {
+                    return new ServiceResponse<string>(accountResult.StatusCode);
+                }
+
+                var saveDataResult = await _accountRepository.SaveOnboardingData(userId, onboardingData);
+
+                if (!saveDataResult.IsSuccessStatusCode)
+                {
+                    return saveDataResult;
+                }
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch(Exception e)
+            {
+                var message = $"{nameof(AccountService)} - {nameof(SaveOnboardingDataAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError);
+            }
+        }
+        public async Task<ServiceResponse> UpdateArtistPersonalDetails(Guid userId, string memberId, UpdateArtistPersonalDetailsDto updateArtistDto)
+        {
+            try
+            {
+                var appUser = await _accountRepository.GetAccountFromDbAsync(userId, memberId);
+
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
+                {
+                    return new ServiceResponse(HttpStatusCode.NotFound, "There was an error while updating your details, please try again.");
+                }
+
+                return await _accountRepository.UpdateArtistPersonalDetails(userId, updateArtistDto);
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(AccountService)} - {nameof(UpdateArtistPersonalDetails)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your details, please try again.");
+            }
+        }
+
+        public async Task<ServiceResponse> UpdateArtistProfileDetails(Guid userId, string memberId, UpdateArtistProfileDetailsDto updateArtistDto)
+        {
+            try
+            {
+                var appUser = await _accountRepository.GetAccountFromDbAsync(userId, memberId);
+
+                if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
+                {
+                    return new ServiceResponse(HttpStatusCode.NotFound, "There was an error while updating your details, please try again.");
+                }
+
+                return await _accountRepository.UpdateArtistProfileDetails(userId, updateArtistDto);
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(AccountService)} - {nameof(UpdateArtistProfileDetails)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your details, please try again.");
+            }
+        }
+
+        public async Task<ServiceResponse> UpdateArtistFollower(Guid userId, string followerId, string artistId, bool startFollowing)
+        {
+            try
+            {
+                var accountResult = await _accountRepository.GetAccountFromDbAsync(userId, followerId);
+
+                if (!accountResult.IsSuccessStatusCode || accountResult.ReturnData is null)
+                {
+                    return accountResult;
+                }
+
+                var followResult = await _accountRepository.UpdateArtistFollowerAsync(accountResult.ReturnData, artistId, startFollowing);
+
+                if (!followResult.IsSuccessStatusCode)
+                {
+                    return followResult;
+                }
+
+                return new ServiceResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(AccountService)} - {nameof(UpdateArtistFollower)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse(HttpStatusCode.InternalServerError, "There was an error while updating your following status, please try again.");
             }
         }
 

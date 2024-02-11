@@ -22,6 +22,7 @@ import { BookingSubmissionModel } from "../app/model/dto/booking-submission.mode
 import { BookingListResponse } from "../app/model/dto/booking-list.-response.model";
 import { NotificationListResponseModel } from "../app/model/dto/notification-list-response.model";
 import { toast } from "react-toastify";
+import { OnboardingDataModel } from "../app/model/dto/onboarding-data.model";
 
 const axiosApiInstance = axios.create();
 
@@ -154,7 +155,7 @@ const Authentication = {
   signOut: () => requests.post<null>("account/sign-out", null),
 };
 
-const Profile = {
+const Account = {
   getProfile: (profileUrl: string) =>
     requests.get<UserModel>(`account/get-profile-details/${profileUrl}`),
   uploadProfileImage: (
@@ -174,29 +175,31 @@ const Profile = {
     requests.get<FollowerListResponse>(
       `account/get-profile-following/member/${memberId}?page=${page}`
     ),
-};
-
-const Artist = {
-  updateArtistPersonalDetails: (
+  saveOnboardingData: (memberId: string, onboardingData: OnboardingDataModel) =>
+    requests.post(
+      `account/member/${memberId}/save-onboarding-data`,
+      onboardingData
+    ),
+  updatePersonalDetails: (
     memberId: string,
     editArtist: UpdateArtistPersonalDetailsModel
   ) =>
     requests.put<null>(
-      `artist/member/${memberId}/personal-details`,
+      `account/member/${memberId}/personal-details`,
       editArtist
     ),
-  updateArtistProfileDetails: (
+  updateProfileDetails: (
     memberId: string,
     editArtist: UpdateArtistProfileDetailsModel
   ) => requests.put(`artist/member/${memberId}/profile-details`, editArtist),
   followArtist: (userId: string, artistId: string) =>
     requests.post<null>(
-      `artist/follow-artist/member/${userId}/artist/${artistId}`,
+      `account/follow-artist/member/${userId}/artist/${artistId}`,
       null
     ),
   unfollowArtist: (userId: string, artistId: string) =>
     requests.post<null>(
-      `artist/unfollow-artist/member/${userId}/artist/${artistId}`,
+      `account/unfollow-artist/member/${userId}/artist/${artistId}`,
       null
     ),
 };
@@ -293,8 +296,7 @@ const Notifications = {
 
 const agent = {
   Authentication,
-  Profile,
-  Artist,
+  Account,
   Genre,
   EventType,
   Tracks,

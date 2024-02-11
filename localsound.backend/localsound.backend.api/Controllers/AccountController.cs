@@ -1,5 +1,6 @@
 ﻿using AutoMapper.Execution;
 using localsound.backend.api.Commands.Account;
+using localsound.backend.api.Commands.Artist;
 using localsound.backend.api.Queries.Account;
 using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model.Dto.Entity;
@@ -7,6 +8,7 @@ using localsound.backend.Domain.Model.Dto.Submission;
 using localsound.backend.Domain.Model.Interfaces.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 using System.Web;
 
 namespace localsound.backend.api.Controllers
@@ -147,11 +149,100 @@ namespace localsound.backend.api.Controllers
             return StatusCode((int)updateResult.StatusCode, updateResult.ServiceResponseMessage);
         }
 
-        [Route("onboading/member/{memberId}")]
+        [Route("member/{memberId}/save-onboarding-data")]
         [HttpPost]
-        public async Task<ActionResult> SaveOnboardingData(string memberId)
+        public async Task<ActionResult> SaveOnboardingData([FromBody] SaveOnboardingDataDto data, string memberId)
         {
-            return Ok();
+            var result = await Mediator.Send(new SaveProfileOnboardingDataCommand
+            {
+                UserId = CurrentUser.AppUserId,
+                MemberId = memberId,
+                OnboardingData = data
+            });
+
+            if (result.IsSuccessStatusCode)
+            {
+                return Ok();
+            }
+
+            return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
+        }
+        [HttpPut]
+        [Route("member/{memberId}/personal-details")]
+        public async Task<ActionResult> UpdateArtistPersonalDetails([FromBody] UpdateArtistPersonalDetailsDto updateArtistDto, string memberId)
+        {
+            var result = await Mediator.Send(new UpdateArtistPersonalDetailsCommand
+            {
+                UserId = CurrentUser.AppUserId,
+                MemberId = memberId,
+                UpdateArtistDto = updateArtistDto
+            });
+
+            if (result.IsSuccessStatusCode)
+            {
+                return Ok();
+            }
+
+            return StatusCode((int)result.StatusCode);
+        }
+
+        [HttpPut]
+        [Route("member/{memberId}/profile-details")]
+        public async Task<ActionResult> UpdateArtistProfileDetails([FromBody] UpdateArtistProfileDetailsDto updateArtistDto, string memberId)
+        {
+            var result = await Mediator.Send(new UpdateArtistProfileDetailsCommand
+            {
+                UserId = CurrentUser.AppUserId,
+                MemberId = memberId,
+                UpdateArtistDto = updateArtistDto
+            });
+
+            if (result.IsSuccessStatusCode)
+            {
+                return Ok();
+            }
+
+            return StatusCode((int)result.StatusCode);
+        }
+
+        [HttpPost]
+        [Route("follow-artist/member/{followerId}/artist/{artistId}")]
+        public async Task<ActionResult> FollowArtist(string followerId, string artistId)
+        {
+            var result = await Mediator.Send(new UpdateArtistFollowerCommand
+            {
+                UserId = CurrentUser.AppUserId,
+                ArtistId = artistId,
+                MemberId = followerId,
+                StartFollowing = true
+            });
+
+            if (result.IsSuccessStatusCode)
+            {
+                return Ok();
+            }
+
+            return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
+        }
+
+        [HttpPost]
+        [Route("unfollow-artist/member/{followerId}/artist/{artistId}")]
+        public async Task<ActionResult> UnfollowArtist(string followerId, string artistId)
+        {
+            var result = await Mediator.Send(new UpdateArtistFollowerCommand
+            {
+                UserId = CurrentUser.AppUserId,
+                ArtistId = artistId,
+                MemberId = followerId,
+                StartFollowing = false
+            });
+
+            if (result.IsSuccessStatusCode)
+            {
+                return Ok();
+            }
+
+            return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
         }
 
         [HttpGet]

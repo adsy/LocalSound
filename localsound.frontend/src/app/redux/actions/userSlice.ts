@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserState } from "../../model/redux/userState";
 import { AccountImageTypes } from "../../model/enums/accountImageTypes";
-import signalHub from "../../../api/signalR";
 
 const initialState: UserState = {
   userDetails: null,
@@ -43,6 +42,12 @@ export const userSlice = createSlice({
 
       state.userDetails = user;
     },
+    handleSaveOnboardingData: (state, { payload }) => {
+      state.userDetails = payload;
+      if (state.userDetails) {
+        state.userDetails.accountSetupCompleted = true;
+      }
+    },
   },
 });
 
@@ -51,6 +56,7 @@ export const {
   handleSetUserDetails,
   handleUpdateUserCoverPhoto,
   handleUpdateUserProfilePhoto,
+  handleSaveOnboardingData,
 } = userSlice.actions;
 
 export default userSlice.reducer;

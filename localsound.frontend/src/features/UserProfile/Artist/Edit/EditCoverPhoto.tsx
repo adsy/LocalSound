@@ -34,7 +34,7 @@ const EditCoverPhoto = ({
 
       try {
         dispatch(handleAppLoading(true));
-        var result = await agent.Profile.uploadProfileImage(
+        var result = await agent.Account.uploadProfileImage(
           userDetail?.memberId!,
           formData,
           AccountImageTypes.CoverImage

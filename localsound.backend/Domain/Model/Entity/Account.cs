@@ -93,5 +93,11 @@ namespace localsound.backend.Domain.Model.Entity
             EventTypes = eventTypes;
             return this;
         }
+
+        public Account UpdateAccountSetupCompleted()
+        {
+            AccountOnboarding.AccountSetupCompleted = true;
+            return this;
+        }
     }
 }

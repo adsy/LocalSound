@@ -71,7 +71,7 @@ const EditArtistDetails = ({ userDetails }: Props) => {
             try {
               var submissionData = { ...values };
 
-              await agent.Artist.updateArtistPersonalDetails(
+              await agent.Account.updatePersonalDetails(
                 userDetails?.memberId!,
                 submissionData
               );

@@ -5,7 +5,10 @@ import { EquipmentModel } from "../../../app/model/dto/equipment.model";
 import { GenreModel } from "../../../app/model/dto/genre.model";
 import { EventTypeModel } from "../../../app/model/dto/eventType.model";
 import { Form, Formik } from "formik";
-import { handleSetUserDetails } from "../../../app/redux/actions/userSlice";
+import {
+  handleSaveOnboardingData,
+  handleSetUserDetails,
+} from "../../../app/redux/actions/userSlice";
 import SearchGenreTypes from "../../../common/components/Search/SearchGenreTypes";
 import SearchEventTypes from "../../../common/components/Search/SearchEventTypes";
 import EquipmentEntry from "../../UserProfile/Artist/Edit/EditArtistProfile/EquipmentEntry";
@@ -15,7 +18,7 @@ import { Button } from "react-bootstrap";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import agent from "../../../api/agent";
 import UpdateProfilePhoto from "../../../common/components/Photo/UpdateProfilePhoto";
-import { TextArea } from "semantic-ui-react";
+import TextArea from "../../../common/form/TextArea";
 
 const ArtistOnboarding = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails)!;
@@ -31,7 +34,7 @@ const ArtistOnboarding = () => {
     setEventTypes([...userDetails?.eventTypes]);
   }, [userDetails]);
 
-  const formValuesUntouched = () => {
+  const formValuesUntouched = (values: { [key: string]: string }) => {
     if (
       JSON.stringify([...userDetails.genres]) !==
       JSON.stringify([...selectedGenres])
@@ -50,6 +53,9 @@ const ArtistOnboarding = () => {
     ) {
       return false;
     }
+    if (values.aboutSection !== userDetails.aboutSection) {
+      return false;
+    }
     return true;
   };
 
@@ -60,7 +66,9 @@ const ArtistOnboarding = () => {
       </div>
       <div className="w-100 fade-in mt-3">
         <Formik
-          initialValues={{}}
+          initialValues={{
+            about: userDetails.aboutSection ? userDetails.aboutSection : "",
+          }}
           onSubmit={async (values, { setStatus }) => {
             setStatus(null);
             if (showSuccessMessage) {
@@ -69,18 +77,19 @@ const ArtistOnboarding = () => {
 
             try {
               var submissionData = {
+                aboutSection: values.about,
                 genres: [...selectedGenres],
                 equipment: [...equipment],
                 eventTypes: [...eventTypes],
               };
 
-              await agent.Artist.updateArtistProfileDetails(
+              await agent.Account.saveOnboardingData(
                 userDetails?.memberId!,
                 submissionData
               );
 
               dispatch(
-                handleSetUserDetails({
+                handleSaveOnboardingData({
                   ...userDetails,
                   ...submissionData,
                 })
@@ -90,13 +99,21 @@ const ArtistOnboarding = () => {
             } catch (err) {
               setStatus({
                 error:
-                  "There was an error updating your details, please try again..",
+                  "There was an error saving your details, please try again..",
               });
             }
           }}
         >
-          {({ handleSubmit, isSubmitting, isValid, status, submitForm }) => {
-            const disabled = !isValid || isSubmitting || formValuesUntouched();
+          {({
+            handleSubmit,
+            isSubmitting,
+            isValid,
+            status,
+            submitForm,
+            values,
+          }) => {
+            const disabled =
+              !isValid || isSubmitting || formValuesUntouched(values);
             return (
               <Form
                 className="ui form error fade-in"
@@ -109,7 +126,7 @@ const ArtistOnboarding = () => {
                     <div className="d-flex">
                       <p className="form-label">ABOUT</p>
                     </div>
-                    <TextArea name="aboutSection" placeholder="" rows={5} />
+                    <TextArea name="about" placeholder="" rows={5} />
                   </div>
                   <div className="d-flex flex-row flex-wrap justify-content-between">
                     <div className="d-flex flex-column col-12 col-md-6 px-3">

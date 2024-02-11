@@ -148,7 +148,7 @@ const ArtistProfile = ({
         setUpdateFollowerError(null);
         try {
           if (follow) {
-            await agent.Artist.followArtist(
+            await agent.Account.followArtist(
               loggedInUser.memberId,
               artistDetails.memberId
             );
@@ -167,7 +167,7 @@ const ArtistProfile = ({
               redirectUrl: `/${loggedInUser.profileUrl}`,
             });
           } else {
-            await agent.Artist.unfollowArtist(
+            await agent.Account.unfollowArtist(
               loggedInUser.memberId,
               artistDetails.memberId
             );

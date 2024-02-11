@@ -25,7 +25,7 @@ const Followers = ({ artistDetails, currentTab, viewingOwnProfile }: Props) => {
       try {
         setLoading(true);
 
-        var result = await agent.Profile.getProfileFollowers(
+        var result = await agent.Account.getProfileFollowers(
           artistDetails.memberId,
           page
         );
@@ -52,7 +52,7 @@ const Followers = ({ artistDetails, currentTab, viewingOwnProfile }: Props) => {
         try {
           setLoading(true);
 
-          var result = await agent.Profile.getProfileFollowers(
+          var result = await agent.Account.getProfileFollowers(
             artistDetails.memberId,
             page
           );
