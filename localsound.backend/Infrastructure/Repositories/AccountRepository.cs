@@ -171,7 +171,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<Account>> GetAccountFromDbAsync(Guid id)
+        public async Task<ServiceResponse<Account>> GetAccountFromDbAsync(Guid? id)
         {
             try
             {

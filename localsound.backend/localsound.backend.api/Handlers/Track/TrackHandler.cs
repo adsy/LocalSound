@@ -15,7 +15,7 @@ namespace localsound.backend.api.Handlers.Track
         IRequestHandler<UpdateTrackSupportingDetailsCommand, ServiceResponse>,
         IRequestHandler<DeleteArtistTrackCommand, ServiceResponse>,
         IRequestHandler<LikeArtistTrackCommand, ServiceResponse>,
-        IRequestHandler<UnlikeArtistTrackCommand, ServiceResponse>,
+        IRequestHandler<UnlikeArtistTrackCommand, ServiceResponse>
     {
         private readonly ITrackService _trackService;
 

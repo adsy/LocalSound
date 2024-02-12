@@ -224,14 +224,19 @@ namespace localsound.backend.Infrastructure.Services
 
                 if (userId is not null)
                 {
-                    var songIds = (await _trackRepository.GetLikedSongsIdsAsync(userId));
+                    var loggedInUser = await _accountRepository.GetAccountFromDbAsync(userId);
 
-                    if (songIds.IsSuccessStatusCode && songIds.ReturnData is not null && songIds.ReturnData.Any())
+                    if (loggedInUser.ReturnData is not null)
                     {
-                        songIds.ReturnData = songIds.ReturnData.OrderBy(x => x).ToList();
-                        foreach (var song in trackList)
+                        var songIds = (await _trackRepository.GetLikedSongsIdsAsync(loggedInUser.ReturnData.MemberId));
+
+                        if (songIds.IsSuccessStatusCode && songIds.ReturnData is not null && songIds.ReturnData.Any())
                         {
-                            song.SongLiked = _searchHelper.GuidBinarySearch(songIds.ReturnData, song.ArtistTrackUploadId) != -1 ? true : false;
+                            songIds.ReturnData = songIds.ReturnData.OrderBy(x => x).ToList();
+                            foreach (var song in trackList)
+                            {
+                                song.SongLiked = _searchHelper.GuidBinarySearch(songIds.ReturnData, song.ArtistTrackUploadId) != -1 ? true : false;
+                            }
                         }
                     }
                 }
@@ -271,7 +276,7 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var likeResult = await _trackRepository.LikeArtistTrackAsync(userId, artistMemberId, trackId);
+                var likeResult = await _trackRepository.LikeArtistTrackAsync(memberId, artistMemberId, trackId);
 
                 if (!likeResult.IsSuccessStatusCode)
                 {
@@ -309,7 +314,7 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var unlikeResult = await _trackRepository.UnlikeArtistTrackAsync(userId, artistMemberId, trackId);
+                var unlikeResult = await _trackRepository.UnlikeArtistTrackAsync(memberId, artistMemberId, trackId);
 
                 if (!unlikeResult.IsSuccessStatusCode)
                 {

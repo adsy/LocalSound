@@ -12,7 +12,6 @@ namespace localsound.backend.Infrastructure.Interface.Services
         Task<ServiceResponse<TrackUploadSASDto>> GenerateTrackUploadSASDtoAsync(Guid userId, string memberId);
         Task<ServiceResponse<ArtistTrackUploadDto>> GetArtistTrackAsync(string memberId, Guid trackId);
         Task<ServiceResponse<TrackListResponseDto>> GetTracksByPlaylistTypeAsync(Guid? userId, string memberId, int page, PlaylistTypeEnum playlistType);
-        Task<ServiceResponse<TrackListResponseDto>> GetLikeTracksAsync(string memberId, int page);
         Task<ServiceResponse> LikeArtistTrackAsync(Guid trackId, string artistMemberId, Guid userId, string memberId);
         Task<ServiceResponse> UnikeArtistTrackAsync(Guid trackId, string artistMemberId, Guid userId, string memberId);
         Task<ServiceResponse> UpdateTrackSupportingDetailsAsync(Guid userId, string memberId, Guid trackId, TrackUpdateDto trackData);

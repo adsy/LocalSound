@@ -171,11 +171,11 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<List<Guid>>> GetLikedSongsIdsAsync(Guid? userId)
+        public async Task<ServiceResponse<List<Guid>>> GetLikedSongsIdsAsync(string memberId)
         {
             try
             {
-                var songLikes = await _dbContext.SongLike.Where(x => x.AppUserId == userId).Select(x => x.ArtistTrackId).ToListAsync();
+                var songLikes = await _dbContext.SongLike.Where(x => x.MemberId == memberId).Select(x => x.ArtistTrackId).ToListAsync();
 
                 return new ServiceResponse<List<Guid>>(HttpStatusCode.OK)
                 {
@@ -191,14 +191,14 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> LikeArtistTrackAsync(Guid userId, string artistMemberId, Guid trackId)
+        public async Task<ServiceResponse> LikeArtistTrackAsync(string memberId, string artistMemberId, Guid trackId)
         {
             try
             {
                 await _dbContext.SongLike.AddAsync(new SongLike
                 {
                     ArtistTrackId = trackId,
-                    AppUserId = userId,
+                    MemberId = memberId,
                 });
 
                 await _dbContext.SaveChangesAsync();
@@ -234,11 +234,11 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> UnlikeArtistTrackAsync(Guid userId, string artistMemberId, Guid trackId)
+        public async Task<ServiceResponse> UnlikeArtistTrackAsync(string memberId, string artistMemberId, Guid trackId)
         {
             try
             {
-                var songLike = await _dbContext.SongLike.FirstOrDefaultAsync(x => x.ArtistTrackId == trackId);
+                var songLike = await _dbContext.SongLike.FirstOrDefaultAsync(x => x.ArtistTrackId == trackId && x.MemberId == memberId);
 
                 if (songLike is null)
                     return new ServiceResponse(HttpStatusCode.InternalServerError);

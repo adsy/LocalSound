@@ -14,7 +14,7 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
         Task<ServiceResponse<Account>> GetArtistFromDbAsync(string profileUrl);
         Task<ServiceResponse<Account>> GetNonArtistFromDbAsync(Guid id);
         Task<ServiceResponse<Account>> GetNonArtistFromDbAsync(string profileUrl);
-        Task<ServiceResponse<Account>> GetAccountFromDbAsync(Guid id);
+        Task<ServiceResponse<Account>> GetAccountFromDbAsync(Guid? id);
         Task<ServiceResponse<Account>> GetAccountFromDbAsync(string memberId);
         Task<ServiceResponse<Account>> GetAccountFromDbAsync(Guid id, string memberId);
         Task<ServiceResponse<AccountImage>> GetAccountImageFromDbAsync(Guid id, AccountImageTypeEnum imageType);
