@@ -7,6 +7,7 @@ namespace localsound.backend.Domain.Model.Entity
         public Guid ArtistTrackUploadId { get; set; }
         [ForeignKey(nameof(Artist))]
         public Guid AppUserId { get; set; }
+        public string ArtistMemberId { get; set; }
         [ForeignKey("TrackData")]
         public Guid TrackDataId { get; set; }
         [ForeignKey("TrackImage")]
@@ -19,6 +20,7 @@ namespace localsound.backend.Domain.Model.Entity
         public double Duration { get; set; }
         public DateTime UploadDate { get; set; }
         public int FileSizeInBytes { get; set; }
+        public int LikeCount { get; set; }
 
         public virtual Account Artist {get;set;}
         public virtual ICollection<ArtistTrackGenre>  Genres { get; set;}
@@ -26,6 +28,5 @@ namespace localsound.backend.Domain.Model.Entity
         public virtual FileContent? TrackImage { get;set; }
 
         public virtual List<SongLike> SongLikes { get; set; }
-        public virtual ArtistTrackLikeCount ArtistTrackLikeCount { get; set; }
     }
 }

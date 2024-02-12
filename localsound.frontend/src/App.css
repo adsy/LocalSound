@@ -932,14 +932,12 @@ i.large.icon {
 }
 
 .purple-button:hover,
-.purple-button:active,
-.purple-button:focus {
+.purple-button:active {
   background-color: #f1f1f1;
   border: 2px solid #e2e8f0;
 }
 .purple-button:hover h4,
-.purple-button:active h4,
-.purple-button:focus h4 {
+.purple-button:active h4 {
   color: #232323;
 }
 

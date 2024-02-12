@@ -235,7 +235,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse> LikeArtistTrackAsync(Guid trackId, Guid userId, string memberId)
+        public async Task<ServiceResponse> LikeArtistTrackAsync(Guid trackId, string artistMemberId, Guid userId, string memberId)
         {
             try
             {
@@ -249,7 +249,7 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var likeResult = await _trackRepository.LikeArtistTrackAsync(userId, trackId);
+                var likeResult = await _trackRepository.LikeArtistTrackAsync(userId, artistMemberId, trackId);
 
                 if (!likeResult.IsSuccessStatusCode)
                 {
@@ -273,7 +273,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse> UnikeArtistTrackAsync(Guid trackId, Guid userId, string memberId)
+        public async Task<ServiceResponse> UnikeArtistTrackAsync(Guid trackId, string artistMemberId, Guid userId, string memberId)
         {
             try
             {
@@ -287,7 +287,7 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var unlikeResult = await _trackRepository.UnlikeArtistTrackAsync(userId, trackId);
+                var unlikeResult = await _trackRepository.UnlikeArtistTrackAsync(userId, artistMemberId, trackId);
 
                 if (!unlikeResult.IsSuccessStatusCode)
                 {
@@ -412,6 +412,7 @@ namespace localsound.backend.Infrastructure.Services
                 {
                     AppUserId = userId,
                     ArtistTrackUploadId = trackId,
+                    ArtistMemberId = memberId,
                     Genres = trackUploadDto.Genres.Select(x => new ArtistTrackGenre
                     {
                         ArtistTrackUploadId = trackId,
@@ -430,10 +431,6 @@ namespace localsound.backend.Infrastructure.Services
                     Duration = double.TryParse(trackUploadDto.Duration, out var duration) ? duration : 0,
                     UploadDate = DateTime.Now.ToLocalTime(),
                     FileSizeInBytes = int.Parse(trackUploadDto.FileSize),
-                    ArtistTrackLikeCount = new ArtistTrackLikeCount
-                    {
-                        ArtistTrackId = trackId,
-                    }
                 };
 
                 // If they have uploaded a custom image against a track, add it to container and db

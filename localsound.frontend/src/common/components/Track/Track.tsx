@@ -171,6 +171,7 @@ const Track = ({
         if (track.songLiked) {
           await agent.Tracks.unlikeSong(
             loggedInUser?.memberId,
+            track.artistMemberId,
             track.artistTrackUploadId
           );
           var clone = [...tracks];
@@ -185,6 +186,7 @@ const Track = ({
         } else {
           await agent.Tracks.likeSong(
             loggedInUser?.memberId,
+            track.artistMemberId,
             track.artistTrackUploadId
           );
           var clone = [...tracks];

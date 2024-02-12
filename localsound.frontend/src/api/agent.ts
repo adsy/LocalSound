@@ -238,11 +238,14 @@ const Tracks = {
     ),
   deleteTrack: (memberId: string, trackId: string) =>
     requests.delete(`track/member/${memberId}/track/${trackId}`),
-  likeSong: (memberId: string, trackId: string) =>
-    requests.put(`track/member/${memberId}/track/${trackId}/track-likes`, {}),
-  unlikeSong: (memberId: string, trackId: string) =>
+  likeSong: (memberId: string, artistMemberId: string, trackId: string) =>
+    requests.put(
+      `track/member/${memberId}/artist/${artistMemberId}/track/${trackId}/track-likes`,
+      {}
+    ),
+  unlikeSong: (memberId: string, artistMemberId: string, trackId: string) =>
     requests.delete(
-      `track/member/${memberId}/track/${trackId}/track-likes`,
+      `track/member/${memberId}/artist/${artistMemberId}/track/${trackId}/track-likes`,
       {}
     ),
 };

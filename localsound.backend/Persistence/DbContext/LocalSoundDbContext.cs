@@ -38,7 +38,6 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<ArtistPackagePhoto> ArtistPackagePhoto { get; set; }
         public DbSet<ArtistTrackGenre> ArtistTrackGenre { get; set; }
         public DbSet<ArtistTrackUpload> ArtistTrackUpload { get; set; }
-        public DbSet<ArtistTrackLikeCount> ArtistTrackLikeCount { get; set; }
         public DbSet<EventType> EventType { get; set; }
         public DbSet<FileContent> FileContent { get; set; }
         public DbSet<Genre> Genres { get; set; }
@@ -122,15 +121,11 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<ArtistTrackGenre>().HasOne(x => x.ArtistTrackUpload);
 
             builder.Entity<ArtistTrackUpload>().HasKey(x => x.ArtistTrackUploadId).IsClustered(false);
-            builder.Entity<ArtistTrackUpload>().HasIndex(x => x.AppUserId).IsClustered(true);
+            builder.Entity<ArtistTrackUpload>().HasIndex(x => x.ArtistMemberId).IsClustered(true);
             builder.Entity<ArtistTrackUpload>().HasMany(x => x.Genres);
             builder.Entity<ArtistTrackUpload>().HasOne(x => x.TrackData).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ArtistTrackUpload>().HasMany(x => x.SongLikes).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<ArtistTrackUpload>().HasOne(x => x.ArtistTrackLikeCount).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<ArtistTrackLikeCount>().HasKey(x => x.ArtistTrackId);
-            builder.Entity<ArtistTrackLikeCount>().HasOne(x => x.ArtistTrackUpload).WithOne(x => x.ArtistTrackLikeCount);
-            builder.Entity<ArtistTrackLikeCount>().Property(x => x.LikeCount).HasDefaultValue(0).IsConcurrencyToken();
+            builder.Entity<ArtistTrackUpload>().Property(x => x.LikeCount).HasDefaultValue(0).IsConcurrencyToken();
 
             builder.Entity<Genre>().HasKey(x => x.GenreId);
             builder.Entity<EventType>().HasKey(x => x.EventTypeId);

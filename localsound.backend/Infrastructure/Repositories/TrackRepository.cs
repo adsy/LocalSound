@@ -86,7 +86,6 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
                     .Include(x => x.SongLikes)
-                    .Include(x => x.ArtistTrackLikeCount)
                     .FirstOrDefaultAsync(x => x.AppUserId == artist.AppUserId && x.ArtistTrackUploadId == trackId);
 
                 if (track is null)
@@ -125,7 +124,6 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.TrackData)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
-                    .Include(x => x.ArtistTrackLikeCount)
                     .Where(x => x.AppUserId == artist.AppUserId)
                     .OrderByDescending(x => x.UploadDate)
                     .Skip(10 * page)
@@ -192,11 +190,11 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> LikeArtistTrackAsync(Guid userId, Guid trackId)
+        public async Task<ServiceResponse> LikeArtistTrackAsync(Guid userId, string artistMemberId, Guid trackId)
         {
             try
             {
-                var track = await _dbContext.SongLike.AddAsync(new SongLike
+                await _dbContext.SongLike.AddAsync(new SongLike
                 {
                     ArtistTrackId = trackId,
                     AppUserId = userId
@@ -204,13 +202,13 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 await _dbContext.SaveChangesAsync();
 
-                var trackLikeCount = await _dbContext.ArtistTrackLikeCount.FirstOrDefaultAsync(x => x.ArtistTrackId == trackId);
-                if (trackLikeCount != null)
+                var track = await _dbContext.ArtistTrackUpload.FirstOrDefaultAsync(x => x.ArtistTrackUploadId == trackId && x.ArtistMemberId == artistMemberId);
+                if (track != null)
                 {
                     bool saveFailed = false;
                     do
                     {
-                        trackLikeCount.LikeCount++;
+                        track.LikeCount++;
 
                         try
                         {
@@ -235,7 +233,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> UnlikeArtistTrackAsync(Guid userId, Guid trackId)
+        public async Task<ServiceResponse> UnlikeArtistTrackAsync(Guid userId, string artistMemberId, Guid trackId)
         {
             try
             {
@@ -248,7 +246,7 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 await _dbContext.SaveChangesAsync();
 
-                var trackLikeCount = await _dbContext.ArtistTrackLikeCount.FirstOrDefaultAsync(x => x.ArtistTrackId == trackId);
+                var trackLikeCount = await _dbContext.ArtistTrackUpload.FirstOrDefaultAsync(x => x.ArtistTrackUploadId == trackId && x.ArtistMemberId == artistMemberId);
                 if (trackLikeCount != null)
                 {
                     bool saveFailed = false;

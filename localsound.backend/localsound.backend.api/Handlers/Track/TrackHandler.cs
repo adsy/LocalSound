@@ -56,12 +56,12 @@ namespace localsound.backend.api.Handlers.Track
 
         public async Task<ServiceResponse> Handle(LikeArtistTrackCommand request, CancellationToken cancellationToken)
         {
-            return await _trackService.LikeArtistTrackAsync(request.TrackId, request.UserId, request.MemberId);
+            return await _trackService.LikeArtistTrackAsync(request.TrackId, request.ArtistMemberId, request.UserId, request.MemberId);
         }
 
         public async Task<ServiceResponse> Handle(UnlikeArtistTrackCommand request, CancellationToken cancellationToken)
         {
-            return await _trackService.UnikeArtistTrackAsync(request.TrackId, request.UserId, request.MemberId);
+            return await _trackService.UnikeArtistTrackAsync(request.TrackId, request.ArtistMemberId, request.UserId, request.MemberId);
         }
     }
 }

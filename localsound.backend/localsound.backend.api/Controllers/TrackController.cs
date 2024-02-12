@@ -137,14 +137,15 @@ namespace localsound.backend.api.Controllers
         }
 
         [HttpPut]
-        [Route("member/{memberId}/track/{trackId}/track-likes")]
-        public async Task<ActionResult> LikeArtistTrack(string memberId, Guid trackId)
+        [Route("member/{memberId}/artist/{artistId}/track/{trackId}/track-likes")]
+        public async Task<ActionResult> LikeArtistTrack(string memberId, string artistId, Guid trackId)
         {
             var result = await Mediator.Send(new LikeArtistTrackCommand
             {
                 UserId = CurrentUser.AppUserId,
                 MemberId = memberId,
-                TrackId = trackId
+                TrackId = trackId,
+                ArtistMemberId = artistId
             });
             if (result.IsSuccessStatusCode)
             {
@@ -155,14 +156,15 @@ namespace localsound.backend.api.Controllers
         }
 
         [HttpDelete]
-        [Route("member/{memberId}/track/{trackId}/track-likes")]
-        public async Task<ActionResult> UnlikeArtistTrack(string memberId, Guid trackId)
+        [Route("member/{memberId}/artist/{artistId}/track/{trackId}/track-likes")]
+        public async Task<ActionResult> UnlikeArtistTrack(string memberId, string artistId, Guid trackId)
         {
             var result = await Mediator.Send(new UnlikeArtistTrackCommand
             {
                 UserId = CurrentUser.AppUserId,
                 MemberId = memberId,
-                TrackId = trackId
+                TrackId = trackId,
+                ArtistMemberId = artistId
             });
             if (result.IsSuccessStatusCode)
             {
