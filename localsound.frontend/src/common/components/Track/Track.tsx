@@ -22,11 +22,10 @@ import { Button } from "react-bootstrap";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
 import EditTrackForm from "../../../features/UserProfile/Artist/Uploads/EditTrackForm";
 import DeleteTrackConfirmation from "../../../features/UserProfile/Artist/Uploads/DeleteTrackConfirmation";
-import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
-import PlaceholderImg from "../../../assets/placeholder.png";
 import agent from "../../../api/agent";
 import Login from "../../../features/Authentication/Login/Login";
 import ErrorBanner from "../../banner/ErrorBanner";
+import { PlaylistTypes } from "../../../app/model/enums/playlistTypes";
 
 interface Props {
   track: ArtistTrackUploadModel;
@@ -36,6 +35,7 @@ interface Props {
   page: number;
   artistName: string;
   artistMemberId: string;
+  playlistType: PlaylistTypes;
 }
 
 const Track = ({
@@ -46,6 +46,7 @@ const Track = ({
   page,
   artistName,
   artistMemberId,
+  playlistType,
 }: Props) => {
   const player = useSelector((state: State) => state.player);
   const loggedInUser = useSelector((state: State) => state.user.userDetails);
@@ -123,6 +124,7 @@ const Track = ({
           artistName: track.artistName,
           trackImage: trackImage,
           duration: track.duration,
+          playlistType: playlistType,
         })
       );
       dispatch(

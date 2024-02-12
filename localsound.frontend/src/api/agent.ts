@@ -24,6 +24,7 @@ import { NotificationListResponseModel } from "../app/model/dto/notification-lis
 import { toast } from "react-toastify";
 import { OnboardingDataModel } from "../app/model/dto/onboarding-data.model";
 import { MessageTypes } from "../app/model/enums/messageTypes";
+import { PlaylistTypes } from "../app/model/enums/playlistTypes";
 
 const axiosApiInstance = axios.create();
 
@@ -230,8 +231,10 @@ const Tracks = {
     trackId: string,
     formData: FormData
   ) => requests.put(`track/member/${memberId}/track/${trackId}`, formData),
-  getArtistUploads: (memberId: string, page: number) =>
-    requests.get<TrackListResponse>(`track/member/${memberId}?page=${page}`),
+  getTracks: (memberId: string, page: number, playlistType: PlaylistTypes) =>
+    requests.get<TrackListResponse>(
+      `track/member/${memberId}/playlist-type/${playlistType}?page=${page}`
+    ),
   getTrackDetails: (memberId: string, trackId: string) =>
     requests.get<ArtistTrackUploadModel>(
       `track/member/${memberId}/track/${trackId}`
@@ -247,10 +250,6 @@ const Tracks = {
     requests.delete(
       `track/member/${memberId}/artist/${artistMemberId}/track/${trackId}/track-likes`,
       {}
-    ),
-  getLikedTracks: (memberId: string, page: number) =>
-    requests.get<TrackListResponse>(
-      `track/member/${memberId}/get-liked-tracks?page=${page}`
     ),
 };
 

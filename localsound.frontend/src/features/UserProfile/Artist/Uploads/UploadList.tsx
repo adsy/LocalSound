@@ -16,6 +16,7 @@ import InfoBanner from "../../../../common/banner/InfoBanner";
 import useFixMissingScroll from "../../../../common/hooks/UseLoadMoreWithoutScroll";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { handleSetTrackList } from "../../../../app/redux/actions/playerSlice";
+import { PlaylistTypes } from "../../../../app/model/enums/playlistTypes";
 
 interface Props {
   userDetails: UserModel;
@@ -46,9 +47,10 @@ const UploadList = ({
     if (currentTab === ProfileTabs.Uploads) {
       try {
         setLoading(true);
-        var result = await agent.Tracks.getArtistUploads(
+        var result = await agent.Tracks.getTracks(
           userDetails!.memberId,
-          page
+          page,
+          PlaylistTypes.Uploads
         );
         setTracks([...tracks, ...result.trackList]);
         setCanLoadMore(result.canLoadMore);
@@ -81,9 +83,10 @@ const UploadList = ({
         if (currentTab === ProfileTabs.Uploads && canLoadMore) {
           try {
             setLoading(true);
-            var result = await agent.Tracks.getArtistUploads(
+            var result = await agent.Tracks.getTracks(
               userDetails!.memberId,
-              page
+              page,
+              PlaylistTypes.Uploads
             );
             setTracks([...tracks, ...result.trackList]);
             setCanLoadMore(result.canLoadMore);
@@ -198,6 +201,7 @@ const UploadList = ({
               setTracks={setTracks}
               canLoadMore={canLoadMore}
               page={page}
+              playlistType={PlaylistTypes.Uploads}
             />
           </div>
         ))}

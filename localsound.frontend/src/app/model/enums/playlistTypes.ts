@@ -1,4 +1,4 @@
 export enum PlaylistTypes {
-  Uploads,
-  Favourites,
+  Uploads = 1,
+  Favourites = 2,
 }

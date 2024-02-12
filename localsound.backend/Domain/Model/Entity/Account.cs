@@ -34,6 +34,7 @@ namespace localsound.backend.Domain.Model.Entity
         public virtual ICollection<ArtistBooking> PartiesBooked { get; set; }
         public virtual ICollection<Notification> SentNotifications { get; set; }
         public virtual ICollection<Notification> ReceivedNotifications { get; set; }
+        public virtual ICollection<SongLike> LikedSongs { get; set; }
 
         public virtual AccountMessages AccountMessages { get; set; }
         public virtual AppUser User { get; set; }

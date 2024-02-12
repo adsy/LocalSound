@@ -13,6 +13,7 @@ const initialState: PlayerState = {
   canLoadMore: false,
   page: 0,
   trackList: [],
+  playlistType: null,
 };
 
 export const playerSlice = createSlice({
@@ -29,6 +30,7 @@ export const playerSlice = createSlice({
       state.artistName = payload.artistName;
       state.listeningProfile = payload.artistProfile;
       state.duration = payload.duration;
+      state.playlistType = payload.playlistType;
     },
     handlePauseSong: (state) => {
       state.playing = false;

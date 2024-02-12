@@ -14,6 +14,7 @@ import useFixMissingScroll from "../../../common/hooks/UseLoadMoreWithoutScroll"
 import Track from "../../../common/components/Track/Track";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import { handleSetTrackList } from "../../../app/redux/actions/playerSlice";
+import { PlaylistTypes } from "../../../app/model/enums/playlistTypes";
 
 interface Props {
   currentTab: ProfileTabs;
@@ -38,9 +39,10 @@ const Favourites = ({
     if (currentTab === ProfileTabs.LikedSongs) {
       try {
         setLoading(true);
-        var result = await agent.Tracks.getLikedTracks(
+        var result = await agent.Tracks.getTracks(
           profileDetails!.memberId,
-          page
+          page,
+          PlaylistTypes.Favourites
         );
         setFavourites([...favourites, ...result.trackList]);
         setCanLoadMore(result.canLoadMore);
@@ -73,9 +75,10 @@ const Favourites = ({
       if (currentTab === ProfileTabs.LikedSongs && canLoadMore) {
         try {
           setLoading(true);
-          var result = await agent.Tracks.getLikedTracks(
-            profileDetails.memberId,
-            page
+          var result = await agent.Tracks.getTracks(
+            profileDetails!.memberId,
+            page,
+            PlaylistTypes.Favourites
           );
           setFavourites([...favourites, ...result.trackList]);
           setCanLoadMore(result.canLoadMore);
@@ -198,6 +201,7 @@ const Favourites = ({
               setTracks={setFavourites}
               canLoadMore={canLoadMore}
               page={page}
+              playlistType={PlaylistTypes.Favourites}
             />
           </div>
         ))}

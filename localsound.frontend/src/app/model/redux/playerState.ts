@@ -13,5 +13,5 @@ export interface PlayerState {
   canLoadMore: boolean;
   page: number;
   trackList: ArtistTrackUploadModel[];
-  playlistType: PlaylistTypes;
+  playlistType: PlaylistTypes | null;
 }

@@ -192,9 +192,11 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<Notification>().HasOne(x => x.NotificationCreator).WithMany(x => x.SentNotifications).OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<SongLike>().HasKey(x => x.SongLikeId).IsClustered(false);
-            builder.Entity<SongLike>().HasIndex(x => x.MemberId).IsUnique(false).IsClustered(true);
-            builder.Entity<SongLike>().HasIndex(x => x.ArtistTrackId).IsUnique(true).IsClustered(false);
+            builder.Entity<SongLike>().HasAlternateKey(x => new { x.ArtistTrackId, x.MemberId }).IsClustered(false);
+            builder.Entity<SongLike>().HasOne(x => x.Account).WithMany(x => x.LikedSongs).HasPrincipalKey(x => x.MemberId);
             builder.Entity<SongLike>().HasOne(x => x.ArtistTrackUpload).WithMany(x => x.SongLikes).OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<SongLike>().HasIndex(x => x.MemberId).IsUnique(false).IsClustered(true);
+            builder.Entity<SongLike>().HasIndex(x => x.ArtistTrackId).IsUnique(false).IsClustered(false);
             builder.HasSequence("SongLikeId", x => x.StartsAt(1).IncrementsBy(1));
             builder.Entity<SongLike>().Property(x => x.SongLikeId).HasDefaultValueSql("NEXT VALUE FOR SongLikeId");
         }
