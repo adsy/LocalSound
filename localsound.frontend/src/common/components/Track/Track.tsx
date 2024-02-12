@@ -26,6 +26,8 @@ import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
 import PlaceholderImg from "../../../assets/placeholder.png";
 import agent from "../../../api/agent";
 import Login from "../../../features/Authentication/Login/Login";
+import { toast } from "react-toastify";
+import ErrorBanner from "../../banner/ErrorBanner";
 
 interface Props {
   track: ArtistTrackUploadModel;
@@ -52,6 +54,7 @@ const Track = ({
   const [analyzerData, setAnalyzerData] = useState<any>(null);
   const [trackImageLoaded, setTrackImageLoaded] = useState(false);
   const [trackImage, setTrackImage] = useState<string | null>(null);
+  const [trackLikeError, setTrackLikeError] = useState<string | null>(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -165,8 +168,8 @@ const Track = ({
   };
 
   const likeSong = async () => {
+    setTrackLikeError(null);
     if (loggedInUser?.memberId) {
-      // TODO: Fix this function
       try {
         if (track.songLiked) {
           await agent.Tracks.unlikeSong(
@@ -199,8 +202,8 @@ const Track = ({
           }
           setTracks(clone);
         }
-      } catch (err) {
-        //TODO: do something on error
+      } catch (err: any) {
+        setTrackLikeError(err);
       }
     } else {
       dispatch(
@@ -214,7 +217,8 @@ const Track = ({
   };
 
   return (
-    <div id="track" className="mt-3">
+    <div id="track" className="mt-3 d-flex flex-column">
+      {trackLikeError ? <ErrorBanner children={trackLikeError} /> : null}
       <div className="d-flex flex-row w-100">
         {!trackImage ? (
           <div className="mr-3 fade-in">

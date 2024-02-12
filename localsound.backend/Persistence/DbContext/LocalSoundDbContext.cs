@@ -41,7 +41,7 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<EventType> EventType { get; set; }
         public DbSet<FileContent> FileContent { get; set; }
         public DbSet<Genre> Genres { get; set; }
-        public DbSet<SongLike> SongLike { get; set; }
+        //public DbSet<SongLike> SongLike { get; set; }
         public DbSet<Notification> Notification { get; set; }
         
 
@@ -194,6 +194,8 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<SongLike>().HasIndex(x => x.AppUserId).IsUnique(false).IsClustered(true);
             builder.Entity<SongLike>().HasIndex(x => x.ArtistTrackId).IsUnique(false).IsClustered(false);
             builder.Entity<SongLike>().HasOne(x => x.ArtistTrackUpload).WithMany(x => x.SongLikes).OnDelete(DeleteBehavior.NoAction);
+            builder.HasSequence("SongLikeId", x => x.StartsAt(1).IncrementsBy(1));
+            builder.Entity<SongLike>().Property(x => x.SongLikeId).HasDefaultValueSql("NEXT VALUE FOR SongLikeId");
         }
 
         public async Task<ServiceResponse> HandleSavingDB()

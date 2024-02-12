@@ -4,6 +4,7 @@ namespace localsound.backend.Domain.Model.Entity
 {
     public class SongLike
     {
+        public int SongLikeId { get; set; }
         [ForeignKey("ArtistTrackUpload")]
         public Guid ArtistTrackId { get; set; }
         [ForeignKey("Account")]

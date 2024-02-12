@@ -34,7 +34,7 @@ const UploadList = ({
 }: Props) => {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [loadTracksError, setLoadTracksError] = useState<string | null>();
+  const [trackError, setTrackError] = useState<string | null>();
   const [canLoadMore, setCanLoadMore] = useState(true);
   const uploadState = useSelector(
     (state: State) => state.pageOperation.uploadTracks
@@ -63,7 +63,7 @@ const UploadList = ({
           );
         }
       } catch (err: any) {
-        setLoadTracksError(err);
+        setTrackError(err);
       }
       setLoading(false);
       setPage(page + 1);
@@ -98,7 +98,7 @@ const UploadList = ({
               );
             }
           } catch (err: any) {
-            setLoadTracksError(err);
+            setTrackError(err);
           }
           setLoading(false);
           setPage(page + 1);
@@ -118,7 +118,7 @@ const UploadList = ({
       ) {
         dispatch(handleResetUploadTrackState());
       }
-      setLoadTracksError(null);
+      setTrackError(null);
     };
   }, [currentTab]);
 
@@ -156,12 +156,10 @@ const UploadList = ({
           </SuccessBanner>
         </>
       ) : null}
-      {loadTracksError ? (
-        <ErrorBanner className="fade-in mb-2 mx-3">
-          {loadTracksError}
-        </ErrorBanner>
+      {trackError ? (
+        <ErrorBanner className="fade-in mb-2 mx-3">{trackError}</ErrorBanner>
       ) : null}
-      {loadTracksError === null && !loading && tracks.length < 1 ? (
+      {trackError === null && !loading && tracks.length < 1 ? (
         <InfoBanner className="fade-in mb-2 mx-3">
           {viewingOwnProfile ? (
             <div className="d-flex flex-row align-items-center justify-content-center">

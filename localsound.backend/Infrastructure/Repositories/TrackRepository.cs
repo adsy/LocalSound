@@ -197,7 +197,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 await _dbContext.SongLike.AddAsync(new SongLike
                 {
                     ArtistTrackId = trackId,
-                    AppUserId = userId
+                    AppUserId = userId,
                 });
 
                 await _dbContext.SaveChangesAsync();
