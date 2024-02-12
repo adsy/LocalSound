@@ -14,6 +14,6 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
         Task<ServiceResponse> UnlikeArtistTrackAsync(Guid userId, string artistMemberId, Guid trackId);
         Task<ServiceResponse> UpdateArtistTrackUploadAsync(Account account, Guid trackId, string trackName, string trackDescription, List<GenreDto> genres, string? trackImageExt, FileContent? newTrackImage, string newTrackImageUrl);
         Task<ServiceResponse<List<Guid>>> GetLikedSongsIdsAsync(Guid? userId);
-        Task<ServiceResponse> GetLikedSongsAsync(Guid userId, string memberId, int page);
+        Task<ServiceResponse<List<ArtistTrackUpload>>> GetLikedSongsAsync(string memberId, int page);
     }
 }

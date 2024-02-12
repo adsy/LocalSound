@@ -68,6 +68,10 @@ const ArtistProfile = ({
                     setCurrentTab(ProfileTabs.Packages);
                     break;
                   }
+                  case "5": {
+                    setCurrentTab(ProfileTabs.LikedSongs);
+                    break;
+                  }
                 }
               }}
               className="mb-4"
@@ -91,6 +95,13 @@ const ArtistProfile = ({
                   setTracks={setTracks}
                   viewingOwnProfile={viewingOwnProfile}
                 />
+              </Tab>
+              <Tab
+                eventKey={ProfileTabs.LikedSongs}
+                title="FAVOURITES"
+                className=""
+              >
+                <div>need to add a liked songs component</div>
               </Tab>
               <Tab
                 eventKey={ProfileTabs.Followers}

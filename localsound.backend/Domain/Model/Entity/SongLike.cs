@@ -8,7 +8,7 @@ namespace localsound.backend.Domain.Model.Entity
         [ForeignKey("ArtistTrackUpload")]
         public Guid ArtistTrackId { get; set; }
         [ForeignKey("Account")]
-        public Guid AppUserId { get; set; }
+        public string MemberId { get; set; }
 
         public virtual ArtistTrackUpload ArtistTrackUpload { get; set; }
         public virtual Account Account { get; set; }

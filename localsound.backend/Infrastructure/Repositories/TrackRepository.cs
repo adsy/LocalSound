@@ -144,22 +144,23 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> GetLikedSongsAsync(Guid userId, string memberId, int page)
+        public async Task<ServiceResponse<List<ArtistTrackUpload>>> GetLikedSongsAsync(string memberId, int page)
         {
             try
             {
                 var tracks = await _dbContext.SongLike
                     .Include(x => x.ArtistTrackUpload)
-                    .Where(x => x.AppUserId == userId)
+                    .Where(x => x.MemberId == memberId)
+                    .OrderBy(x => x.SongLikeId)
                     .Select(x => x.ArtistTrackUpload)
-                    .OrderByDescending(x => x.UploadDate)
                     .Skip(10 * page)
                     .Take(10)
                     .ToListAsync();
 
-
-                //TODO: Complete this function
-                return new ServiceResponse(HttpStatusCode.OK);
+                return new ServiceResponse<List<ArtistTrackUpload>>(HttpStatusCode.OK)
+                {
+                    ReturnData = tracks
+                };
             }
             catch (Exception e)
             {

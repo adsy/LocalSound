@@ -26,25 +26,26 @@ import { AccountImageTypes } from "../../../app/model/enums/accountImageTypes";
 import PlaceholderImg from "../../../assets/placeholder.png";
 import agent from "../../../api/agent";
 import Login from "../../../features/Authentication/Login/Login";
-import { toast } from "react-toastify";
 import ErrorBanner from "../../banner/ErrorBanner";
 
 interface Props {
   track: ArtistTrackUploadModel;
-  artistDetails: UserModel;
   tracks: ArtistTrackUploadModel[];
   setTracks: (tracks: ArtistTrackUploadModel[]) => void;
   canLoadMore: boolean;
   page: number;
+  artistName: string;
+  artistMemberId: string;
 }
 
 const Track = ({
   track,
-  artistDetails,
   tracks,
   setTracks,
   canLoadMore,
   page,
+  artistName,
+  artistMemberId,
 }: Props) => {
   const player = useSelector((state: State) => state.player);
   const loggedInUser = useSelector((state: State) => state.user.userDetails);
@@ -70,14 +71,15 @@ const Track = ({
           setTrackImageLoaded(true);
         });
     } else {
-      var profileImg = artistDetails.images.find(
-        (x) => x.accountImageTypeId == AccountImageTypes.ProfileImage
-      );
-      if (profileImg) {
-        setTrackImage(profileImg.accountImageUrl);
-      } else {
-        setTrackImage(PlaceholderImg);
-      }
+      // Fix the image
+      // var profileImg = artistDetails.images.find(
+      //   (x) => x.accountImageTypeId == AccountImageTypes.ProfileImage
+      // );
+      // if (profileImg) {
+      //   setTrackImage(profileImg.accountImageUrl);
+      // } else {
+      //   setTrackImage(PlaceholderImg);
+      // }
     }
   }, [track.artistTrackUploadId, track.trackImageUrl]);
 
@@ -246,13 +248,13 @@ const Track = ({
                 />
               </TrackContainer>
               <div className="d-flex flex-column ml-2">
-                <p className="artist-name mb-0">{artistDetails.name}</p>
+                <p className="artist-name mb-0">{artistName}</p>
                 <p className="mb-0 track-name">{track.trackName}</p>
               </div>
             </div>
 
             <div className="my-1 action-row">
-              {artistDetails.memberId === loggedInUser?.memberId ? (
+              {artistMemberId === loggedInUser?.memberId ? (
                 <Button
                   className="white-button track-button mr-1"
                   onClick={() => openEditTrackModal()}
@@ -262,7 +264,7 @@ const Track = ({
                   </h4>
                 </Button>
               ) : null}
-              {artistDetails.memberId === loggedInUser?.memberId ? (
+              {artistMemberId === loggedInUser?.memberId ? (
                 <Button
                   className="white-button track-button bin-button"
                   onClick={async () => await openDeleteModal()}
@@ -272,7 +274,7 @@ const Track = ({
                   </h4>
                 </Button>
               ) : null}
-              {artistDetails.memberId !== loggedInUser?.memberId ? (
+              {artistMemberId !== loggedInUser?.memberId ? (
                 <Button
                   className={`track-button ${
                     !track.songLiked ? "white-button" : "purple-button"

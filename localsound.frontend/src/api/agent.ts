@@ -248,6 +248,10 @@ const Tracks = {
       `track/member/${memberId}/artist/${artistMemberId}/track/${trackId}/track-likes`,
       {}
     ),
+  getLikedTracks: (memberId: string, page: number) =>
+    requests.get<TrackListResponse>(
+      `track/member/${memberId}/get-liked-tracks?page=${page}`
+    ),
 };
 
 const Packages = {

@@ -1,6 +1,8 @@
-﻿using Azure.Storage.Blobs.Models;
+﻿using Azure;
+using Azure.Storage.Blobs.Models;
 using localsound.backend.api.Commands.Track;
 using localsound.backend.api.Queries.Track;
+using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model.Dto.Submission;
 using localsound.backend.Domain.ModelAdaptor;
 using Microsoft.AspNetCore.Authorization;
@@ -79,26 +81,6 @@ namespace localsound.backend.api.Controllers
         }
 
         [HttpGet]
-        [Route("member/{memberId}")]
-        [AllowAnonymous]
-        public async Task<ActionResult> GetArtistTrackUploads(string memberId, [FromQuery]int page)
-        {
-            var result = await Mediator.Send(new GetArtistTracksQuery
-            {
-                UserId = CurrentUser?.AppUserId,
-                MemberId = memberId,
-                Page = page
-            });
-
-            if (!result.IsSuccessStatusCode)
-            {
-                return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
-            }
-
-            return Ok(result.ReturnData);
-        }
-
-        [HttpGet]
         [Route("member/{memberId}/track/{trackId}")]
         [AllowAnonymous]
         public async Task<ActionResult> GetArtistTrack(string memberId, Guid trackId)
@@ -147,12 +129,13 @@ namespace localsound.backend.api.Controllers
                 TrackId = trackId,
                 ArtistMemberId = artistId
             });
-            if (result.IsSuccessStatusCode)
+
+            if (!result.IsSuccessStatusCode)
             {
-                return Ok();
+                return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
             }
 
-            return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
+            return Ok();
         }
 
         [HttpDelete]
@@ -166,12 +149,34 @@ namespace localsound.backend.api.Controllers
                 TrackId = trackId,
                 ArtistMemberId = artistId
             });
-            if (result.IsSuccessStatusCode)
+
+            if (!result.IsSuccessStatusCode)
             {
-                return Ok();
+                return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
             }
 
-            return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("member/{memberId}/playlist-type/{playlistType}")]
+        [AllowAnonymous]
+        public async Task<ActionResult> GetTracks([FromQuery] int page, string memberId, PlaylistTypeEnum playlistType)
+        {
+            var result = await Mediator.Send(new GetTracksQuery
+            {
+                UserId = CurrentUser?.AppUserId,
+                MemberId = memberId,
+                Page = page,
+                PlaylistType = playlistType
+            });
+
+            if (!result.IsSuccessStatusCode)
+            {
+                return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
+            }
+
+            return Ok(result.ReturnData);
         }
     }
 }

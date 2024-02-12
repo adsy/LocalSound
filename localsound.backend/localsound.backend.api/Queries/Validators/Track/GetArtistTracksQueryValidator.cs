@@ -3,7 +3,7 @@ using localsound.backend.api.Queries.Track;
 
 namespace localsound.backend.api.Queries.Validators.Track
 {
-    public class GetArtistTracksQueryValidator : AbstractValidator<GetArtistTracksQuery>
+    public class GetArtistTracksQueryValidator : AbstractValidator<GetTracksQuery>
     {
         public GetArtistTracksQueryValidator()
         {

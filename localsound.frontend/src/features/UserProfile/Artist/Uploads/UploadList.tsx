@@ -53,7 +53,7 @@ const UploadList = ({
         setTracks([...tracks, ...result.trackList]);
         setCanLoadMore(result.canLoadMore);
 
-        if (userDetails.profileUrl === playerState.artistProfile) {
+        if (userDetails.profileUrl === playerState.listeningProfile) {
           dispatch(
             handleSetTrackList({
               trackList: [...tracks, ...result.trackList],
@@ -77,7 +77,7 @@ const UploadList = ({
 
   useLayoutEffect(() => {
     (async () => {
-      if (userDetails.profileUrl !== playerState.artistProfile) {
+      if (userDetails.profileUrl !== playerState.listeningProfile) {
         if (currentTab === ProfileTabs.Uploads && canLoadMore) {
           try {
             setLoading(true);
@@ -88,7 +88,7 @@ const UploadList = ({
             setTracks([...tracks, ...result.trackList]);
             setCanLoadMore(result.canLoadMore);
 
-            if (userDetails.profileUrl === playerState.artistProfile) {
+            if (userDetails.profileUrl === playerState.listeningProfile) {
               dispatch(
                 handleSetTrackList({
                   trackList: [...tracks, ...result.trackList],
@@ -125,7 +125,7 @@ const UploadList = ({
   useEffect(() => {
     if (
       playerState.trackList.length > 0 &&
-      userDetails.profileUrl === playerState.artistProfile
+      userDetails.profileUrl === playerState.listeningProfile
     ) {
       setTracks(playerState.trackList);
       setCanLoadMore(playerState.canLoadMore);
@@ -192,7 +192,8 @@ const UploadList = ({
           <div key={index} className="fade-in p-2 track-container">
             <Track
               track={track}
-              artistDetails={userDetails}
+              artistName={track.artistName}
+              artistMemberId={track.artistMemberId}
               tracks={tracks}
               setTracks={setTracks}
               canLoadMore={canLoadMore}

@@ -41,7 +41,7 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<EventType> EventType { get; set; }
         public DbSet<FileContent> FileContent { get; set; }
         public DbSet<Genre> Genres { get; set; }
-        //public DbSet<SongLike> SongLike { get; set; }
+        public DbSet<SongLike> SongLike { get; set; }
         public DbSet<Notification> Notification { get; set; }
         
 
@@ -99,6 +99,7 @@ namespace localsound.backend.Persistence.DbContext
 
             builder.HasSequence("MemberId", x => x.StartsAt(100000).IncrementsBy(1));
             builder.Entity<Account>().Property(x => x.MemberId).HasDefaultValueSql("NEXT VALUE FOR MemberId");
+            builder.Entity<Account>().HasIndex(x => x.MemberId).IsUnique(true).IsClustered(false);
             builder.Entity<Account>().HasMany(x => x.Following);
             builder.Entity<Account>().HasOne(x => x.AccountMessages).WithOne(x => x.Account);
 
@@ -190,9 +191,9 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<Notification>().HasOne(x => x.NotificationReceiver).WithMany(x => x.ReceivedNotifications).OnDelete(DeleteBehavior.NoAction);
             builder.Entity<Notification>().HasOne(x => x.NotificationCreator).WithMany(x => x.SentNotifications).OnDelete(DeleteBehavior.NoAction);
 
-            builder.Entity<SongLike>().HasKey(x => x.ArtistTrackId).IsClustered(false);
-            builder.Entity<SongLike>().HasIndex(x => x.AppUserId).IsUnique(false).IsClustered(true);
-            builder.Entity<SongLike>().HasIndex(x => x.ArtistTrackId).IsUnique(false).IsClustered(false);
+            builder.Entity<SongLike>().HasKey(x => x.SongLikeId).IsClustered(false);
+            builder.Entity<SongLike>().HasIndex(x => x.MemberId).IsUnique(false).IsClustered(true);
+            builder.Entity<SongLike>().HasIndex(x => x.ArtistTrackId).IsUnique(true).IsClustered(false);
             builder.Entity<SongLike>().HasOne(x => x.ArtistTrackUpload).WithMany(x => x.SongLikes).OnDelete(DeleteBehavior.NoAction);
             builder.HasSequence("SongLikeId", x => x.StartsAt(1).IncrementsBy(1));
             builder.Entity<SongLike>().Property(x => x.SongLikeId).HasDefaultValueSql("NEXT VALUE FOR SongLikeId");

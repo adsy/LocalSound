@@ -315,8 +315,8 @@ const MusicPlayer = () => {
   };
 
   const goArtistProfile = () => {
-    if (player.artistProfile) {
-      history.push(player.artistProfile);
+    if (player.listeningProfile) {
+      history.push(player.listeningProfile);
     }
   };
 

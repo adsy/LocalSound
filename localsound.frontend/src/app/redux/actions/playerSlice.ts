@@ -8,7 +8,7 @@ const initialState: PlayerState = {
   trackName: null,
   trackImage: null,
   artistName: null,
-  artistProfile: null,
+  listeningProfile: null,
   duration: null,
   canLoadMore: false,
   page: 0,
@@ -27,7 +27,7 @@ export const playerSlice = createSlice({
       state.trackName = payload.trackName;
       state.trackImage = payload.trackImage;
       state.artistName = payload.artistName;
-      state.artistProfile = payload.artistProfile;
+      state.listeningProfile = payload.artistProfile;
       state.duration = payload.duration;
     },
     handlePauseSong: (state) => {

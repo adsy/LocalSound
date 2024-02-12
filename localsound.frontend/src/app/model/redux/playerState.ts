@@ -1,4 +1,5 @@
 import { ArtistTrackUploadModel } from "../dto/artist-track-upload.model";
+import { PlaylistTypes } from "../enums/playlistTypes";
 
 export interface PlayerState {
   trackId: string | null;
@@ -7,9 +8,10 @@ export interface PlayerState {
   trackName: string | null;
   trackImage: string | null;
   artistName: string | null;
-  artistProfile: string | null;
+  listeningProfile: string | null;
   duration: number | null;
   canLoadMore: boolean;
   page: number;
   trackList: ArtistTrackUploadModel[];
+  playlistType: PlaylistTypes;
 }

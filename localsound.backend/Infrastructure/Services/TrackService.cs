@@ -2,6 +2,7 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Sas;
+using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Domain.Model.Dto.Response;
@@ -188,11 +189,31 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<TrackListResponseDto>> GetArtistTracksAsync(Guid? userId, string memberId, int page)
+        public async Task<ServiceResponse<TrackListResponseDto>> GetTracksByPlaylistTypeAsync(Guid? userId, string memberId, int page, PlaylistTypeEnum playlistType)
         {
             try
             {
-                var tracksResult = await _trackRepository.GetArtistTracksAsync(memberId, page);
+                ServiceResponse<List<ArtistTrackUpload>> tracksResult = null;
+
+                switch (playlistType)
+                {
+                    case PlaylistTypeEnum.Uploads:
+                        {
+                            tracksResult = await _trackRepository.GetArtistTracksAsync(memberId, page);
+                            break;
+                        }
+                    case PlaylistTypeEnum.Favourites:
+                        {
+                            tracksResult = await _trackRepository.GetLikedSongsAsync(memberId, page);
+                            break;
+                        }
+                    default:
+                        {
+                            // Invalid playlist type
+                            tracksResult = new ServiceResponse<List<ArtistTrackUpload>>(HttpStatusCode.InternalServerError);
+                            break;
+                        }
+                }
 
                 if (!tracksResult.IsSuccessStatusCode || tracksResult.ReturnData is null)
                 {
@@ -203,10 +224,11 @@ namespace localsound.backend.Infrastructure.Services
 
                 if (userId is not null)
                 {
-                    var songIds = await _trackRepository.GetLikedSongsIdsAsync(userId);
+                    var songIds = (await _trackRepository.GetLikedSongsIdsAsync(userId));
 
                     if (songIds.IsSuccessStatusCode && songIds.ReturnData is not null && songIds.ReturnData.Any())
                     {
+                        songIds.ReturnData = songIds.ReturnData.OrderBy(x => x).ToList();
                         foreach (var song in trackList)
                         {
                             song.SongLiked = _searchHelper.GuidBinarySearch(songIds.ReturnData, song.ArtistTrackUploadId) != -1 ? true : false;
@@ -225,7 +247,7 @@ namespace localsound.backend.Infrastructure.Services
             }
             catch(Exception e)
             {
-                var message = $"{nameof(TrackService)} - {nameof(GetArtistTracksAsync)} - {e.Message}";
+                var message = $"{nameof(TrackService)} - {nameof(GetTracksByPlaylistTypeAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<TrackListResponseDto>(HttpStatusCode.InternalServerError)
