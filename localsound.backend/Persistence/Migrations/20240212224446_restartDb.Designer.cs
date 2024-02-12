@@ -12,8 +12,8 @@ using localsound.backend.Persistence.DbContext;
 namespace localsound.backend.Persistence.Migrations
 {
     [DbContext(typeof(LocalSoundDbContext))]
-    [Migration("20230920095641_moreUpdatesForArtistTracks")]
-    partial class moreUpdatesForArtistTracks
+    [Migration("20240212224446_restartDb")]
+    partial class restartDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,6 +27,8 @@ namespace localsound.backend.Persistence.Migrations
 
             modelBuilder.HasSequence("MemberId")
                 .StartsAt(100000L);
+
+            modelBuilder.HasSequence("SongLikeId");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
@@ -140,6 +142,81 @@ namespace localsound.backend.Persistence.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.Account", b =>
+                {
+                    b.Property<Guid>("AppUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AboutSection")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CustomerType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MemberId")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)")
+                        .HasDefaultValueSql("NEXT VALUE FOR MemberId");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfileUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SoundcloudUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SpotifyUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("YoutubeUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AppUserId");
+
+                    b.HasIndex("MemberId")
+                        .IsUnique();
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("MemberId"), false);
+
+                    b.HasIndex("ProfileUrl")
+                        .IsUnique();
+
+                    b.ToTable("Account");
+                });
+
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AccountGenre", b =>
+                {
+                    b.Property<Guid>("AppUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GenreId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("AppUserId", "GenreId");
+
+                    b.HasIndex("GenreId");
+
+                    b.ToTable("AccountGenre");
+                });
+
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AccountImage", b =>
                 {
                     b.Property<int>("AccountImageId")
@@ -160,6 +237,9 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.Property<Guid>("FileContentId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("ToBeDeleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("AccountImageId");
 
@@ -187,6 +267,21 @@ namespace localsound.backend.Persistence.Migrations
                     b.ToTable("AccountImageType");
                 });
 
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AccountMessages", b =>
+                {
+                    b.Property<Guid>("AppUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("OnboardingMessageClosed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.HasKey("AppUserId");
+
+                    b.ToTable("AccountMessages");
+                });
+
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AppUser", b =>
                 {
                     b.Property<Guid>("Id")
@@ -200,9 +295,6 @@ namespace localsound.backend.Persistence.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CustomerType")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -215,11 +307,6 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("MemberId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValueSql("NEXT VALUE FOR MemberId");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -285,45 +372,61 @@ namespace localsound.backend.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.Artist", b =>
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistBooking", b =>
                 {
-                    b.Property<Guid>("AppUserId")
+                    b.Property<Guid>("BookingId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("AboutSection")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("ArtistId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Address")
+                    b.Property<Guid>("BookerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BookingAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<bool>("BookingCompleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool?>("BookingConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("BookingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("BookingDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("BookingLength")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("ProfileUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("EventTypeId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("SoundcloudUrl")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("PackageId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("SpotifyUrl")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("BookingId");
 
-                    b.Property<string>("YoutubeUrl")
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("BookingId"), false);
 
-                    b.HasKey("AppUserId");
+                    b.HasIndex("ArtistId");
 
-                    b.HasIndex("ProfileUrl")
-                        .IsUnique();
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("ArtistId"));
 
-                    b.ToTable("Artist");
+                    b.HasIndex("BookerId");
+
+                    b.HasIndex("EventTypeId");
+
+                    b.HasIndex("PackageId");
+
+                    b.ToTable("ArtistBooking");
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistEquipment", b =>
@@ -364,46 +467,124 @@ namespace localsound.backend.Persistence.Migrations
                     b.ToTable("ArtistEventType");
                 });
 
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistGenre", b =>
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistFollower", b =>
                 {
-                    b.Property<Guid>("AppUserId")
+                    b.Property<Guid>("ArtistId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("GenreId")
+                    b.Property<Guid>("FollowerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("AppUserId", "GenreId");
+                    b.HasKey("ArtistId", "FollowerId");
 
-                    b.HasIndex("GenreId");
+                    b.HasIndex("FollowerId");
 
-                    b.ToTable("ArtistGenre");
+                    b.ToTable("ArtistFollower");
                 });
 
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackChunk", b =>
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistPackage", b =>
                 {
-                    b.Property<int>("ChunkId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("PartialTrackId")
+                    b.Property<Guid>("ArtistPackageId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AppUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PackageDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PackageName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PackagePrice")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ArtistPackageId");
+
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("ArtistPackageId"), false);
+
+                    b.HasIndex("AppUserId");
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("AppUserId"));
+
+                    b.ToTable("ArtistPackage");
+                });
+
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistPackageEquipment", b =>
+                {
+                    b.Property<Guid>("ArtistPackageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ArtistPackageEquipmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EquipmentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ArtistPackageId", "ArtistPackageEquipmentId");
+
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("ArtistPackageId", "ArtistPackageEquipmentId"), false);
+
+                    b.HasIndex("ArtistPackageId");
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("ArtistPackageId"));
+
+                    b.ToTable("ArtistPackageEquipment");
+                });
+
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistPackagePhoto", b =>
+                {
+                    b.Property<Guid>("ArtistPackagePhotoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ArtistPackageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("FileContentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ChunkId", "PartialTrackId");
+                    b.Property<string>("PhotoUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("ChunkId", "PartialTrackId"), false);
+                    b.Property<bool>("ToBeDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("ArtistPackagePhotoId");
+
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("ArtistPackagePhotoId"), false);
+
+                    b.HasIndex("ArtistPackageId");
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("ArtistPackageId"));
 
                     b.HasIndex("FileContentId");
 
-                    b.HasIndex("PartialTrackId");
+                    b.ToTable("ArtistPackagePhoto");
+                });
 
-                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("PartialTrackId"));
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackGenre", b =>
+                {
+                    b.Property<Guid>("ArtistTrackUploadId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.ToTable("ArtistTrackChunk");
+                    b.Property<Guid>("GenreId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ArtistTrackUploadId", "GenreId");
+
+                    b.HasIndex("GenreId");
+
+                    b.ToTable("ArtistTrackGenre");
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackUpload", b =>
@@ -415,8 +596,21 @@ namespace localsound.backend.Persistence.Migrations
                     b.Property<Guid>("AppUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("GenreId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ArtistMemberId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double>("Duration")
+                        .HasColumnType("float");
+
+                    b.Property<int>("FileSizeInBytes")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LikeCount")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<Guid>("TrackDataId")
                         .HasColumnType("uniqueidentifier");
@@ -428,7 +622,21 @@ namespace localsound.backend.Persistence.Migrations
                     b.Property<Guid?>("TrackImageId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("TrackImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("TrackName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrackUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UploadDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("WaveformUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -438,9 +646,9 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("AppUserId"));
+                    b.HasIndex("ArtistMemberId");
 
-                    b.HasIndex("GenreId");
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("ArtistMemberId"));
 
                     b.HasIndex("TrackDataId")
                         .IsUnique();
@@ -499,43 +707,81 @@ namespace localsound.backend.Persistence.Migrations
                     b.ToTable("Genres");
                 });
 
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.NonArtist", b =>
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.Notification", b =>
                 {
-                    b.Property<Guid>("AppUserId")
+                    b.Property<Guid>("NotificationId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Address")
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("NotificationCreatorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("NotificationMessage")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName")
+                    b.Property<Guid>("NotificationReceiverId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("NotificationViewed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RedirectUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("NotificationId");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("NotificationId"), false);
 
-                    b.Property<string>("ProfileUrl")
+                    b.HasIndex("NotificationCreatorId");
+
+                    b.HasIndex("NotificationReceiverId");
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("NotificationReceiverId"));
+
+                    b.ToTable("Notification");
+                });
+
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.SongLike", b =>
+                {
+                    b.Property<int>("SongLikeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("NEXT VALUE FOR SongLikeId");
+
+                    b.Property<string>("AccountMemberId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("ArtistTrackId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("MemberId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.HasKey("SongLikeId");
 
-                    b.HasKey("AppUserId");
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("SongLikeId"), false);
 
-                    b.HasIndex("ProfileUrl")
-                        .IsUnique();
+                    b.HasAlternateKey("ArtistTrackId", "MemberId");
 
-                    b.HasIndex("UserId");
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasAlternateKey("ArtistTrackId", "MemberId"), false);
 
-                    b.ToTable("NonArtist");
+                    b.HasIndex("AccountMemberId");
+
+                    b.HasIndex("ArtistTrackId");
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("ArtistTrackId"), false);
+
+                    b.HasIndex("MemberId");
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("MemberId"));
+
+                    b.ToTable("SongLike");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -580,6 +826,36 @@ namespace localsound.backend.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.Account", b =>
+                {
+                    b.HasOne("localsound.backend.Domain.Model.Entity.AppUser", "User")
+                        .WithOne("Account")
+                        .HasForeignKey("localsound.backend.Domain.Model.Entity.Account", "AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AccountGenre", b =>
+                {
+                    b.HasOne("localsound.backend.Domain.Model.Entity.Account", "Artist")
+                        .WithMany("Genres")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("localsound.backend.Domain.Model.Entity.Genre", "Genre")
+                        .WithMany()
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artist");
+
+                    b.Navigation("Genre");
+                });
+
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AccountImage", b =>
                 {
                     b.HasOne("localsound.backend.Domain.Model.Entity.AccountImageType", "AccountImageType")
@@ -588,7 +864,7 @@ namespace localsound.backend.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("localsound.backend.Domain.Model.Entity.AppUser", "AppUser")
+                    b.HasOne("localsound.backend.Domain.Model.Entity.Account", "AppUser")
                         .WithMany("Images")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -607,6 +883,17 @@ namespace localsound.backend.Persistence.Migrations
                     b.Navigation("FileContent");
                 });
 
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AccountMessages", b =>
+                {
+                    b.HasOne("localsound.backend.Domain.Model.Entity.Account", "Account")
+                        .WithOne("AccountMessages")
+                        .HasForeignKey("localsound.backend.Domain.Model.Entity.AccountMessages", "AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AppUserToken", b =>
                 {
                     b.HasOne("localsound.backend.Domain.Model.Entity.AppUser", null)
@@ -616,20 +903,44 @@ namespace localsound.backend.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.Artist", b =>
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistBooking", b =>
                 {
-                    b.HasOne("localsound.backend.Domain.Model.Entity.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("localsound.backend.Domain.Model.Entity.Account", "Artist")
+                        .WithMany("Bookings")
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.HasOne("localsound.backend.Domain.Model.Entity.Account", "Booker")
+                        .WithMany("PartiesBooked")
+                        .HasForeignKey("BookerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("localsound.backend.Domain.Model.Entity.EventType", "EventType")
+                        .WithMany("RelatedBookings")
+                        .HasForeignKey("EventTypeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("localsound.backend.Domain.Model.Entity.ArtistPackage", "Package")
+                        .WithMany("RelatedBookings")
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Artist");
+
+                    b.Navigation("Booker");
+
+                    b.Navigation("EventType");
+
+                    b.Navigation("Package");
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistEquipment", b =>
                 {
-                    b.HasOne("localsound.backend.Domain.Model.Entity.Artist", "Artist")
+                    b.HasOne("localsound.backend.Domain.Model.Entity.Account", "Artist")
                         .WithMany("Equipment")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -640,7 +951,7 @@ namespace localsound.backend.Persistence.Migrations
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistEventType", b =>
                 {
-                    b.HasOne("localsound.backend.Domain.Model.Entity.Artist", "Artist")
+                    b.HasOne("localsound.backend.Domain.Model.Entity.Account", "Artist")
                         .WithMany("EventTypes")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -657,47 +968,90 @@ namespace localsound.backend.Persistence.Migrations
                     b.Navigation("EventType");
                 });
 
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistGenre", b =>
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistFollower", b =>
                 {
-                    b.HasOne("localsound.backend.Domain.Model.Entity.Artist", "Artist")
-                        .WithMany("Genres")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("localsound.backend.Domain.Model.Entity.Account", "Artist")
+                        .WithMany("Followers")
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("localsound.backend.Domain.Model.Entity.Genre", "Genre")
-                        .WithMany()
-                        .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("localsound.backend.Domain.Model.Entity.Account", "Follower")
+                        .WithMany("Following")
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Artist");
 
-                    b.Navigation("Genre");
+                    b.Navigation("Follower");
                 });
 
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackChunk", b =>
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistPackage", b =>
                 {
+                    b.HasOne("localsound.backend.Domain.Model.Entity.Account", "Artist")
+                        .WithMany("Packages")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artist");
+                });
+
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistPackageEquipment", b =>
+                {
+                    b.HasOne("localsound.backend.Domain.Model.Entity.ArtistPackage", "ArtistPackage")
+                        .WithMany("Equipment")
+                        .HasForeignKey("ArtistPackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ArtistPackage");
+                });
+
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistPackagePhoto", b =>
+                {
+                    b.HasOne("localsound.backend.Domain.Model.Entity.ArtistPackage", "ArtistPackage")
+                        .WithMany("PackagePhotos")
+                        .HasForeignKey("ArtistPackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("localsound.backend.Domain.Model.Entity.FileContent", "FileContent")
                         .WithMany()
                         .HasForeignKey("FileContentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("ArtistPackage");
+
                     b.Navigation("FileContent");
                 });
 
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackUpload", b =>
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackGenre", b =>
                 {
-                    b.HasOne("localsound.backend.Domain.Model.Entity.Artist", "Artist")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
+                    b.HasOne("localsound.backend.Domain.Model.Entity.ArtistTrackUpload", "ArtistTrackUpload")
+                        .WithMany("Genres")
+                        .HasForeignKey("ArtistTrackUploadId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("localsound.backend.Domain.Model.Entity.Genre", "Genre")
                         .WithMany()
                         .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ArtistTrackUpload");
+
+                    b.Navigation("Genre");
+                });
+
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackUpload", b =>
+                {
+                    b.HasOne("localsound.backend.Domain.Model.Entity.Account", "Artist")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -713,36 +1067,103 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.Navigation("Artist");
 
-                    b.Navigation("Genre");
-
                     b.Navigation("TrackData");
 
                     b.Navigation("TrackImage");
                 });
 
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.NonArtist", b =>
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.Notification", b =>
                 {
-                    b.HasOne("localsound.backend.Domain.Model.Entity.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("localsound.backend.Domain.Model.Entity.Account", "NotificationCreator")
+                        .WithMany("SentNotifications")
+                        .HasForeignKey("NotificationCreatorId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.HasOne("localsound.backend.Domain.Model.Entity.Account", "NotificationReceiver")
+                        .WithMany("ReceivedNotifications")
+                        .HasForeignKey("NotificationReceiverId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("NotificationCreator");
+
+                    b.Navigation("NotificationReceiver");
                 });
 
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AppUser", b =>
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.SongLike", b =>
                 {
-                    b.Navigation("Images");
+                    b.HasOne("localsound.backend.Domain.Model.Entity.Account", "Account")
+                        .WithMany("LikedSongs")
+                        .HasForeignKey("AccountMemberId")
+                        .HasPrincipalKey("MemberId");
+
+                    b.HasOne("localsound.backend.Domain.Model.Entity.ArtistTrackUpload", "ArtistTrackUpload")
+                        .WithMany("SongLikes")
+                        .HasForeignKey("ArtistTrackId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("ArtistTrackUpload");
                 });
 
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.Artist", b =>
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.Account", b =>
                 {
+                    b.Navigation("AccountMessages")
+                        .IsRequired();
+
+                    b.Navigation("Bookings");
+
                     b.Navigation("Equipment");
 
                     b.Navigation("EventTypes");
 
+                    b.Navigation("Followers");
+
+                    b.Navigation("Following");
+
                     b.Navigation("Genres");
+
+                    b.Navigation("Images");
+
+                    b.Navigation("LikedSongs");
+
+                    b.Navigation("Packages");
+
+                    b.Navigation("PartiesBooked");
+
+                    b.Navigation("ReceivedNotifications");
+
+                    b.Navigation("SentNotifications");
+                });
+
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AppUser", b =>
+                {
+                    b.Navigation("Account")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistPackage", b =>
+                {
+                    b.Navigation("Equipment");
+
+                    b.Navigation("PackagePhotos");
+
+                    b.Navigation("RelatedBookings");
+                });
+
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackUpload", b =>
+                {
+                    b.Navigation("Genres");
+
+                    b.Navigation("SongLikes");
+                });
+
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.EventType", b =>
+                {
+                    b.Navigation("RelatedBookings");
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.FileContent", b =>

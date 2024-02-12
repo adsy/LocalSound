@@ -163,7 +163,7 @@ namespace localsound.backend.Persistence.Migrations
                     b.Property<string>("MemberId")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("nvarchar(450)")
                         .HasDefaultValueSql("NEXT VALUE FOR MemberId");
 
                     b.Property<string>("Name")
@@ -187,6 +187,11 @@ namespace localsound.backend.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AppUserId");
+
+                    b.HasIndex("MemberId")
+                        .IsUnique();
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("MemberId"), false);
 
                     b.HasIndex("ProfileUrl")
                         .IsUnique();
@@ -745,24 +750,33 @@ namespace localsound.backend.Persistence.Migrations
                         .HasColumnType("int")
                         .HasDefaultValueSql("NEXT VALUE FOR SongLikeId");
 
-                    b.Property<Guid>("AppUserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("AccountMemberId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("ArtistTrackId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("MemberId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("SongLikeId");
 
                     SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("SongLikeId"), false);
 
-                    b.HasIndex("AppUserId");
+                    b.HasAlternateKey("ArtistTrackId", "MemberId");
 
-                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("AppUserId"));
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasAlternateKey("ArtistTrackId", "MemberId"), false);
 
-                    b.HasIndex("ArtistTrackId")
-                        .IsUnique();
+                    b.HasIndex("AccountMemberId");
+
+                    b.HasIndex("ArtistTrackId");
 
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("ArtistTrackId"), false);
+
+                    b.HasIndex("MemberId");
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("MemberId"));
 
                     b.ToTable("SongLike");
                 });
@@ -1077,10 +1091,9 @@ namespace localsound.backend.Persistence.Migrations
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.SongLike", b =>
                 {
                     b.HasOne("localsound.backend.Domain.Model.Entity.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("LikedSongs")
+                        .HasForeignKey("AccountMemberId")
+                        .HasPrincipalKey("MemberId");
 
                     b.HasOne("localsound.backend.Domain.Model.Entity.ArtistTrackUpload", "ArtistTrackUpload")
                         .WithMany("SongLikes")
@@ -1111,6 +1124,8 @@ namespace localsound.backend.Persistence.Migrations
                     b.Navigation("Genres");
 
                     b.Navigation("Images");
+
+                    b.Navigation("LikedSongs");
 
                     b.Navigation("Packages");
 

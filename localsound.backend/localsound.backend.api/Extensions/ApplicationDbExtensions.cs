@@ -14,7 +14,7 @@ namespace localsound.backend.api.Extensions
             var userManager = provider.GetRequiredService<UserManager<AppUser>>();
             var roleManager = provider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
             await context.Database.MigrateAsync();
-            await Seed.SeedData(context, userManager, roleManager);
+            //await Seed.SeedData(context, userManager, roleManager);
         }
     }
 }
