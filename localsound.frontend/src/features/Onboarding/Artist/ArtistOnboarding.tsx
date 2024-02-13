@@ -119,7 +119,7 @@ const ArtistOnboarding = () => {
               >
                 <div className="form-body">
                   <UpdateProfilePhoto />
-                  <div className="d-flex flex-column col-12 col-md-6 px-3">
+                  <div className="d-flex flex-column col-12 px-3 mb-3">
                     <div className="d-flex mb-1">
                       <p className="form-label">ABOUT</p>
                     </div>

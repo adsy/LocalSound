@@ -10,11 +10,11 @@ namespace localsound.backend.Persistence.DbContext
     {
         public static async Task SeedData(LocalSoundDbContext context, UserManager<AppUser> userManager, RoleManager<IdentityRole<Guid>> roleManager)
         {
-            //if (!roleManager.Roles.Any())
-            //{
-            //    await roleManager.CreateAsync(new IdentityRole<Guid>(CustomerTypeEnum.NonArtist.ToString()));
-            //    await roleManager.CreateAsync(new IdentityRole<Guid>(CustomerTypeEnum.Artist.ToString()));
-            //}
+            if (!roleManager.Roles.Any())
+            {
+                await roleManager.CreateAsync(new IdentityRole<Guid>(CustomerTypeEnum.NonArtist.ToString()));
+                await roleManager.CreateAsync(new IdentityRole<Guid>(CustomerTypeEnum.Artist.ToString()));
+            }
 
             if (!(await context.AccountImageType.AnyAsync())){
                 await context.AccountImageType.AddAsync(new AccountImageType

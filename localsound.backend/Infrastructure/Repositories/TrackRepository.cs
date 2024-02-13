@@ -120,7 +120,6 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 var tracks = await _dbContext.ArtistTrackUpload
                     .Include(x => x.Artist)
-                    .ThenInclude(x => x.User)
                     .Include(x => x.TrackData)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
@@ -150,8 +149,14 @@ namespace localsound.backend.Infrastructure.Repositories
             {
                 var tracks = await _dbContext.SongLike
                     .Include(x => x.ArtistTrackUpload)
+                    .ThenInclude(x => x.Artist)
+                    .Include(x => x.ArtistTrackUpload)
+                    .ThenInclude(x => x.TrackData)
+                    .Include(x => x.ArtistTrackUpload)
+                    .ThenInclude(x => x.Genres)
+                    .ThenInclude(x => x.Genre)
                     .Where(x => x.MemberId == memberId)
-                    .OrderBy(x => x.SongLikeId)
+                    .OrderByDescending(x => x.SongLikeId)
                     .Select(x => x.ArtistTrackUpload)
                     .Skip(10 * page)
                     .Take(10)

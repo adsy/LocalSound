@@ -80,7 +80,7 @@ const UserProfileSummary = () => {
         <div id="user-profile">
           <ArtistProfile
             loggedInUser={userDetail!}
-            artistDetails={profile}
+            profileDetails={profile}
             viewingOwnProfile={viewingOwnProfile}
           />
         </div>
@@ -91,7 +91,7 @@ const UserProfileSummary = () => {
         <div id="user-profile">
           <NonArtistProfile
             loggedInUser={userDetail!}
-            artistDetails={profile}
+            profileDetails={profile}
             viewingOwnProfile={viewingOwnProfile}
           />
         </div>

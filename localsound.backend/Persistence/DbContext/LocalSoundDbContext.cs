@@ -193,7 +193,7 @@ namespace localsound.backend.Persistence.DbContext
 
             builder.Entity<SongLike>().HasKey(x => x.SongLikeId).IsClustered(false);
             builder.Entity<SongLike>().HasAlternateKey(x => new { x.ArtistTrackId, x.MemberId }).IsClustered(false);
-            builder.Entity<SongLike>().HasOne(x => x.Account).WithMany(x => x.LikedSongs).HasPrincipalKey(x => x.MemberId);
+            builder.Entity<SongLike>().HasOne(x => x.Account).WithMany(x => x.LikedSongs).HasPrincipalKey(x => x.MemberId).HasForeignKey(x => x.MemberId);
             builder.Entity<SongLike>().HasOne(x => x.ArtistTrackUpload).WithMany(x => x.SongLikes).OnDelete(DeleteBehavior.NoAction);
             builder.Entity<SongLike>().HasIndex(x => x.MemberId).IsUnique(false).IsClustered(true);
             builder.Entity<SongLike>().HasIndex(x => x.ArtistTrackId).IsUnique(false).IsClustered(false);

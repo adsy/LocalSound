@@ -8,12 +8,16 @@ import ErrorBanner from "../../../common/banner/ErrorBanner";
 import useFixMissingScroll from "../../../common/hooks/UseLoadMoreWithoutScroll";
 
 interface Props {
-  artistDetails: UserModel;
+  profileDetails: UserModel;
   currentTab: ProfileTabs;
   viewingOwnProfile: boolean;
 }
 
-const Followers = ({ artistDetails, currentTab, viewingOwnProfile }: Props) => {
+const Followers = ({
+  profileDetails,
+  currentTab,
+  viewingOwnProfile,
+}: Props) => {
   const [followers, setFollowers] = useState<UserSummaryModel[]>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -26,7 +30,7 @@ const Followers = ({ artistDetails, currentTab, viewingOwnProfile }: Props) => {
         setLoading(true);
 
         var result = await agent.Account.getProfileFollowers(
-          artistDetails.memberId,
+          profileDetails.memberId,
           page
         );
 
@@ -53,7 +57,7 @@ const Followers = ({ artistDetails, currentTab, viewingOwnProfile }: Props) => {
           setLoading(true);
 
           var result = await agent.Account.getProfileFollowers(
-            artistDetails.memberId,
+            profileDetails.memberId,
             page
           );
 

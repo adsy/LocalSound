@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { UserModel } from "../../../app/model/dto/user.model";
 import { ProfileTabs } from "../../../app/model/enums/ProfileTabTypes";
 import { ArtistTrackUploadModel } from "../../../app/model/dto/artist-track-upload.model";
@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../app/model/redux/state";
 import InfoBanner from "../../../common/banner/InfoBanner";
 import { Image } from "semantic-ui-react";
-import wavePulse from "../../../../assets/wave-pulse-1-svgrepo-com.svg";
+import wavePulse from "../../../assets/wave-pulse-1-svgrepo-com.svg";
 import InfiniteScroll from "react-infinite-scroll-component";
 import agent from "../../../api/agent";
 import useFixMissingScroll from "../../../common/hooks/UseLoadMoreWithoutScroll";
@@ -36,7 +36,7 @@ const Favourites = ({
   const dispatch = useDispatch();
 
   const getMoreFavourites = async () => {
-    if (currentTab === ProfileTabs.LikedSongs) {
+    if (canLoadMore) {
       try {
         setLoading(true);
         var result = await agent.Tracks.getTracks(
@@ -47,16 +47,15 @@ const Favourites = ({
         setFavourites([...favourites, ...result.trackList]);
         setCanLoadMore(result.canLoadMore);
 
-        //TODO: Fix the player so it knows to get more artist tracks or get artists liked songs
-        // if (profileDetails.profileUrl === playerState.listeningProfile) {
-        //   dispatch(
-        //     handleSetTrackList({
-        //       trackList: [...tracks, ...result.trackList],
-        //       page: page + 1,
-        //       canLoadMore: result.canLoadMore,
-        //     })
-        //   );
-        // }
+        if (profileDetails.profileUrl === playerState.listeningProfile) {
+          dispatch(
+            handleSetTrackList({
+              trackList: [...favourites, ...result.trackList],
+              page: page + 1,
+              canLoadMore: result.canLoadMore,
+            })
+          );
+        }
       } catch (err: any) {
         setFavouritesError(err);
       }
@@ -72,89 +71,27 @@ const Favourites = ({
 
   useLayoutEffect(() => {
     (async () => {
-      if (currentTab === ProfileTabs.LikedSongs && canLoadMore) {
-        try {
-          setLoading(true);
-          var result = await agent.Tracks.getTracks(
-            profileDetails!.memberId,
-            page,
-            PlaylistTypes.Favourites
-          );
-          setFavourites([...favourites, ...result.trackList]);
-          setCanLoadMore(result.canLoadMore);
-
-          if (profileDetails.profileUrl === playerState.listeningProfile) {
-            dispatch(
-              handleSetTrackList({
-                trackList: [...favourites, ...result.trackList],
-                page: page + 1,
-                canLoadMore: result.canLoadMore,
-              })
-            );
-          }
-        } catch (err: any) {
-          setFavouritesError(err);
-        }
-        setLoading(false);
-        setPage(page + 1);
+      if (
+        currentTab === ProfileTabs.LikedSongs &&
+        (profileDetails.profileUrl !== playerState.listeningProfile ||
+          playerState.playlistType === PlaylistTypes.Uploads)
+      ) {
+        await getMoreFavourites();
       }
-
-      //TODO: Fix this so playerState can handle liked songs or uploads
-      // if (profileDetails.profileUrl !== playerState.listeningProfile) {
-      //   if (currentTab === ProfileTabs.LikedSongs && canLoadMore) {
-      //     try {
-      //       setLoading(true);
-      //       var result = await agent.Tracks.getLikedTracks(
-      //         profileDetails.memberId,
-      //         page
-      //       );
-      //       setFavourites([...favourites, ...result.trackList]);
-      //       setCanLoadMore(result.canLoadMore);
-
-      //       if (profileDetails.profileUrl === playerState.listeningProfile) {
-      //         dispatch(
-      //           handleSetTrackList({
-      //             trackList: [...tracks, ...result.trackList],
-      //             page: page + 1,
-      //             canLoadMore: result.canLoadMore,
-      //           })
-      //         );
-      //       }
-      //     } catch (err: any) {
-      //       setTrackError(err);
-      //     }
-      //     setLoading(false);
-      //     setPage(page + 1);
-      //   }
-      // } else {
-      //   setFavourites([...playerState.trackList]);
-      //   setCanLoadMore(playerState.canLoadMore);
-      //   setPage(playerState.page);
-      // }
     })();
-
-    //   return () => {
-    //     if (
-    //       uploadState.trackUploaded ||
-    //       uploadState.trackUpdated ||
-    //       uploadState.trackDeleted
-    //     ) {
-    //       dispatch(handleResetUploadTrackState());
-    //     }
-    //     setTrackError(null);
-    //   };
   }, [currentTab]);
 
-  //   useEffect(() => {
-  //     if (
-  //       playerState.trackList.length > 0 &&
-  //       profileDetails.profileUrl === playerState.artistProfile
-  //     ) {
-  //       setTracks(playerState.trackList);
-  //       setCanLoadMore(playerState.canLoadMore);
-  //       setPage(playerState.page);
-  //     }
-  //   }, [playerState.trackList]);
+  useEffect(() => {
+    if (
+      playerState.trackList.length > 0 &&
+      profileDetails.profileUrl === playerState.listeningProfile &&
+      playerState.playlistType === PlaylistTypes.Favourites
+    ) {
+      setFavourites(playerState.trackList);
+      setCanLoadMore(playerState.canLoadMore);
+      setPage(playerState.page);
+    }
+  }, [playerState.trackList]);
 
   return (
     <div id="upload-list">
@@ -168,20 +105,18 @@ const Favourites = ({
           {viewingOwnProfile ? (
             <div className="d-flex flex-row align-items-center justify-content-center">
               <Image src={wavePulse} height={25} width={25} />
-              <div className="ml-2">
-                <p className="mb-0">
-                  <span className="ml-1">You haven't liked any tracks!</span>
-                  Start listening to some local artists and find someone new.
-                </p>
-              </div>
+              <span className="ml-2">
+                You haven't liked any tracks! Start listening to some local
+                artists and find someone new.
+              </span>
             </div>
           ) : (
-            <p>
+            <div className="d-flex flex-row align-items-center justify-content-center">
               <Image src={wavePulse} height={30} width={30} />
               <span className="ml-1">
                 This account hasn't liked any tracks yet.
               </span>
-            </p>
+            </div>
           )}
         </InfoBanner>
       ) : null}

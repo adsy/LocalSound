@@ -19,7 +19,7 @@ import { handleSetTrackList } from "../../../../app/redux/actions/playerSlice";
 import { PlaylistTypes } from "../../../../app/model/enums/playlistTypes";
 
 interface Props {
-  userDetails: UserModel;
+  profileDetails: UserModel;
   currentTab: ProfileTabs;
   tracks: ArtistTrackUploadModel[];
   setTracks: (tracks: ArtistTrackUploadModel[]) => void;
@@ -27,7 +27,7 @@ interface Props {
 }
 
 const UploadList = ({
-  userDetails,
+  profileDetails,
   currentTab,
   tracks,
   setTracks,
@@ -44,18 +44,18 @@ const UploadList = ({
   const dispatch = useDispatch();
 
   const getMoreTracks = async () => {
-    if (currentTab === ProfileTabs.Uploads) {
+    if (canLoadMore) {
       try {
         setLoading(true);
         var result = await agent.Tracks.getTracks(
-          userDetails!.memberId,
+          profileDetails!.memberId,
           page,
           PlaylistTypes.Uploads
         );
         setTracks([...tracks, ...result.trackList]);
         setCanLoadMore(result.canLoadMore);
 
-        if (userDetails.profileUrl === playerState.listeningProfile) {
+        if (profileDetails.profileUrl === playerState.listeningProfile) {
           dispatch(
             handleSetTrackList({
               trackList: [...tracks, ...result.trackList],
@@ -79,37 +79,12 @@ const UploadList = ({
 
   useLayoutEffect(() => {
     (async () => {
-      if (userDetails.profileUrl !== playerState.listeningProfile) {
-        if (currentTab === ProfileTabs.Uploads && canLoadMore) {
-          try {
-            setLoading(true);
-            var result = await agent.Tracks.getTracks(
-              userDetails!.memberId,
-              page,
-              PlaylistTypes.Uploads
-            );
-            setTracks([...tracks, ...result.trackList]);
-            setCanLoadMore(result.canLoadMore);
-
-            if (userDetails.profileUrl === playerState.listeningProfile) {
-              dispatch(
-                handleSetTrackList({
-                  trackList: [...tracks, ...result.trackList],
-                  page: page + 1,
-                  canLoadMore: result.canLoadMore,
-                })
-              );
-            }
-          } catch (err: any) {
-            setTrackError(err);
-          }
-          setLoading(false);
-          setPage(page + 1);
-        }
-      } else {
-        setTracks([...playerState.trackList]);
-        setCanLoadMore(playerState.canLoadMore);
-        setPage(playerState.page);
+      if (
+        currentTab === ProfileTabs.Uploads &&
+        (profileDetails.profileUrl !== playerState.listeningProfile ||
+          playerState.playlistType === PlaylistTypes.Favourites)
+      ) {
+        await getMoreTracks();
       }
     })();
 
@@ -128,7 +103,8 @@ const UploadList = ({
   useEffect(() => {
     if (
       playerState.trackList.length > 0 &&
-      userDetails.profileUrl === playerState.listeningProfile
+      profileDetails.profileUrl === playerState.listeningProfile &&
+      playerState.playlistType === PlaylistTypes.Uploads
     ) {
       setTracks(playerState.trackList);
       setCanLoadMore(playerState.canLoadMore);
@@ -186,7 +162,7 @@ const UploadList = ({
         </InfoBanner>
       ) : null}
       <InfiniteScroll
-        dataLength={tracks.length} //This is important field to render the next data
+        dataLength={tracks.length}
         next={() => getMoreTracks()}
         hasMore={canLoadMore}
         loader={<></>}

@@ -20,10 +20,10 @@ import signalHub from "../../../api/signalR";
 
 interface Props {
   artistPackage: ArtistPackageModel;
-  artistDetails: UserModel;
+  profileDetails: UserModel;
 }
 
-const CreateBooking = ({ artistPackage, artistDetails }: Props) => {
+const CreateBooking = ({ artistPackage, profileDetails }: Props) => {
   const memberId = useSelector(
     (state: State) => state.user.userDetails?.memberId
   );
@@ -83,7 +83,7 @@ const CreateBooking = ({ artistPackage, artistDetails }: Props) => {
                   const length = new Number(values.bookingLength);
 
                   const bookingModel = {
-                    artistId: artistDetails.memberId,
+                    artistId: profileDetails.memberId,
                     packageId: artistPackage.artistPackageId,
                     eventTypeId: values.eventType,
                     bookingDescription: values.bookingDescription,
@@ -95,7 +95,7 @@ const CreateBooking = ({ artistPackage, artistDetails }: Props) => {
                   await agent.Bookings.createBooking(memberId!, bookingModel);
 
                   await signalHub.createNotification({
-                    receiverMemberId: artistDetails.memberId,
+                    receiverMemberId: profileDetails.memberId,
                     message: `Congratulations! Someone has booked your ${artistPackage.artistPackageName} package.`,
                     redirectUrl: "/bookings",
                   });

@@ -3,18 +3,19 @@ import { Tab, Tabs } from "react-bootstrap";
 import { UserModel } from "../../../app/model/dto/user.model";
 import { ProfileTabs } from "../../../app/model/enums/ProfileTabTypes";
 import Following from "../Followers/Following";
-import NonArtistDetails from "./NonArtistDetails";
 import ProfileBanner from "../ProfileBanner";
+import Favourites from "../Favourites/Favourites";
+import NonArtistDetails from "./NonArtistDetails";
 
 interface Props {
   loggedInUser: UserModel;
-  artistDetails: UserModel;
+  profileDetails: UserModel;
   viewingOwnProfile: boolean;
 }
 
 const NonArtistProfile = ({
   loggedInUser,
-  artistDetails,
+  profileDetails,
   viewingOwnProfile,
 }: Props) => {
   const [currentTab, setCurrentTab] = useState(ProfileTabs.ProfileDetails);
@@ -26,7 +27,7 @@ const NonArtistProfile = ({
         <div className="d-flex flex-column flex-wrap p-0 fade-in w-100">
           <ProfileBanner
             loggedInUser={loggedInUser}
-            profileDetails={artistDetails}
+            profileDetails={profileDetails}
             viewingOwnProfile={viewingOwnProfile}
             setCurrentTab={setCurrentTab}
             setPhotoUpdateError={setPhotoUpdateError}
@@ -70,7 +71,7 @@ const NonArtistProfile = ({
                 className=""
               >
                 <NonArtistDetails
-                  userDetails={artistDetails}
+                  userDetails={profileDetails}
                   photoUpdateError={photoUpdateError}
                   setCurrentTab={setCurrentTab}
                 />
@@ -81,7 +82,7 @@ const NonArtistProfile = ({
                 className=""
               >
                 <Following
-                  profileDetails={artistDetails}
+                  profileDetails={profileDetails}
                   currentTab={currentTab}
                   viewingOwnProfile={viewingOwnProfile}
                 />
@@ -91,7 +92,11 @@ const NonArtistProfile = ({
                 title="FAVOURITES"
                 className=""
               >
-                <div>need to add a liked songs component</div>
+                <Favourites
+                  currentTab={currentTab}
+                  profileDetails={profileDetails}
+                  viewingOwnProfile={viewingOwnProfile}
+                />
               </Tab>
             </Tabs>
           </div>

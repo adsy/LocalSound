@@ -175,38 +175,33 @@ const Track = ({
     setTrackLikeError(null);
     if (loggedInUser?.memberId) {
       try {
+        var trackClone = { ...track };
+        var clone = [...tracks];
+        var trackIndex = clone.findIndex(
+          (x) => x.artistTrackUploadId === track.artistTrackUploadId
+        );
         if (track.songLiked) {
           await agent.Tracks.unlikeSong(
             loggedInUser?.memberId,
             track.artistMemberId,
             track.artistTrackUploadId
           );
-          var clone = [...tracks];
-          var currentTrack = clone.find(
-            (x) => x.artistTrackUploadId === track.artistTrackUploadId
-          );
-          if (currentTrack) {
-            currentTrack.songLiked = false;
-            currentTrack.likeCount--;
-          }
-          setTracks(clone);
+          trackClone.songLiked = false;
+          trackClone.likeCount--;
         } else {
           await agent.Tracks.likeSong(
             loggedInUser?.memberId,
             track.artistMemberId,
             track.artistTrackUploadId
           );
-          var clone = [...tracks];
-          var currentTrack = clone.find(
-            (x) => x.artistTrackUploadId === track.artistTrackUploadId
-          );
-          if (currentTrack) {
-            currentTrack.songLiked = true;
-            currentTrack.likeCount++;
-          }
-          setTracks(clone);
+          trackClone.songLiked = true;
+          trackClone.likeCount++;
         }
+
+        clone[trackIndex] = trackClone;
+        setTracks(clone);
       } catch (err: any) {
+        console.log(err);
         setTrackLikeError(err);
       }
     } else {

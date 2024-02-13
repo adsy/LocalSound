@@ -13,14 +13,14 @@ interface Props {
   artistPackage: ArtistPackageModel;
   packages: ArtistPackageModel[];
   setPackages: (packages: ArtistPackageModel[]) => void;
-  artistDetails: UserModel;
+  profileDetails: UserModel;
 }
 
 const DeletePackageConfirmation = ({
   artistPackage,
   packages,
   setPackages,
-  artistDetails,
+  profileDetails,
 }: Props) => {
   const dispatch = useDispatch();
   const [deleteError, setDeleteError] = useState<string | null>();
@@ -33,10 +33,10 @@ const DeletePackageConfirmation = ({
   const deleteTrack = async () => {
     setDeleteError(null);
     try {
-      if (artistDetails?.memberId && artistPackage.artistPackageId) {
+      if (profileDetails?.memberId && artistPackage.artistPackageId) {
         setDeletingPackage(true);
         await agent.Packages.deletePackage(
-          artistDetails?.memberId,
+          profileDetails?.memberId,
           artistPackage.artistPackageId
         );
 
@@ -45,7 +45,7 @@ const DeletePackageConfirmation = ({
         );
         setPackages(packagesFiltered);
 
-        if (!artistDetails.canAddPackage) {
+        if (!profileDetails.canAddPackage) {
           dispatch(handleUpdateAllowAddPackage(true));
         }
 

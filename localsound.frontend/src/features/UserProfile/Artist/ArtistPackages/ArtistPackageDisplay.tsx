@@ -20,7 +20,7 @@ interface Props {
   artistPackage: ArtistPackageModel;
   packages: ArtistPackageModel[];
   setPackages: (packages: ArtistPackageModel[]) => void;
-  artistDetails: UserModel;
+  profileDetails: UserModel;
   selectedPackageId: string | null;
   setSelectedPackageId: (selectedPackageId: string | null) => void;
 }
@@ -29,7 +29,7 @@ const ArtistPackageDisplay = ({
   artistPackage,
   packages,
   setPackages,
-  artistDetails,
+  profileDetails,
   selectedPackageId,
   setSelectedPackageId,
 }: Props) => {
@@ -68,7 +68,7 @@ const ArtistPackageDisplay = ({
         open: true,
         body: (
           <DeletePackageConfirmation
-            artistDetails={artistDetails}
+            profileDetails={profileDetails}
             artistPackage={artistPackage}
             packages={packages}
             setPackages={setPackages}
@@ -85,7 +85,7 @@ const ArtistPackageDisplay = ({
         open: true,
         body: (
           <EditArtistPackage
-            artistDetails={artistDetails}
+            profileDetails={profileDetails}
             artistPackage={artistPackage}
             setPackages={setPackages}
           />
@@ -112,7 +112,7 @@ const ArtistPackageDisplay = ({
         body: (
           <CreateBooking
             artistPackage={selectedPackage}
-            artistDetails={artistDetails}
+            profileDetails={profileDetails}
           />
         ),
         size: "tiny",
@@ -175,7 +175,7 @@ const ArtistPackageDisplay = ({
                 </span>
               ))}
             </div>
-            {artistDetails.memberId === loggedInUser?.memberId ? (
+            {profileDetails.memberId === loggedInUser?.memberId ? (
               <>
                 <Button
                   className="black-button bin-icon"
@@ -234,7 +234,7 @@ const ArtistPackageDisplay = ({
           ) : null}
           <div className="d-flex flex-column mt-2">
             {loggedInUser &&
-            loggedInUser.memberId !== artistDetails.memberId ? (
+            loggedInUser.memberId !== profileDetails.memberId ? (
               <Button
                 className="black-button mt-2"
                 onClick={() => openBookingModal(artistPackage)}

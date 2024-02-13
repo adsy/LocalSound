@@ -11,7 +11,7 @@ import ArtistPackageDisplay from "./ArtistPackageDisplay";
 
 interface Props {
   currentTab: ProfileTabs;
-  artistDetails: UserModel;
+  profileDetails: UserModel;
   viewingOwnProfile: boolean;
   packages: ArtistPackageModel[];
   setPackages: (packages: ArtistPackageModel[]) => void;
@@ -19,7 +19,7 @@ interface Props {
 
 const ArtistPackages = ({
   currentTab,
-  artistDetails,
+  profileDetails,
   viewingOwnProfile,
   packages,
   setPackages,
@@ -36,7 +36,7 @@ const ArtistPackages = ({
         try {
           setLoading(true);
           var result = await agent.Packages.getPackages(
-            artistDetails!.memberId
+            profileDetails!.memberId
           );
           setPackages([...result]);
         } catch (err: any) {
@@ -91,7 +91,7 @@ const ArtistPackages = ({
                 artistPackage={artistPackage}
                 packages={packages}
                 setPackages={setPackages}
-                artistDetails={artistDetails}
+                profileDetails={profileDetails}
                 selectedPackageId={selectedPackageId}
                 setSelectedPackageId={setSelectedPackageId}
               />

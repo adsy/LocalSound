@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import { UserModel } from "../../../app/model/dto/user.model";
-import ArtistDetails from "./ArtistDetails";
 import UploadList from "./Uploads/UploadList";
 import { ArtistTrackUploadModel } from "../../../app/model/dto/artist-track-upload.model";
 import Followers from "../Followers/Followers";
@@ -11,16 +10,18 @@ import ArtistPackages from "./ArtistPackages/ArtistPackages";
 import { ArtistPackageModel } from "../../../app/model/dto/artist-package.model";
 import { CustomerTypes } from "../../../app/model/enums/customerTypes";
 import ProfileBanner from "../ProfileBanner";
+import ArtistDetails from "./ArtistDetails";
+import Favourites from "../Favourites/Favourites";
 
 interface Props {
   loggedInUser: UserModel;
-  artistDetails: UserModel;
+  profileDetails: UserModel;
   viewingOwnProfile: boolean;
 }
 
 const ArtistProfile = ({
   loggedInUser,
-  artistDetails,
+  profileDetails,
   viewingOwnProfile,
 }: Props) => {
   const [currentTab, setCurrentTab] = useState(ProfileTabs.ProfileDetails);
@@ -34,7 +35,7 @@ const ArtistProfile = ({
         <div className="d-flex flex-column flex-wrap p-0 fade-in w-100">
           <ProfileBanner
             loggedInUser={loggedInUser}
-            profileDetails={artistDetails}
+            profileDetails={profileDetails}
             viewingOwnProfile={viewingOwnProfile}
             setCurrentTab={setCurrentTab}
             tracks={tracks}
@@ -82,18 +83,18 @@ const ArtistProfile = ({
                 className=""
               >
                 <ArtistDetails
-                  userDetails={artistDetails}
+                  userDetails={profileDetails}
                   photoUpdateError={photoUpdateError}
                   setCurrentTab={setCurrentTab}
                 />
               </Tab>
               <Tab eventKey={ProfileTabs.Uploads} title="UPLOADS" className="">
                 <UploadList
-                  userDetails={artistDetails}
                   currentTab={currentTab}
+                  profileDetails={profileDetails}
+                  viewingOwnProfile={viewingOwnProfile}
                   tracks={tracks}
                   setTracks={setTracks}
-                  viewingOwnProfile={viewingOwnProfile}
                 />
               </Tab>
               <Tab
@@ -101,7 +102,11 @@ const ArtistProfile = ({
                 title="FAVOURITES"
                 className=""
               >
-                <div>need to add a liked songs component</div>
+                <Favourites
+                  currentTab={currentTab}
+                  profileDetails={profileDetails}
+                  viewingOwnProfile={viewingOwnProfile}
+                />
               </Tab>
               <Tab
                 eventKey={ProfileTabs.Followers}
@@ -109,7 +114,7 @@ const ArtistProfile = ({
                 className=""
               >
                 <Followers
-                  artistDetails={artistDetails}
+                  profileDetails={profileDetails}
                   currentTab={currentTab}
                   viewingOwnProfile={viewingOwnProfile}
                 />
@@ -120,7 +125,7 @@ const ArtistProfile = ({
                 className=""
               >
                 <Following
-                  profileDetails={artistDetails}
+                  profileDetails={profileDetails}
                   currentTab={currentTab}
                   viewingOwnProfile={viewingOwnProfile}
                 />
@@ -134,7 +139,7 @@ const ArtistProfile = ({
                   className=""
                 >
                   <ArtistPackages
-                    artistDetails={artistDetails}
+                    profileDetails={profileDetails}
                     currentTab={currentTab}
                     viewingOwnProfile={viewingOwnProfile}
                     packages={packages}

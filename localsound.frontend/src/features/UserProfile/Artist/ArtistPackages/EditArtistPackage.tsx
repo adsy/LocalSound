@@ -16,13 +16,13 @@ import ErrorBanner from "../../../../common/banner/ErrorBanner";
 
 interface Props {
   artistPackage: ArtistPackageModel;
-  artistDetails: UserModel;
+  profileDetails: UserModel;
   setPackages: (packages: ArtistPackageModel[]) => void;
 }
 
 const EditArtistPackage = ({
   artistPackage,
-  artistDetails,
+  profileDetails,
   setPackages,
 }: Props) => {
   const [submitting, setSubmitting] = useState(false);
@@ -115,13 +115,13 @@ const EditArtistPackage = ({
                     );
 
                     await agent.Packages.updatePackage(
-                      artistDetails.memberId!,
+                      profileDetails.memberId!,
                       artistPackage.artistPackageId!,
                       formData
                     );
 
                     var packages = await agent.Packages.getPackages(
-                      artistDetails.memberId!
+                      profileDetails.memberId!
                     );
 
                     setPackages(packages);
@@ -161,22 +161,15 @@ const EditArtistPackage = ({
                                   disabled={disabled}
                                 />
                               </div>
-                              <div className="mb-3">
-                                <div className="d-flex">
-                                  <p className="form-label">
-                                    PACKAGE EQUIPMENT
-                                  </p>
-                                </div>
-                                <p className="text-justify">
-                                  Add the list of equipment you will provide
+
+                              <EquipmentEntry
+                                title="PACKAGE EQUIPMENT"
+                                description="Add the list of equipment you will provide
                                   with this package. Type your equipment name
-                                  and press enter to add it to the list.
-                                </p>
-                                <EquipmentEntry
-                                  equipment={equipment}
-                                  setEquipment={setEquipment}
-                                />
-                              </div>
+                                  and press enter to add it to the list."
+                                equipment={equipment}
+                                setEquipment={setEquipment}
+                              />
                               <div className="mb-3">
                                 <div className="d-flex">
                                   <p className="form-label">
