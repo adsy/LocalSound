@@ -167,7 +167,7 @@ const App = () => {
           )}
         />
       </div>
-      {player.trackId ? <MusicPlayer /> : null}
+      {player.currentSong ? <MusicPlayer /> : null}
     </>
   );
 };

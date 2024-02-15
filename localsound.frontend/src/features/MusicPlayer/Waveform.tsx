@@ -73,7 +73,7 @@ const WaveForm = ({ analyzerData, trackId }: Props) => {
       canvas.height = canvas.offsetHeight;
       const canvasCtx = canvas.getContext("2d");
 
-      if (player.playing) {
+      if (player.currentSong?.playing) {
         animateBars(analyzer, canvas, canvasCtx, dataArray, bufferLength);
       }
     }

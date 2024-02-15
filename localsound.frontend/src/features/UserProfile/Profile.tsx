@@ -28,23 +28,18 @@ const UserProfileSummary = () => {
   }, [controller]);
 
   const getProfile = async () => {
-    if (!loading) {
-      var profileUrl = history.location.pathname.slice(1);
+    var profileUrl = history.location.pathname.slice(1);
 
-      if (profileUrl !== profile?.profileUrl) {
-        dispatch(handleSetProfile(null));
-        setLoading(true);
-        if (!userDetail || userDetail?.profileUrl !== profileUrl) {
-          if (profileUrl?.length > 0) {
-            var result = await agent.Account.getProfile(profileUrl);
-            dispatch(handleSetProfile(result));
-            setViewingOwnProfile(false);
-          }
-        } else if (userDetail) {
-          dispatch(handleSetProfile(userDetail));
-          setViewingOwnProfile(true);
+    if (!loading && profileUrl !== profile?.profileUrl) {
+      dispatch(handleSetProfile(null));
+      setLoading(true);
+      if (userDetail?.profileUrl !== profileUrl) {
+        if (profileUrl?.length > 0) {
+          var result = await agent.Account.getProfile(profileUrl);
+          dispatch(handleSetProfile(result));
+          setViewingOwnProfile(false);
         }
-      } else {
+      } else if (userDetail) {
         dispatch(handleSetProfile(userDetail));
         setViewingOwnProfile(true);
       }

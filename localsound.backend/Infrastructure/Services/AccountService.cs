@@ -345,14 +345,21 @@ namespace localsound.backend.Infrastructure.Services
                 if (artistResponse?.ReturnData != null && artistResponse.IsSuccessStatusCode)
                 {
                     returnDto = _accountHelper.CreateArtistDto(artistResponse.ReturnData);
-                    if (artistResponse.ReturnData.Followers.Any(x => x.FollowerId == currentUser))
-                    {
-                        returnDto.IsFollowing = true;
 
-                    }
-                    else
+                    // Check if following
+                    if (currentUser != null)
                     {
-                        returnDto.IsFollowing = false;
+                        var followingResponse = await _accountRepository.CheckIfUserIsFollowingArtistAsync(currentUser.Value, artistResponse.ReturnData.AppUserId);
+
+                        if (!followingResponse.IsSuccessStatusCode)
+                        {
+                            return new ServiceResponse<IAppUserDto>(HttpStatusCode.InternalServerError)
+                            {
+                                ServiceResponseMessage = "An error occured while getting the user profile, please try again..."
+                            };
+                        }
+
+                        returnDto.IsFollowing = followingResponse.ReturnData;
                     }
 
                     return new ServiceResponse<IAppUserDto>(HttpStatusCode.OK)

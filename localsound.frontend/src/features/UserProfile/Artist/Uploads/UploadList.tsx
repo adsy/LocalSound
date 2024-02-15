@@ -44,7 +44,7 @@ const UploadList = ({
   const dispatch = useDispatch();
 
   const getMoreTracks = async () => {
-    if (canLoadMore) {
+    if (canLoadMore && currentTab === ProfileTabs.Uploads) {
       try {
         setLoading(true);
         var result = await agent.Tracks.getTracks(
@@ -55,12 +55,16 @@ const UploadList = ({
         setTracks([...tracks, ...result.trackList]);
         setCanLoadMore(result.canLoadMore);
 
-        if (profileDetails.profileUrl === playerState.listeningProfile) {
+        if (
+          profileDetails.memberId === playerState.listeningProfileMemberId &&
+          playerState.playlistType !== PlaylistTypes.Favourites
+        ) {
           dispatch(
             handleSetTrackList({
               trackList: [...tracks, ...result.trackList],
               page: page + 1,
               canLoadMore: result.canLoadMore,
+              listeningProfileMemberId: profileDetails.memberId,
             })
           );
         }
@@ -79,12 +83,26 @@ const UploadList = ({
 
   useLayoutEffect(() => {
     (async () => {
+      // If we loading uploads page for first time, and the current playerState is not listening to profile OR its listening to a favourites play
+      // we load the profiles track list
       if (
         currentTab === ProfileTabs.Uploads &&
-        (profileDetails.profileUrl !== playerState.listeningProfile ||
+        page == 0 &&
+        (profileDetails.memberId !== playerState.listeningProfileMemberId ||
           playerState.playlistType === PlaylistTypes.Favourites)
       ) {
         await getMoreTracks();
+      }
+      // If we loading uploads page for first time, and the current playerState is not listening to profile OR its listening to a favourites play
+      // we load the profiles track list
+      else if (
+        currentTab === ProfileTabs.Uploads &&
+        page == 0 &&
+        profileDetails.memberId === playerState.listeningProfileMemberId
+      ) {
+        setTracks(playerState.trackList);
+        setCanLoadMore(playerState.canLoadMore);
+        setPage(playerState.page);
       }
     })();
 
@@ -102,8 +120,9 @@ const UploadList = ({
 
   useEffect(() => {
     if (
+      currentTab === ProfileTabs.Uploads &&
       playerState.trackList.length > 0 &&
-      profileDetails.profileUrl === playerState.listeningProfile &&
+      profileDetails.memberId === playerState.listeningProfileMemberId &&
       playerState.playlistType === PlaylistTypes.Uploads
     ) {
       setTracks(playerState.trackList);
@@ -178,6 +197,7 @@ const UploadList = ({
               canLoadMore={canLoadMore}
               page={page}
               playlistType={PlaylistTypes.Uploads}
+              listeningProfileMemberId={profileDetails.memberId}
             />
           </div>
         ))}

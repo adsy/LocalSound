@@ -24,5 +24,6 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
         Task<ServiceResponse> UpdateArtistFollowerAsync(Account follower, string artistId, bool startFollowing);
         Task<ServiceResponse> UpdateArtistPersonalDetails(Guid userId, UpdateArtistPersonalDetailsDto updateArtistDto);
         Task<ServiceResponse> UpdateArtistProfileDetails(Guid userId, UpdateArtistProfileDetailsDto updateArtistDto);
+        Task<ServiceResponse<bool>> CheckIfUserIsFollowingArtistAsync(Guid userId, Guid artistId);
     }
 }

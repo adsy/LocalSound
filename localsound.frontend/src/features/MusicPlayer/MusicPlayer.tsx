@@ -64,17 +64,17 @@ const MusicPlayer = () => {
       singleton.audioElementRef = waveformRef;
       waveformRef!.current!.crossOrigin = "anonymous";
 
-      if (currentTrack !== player.trackId) {
+      if (currentTrack !== player.currentSong?.trackId) {
         // disconnect the source if it exists when swapping tracks
         mediaElementSource?.disconnect();
 
         // get track data
         getTotalTime();
-        setCurrentTrack(player.trackId);
+        setCurrentTrack(player.currentSong?.trackId!);
 
         // set ref values
         seekerRef!.current!.value = "0";
-        waveformRef.current.src = player.trackUrl!;
+        waveformRef.current.src = player.currentSong?.trackUrl!;
 
         // create audio analyzer
         audioAnalyzer();
@@ -84,17 +84,16 @@ const MusicPlayer = () => {
           waveformRef!.current!.play();
           dispatch(handlePlaySong());
         }, 0);
-      } else if (player.playing) {
+      } else if (player.currentSong?.playing) {
         // create audio analyzer
         audioAnalyzer();
         waveformRef.current.play();
-        dispatch(handlePlaySong());
-      } else if (!player.playing) {
+      } else if (!player.currentSong?.playing) {
         waveformRef.current.pause();
         mediaElementSource?.disconnect();
       }
     }
-  }, [player]);
+  }, [player.currentSong]);
 
   const audioAnalyzer = () => {
     // create an analyzer node with a buffer size of 2048
@@ -115,13 +114,13 @@ const MusicPlayer = () => {
       mediaElementSource!.connect(analyzer);
       mediaElementSource!.connect(audioContext.destination);
     }
-    var trackid = player.trackId;
+    var trackid = player.currentSong?.trackId;
     singleton.analyzerData = { analyzer, bufferLength, dataArray, trackid };
   };
 
   const getTotalTime = () => {
-    var time = player.duration
-      ? player.duration
+    var time = player.currentSong?.duration
+      ? player.currentSong?.duration
       : waveformRef!.current!.duration;
     var totalHours = Math.trunc(time / 3600);
     var hoursRemainder = (time % 3600) / 3600;
@@ -221,7 +220,7 @@ const MusicPlayer = () => {
         waveformRef.current.currentTime = 0;
       } else {
         var currentIndex = player.trackList.findIndex(
-          (x) => x.artistTrackUploadId == player.trackId
+          (x) => x.artistTrackUploadId == player.currentSong?.trackId
         );
 
         if (currentIndex > 0) {
@@ -230,7 +229,7 @@ const MusicPlayer = () => {
             handleSetPlayerSong({
               trackId: track.artistTrackUploadId,
               trackUrl: track.trackUrl,
-              artistProfile: track.artistProfile,
+              currentSongArtistProfile: track.artistProfile,
               trackName: track.trackName,
               artistName: track.artistName,
               trackImage: track.trackImageUrl,
@@ -246,7 +245,7 @@ const MusicPlayer = () => {
 
   const getNextSong = async () => {
     var currentIndex = player.trackList.findIndex(
-      (x) => x.artistTrackUploadId == player.trackId
+      (x) => x.artistTrackUploadId == player.currentSong?.trackId
     );
 
     if (currentIndex + 1 < player.trackList.length) {
@@ -256,7 +255,7 @@ const MusicPlayer = () => {
         handleSetPlayerSong({
           trackId: track.artistTrackUploadId,
           trackUrl: track.trackUrl,
-          artistProfile: track.artistProfile,
+          currentSongArtistProfile: track.artistProfile,
           trackName: track.trackName,
           artistName: track.artistName,
           trackImage: track.trackImageUrl,
@@ -268,9 +267,10 @@ const MusicPlayer = () => {
         if (!loadingMore) {
           try {
             setLoadingMore(true);
-            var result = await agent.Tracks.getArtistUploads(
-              player.trackList[currentIndex].artistMemberId,
-              player.page
+            var result = await agent.Tracks.getTracks(
+              player.listeningProfileMemberId!,
+              player.page,
+              player.playlistType!
             );
 
             if (result.trackList.length > 0) {
@@ -280,6 +280,7 @@ const MusicPlayer = () => {
                   trackList: newTrackList,
                   page: player.page + 1,
                   canLoadMore: result.canLoadMore,
+                  listeningProfileMemberId: player.listeningProfileMemberId,
                 })
               );
 
@@ -289,7 +290,7 @@ const MusicPlayer = () => {
                 handleSetPlayerSong({
                   trackId: track.artistTrackUploadId,
                   trackUrl: track.trackUrl,
-                  artistProfile: track.artistProfile,
+                  currentSongArtistProfile: track.artistProfile,
                   trackName: track.trackName,
                   artistName: track.artistName,
                   trackImage: track.trackImageUrl,
@@ -315,8 +316,8 @@ const MusicPlayer = () => {
   };
 
   const goArtistProfile = () => {
-    if (player.listeningProfile) {
-      history.push(player.listeningProfile);
+    if (player.currentSong?.currentSongArtistProfile) {
+      history.push(player.currentSong?.currentSongArtistProfile);
     }
   };
 
@@ -326,14 +327,20 @@ const MusicPlayer = () => {
         <div className="mt-2 player-container mb-2">
           <div className="d-flex flex-row col-12 col-lg-2 track-details">
             <div className="track-image d-flex justify-content-center align-items-center">
-              <Image size="mini" src={player.trackImage} className="br-5" />
+              <Image
+                size="mini"
+                src={player.currentSong?.trackImage}
+                className="br-5"
+              />
             </div>
             <div
               className="d-flex flex-column ml-2 track-artist"
               onClick={() => goArtistProfile()}
             >
-              <div className="track-name">{player.trackName}</div>
-              <div className="artist-name">{player.artistName}</div>
+              <div className="track-name">{player.currentSong?.trackName}</div>
+              <div className="artist-name">
+                {player.currentSong?.artistName}
+              </div>
             </div>
           </div>
           <div className="d-flex flex-row col-12 col-lg-10 align-items-center">
@@ -360,7 +367,7 @@ const MusicPlayer = () => {
                     />
                   </div>
                   <div>
-                    {!player.playing ? (
+                    {!player.currentSong?.playing ? (
                       <Icon
                         className="audio-button m-0 fade-in"
                         name="play"

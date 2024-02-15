@@ -10,7 +10,6 @@ import {
   handleSetTrackList,
 } from "../../../app/redux/actions/playerSlice";
 import { State } from "../../../app/model/redux/state";
-import { UserModel } from "../../../app/model/dto/user.model";
 import { Icon, Image as ImageComponent, Placeholder } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 import {
@@ -36,6 +35,7 @@ interface Props {
   artistName: string;
   artistMemberId: string;
   playlistType: PlaylistTypes;
+  listeningProfileMemberId: string;
 }
 
 const Track = ({
@@ -47,6 +47,7 @@ const Track = ({
   artistName,
   artistMemberId,
   playlistType,
+  listeningProfileMemberId,
 }: Props) => {
   const player = useSelector((state: State) => state.player);
   const loggedInUser = useSelector((state: State) => state.user.userDetails);
@@ -95,7 +96,10 @@ const Track = ({
   };
 
   useEffect(() => {
-    if (player.trackId === track.artistTrackUploadId && player.playing) {
+    if (
+      player.currentSong?.trackId === track.artistTrackUploadId &&
+      player.currentSong?.playing
+    ) {
       if (!analyzerData) {
         setAnalyzerData(singleton.analyzerData);
       }
@@ -104,14 +108,21 @@ const Track = ({
         setAnalyzerData(null);
       }
     }
-  }, [player.trackId, player.trackName, player.playing]);
+  }, [
+    player.currentSong?.trackId,
+    player.currentSong?.trackName,
+    player.currentSong?.playing,
+  ]);
 
   const playSong = () => {
-    if (player.playing && player.trackId === track.artistTrackUploadId) {
+    if (
+      player.currentSong?.playing &&
+      player.currentSong?.trackId === track.artistTrackUploadId
+    ) {
       dispatch(handlePauseSong());
     } else if (
-      !player.playing &&
-      player.trackId === track.artistTrackUploadId
+      !player.currentSong?.playing &&
+      player.currentSong?.trackId === track.artistTrackUploadId
     ) {
       dispatch(handlePlaySong());
     } else {
@@ -119,7 +130,8 @@ const Track = ({
         handleSetPlayerSong({
           trackId: track.artistTrackUploadId,
           trackUrl: track.trackUrl,
-          artistProfile: track.artistProfile,
+          currentSongArtistProfile: track.artistProfile,
+          listeningMemberId: track.artistMemberId,
           trackName: track.trackName,
           artistName: track.artistName,
           trackImage: trackImage,
@@ -127,13 +139,19 @@ const Track = ({
           playlistType: playlistType,
         })
       );
-      dispatch(
-        handleSetTrackList({
-          trackList: tracks,
-          canLoadMore: canLoadMore,
-          page: page,
-        })
-      );
+      if (
+        player.listeningProfileMemberId !== listeningProfileMemberId ||
+        player.playlistType !== playlistType
+      ) {
+        dispatch(
+          handleSetTrackList({
+            trackList: tracks,
+            canLoadMore: canLoadMore,
+            page: page,
+            listeningProfileMemberId: listeningProfileMemberId,
+          })
+        );
+      }
     }
   };
 
@@ -239,8 +257,8 @@ const Track = ({
                 <PlayButton
                   handlePlay={playSong}
                   playing={
-                    track.artistTrackUploadId === player.trackId &&
-                    player.playing
+                    track.artistTrackUploadId === player.currentSong?.trackId &&
+                    player.currentSong?.playing
                   }
                 />
               </TrackContainer>
@@ -289,7 +307,8 @@ const Track = ({
 
           <div className="w-100 h-100 d-flex flex-column align-items-center">
             <div className="w-100 h-100 position-relative">
-              {track.artistTrackUploadId === player.trackId && analyzerData ? (
+              {track.artistTrackUploadId === player.currentSong?.trackId &&
+              analyzerData ? (
                 <div>
                   <WaveForm
                     trackId={track.artistTrackUploadId}

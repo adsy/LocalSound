@@ -325,14 +325,13 @@ namespace localsound.backend.Infrastructure.Repositories
             {
                 var artist = await _dbContext.Account
                     .Include(x => x.Images)
-                    .Include(x => x.Following)
-                    .Include(x => x.Followers)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
                     .Include(x => x.EventTypes)
                     .ThenInclude(x => x.EventType)
                     .Include(x => x.Equipment)
-                    .Include(x => x.Packages)
+                    .Include(x => x.Followers)
+                    .Include(x => x.Following)
                     .FirstOrDefaultAsync(x => x.ProfileUrl == profileUrl);
 
                 if (artist is null)
@@ -603,6 +602,26 @@ namespace localsound.backend.Infrastructure.Repositories
                     AppUserId = account.AppUserId,
                     EventTypeId = x.EventTypeId
                 }).ToList());
+            }
+        }
+
+        public async Task<ServiceResponse<bool>> CheckIfUserIsFollowingArtistAsync(Guid userId, Guid artistId)
+        {
+            try
+            {
+                var artistFollower = await _dbContext.ArtistFollower.FirstOrDefaultAsync(x => x.ArtistId == artistId && x.FollowerId == userId);
+
+                return new ServiceResponse<bool>(HttpStatusCode.OK)
+                {
+                    ReturnData = artistFollower != null
+                };
+            }
+            catch (Exception e)
+            {
+                var message = $"{nameof(AccountRepository)} - {nameof(CheckIfUserIsFollowingArtistAsync)} - {e.Message}";
+                _logger.LogError(e, message);
+
+                return new ServiceResponse<bool>(HttpStatusCode.InternalServerError, "There was an error while updating your details, please try again.");
             }
         }
     }

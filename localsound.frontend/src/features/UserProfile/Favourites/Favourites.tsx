@@ -34,9 +34,10 @@ const Favourites = ({
   const [favouritesError, setFavouritesError] = useState<string | null>(null);
   const playerState = useSelector((state: State) => state.player);
   const dispatch = useDispatch();
+  console.log(favourites);
 
   const getMoreFavourites = async () => {
-    if (canLoadMore) {
+    if (canLoadMore && currentTab === ProfileTabs.LikedSongs) {
       try {
         setLoading(true);
         var result = await agent.Tracks.getTracks(
@@ -47,12 +48,16 @@ const Favourites = ({
         setFavourites([...favourites, ...result.trackList]);
         setCanLoadMore(result.canLoadMore);
 
-        if (profileDetails.profileUrl === playerState.listeningProfile) {
+        if (
+          profileDetails.memberId === playerState.listeningProfileMemberId &&
+          playerState.playlistType !== PlaylistTypes.Uploads
+        ) {
           dispatch(
             handleSetTrackList({
               trackList: [...favourites, ...result.trackList],
               page: page + 1,
               canLoadMore: result.canLoadMore,
+              listeningProfileMemberId: profileDetails.memberId,
             })
           );
         }
@@ -73,7 +78,8 @@ const Favourites = ({
     (async () => {
       if (
         currentTab === ProfileTabs.LikedSongs &&
-        (profileDetails.profileUrl !== playerState.listeningProfile ||
+        page == 0 &&
+        (profileDetails.memberId !== playerState.listeningProfileMemberId ||
           playerState.playlistType === PlaylistTypes.Uploads)
       ) {
         await getMoreFavourites();
@@ -83,8 +89,9 @@ const Favourites = ({
 
   useEffect(() => {
     if (
+      currentTab === ProfileTabs.LikedSongs &&
       playerState.trackList.length > 0 &&
-      profileDetails.profileUrl === playerState.listeningProfile &&
+      profileDetails.memberId === playerState.listeningProfileMemberId &&
       playerState.playlistType === PlaylistTypes.Favourites
     ) {
       setFavourites(playerState.trackList);
@@ -137,6 +144,7 @@ const Favourites = ({
               canLoadMore={canLoadMore}
               page={page}
               playlistType={PlaylistTypes.Favourites}
+              listeningProfileMemberId={profileDetails.memberId}
             />
           </div>
         ))}
