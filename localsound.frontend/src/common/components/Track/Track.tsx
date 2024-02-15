@@ -27,6 +27,7 @@ import ErrorBanner from "../../banner/ErrorBanner";
 import { PlaylistTypes } from "../../../app/model/enums/playlistTypes";
 import signalHub from "../../../api/signalR";
 import { CustomerTypes } from "../../../app/model/enums/customerTypes";
+import ThreeDAnalyzer from "../../../features/MusicPlayer/3dAnalyzer";
 
 interface Props {
   track: ArtistTrackUploadModel;
@@ -254,7 +255,14 @@ const Track = ({
       <div className="d-flex flex-row w-100">
         {!trackImage ? (
           <div className="mr-3 fade-in">
-            <Placeholder className="track-image">
+            <Placeholder
+              className={`track-image ${
+                track.artistTrackUploadId === player.currentSong?.trackId &&
+                player.currentSong.playing
+                  ? "playing"
+                  : ""
+              }`}
+            >
               <Placeholder.Image />
             </Placeholder>
           </div>
@@ -262,7 +270,12 @@ const Track = ({
           <ImageComponent
             size="small"
             src={trackImage}
-            className="mr-3 track-image fade-in"
+            className={`track-image ${
+              track.artistTrackUploadId === player.currentSong?.trackId &&
+              player.currentSong.playing
+                ? "playing"
+                : ""
+            } fade-in`}
           />
         )}
         <div className="d-flex flex-column w-100 fade-in">
@@ -319,17 +332,17 @@ const Track = ({
               ) : null}
             </div>
           </div>
-
           <div className="w-100 h-100 d-flex flex-column align-items-center">
             <div className="w-100 h-100 position-relative">
               {track.artistTrackUploadId === player.currentSong?.trackId &&
               analyzerData ? (
-                <div>
+                <>
                   <WaveForm
                     trackId={track.artistTrackUploadId}
                     analyzerData={analyzerData}
                   />
-                </div>
+                  {/* <ThreeDAnalyzer/> */}
+                </>
               ) : null}
             </div>
           </div>

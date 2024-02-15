@@ -26,7 +26,7 @@ const MusicPlayer = () => {
   const [time, setTime] = useState<any>(null);
   const [totalTime, setTotalTime] = useState<string | null>(null);
   const [currentTrack, setCurrentTrack] = useState<string | null>(null);
-  const waveformRef = useRef<HTMLAudioElement>(null);
+  const waveformRef = useRef<HTMLMediaElement>(null);
   const seekerRef = useRef<HTMLInputElement>(null);
   const volumeRef = useRef<HTMLInputElement>(null);
   const [volumeMuted, setVolumeMuted] = useState(false);
@@ -114,6 +114,7 @@ const MusicPlayer = () => {
       mediaElementSource!.connect(analyzer);
       mediaElementSource!.connect(audioContext.destination);
     }
+
     var trackid = player.currentSong?.trackId;
     singleton.analyzerData = { analyzer, bufferLength, dataArray, trackid };
   };

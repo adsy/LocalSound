@@ -1325,9 +1325,14 @@ i.large.icon {
   padding-left: 2px;
 }
 #track .track-image {
+  transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
+  width: 50px !important;
+  height: 50px !important;
+}
+#track .track-image.playing {
   border-radius: 5px;
-  width: 150px !important;
-  height: 150px !important;
+  width: 100px !important;
+  height: 100px !important;
 }
 #track .track-genre-list {
   margin-top: 5px;

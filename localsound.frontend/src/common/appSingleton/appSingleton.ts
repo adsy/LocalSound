@@ -2,6 +2,7 @@ class SingletonClass {
   audioElementRef: React.RefObject<HTMLAudioElement> | null = null;
   analyzerData: any = null;
   refreshingToken: boolean = false;
+  threeAudio: THREE.Audio<GainNode> | null = null;
 }
 
 var SingletonFactory = (function () {
