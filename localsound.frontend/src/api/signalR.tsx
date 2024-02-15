@@ -11,7 +11,7 @@ import {
   StoreUpdateNotificationInitialLoad,
 } from "../app/redux/store/store";
 import NotificationPopUp from "../common/components/Notification/NotificationPopUp";
-import { CreateNotification } from "../app/model/dto/create-booking-created-notification.model";
+import { CreateNotification } from "../app/model/dto/create-notification.model";
 import { NotificationListResponseModel } from "../app/model/dto/notification-list-response.model";
 
 var hubConnection: HubConnection | null;

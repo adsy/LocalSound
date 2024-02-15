@@ -25,6 +25,8 @@ import agent from "../../../api/agent";
 import Login from "../../../features/Authentication/Login/Login";
 import ErrorBanner from "../../banner/ErrorBanner";
 import { PlaylistTypes } from "../../../app/model/enums/playlistTypes";
+import signalHub from "../../../api/signalR";
+import { CustomerTypes } from "../../../app/model/enums/customerTypes";
 
 interface Props {
   track: ArtistTrackUploadModel;
@@ -49,6 +51,7 @@ const Track = ({
   playlistType,
   listeningProfileMemberId,
 }: Props) => {
+  const userDetails = useSelector((state: State) => state.user.userDetails);
   const player = useSelector((state: State) => state.player);
   const loggedInUser = useSelector((state: State) => state.user.userDetails);
   const [singleton, setSingleton] = useState<SingletonClass>(
@@ -204,6 +207,7 @@ const Track = ({
             track.artistMemberId,
             track.artistTrackUploadId
           );
+
           trackClone.songLiked = false;
           trackClone.likeCount--;
         } else {
@@ -212,8 +216,19 @@ const Track = ({
             track.artistMemberId,
             track.artistTrackUploadId
           );
+
           trackClone.songLiked = true;
           trackClone.likeCount++;
+
+          await signalHub.createNotification({
+            receiverMemberId: track.artistMemberId,
+            message: `${
+              userDetails?.customerType === CustomerTypes.Artist
+                ? userDetails.name
+                : userDetails?.firstName + " " + userDetails?.lastName
+            } just liked your track ${track.trackName}.`,
+            redirectUrl: "",
+          });
         }
 
         clone[trackIndex] = trackClone;
