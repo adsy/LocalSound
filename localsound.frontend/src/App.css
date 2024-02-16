@@ -933,8 +933,8 @@ i.large.icon {
 
 .purple-button:hover,
 .purple-button:active {
+  border: 2px solid #6d69fa;
   background-color: #f1f1f1;
-  border: 2px solid #e2e8f0;
 }
 .purple-button:hover h4,
 .purple-button:active h4 {
@@ -1328,9 +1328,10 @@ i.large.icon {
   transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
   width: 50px !important;
   height: 50px !important;
+  margin-right: 10px;
+  border-radius: 5px;
 }
 #track .track-image.playing {
-  border-radius: 5px;
   width: 100px !important;
   height: 100px !important;
 }
@@ -1353,23 +1354,25 @@ i.large.icon {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   background: unset;
   border-radius: 50%;
-  border: none;
+  border: 2px solid transparent;
   outline: none;
   cursor: pointer;
   padding-bottom: 3px;
   transition: border 0.1s ease-in-out !important;
 }
 #track .play-button:hover {
-  border: 2px solid #232323;
+  border: 2px solid #6d69fa;
 }
 #track .play-button i.icon {
   margin: 0 !important;
   color: #232323 !important;
-  margin-left: 3px !important;
+  margin-left: 1px !important;
+  margin-top: -2px !important;
+  font-size: 14px;
 }
 
 #track-upload {
@@ -2221,7 +2224,7 @@ i.large.icon {
   .ui.container {
     width: unset !important;
   }
-  #track .track-image {
+  #track .track-image.playing {
     width: 80px !important;
     height: 80px !important;
   }

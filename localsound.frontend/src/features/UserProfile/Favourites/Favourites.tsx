@@ -34,7 +34,6 @@ const Favourites = ({
   const [favouritesError, setFavouritesError] = useState<string | null>(null);
   const playerState = useSelector((state: State) => state.player);
   const dispatch = useDispatch();
-  console.log(favourites);
 
   const getMoreFavourites = async () => {
     if (canLoadMore && currentTab === ProfileTabs.LikedSongs) {
@@ -145,6 +144,7 @@ const Favourites = ({
               page={page}
               playlistType={PlaylistTypes.Favourites}
               listeningProfileMemberId={profileDetails.memberId}
+              viewingOwnProfile={viewingOwnProfile}
             />
           </div>
         ))}

@@ -53,7 +53,8 @@ const WaveForm = ({ analyzerData, trackId }: Props) => {
       var b = 0 + Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
 
       // Set the canvas fill style to the random RGB values..
-      canvasCtx.fillStyle = "rgb(109,105,250";
+      // canvasCtx.fillStyle = "rgb(109,105,250)";
+      canvasCtx.fillStyle = "rgb(0,0,0)";
 
       // Draw the bar on the canvas at the current x-position and with the calculated height and width.
       canvasCtx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);

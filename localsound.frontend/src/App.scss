@@ -807,8 +807,8 @@ i.large.icon {
 
 .purple-button:hover,
 .purple-button:active {
+  border: 2px solid $purple100;
   background-color: $white100;
-  border: 2px solid $white300;
   h4 {
     color: $black100;
   }
@@ -1237,10 +1237,11 @@ i.large.icon {
     transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
     width: 50px !important;
     height: 50px !important;
+    margin-right: 10px;
+    border-radius: 5px;
   }
 
   .track-image.playing {
-    border-radius: 5px;
     width: 100px !important;
     height: 100px !important;
   }
@@ -1272,11 +1273,11 @@ i.large.icon {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
     background: unset;
     border-radius: 50%;
-    border: none;
+    border: 2px solid transparent;
     outline: none;
     cursor: pointer;
     padding-bottom: 3px;
@@ -1284,13 +1285,15 @@ i.large.icon {
     transition: border 0.1s ease-in-out !important;
 
     &:hover {
-      border: 2px solid $black100;
+      border: 2px solid $purple100;
     }
 
     i.icon {
       margin: 0 !important;
       color: $black100 !important;
-      margin-left: 3px !important;
+      margin-left: 1px !important;
+      margin-top: -2px !important;
+      font-size: 14px;
     }
   }
 }
@@ -2119,11 +2122,10 @@ i.large.icon {
   }
 
   #track {
-    .track-image {
+    .track-image.playing {
       width: 80px !important;
       height: 80px !important;
     }
-
     .track-name {
       font-size: 14px !important;
     }

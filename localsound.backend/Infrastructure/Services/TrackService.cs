@@ -215,9 +215,15 @@ namespace localsound.backend.Infrastructure.Services
                         }
                 }
 
+
                 if (!tracksResult.IsSuccessStatusCode || tracksResult.ReturnData is null)
                 {
                     return new ServiceResponse<TrackListResponseDto>(tracksResult.StatusCode);
+                }
+
+                foreach(var track in tracksResult.ReturnData)
+                {
+                    track.TrackImageUrl = !string.IsNullOrWhiteSpace(track.TrackImageUrl) ? track.TrackImageUrl : track.Artist.Images.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage)?.AccountImageUrl;
                 }
 
                 var trackList = _mapper.Map<List<ArtistTrackUploadDto>>(tracksResult.ReturnData);

@@ -198,6 +198,7 @@ const UploadList = ({
               page={page}
               playlistType={PlaylistTypes.Uploads}
               listeningProfileMemberId={profileDetails.memberId}
+              viewingOwnProfile={viewingOwnProfile}
             />
           </div>
         ))}

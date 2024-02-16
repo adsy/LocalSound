@@ -10,7 +10,7 @@ import {
   handleSetTrackList,
 } from "../../../app/redux/actions/playerSlice";
 import { State } from "../../../app/model/redux/state";
-import { Icon, Image as ImageComponent, Placeholder } from "semantic-ui-react";
+import { Icon, Image as ImageComponent } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 import {
   SingletonClass,
@@ -28,6 +28,7 @@ import { PlaylistTypes } from "../../../app/model/enums/playlistTypes";
 import signalHub from "../../../api/signalR";
 import { CustomerTypes } from "../../../app/model/enums/customerTypes";
 import ThreeDAnalyzer from "../../../features/MusicPlayer/3dAnalyzer";
+import PlaceHolderImg from "../../../assets/placeholder.png";
 
 interface Props {
   track: ArtistTrackUploadModel;
@@ -39,6 +40,7 @@ interface Props {
   artistMemberId: string;
   playlistType: PlaylistTypes;
   listeningProfileMemberId: string;
+  viewingOwnProfile: boolean;
 }
 
 const Track = ({
@@ -51,6 +53,7 @@ const Track = ({
   artistMemberId,
   playlistType,
   listeningProfileMemberId,
+  viewingOwnProfile,
 }: Props) => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const player = useSelector((state: State) => state.player);
@@ -77,15 +80,7 @@ const Track = ({
           setTrackImageLoaded(true);
         });
     } else {
-      // Fix the image
-      // var profileImg = artistDetails.images.find(
-      //   (x) => x.accountImageTypeId == AccountImageTypes.ProfileImage
-      // );
-      // if (profileImg) {
-      //   setTrackImage(profileImg.accountImageUrl);
-      // } else {
-      //   setTrackImage(PlaceholderImg);
-      // }
+      setTrackImage(PlaceHolderImg);
     }
   }, [track.artistTrackUploadId, track.trackImageUrl]);
 
@@ -138,7 +133,7 @@ const Track = ({
           listeningMemberId: track.artistMemberId,
           trackName: track.trackName,
           artistName: track.artistName,
-          trackImage: trackImage,
+          trackImage: track.trackImageUrl,
           duration: track.duration,
           playlistType: playlistType,
         })
@@ -253,31 +248,16 @@ const Track = ({
     <div id="track" className="mt-3 d-flex flex-column">
       {trackLikeError ? <ErrorBanner children={trackLikeError} /> : null}
       <div className="d-flex flex-row w-100">
-        {!trackImage ? (
-          <div className="mr-3 fade-in">
-            <Placeholder
-              className={`track-image ${
-                track.artistTrackUploadId === player.currentSong?.trackId &&
-                player.currentSong.playing
-                  ? "playing"
-                  : ""
-              }`}
-            >
-              <Placeholder.Image />
-            </Placeholder>
-          </div>
-        ) : (
-          <ImageComponent
-            size="small"
-            src={trackImage}
-            className={`track-image ${
-              track.artistTrackUploadId === player.currentSong?.trackId &&
-              player.currentSong.playing
-                ? "playing"
-                : ""
-            } fade-in`}
-          />
-        )}
+        <ImageComponent
+          size="small"
+          src={trackImage}
+          className={`track-image ${
+            track.artistTrackUploadId === player.currentSong?.trackId &&
+            player.currentSong.playing
+              ? "playing"
+              : ""
+          } fade-in`}
+        />
         <div className="d-flex flex-column w-100 fade-in">
           <div className="d-flex flex-row justify-content-between">
             <div className="d-flex flex-row">
@@ -297,7 +277,19 @@ const Track = ({
             </div>
 
             <div className="my-1 action-row">
-              {artistMemberId === loggedInUser?.memberId ? (
+              <Button
+                className={`track-button mr-1 ${
+                  !track.songLiked ? "white-button" : "purple-button"
+                }`}
+                onClick={async () => await likeSong()}
+              >
+                <h4 className="d-flex flex-row align-items-center">
+                  <Icon name="heart" size="small" className="pr-1" />
+                  <span className="ml-1">{track.likeCount}</span>
+                </h4>
+              </Button>
+              {artistMemberId === loggedInUser?.memberId &&
+              viewingOwnProfile ? (
                 <Button
                   className="white-button track-button mr-1"
                   onClick={() => openEditTrackModal()}
@@ -307,26 +299,14 @@ const Track = ({
                   </h4>
                 </Button>
               ) : null}
-              {artistMemberId === loggedInUser?.memberId ? (
+              {artistMemberId === loggedInUser?.memberId &&
+              viewingOwnProfile ? (
                 <Button
                   className="white-button track-button bin-button"
                   onClick={async () => await openDeleteModal()}
                 >
                   <h4>
                     <Icon name="trash" size="small" className="mr-0" />
-                  </h4>
-                </Button>
-              ) : null}
-              {artistMemberId !== loggedInUser?.memberId ? (
-                <Button
-                  className={`track-button ${
-                    !track.songLiked ? "white-button" : "purple-button"
-                  }`}
-                  onClick={async () => await likeSong()}
-                >
-                  <h4 className="d-flex flex-row align-items-center">
-                    <Icon name="heart" size="small" className="pr-1" />
-                    <span className="ml-1">{track.likeCount}</span>
                   </h4>
                 </Button>
               ) : null}
@@ -341,7 +321,7 @@ const Track = ({
                     trackId={track.artistTrackUploadId}
                     analyzerData={analyzerData}
                   />
-                  {/* <ThreeDAnalyzer/> */}
+                  {/* <ThreeDAnalyzer /> */}
                 </>
               ) : null}
             </div>

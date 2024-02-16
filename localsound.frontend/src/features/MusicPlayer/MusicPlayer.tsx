@@ -19,6 +19,7 @@ import { SingletonFactory } from "../../common/appSingleton/appSingleton";
 import agent from "../../api/agent";
 import InPageLoadingComponent from "../../app/layout/InPageLoadingComponent";
 import { useHistory } from "react-router-dom";
+import PlaceholderImg from "../../assets/placeholder.png";
 
 const MusicPlayer = () => {
   const history = useHistory();
@@ -330,7 +331,11 @@ const MusicPlayer = () => {
             <div className="track-image d-flex justify-content-center align-items-center">
               <Image
                 size="mini"
-                src={player.currentSong?.trackImage}
+                src={
+                  player.currentSong?.trackImage
+                    ? player.currentSong.trackImage
+                    : PlaceholderImg
+                }
                 className="br-5"
               />
             </div>
