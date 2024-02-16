@@ -76,7 +76,7 @@ const ArtistRegister = ({ handleRegisterRequest }: Props) => {
             ) : null}
             {!isSubmitting ? (
               <Button
-                className={`black-button w-100 align-self-center ${
+                className={`white-button w-100 align-self-center ${
                   status?.error ? "mt-3" : "mt-4"
                 }`}
                 disabled={disabled || addressError}

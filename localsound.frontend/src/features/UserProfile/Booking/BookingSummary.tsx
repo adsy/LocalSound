@@ -66,7 +66,7 @@ const BookingSummary = ({ booking, type, user }: Props) => {
         {user.customerType === CustomerTypes.Artist &&
         type === BookingTypes.pending ? (
           <Button
-            className="black-button"
+            className="white-button"
             onClick={(e) => openModal(e, true)}
             title="Accept booking"
           >
@@ -81,7 +81,7 @@ const BookingSummary = ({ booking, type, user }: Props) => {
         ) : null}
         {type === BookingTypes.upcoming || type === BookingTypes.pending ? (
           <Button
-            className="black-button ml-1"
+            className="white-button ml-1"
             onClick={(e) => openModal(e, false)}
             title="Cancel booking"
           >

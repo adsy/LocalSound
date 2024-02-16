@@ -801,17 +801,16 @@ i.large.icon {
 .white-button {
   color: #232323;
   letter-spacing: 2px;
-  transition: border-color 0.3s ease;
-  transition: background-color 0.3s ease;
+  transition: width 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out, background-color 0.3s ease-in-out !important;
   border-radius: 10px 10px;
   background-color: #fcfcfd !important;
-  border: 2px solid #e2e8f0;
+  border: 2px solid #ccd0d4;
   padding: 5px;
   color: #001514 !important;
   background-color: unset;
-  transition: width 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out, background-color 0.3s ease-in-out !important;
 }
 .white-button h4 {
+  transition: color 0.3s ease-in-out;
   font-size: 12px !important;
 }
 .white-button h4 {
@@ -819,9 +818,17 @@ i.large.icon {
 }
 
 .white-button:hover,
-.white-button:active,
-.white-button:focus {
-  border: 2px solid #6d69fa;
+.white-button:active {
+  background-color: #6d69fa !important;
+  border: 2px solid #001514;
+}
+.white-button:hover h4,
+.white-button:active h4 {
+  color: #f1f1f1;
+}
+
+.white-button:disabled {
+  border: 2px solid #e2e8f0;
 }
 
 .white-button h4 {
@@ -831,8 +838,7 @@ i.large.icon {
 .transparent-button {
   color: #232323;
   letter-spacing: 2px;
-  transition: border-color 0.3s ease;
-  transition: background-color 0.3s ease;
+  transition: width 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out, background-color 0.3s ease-in-out !important;
   border-radius: 10px 10px;
   border: 1px solid transparent !important;
   padding: 5px;
@@ -841,6 +847,7 @@ i.large.icon {
   text-transform: uppercase !important;
 }
 .transparent-button h4 {
+  transition: color 0.3s ease-in-out;
   font-size: 12px !important;
 }
 
@@ -866,40 +873,6 @@ i.large.icon {
   border: unset !important;
 }
 
-.black-button {
-  color: #232323;
-  letter-spacing: 2px;
-  transition: border-color 0.3s ease;
-  transition: background-color 0.3s ease;
-  border-radius: 10px 10px;
-  background-color: #232323;
-  border: 1px solid #001514;
-  padding: 5px;
-  transition: border 0.3s ease-in-out !important;
-  background-image: linear-gradient(#232323, #001514);
-}
-.black-button h4 {
-  font-size: 12px !important;
-}
-.black-button h4 {
-  font-weight: 100 !important;
-}
-
-.black-button:hover,
-.black-button:active,
-.black-button:focus {
-  background-color: #001514 !important;
-  border: 1px solid #6d69fa;
-  color: #232323;
-}
-
-.black-button:disabled {
-  opacity: 0.5;
-  background-color: #232323;
-  border: 1px solid #232323;
-  color: white;
-}
-
 .link-button {
   color: #6d69fa;
   text-decoration: unset;
@@ -916,8 +889,7 @@ i.large.icon {
 .purple-button {
   color: #232323;
   letter-spacing: 2px;
-  transition: border-color 0.3s ease;
-  transition: background-color 0.3s ease;
+  transition: width 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out, background-color 0.3s ease-in-out !important;
   border-radius: 10px 10px;
   border: 2px solid #001514;
   background-color: #6d69fa;
@@ -925,6 +897,7 @@ i.large.icon {
   transition: border 0.3s ease-in-out, background-color 0.3s ease-in-out !important;
 }
 .purple-button h4 {
+  transition: color 0.3s ease-in-out;
   font-size: 12px !important;
 }
 .purple-button h4 {
@@ -944,8 +917,7 @@ i.large.icon {
 .soundcloud-button {
   color: #232323;
   letter-spacing: 2px;
-  transition: border-color 0.3s ease;
-  transition: background-color 0.3s ease;
+  transition: width 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out, background-color 0.3s ease-in-out !important;
   border-radius: 10px 10px;
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   background-color: #ff6100;
@@ -955,6 +927,7 @@ i.large.icon {
   color: #232323;
 }
 .soundcloud-button h4 {
+  transition: color 0.3s ease-in-out;
   font-size: 12px !important;
 }
 
@@ -969,8 +942,7 @@ i.large.icon {
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   color: #232323;
   letter-spacing: 2px;
-  transition: border-color 0.3s ease;
-  transition: background-color 0.3s ease;
+  transition: width 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out, background-color 0.3s ease-in-out !important;
   border-radius: 10px 10px;
   transition: background-color border 0.5s ease;
   background-color: #1ed75d;
@@ -980,6 +952,7 @@ i.large.icon {
   color: #232323;
 }
 .spotify-button h4 {
+  transition: color 0.3s ease-in-out;
   font-size: 12px !important;
 }
 
@@ -994,8 +967,7 @@ i.large.icon {
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   color: #232323;
   letter-spacing: 2px;
-  transition: border-color 0.3s ease;
-  transition: background-color 0.3s ease;
+  transition: width 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out, background-color 0.3s ease-in-out !important;
   border-radius: 10px 10px;
   transition: background-color 0.5s ease;
   background-color: #ff0000;
@@ -1005,6 +977,7 @@ i.large.icon {
   color: #232323;
 }
 .youtube-button h4 {
+  transition: color 0.3s ease-in-out;
   font-size: 12px !important;
 }
 

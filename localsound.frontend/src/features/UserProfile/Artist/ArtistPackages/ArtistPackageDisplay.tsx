@@ -178,7 +178,7 @@ const ArtistPackageDisplay = ({
             {profileDetails.memberId === loggedInUser?.memberId ? (
               <>
                 <Button
-                  className="black-button bin-icon"
+                  className="white-button bin-icon"
                   onClick={() => openDeleteModal()}
                 >
                   <Icon
@@ -189,7 +189,7 @@ const ArtistPackageDisplay = ({
                 </Button>
 
                 <Button
-                  className="black-button pencil-icon"
+                  className="white-button pencil-icon"
                   onClick={() => openEditModal()}
                 >
                   <Icon
@@ -203,7 +203,7 @@ const ArtistPackageDisplay = ({
             <>
               {selectedPackageId === artistPackage.artistPackageId ? (
                 <Button
-                  className="black-button close-icon fade-in"
+                  className="white-button close-icon fade-in"
                   onClick={() => closePackageDetail()}
                 >
                   <Icon
@@ -236,7 +236,7 @@ const ArtistPackageDisplay = ({
             {loggedInUser &&
             loggedInUser.memberId !== profileDetails.memberId ? (
               <Button
-                className="black-button mt-2"
+                className="white-button mt-2"
                 onClick={() => openBookingModal(artistPackage)}
               >
                 <h4>Make booking</h4>

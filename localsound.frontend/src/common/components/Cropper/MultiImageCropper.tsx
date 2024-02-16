@@ -121,7 +121,7 @@ const MultiImageCropper = ({ maxImages = 3, images, setImages }: Props) => {
             {images.map((image, index) => (
               <div key={index} className="position-relative fade-in px-1">
                 <Button
-                  className="black-button bin-icon"
+                  className="white-button bin-icon"
                   onClick={() => deletePhoto(image)}
                 >
                   <Icon

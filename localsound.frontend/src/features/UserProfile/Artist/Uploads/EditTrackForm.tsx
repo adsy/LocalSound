@@ -264,7 +264,7 @@ const EditTrackForm = ({
                   <div className="px-3 mt-3">
                     {!isSubmitting ? (
                       <Button
-                        className={`black-button w-100 align-self-center`}
+                        className={`white-button w-100 align-self-center`}
                         disabled={
                           disabled ||
                           !values.trackName ||

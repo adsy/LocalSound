@@ -110,7 +110,7 @@ const AcceptCancelBookingModal = ({ isAccepting, booking }: Props) => {
               <a
                 onClick={async () => await accept()}
                 target="_blank"
-                className="btn black-button save-crop-btn w-50"
+                className="btn white-button save-crop-btn w-50"
               >
                 <h4>Yes</h4>
               </a>

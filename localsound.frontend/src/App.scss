@@ -3,6 +3,7 @@ $black200: #001514;
 $white100: #f1f1f1;
 $white200: #fcfcfd;
 $white300: #e2e8f0;
+$white400: #ccd0d4;
 $purple100: #6d69fa;
 
 /** MIX-INS **/
@@ -44,10 +45,11 @@ $purple100: #6d69fa;
 @mixin button-style {
   color: $black100;
   letter-spacing: 2px;
-  transition: border-color 0.3s ease;
-  transition: background-color 0.3s ease;
+  transition: width 0.3s ease-in-out, color 0.3s ease-in-out,
+    border 0.3s ease-in-out, background-color 0.3s ease-in-out !important;
   border-radius: 10px 10px;
   h4 {
+    transition: color 0.3s ease-in-out;
     font-size: 12px !important;
   }
 }
@@ -696,12 +698,10 @@ i.large.icon {
 .white-button {
   @include button-style;
   background-color: $white200 !important;
-  border: 2px solid $white300;
+  border: 2px solid $white400;
   padding: 5px;
   color: $black200 !important;
   background-color: unset;
-  transition: width 0.3s ease-in-out, color 0.3s ease-in-out,
-    border 0.3s ease-in-out, background-color 0.3s ease-in-out !important;
 
   h4 {
     transition: color 0.3s ease-in-out !important;
@@ -709,9 +709,16 @@ i.large.icon {
 }
 
 .white-button:hover,
-.white-button:active,
-.white-button:focus {
-  border: 2px solid $purple100;
+.white-button:active {
+  background-color: $purple100 !important;
+  border: 2px solid $black200;
+  h4 {
+    color: $white100;
+  }
+}
+
+.white-button:disabled {
+  border: 2px solid $white300;
 }
 
 .white-button {
@@ -750,35 +757,6 @@ i.large.icon {
   opacity: 0.5;
   background-color: unset !important;
   border: unset !important;
-  // color: white;
-}
-
-.black-button {
-  @include button-style;
-  background-color: $black100;
-  border: 1px solid $black200;
-  padding: 5px;
-  transition: border 0.3s ease-in-out !important;
-  background-image: linear-gradient($black100, $black200);
-
-  h4 {
-    font-weight: 100 !important;
-  }
-}
-
-.black-button:hover,
-.black-button:active,
-.black-button:focus {
-  background-color: $black200 !important;
-  border: 1px solid $purple100;
-  color: $black100;
-}
-
-.black-button:disabled {
-  opacity: 0.5;
-  background-color: $black100;
-  border: 1px solid $black100;
-  color: white;
 }
 
 .link-button {

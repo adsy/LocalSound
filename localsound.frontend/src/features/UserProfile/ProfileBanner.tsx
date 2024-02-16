@@ -236,7 +236,7 @@ const ProfileBanner = ({
                         <div className="fade-in edit-cover-button">
                           <label
                             htmlFor="exampleInput"
-                            className="btn black-button fade-in-out"
+                            className="btn white-button fade-in-out"
                           >
                             <h4>
                               <Icon name="photo" className="m-0 photo-icon" />
@@ -259,7 +259,7 @@ const ProfileBanner = ({
                         <a
                           onClick={() => editArtistProfile()}
                           target="_blank"
-                          className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3 mr-1"
+                          className="btn white-button edit-profile-button w-fit-content d-flex flex-row mb-3 mr-1"
                           title="edit-details"
                         >
                           <h4>
@@ -270,7 +270,7 @@ const ProfileBanner = ({
                           <a
                             onClick={() => uploadTrack()}
                             target="_blank"
-                            className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3 mr-1"
+                            className="btn white-button edit-profile-button w-fit-content d-flex flex-row mb-3 mr-1"
                             title="upload-track"
                           >
                             <h4>
@@ -282,7 +282,7 @@ const ProfileBanner = ({
                           <a
                             onClick={() => createPackage()}
                             target="_blank"
-                            className="btn black-button edit-profile-button w-fit-content d-flex flex-row mb-3"
+                            className="btn white-button edit-profile-button w-fit-content d-flex flex-row mb-3"
                             title="create-package"
                           >
                             <h4>

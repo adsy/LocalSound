@@ -109,7 +109,7 @@ const ConfirmEmailPopUp = () => {
                   <div className="d-flex justify-content-center mt-2">
                     <Button
                       onClick={() => resendEmailToken()}
-                      className="black-button align-self-center fade-in mt-1 w-100"
+                      className="white-button align-self-center fade-in mt-1 w-100"
                     >
                       <h4>Request new token</h4>
                     </Button>

@@ -202,7 +202,7 @@ const BookingViewContainer = ({ bookingType, setViewMore }: Props) => {
               {canLoadMore ? (
                 <div className="d-flex flex-row justify-content-center">
                   <Button
-                    className="mt-2 mx-3 black-button px-5"
+                    className="mt-2 mx-3 white-button px-5"
                     onClick={() => setViewMore(bookingType)}
                     title="View more"
                   >

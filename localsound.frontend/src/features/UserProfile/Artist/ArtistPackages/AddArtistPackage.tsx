@@ -165,7 +165,7 @@ const AddArtistPackage = ({ userDetails, setPackages }: Props) => {
                   <div className="px-3 mt-3">
                     {!submitting ? (
                       <Button
-                        className={`black-button w-100 align-self-center`}
+                        className={`white-button w-100 align-self-center`}
                         disabled={
                           images.length === 0 ||
                           !values.packageName ||
