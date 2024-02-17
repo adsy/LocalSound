@@ -98,36 +98,46 @@ namespace localsound.backend.Persistence.DbContext
             base.OnModelCreating(builder);
 
             builder.HasSequence("MemberId", x => x.StartsAt(100000).IncrementsBy(1));
-            builder.Entity<Account>().Property(x => x.MemberId).HasDefaultValueSql("NEXT VALUE FOR MemberId");
-            builder.Entity<Account>().HasIndex(x => x.MemberId).IsUnique(true).IsClustered(false);
-            builder.Entity<Account>().HasMany(x => x.Following);
-            builder.Entity<Account>().HasOne(x => x.AccountMessages).WithOne(x => x.Account);
-
-            builder.Entity<Account>().HasMany(x => x.Following).WithOne(x => x.Follower).OnDelete(DeleteBehavior.NoAction);
-            builder.Entity<Account>().HasMany(x => x.Followers).WithOne(x => x.Artist).OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<Account>(x =>
+            {
+                x.Property(x => x.MemberId).HasDefaultValueSql("NEXT VALUE FOR MemberId");
+                x.HasIndex(x => x.MemberId).IsUnique(true).IsClustered(false);
+                x.HasMany(x => x.Following);
+                x.HasOne(x => x.AccountMessages).WithOne(x => x.Account);
+                x.HasMany(x => x.Following).WithOne(x => x.Follower).OnDelete(DeleteBehavior.NoAction);
+                x.HasMany(x => x.Followers).WithOne(x => x.Artist).OnDelete(DeleteBehavior.NoAction);
+                x.HasKey(x => x.AppUserId);
+                x.HasMany(x => x.Genres);
+                x.HasIndex(x => x.ProfileUrl).IsUnique();
+                x.HasMany(x => x.Packages).WithOne(x => x.Artist).OnDelete(DeleteBehavior.Cascade);
+            });
 
             builder.Entity<AppUserToken>().Property(o => o.ExpirationDate).HasDefaultValueSql("DateAdd(week,1,getDate())");
 
-            builder.Entity<AccountMessages>().HasKey(x => x.AppUserId);
-            builder.Entity<AccountMessages>().Property(x => x.OnboardingMessageClosed).HasDefaultValue(false);
+            builder.Entity<AccountMessages>(x =>
+            {
+                x.HasKey(x => x.AppUserId);
+                x.Property(x => x.OnboardingMessageClosed).HasDefaultValue(false);
+            });
 
-            builder.Entity<Account>().HasKey(x => x.AppUserId);
-            builder.Entity<Account>().HasMany(x => x.Genres);
-            builder.Entity<Account>().HasIndex(x => x.ProfileUrl).IsUnique();
 
-            builder.Entity<Account>().HasMany(x => x.Packages).WithOne(x => x.Artist).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<ArtistTrackGenre>(x =>
+            {
+                x.HasKey(x => new { x.ArtistTrackUploadId, x.GenreId });
+                x.HasOne(x => x.Genre);
+                x.HasOne(x => x.ArtistTrackUpload);
+            });
 
-            builder.Entity<ArtistTrackGenre>().HasKey(x => new { x.ArtistTrackUploadId, x.GenreId });
-            builder.Entity<ArtistTrackGenre>().HasOne(x => x.Genre);
-            builder.Entity<ArtistTrackGenre>().HasOne(x => x.ArtistTrackUpload);
-
-            builder.Entity<ArtistTrackUpload>().HasKey(x => x.ArtistTrackUploadId).IsClustered(false);
-            builder.Entity<ArtistTrackUpload>().HasIndex(x => x.ArtistMemberId).IsClustered(true);
-            builder.Entity<ArtistTrackUpload>().HasMany(x => x.Genres);
-            builder.Entity<ArtistTrackUpload>().HasOne(x => x.TrackData).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<ArtistTrackUpload>().HasMany(x => x.SongLikes).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<ArtistTrackUpload>().Property(x => x.LikeCount).HasDefaultValue(0).IsConcurrencyToken();
-            builder.Entity<ArtistTrackUpload>().Property(x => x.UploadDate).HasColumnOrder(0);
+            builder.Entity<ArtistTrackUpload>(x =>
+            {
+                x.HasKey(x => x.ArtistTrackUploadId).IsClustered(false);
+                x.HasIndex(x => x.ArtistMemberId).IsClustered(true);
+                x.HasMany(x => x.Genres);
+                x.HasOne(x => x.TrackData).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
+                x.HasMany(x => x.SongLikes).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
+                x.Property(x => x.LikeCount).HasDefaultValue(0).IsConcurrencyToken();
+                x.Property(x => x.UploadDate).HasColumnOrder(0);
+            });
 
             builder.Entity<Genre>().HasKey(x => x.GenreId);
             builder.Entity<EventType>().HasKey(x => x.EventTypeId);
@@ -144,33 +154,49 @@ namespace localsound.backend.Persistence.DbContext
                 x.HasOne(x => x.EventType).WithMany(x => x.RelatedBookings).OnDelete(DeleteBehavior.NoAction);
             });
 
-            builder.Entity<ArtistEventType>().HasKey(x => new { x.AppUserId, x.EventTypeId });
-            builder.Entity<ArtistEventType>().HasOne(x => x.EventType);
-            builder.Entity<ArtistEventType>().HasOne(x => x.Artist);
+            builder.Entity<ArtistEventType>(x =>
+            {
+                x.HasKey(x => new { x.AppUserId, x.EventTypeId });
+                x.HasOne(x => x.EventType);
+                x.HasOne(x => x.Artist);
+            });
 
-            builder.Entity<AccountGenre>().HasKey(x => new { x.AppUserId, x.GenreId });
-            builder.Entity<AccountGenre>().HasOne(x => x.Genre);
-            builder.Entity<AccountGenre>().HasOne(x => x.Artist);
+            builder.Entity<AccountGenre>(x =>
+            {
+                x.HasKey(x => new { x.AppUserId, x.GenreId });
+                x.HasOne(x => x.Genre);
+                x.HasOne(x => x.Artist);
+            });
 
-            builder.Entity<ArtistEquipment>().HasKey(x => new { x.AppUserId, x.EquipmentId }).IsClustered(false);
-            builder.Entity<ArtistEquipment>().HasOne(x => x.Artist);
-            builder.Entity<ArtistEquipment>().HasIndex(x => x.AppUserId).IsClustered();
+            builder.Entity<ArtistEquipment>(x =>
+            {
+                x.HasKey(x => new { x.AppUserId, x.EquipmentId }).IsClustered(false);
+                x.HasOne(x => x.Artist);
+                x.HasIndex(x => x.AppUserId).IsClustered();
+            });
 
-            builder.Entity<ArtistPackage>().HasKey(x => x.ArtistPackageId).IsClustered(false);
-            builder.Entity<ArtistPackage>().HasIndex(x => x.AppUserId).IsClustered(true);
-            builder.Entity<ArtistPackage>().HasMany(x => x.Equipment).WithOne(x => x.ArtistPackage).OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<ArtistPackage>().HasMany(x => x.PackagePhotos).WithOne(x => x.ArtistPackage).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<ArtistPackage>(x =>
+            {
+                x.HasKey(x => x.ArtistPackageId).IsClustered(false);
+                x.HasIndex(x => x.AppUserId).IsClustered(true);
+                x.HasMany(x => x.Equipment).WithOne(x => x.ArtistPackage).OnDelete(DeleteBehavior.Cascade);
+                x.HasMany(x => x.PackagePhotos).WithOne(x => x.ArtistPackage).OnDelete(DeleteBehavior.Cascade);
+            });
 
-            builder.Entity<ArtistPackageEquipment>().HasKey(x => new { x.ArtistPackageId, x.ArtistPackageEquipmentId }).IsClustered(false);
-            builder.Entity<ArtistPackageEquipment>().HasOne(x => x.ArtistPackage);
-            builder.Entity<ArtistPackageEquipment>().HasIndex(x => x.ArtistPackageId).IsClustered(true);
+            builder.Entity<ArtistPackageEquipment>(x =>
+            {
+                x.HasKey(x => new { x.ArtistPackageId, x.ArtistPackageEquipmentId }).IsClustered(false);
+                x.HasOne(x => x.ArtistPackage);
+                x.HasIndex(x => x.ArtistPackageId).IsClustered(true);
+            });
 
-            builder.Entity<ArtistPackagePhoto>().HasKey(x => x.ArtistPackagePhotoId).IsClustered(false);
-            builder.Entity<ArtistPackagePhoto>().HasIndex(x => x.ArtistPackageId).IsClustered(true);
+            builder.Entity<ArtistPackagePhoto>(x =>
+            {
+                x.HasKey(x => x.ArtistPackagePhotoId).IsClustered(false);
+                x.HasIndex(x => x.ArtistPackageId).IsClustered(true);
+            });
 
-            builder.Entity<Account>().HasKey(x => x.AppUserId);
-            builder.Entity<Account>().HasIndex(x => x.ProfileUrl).IsUnique();
-
+            
             builder.Entity<AccountImageType>().HasKey(x => x.AccountImageTypeId);
 
             builder.Entity<AccountImage>(x =>
@@ -191,19 +217,26 @@ namespace localsound.backend.Persistence.DbContext
                 x.HasOne(x => x.Follower).WithMany(x => x.Following).OnDelete(DeleteBehavior.NoAction);
             });
 
-            builder.Entity<Notification>().HasKey(x => x.NotificationId).IsClustered(false);
-            builder.Entity<Notification>().HasIndex(x => x.NotificationReceiverId).IsUnique(false).IsClustered(true);
-            builder.Entity<Notification>().HasOne(x => x.NotificationReceiver).WithMany(x => x.ReceivedNotifications).OnDelete(DeleteBehavior.NoAction);
-            builder.Entity<Notification>().HasOne(x => x.NotificationCreator).WithMany(x => x.SentNotifications).OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<Notification>(x =>
+            {
+                x.HasKey(x => x.NotificationId).IsClustered(false);
+                x.HasIndex(x => x.NotificationReceiverId).IsUnique(false).IsClustered(true);
+                x.HasOne(x => x.NotificationReceiver).WithMany(x => x.ReceivedNotifications).OnDelete(DeleteBehavior.NoAction);
+                x.HasOne(x => x.NotificationCreator).WithMany(x => x.SentNotifications).OnDelete(DeleteBehavior.NoAction);
+            });
 
-            builder.Entity<SongLike>().HasKey(x => x.SongLikeId).IsClustered(false);
-            builder.Entity<SongLike>().HasAlternateKey(x => new { x.ArtistTrackId, x.MemberId }).IsClustered(false);
-            builder.Entity<SongLike>().HasOne(x => x.Account).WithMany(x => x.LikedSongs).HasPrincipalKey(x => x.MemberId).HasForeignKey(x => x.MemberId);
-            builder.Entity<SongLike>().HasOne(x => x.ArtistTrackUpload).WithMany(x => x.SongLikes).OnDelete(DeleteBehavior.NoAction);
-            builder.Entity<SongLike>().HasIndex(x => x.MemberId).IsUnique(false).IsClustered(true);
-            builder.Entity<SongLike>().HasIndex(x => x.ArtistTrackId).IsUnique(false).IsClustered(false);
             builder.HasSequence("SongLikeId", x => x.StartsAt(1).IncrementsBy(1));
-            builder.Entity<SongLike>().Property(x => x.SongLikeId).HasDefaultValueSql("NEXT VALUE FOR SongLikeId");
+            builder.Entity<SongLike>(x =>
+            {
+                x.HasKey(x => x.SongLikeId).IsClustered(false);
+                x.HasAlternateKey(x => new { x.ArtistTrackId, x.MemberId }).IsClustered(false);
+                x.HasOne(x => x.Account).WithMany(x => x.LikedSongs).HasPrincipalKey(x => x.MemberId).HasForeignKey(x => x.MemberId);
+                x.HasOne(x => x.ArtistTrackUpload).WithMany(x => x.SongLikes).OnDelete(DeleteBehavior.NoAction);
+                x.HasIndex(x => x.MemberId).IsUnique(false).IsClustered(true);
+                x.HasIndex(x => x.ArtistTrackId).IsUnique(false).IsClustered(false);
+                x.Property(x => x.SongLikeId).HasDefaultValueSql("NEXT VALUE FOR SongLikeId");
+            });
+
         }
 
         public async Task<ServiceResponse> HandleSavingDB()
