@@ -2,7 +2,7 @@
 {
     public class BookingDto
     {
-        public Guid BookingId { get; set; }
+        public int BookingId { get; set; }
         public string BookerId { get; set; }
         public string BookerName { get; set; }
         public string ArtistId { get; set; }

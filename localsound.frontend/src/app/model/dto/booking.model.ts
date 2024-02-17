@@ -1,7 +1,7 @@
 import { EquipmentModel } from "./equipment.model";
 
 export interface BookingModel {
-  bookingId: string;
+  bookingId: number;
   bookerId: string;
   bookerName: string;
   artistId: string;

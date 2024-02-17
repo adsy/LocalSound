@@ -277,10 +277,10 @@ const Bookings = {
     requests.post(`bookings/member/${memberId}/create-booking`, bookingData),
   getNonCompletedBookings: (
     memberId: string,
-    page: number,
+    lastBookingId: number,
     bookingConfirmed: boolean | null
   ) => {
-    let url = `bookings/member/${memberId}/get-bookings?page=${page}`;
+    let url = `bookings/member/${memberId}/get-bookings?lastBookingId=${lastBookingId}`;
 
     if (bookingConfirmed !== null) {
       url += "&bookingConfirmed=" + bookingConfirmed;
@@ -288,9 +288,9 @@ const Bookings = {
 
     return requests.get<BookingListResponse>(url);
   },
-  getCompletedBookings: (memberId: string, page: number) =>
+  getCompletedBookings: (memberId: string, lastBookingId: number) =>
     requests.get<BookingListResponse>(
-      `bookings/member/${memberId}/get-completed-bookings?page=${page}`
+      `bookings/member/${memberId}/get-completed-bookings?lastBookingId=${lastBookingId}`
     ),
   acceptBooking: (memberId: string, bookingId: string) =>
     requests.put(

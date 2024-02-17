@@ -15,7 +15,7 @@ namespace localsound.backend.api.Queries.Validators.Bookings
                 .NotEmpty()
                 .WithMessage("An error occured getting your bookings, please try again...");
 
-            RuleFor(m => m.Page)
+            RuleFor(m => m.LastBookingId)
                 .NotEmpty()
                 .WithMessage("An error occured getting your bookings, please try again...");
         }

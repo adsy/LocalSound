@@ -1,6 +1,4 @@
-﻿using localsound.backend.Domain.Model.Dto.Entity;
-
-namespace localsound.backend.Domain.Model.Entity
+﻿namespace localsound.backend.Domain.Model.Entity
 {
     public class FileContent
     {

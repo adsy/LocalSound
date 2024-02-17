@@ -7,6 +7,6 @@ namespace localsound.backend.api.Commands.Bookings
     {
         public Guid AppUserId { get; set; }
         public string MemberId { get; set; }
-        public Guid BookingId { get; set; }
+        public int BookingId { get; set; }
     }
 }

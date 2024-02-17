@@ -27,7 +27,7 @@ namespace localsound.backend.api.Handlers.Booking
 
         public async Task<ServiceResponse<BookingListResponse>> Handle(GetUserBookingsQuery request, CancellationToken cancellationToken)
         {
-            return await _bookingService.GetNonCompletedBookings(request.AppUserId, request.MemberId, request.BookingConfirmed, request.Page);
+            return await _bookingService.GetNonCompletedBookings(request.AppUserId, request.MemberId, request.BookingConfirmed, request.LastBookingId);
         }
 
         public async Task<ServiceResponse> Handle(CancelBookingCommand request, CancellationToken cancellationToken)
@@ -42,7 +42,7 @@ namespace localsound.backend.api.Handlers.Booking
 
         public async Task<ServiceResponse<BookingListResponse>> Handle(GetCompletedBookingsQuery request, CancellationToken cancellationToken)
         {
-            return await _bookingService.GetCompletedBookings(request.AppUserId, request.MemberId, request.Page);
+            return await _bookingService.GetCompletedBookings(request.AppUserId, request.MemberId, request.LastBookingId);
         }
     }
 }

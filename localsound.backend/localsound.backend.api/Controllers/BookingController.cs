@@ -30,14 +30,14 @@ namespace localsound.backend.api.Controllers
 
         [HttpGet]
         [Route("member/{memberId}/get-bookings")]
-        public async Task<ActionResult> GetNonCompletedBookings([FromQuery] bool? bookingConfirmed, [FromQuery] int page, string memberId)
+        public async Task<ActionResult> GetNonCompletedBookings([FromQuery] bool? bookingConfirmed, [FromQuery] int? lastBookingId, string memberId)
         {
             var result = await Mediator.Send(new GetUserBookingsQuery
             {
                 AppUserId = CurrentUser.AppUserId,
                 MemberId = memberId,
                 BookingConfirmed = bookingConfirmed,
-                Page = page
+                LastBookingId = lastBookingId
             });
 
             if (!result.IsSuccessStatusCode)
@@ -50,13 +50,13 @@ namespace localsound.backend.api.Controllers
 
         [HttpGet]
         [Route("member/{memberId}/get-completed-bookings")]
-        public async Task<ActionResult> GetCompletedBookings([FromQuery] int page, string memberId)
+        public async Task<ActionResult> GetCompletedBookings([FromQuery] int? lastBookingId, string memberId)
         {
             var result = await Mediator.Send(new GetCompletedBookingsQuery
             {
                 AppUserId = CurrentUser.AppUserId,
                 MemberId = memberId,
-                Page = page
+                LastBookingId = lastBookingId
             });
 
             if (!result.IsSuccessStatusCode)
@@ -69,7 +69,7 @@ namespace localsound.backend.api.Controllers
 
         [HttpPut]
         [Route("member/{memberId}/booking/{bookingId}/accept-booking")]
-        public async Task<ActionResult> AcceptBooking(string memberId, Guid bookingId) 
+        public async Task<ActionResult> AcceptBooking(string memberId, int bookingId) 
         {
             var result = await Mediator.Send(new AcceptBookingCommand
             {
@@ -88,7 +88,7 @@ namespace localsound.backend.api.Controllers
 
         [HttpPut]
         [Route("member/{memberId}/booking/{bookingId}/cancel-booking")]
-        public async Task<ActionResult> CancelBooking(string memberId, Guid bookingId)
+        public async Task<ActionResult> CancelBooking(string memberId, int bookingId)
         {
             var result = await Mediator.Send(new CancelBookingCommand
             {

@@ -21,7 +21,7 @@ namespace localsound.backend.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public async Task<ServiceResponse> AcceptBookingAsync(Guid appUserId, Guid bookingId)
+        public async Task<ServiceResponse> AcceptBookingAsync(Guid appUserId, int bookingId)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> CancelBookingAsync(Guid appUserId, Guid bookingId, CustomerTypeEnum customerType)
+        public async Task<ServiceResponse> CancelBookingAsync(Guid appUserId, int bookingId, CustomerTypeEnum customerType)
         {
             try
             {
@@ -133,7 +133,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<List<ArtistBooking>>> GetCompletedBookingsAsync(Guid appUserId, int page)
+        public async Task<ServiceResponse<List<ArtistBooking>>> GetCompletedBookingsAsync(Guid appUserId, int? lastBookingId)
         {
             try
             {
@@ -148,29 +148,31 @@ namespace localsound.backend.Infrastructure.Repositories
                 }
 
                 List<ArtistBooking>? bookings = null;
+                lastBookingId = lastBookingId ?? 0;
+
                 if (account.CustomerType == CustomerTypeEnum.Artist)
                 {
-                    bookings = await _dbContext.ArtistBooking.Where(x => x.ArtistId == appUserId && x.BookingConfirmed == true  && x.BookingCompleted)
+                    bookings = await _dbContext.ArtistBooking
                         .Include(x => x.Artist)
                         .Include(x => x.Booker)
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
+                        .Where(x => x.ArtistId == appUserId && x.BookingConfirmed == true  && x.BookingCompleted && x.BookingId > lastBookingId)
                         .OrderByDescending(x => x.BookingDate)
-                        .Skip(page * 10)
                         .Take(10)
                         .ToListAsync();
                 }
                 else
                 {
-                    bookings = await _dbContext.ArtistBooking.Where(x => x.BookerId == appUserId && x.BookingConfirmed == true && x.BookingCompleted)
+                    bookings = await _dbContext.ArtistBooking
                         .Include(x => x.Artist)
                         .Include(x => x.Booker)
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
+                        .Where(x => x.BookerId == appUserId && x.BookingConfirmed == true && x.BookingCompleted && x.BookingCompleted && x.BookingId > lastBookingId)
                         .OrderByDescending(x => x.BookingDate)
-                        .Skip(page * 10)
                         .Take(10)
                         .ToListAsync();
                 }
@@ -192,7 +194,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<List<ArtistBooking>>> GetNonCompletedBookingsAsync(Guid appUserId, bool? bookingConfirmed, int page)
+        public async Task<ServiceResponse<List<ArtistBooking>>> GetNonCompletedBookingsAsync(Guid appUserId, bool? bookingConfirmed, int? lastBookingId)
         {
             try
             {
@@ -207,6 +209,8 @@ namespace localsound.backend.Infrastructure.Repositories
                 }
 
                 List<ArtistBooking>? bookings = null;
+                lastBookingId = lastBookingId ?? 0;
+
                 if (account.CustomerType == CustomerTypeEnum.Artist)
                 {
                     bookings = await _dbContext.ArtistBooking
@@ -215,9 +219,8 @@ namespace localsound.backend.Infrastructure.Repositories
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
-                        .Where(x => x.ArtistId == appUserId && x.BookingConfirmed == bookingConfirmed && !x.BookingCompleted)
+                        .Where(x => x.ArtistId == appUserId && x.BookingConfirmed == bookingConfirmed && !x.BookingCompleted && x.BookingId > lastBookingId)
                         .OrderByDescending(x => x.BookingDate)
-                        .Skip(page * 10)
                         .Take(10)
                         .ToListAsync();
                 }
@@ -229,9 +232,8 @@ namespace localsound.backend.Infrastructure.Repositories
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
-                        .Where(x => x.BookerId == appUserId && x.BookingConfirmed == bookingConfirmed && !x.BookingCompleted)
+                        .Where(x => x.BookerId == appUserId && x.BookingConfirmed == bookingConfirmed && !x.BookingCompleted && x.BookingId > lastBookingId)
                         .OrderByDescending(x => x.BookingDate)
-                        .Skip(page * 10)
                         .Take(10)
                         .ToListAsync();
                 }

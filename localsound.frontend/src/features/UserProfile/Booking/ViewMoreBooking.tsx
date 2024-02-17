@@ -32,7 +32,6 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
   const bookingData = useSelector((state: State) => state.pageData.bookingData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
-  const [page, setPage] = useState(0);
   const [canLoadMore, setCanLoadMore] = useState(false);
   const dispatch = useDispatch();
 
@@ -47,11 +46,17 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
     try {
       switch (bookingType) {
         case BookingTypes.upcoming: {
+          var lastBookingId =
+            bookingData.upcoming?.length > 0
+              ? bookingData.upcoming[bookingData.upcoming.length - 1]?.bookingId
+              : 0;
+
           var bookingResult = await agent.Bookings.getNonCompletedBookings(
             userDetails?.memberId!,
-            page + 1,
+            lastBookingId,
             true
           );
+
           setCanLoadMore(bookingResult.canLoadMore);
           dispatch(
             handleSetUpcomingBookings([
@@ -62,11 +67,17 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
           break;
         }
         case BookingTypes.pending: {
+          var lastBookingId =
+            bookingData.pending?.length > 0
+              ? bookingData.pending[bookingData.pending.length - 1]?.bookingId
+              : 0;
+
           var bookingResult = await agent.Bookings.getNonCompletedBookings(
             userDetails?.memberId!,
-            page + 1,
+            lastBookingId,
             null
           );
+
           setCanLoadMore(bookingResult.canLoadMore);
           dispatch(
             handleSetPendingBookings([
@@ -77,9 +88,15 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
           break;
         }
         case BookingTypes.cancelled: {
+          var lastBookingId =
+            bookingData.cancelled?.length > 0
+              ? bookingData.cancelled[bookingData.cancelled.length - 1]
+                  ?.bookingId
+              : 0;
+
           var bookingResult = await agent.Bookings.getNonCompletedBookings(
             userDetails?.memberId!,
-            page + 1,
+            lastBookingId,
             false
           );
           setCanLoadMore(bookingResult.canLoadMore);
@@ -92,9 +109,15 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
           break;
         }
         case BookingTypes.completed: {
+          var lastBookingId =
+            bookingData.completed?.length > 0
+              ? bookingData.completed[bookingData.completed.length - 1]
+                  ?.bookingId
+              : 0;
+
           var bookingResult = await agent.Bookings.getCompletedBookings(
             userDetails?.memberId!,
-            page + 1
+            lastBookingId
           );
           setCanLoadMore(bookingResult.canLoadMore);
           dispatch(
@@ -106,7 +129,6 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
           break;
         }
       }
-      setPage(page + 1);
     } catch (err: any) {
       setError(err);
     }
@@ -126,7 +148,7 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
         case BookingTypes.upcoming: {
           var bookingResult = await agent.Bookings.getNonCompletedBookings(
             userDetails?.memberId!,
-            page,
+            0,
             true
           );
           setCanLoadMore(bookingResult.canLoadMore);
@@ -136,7 +158,7 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
         case BookingTypes.pending: {
           var bookingResult = await agent.Bookings.getNonCompletedBookings(
             userDetails?.memberId!,
-            page,
+            0,
             null
           );
           setCanLoadMore(bookingResult.canLoadMore);
@@ -146,7 +168,7 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
         case BookingTypes.cancelled: {
           var bookingResult = await agent.Bookings.getNonCompletedBookings(
             userDetails?.memberId!,
-            page,
+            0,
             false
           );
           setCanLoadMore(bookingResult.canLoadMore);
@@ -156,7 +178,7 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
         case BookingTypes.completed: {
           var bookingResult = await agent.Bookings.getCompletedBookings(
             userDetails?.memberId!,
-            page
+            0
           );
           setCanLoadMore(bookingResult.canLoadMore);
           dispatch(handleSetCompletedBookings([...bookingResult.bookings]));

@@ -23,7 +23,7 @@ namespace localsound.backend.Infrastructure.Services
             _accountRepository = accountRepository;
         }
 
-        public async Task<ServiceResponse> AcceptBooking(Guid appUserId, string memberId, Guid bookingId)
+        public async Task<ServiceResponse> AcceptBooking(Guid appUserId, string memberId, int bookingId)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse> CancelBooking(Guid appUserId, string memberId, Guid bookingId)
+        public async Task<ServiceResponse> CancelBooking(Guid appUserId, string memberId, int bookingId)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<BookingListResponse>> GetCompletedBookings(Guid appUserId, string memberId, int page)
+        public async Task<ServiceResponse<BookingListResponse>> GetCompletedBookings(Guid appUserId, string memberId, int? lastBookingId)
         {
             try
             {
@@ -145,7 +145,7 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var userBookingsResult = await _bookingRepository.GetCompletedBookingsAsync(appUserId, page);
+                var userBookingsResult = await _bookingRepository.GetCompletedBookingsAsync(appUserId, lastBookingId);
 
                 if (!userBookingsResult.IsSuccessStatusCode || userBookingsResult.ReturnData is null)
                 {
@@ -198,7 +198,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<BookingListResponse>> GetNonCompletedBookings(Guid appUserId, string memberId, bool? bookingConfirmed, int page)
+        public async Task<ServiceResponse<BookingListResponse>> GetNonCompletedBookings(Guid appUserId, string memberId, bool? bookingConfirmed, int? lastBookingId)
         {
             try
             {
@@ -212,7 +212,7 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var userBookingsResult = await _bookingRepository.GetNonCompletedBookingsAsync(appUserId, bookingConfirmed, page);
+                var userBookingsResult = await _bookingRepository.GetNonCompletedBookingsAsync(appUserId, bookingConfirmed, lastBookingId);
 
                 if (!userBookingsResult.IsSuccessStatusCode || userBookingsResult.ReturnData is null)
                 {
