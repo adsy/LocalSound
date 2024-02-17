@@ -7,4 +7,5 @@ export interface CurrentSongState {
   artistName: string | null;
   currentSongArtistProfile: string | null;
   duration: number | null;
+  uploadDate: Date;
 }

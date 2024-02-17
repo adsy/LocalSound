@@ -61,7 +61,7 @@ namespace localsound.backend.api.Handlers.Track
 
         public async Task<ServiceResponse<TrackListResponseDto>> Handle(GetTracksQuery request, CancellationToken cancellationToken)
         {
-            return await _trackService.GetTracksByPlaylistTypeAsync(request.UserId, request.MemberId, request.Page, request.PlaylistType);
+            return await _trackService.GetTracksByPlaylistTypeAsync(request.UserId, request.MemberId, request.LastUploadDate, request.PlaylistType);
         }
     }
 }

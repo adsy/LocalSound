@@ -127,6 +127,7 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<ArtistTrackUpload>().HasOne(x => x.TrackData).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ArtistTrackUpload>().HasMany(x => x.SongLikes).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ArtistTrackUpload>().Property(x => x.LikeCount).HasDefaultValue(0).IsConcurrencyToken();
+            builder.Entity<ArtistTrackUpload>().Property(x => x.UploadDate).HasColumnOrder(0);
 
             builder.Entity<Genre>().HasKey(x => x.GenreId);
             builder.Entity<EventType>().HasKey(x => x.EventTypeId);

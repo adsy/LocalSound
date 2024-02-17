@@ -11,7 +11,7 @@ namespace localsound.backend.api.Queries.Validators.Track
                 .NotEmpty()
                 .WithMessage("An error occured retrieving artist uploads, please try again...");
 
-            RuleFor(m => m.Page)
+            RuleFor(m => m.LastUploadDate)
                 .NotEmpty()
                 .WithMessage("An error occured retrieving artist uploads, please try again...");
         }

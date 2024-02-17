@@ -39,9 +39,12 @@ const Favourites = ({
     if (canLoadMore && currentTab === ProfileTabs.LikedSongs) {
       try {
         setLoading(true);
+
+        var lastUploadDate = favourites[favourites.length - 1]?.uploadDate;
+
         var result = await agent.Tracks.getTracks(
           profileDetails!.memberId,
-          page,
+          lastUploadDate,
           PlaylistTypes.Favourites
         );
         setFavourites([...favourites, ...result.trackList]);

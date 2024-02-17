@@ -107,7 +107,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<List<ArtistTrackUpload>>> GetArtistTracksAsync(string memberId, int page)
+        public async Task<ServiceResponse<List<ArtistTrackUpload>>> GetArtistTracksAsync(string memberId, DateTime? lastUploadDate)
         {
             try
             {
@@ -118,15 +118,16 @@ namespace localsound.backend.Infrastructure.Repositories
                     return new ServiceResponse<List<ArtistTrackUpload>>(HttpStatusCode.NotFound);
                 }
 
+                var date = lastUploadDate.HasValue ? lastUploadDate.Value : DateTime.Now;
+
                 var tracks = await _dbContext.ArtistTrackUpload
                     .Include(x => x.Artist)
                     .ThenInclude(x => x.Images)
                     .Include(x => x.TrackData)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
-                    .Where(x => x.AppUserId == artist.AppUserId)
+                    .Where(x => x.AppUserId == artist.AppUserId && x.UploadDate <  date)
                     .OrderByDescending(x => x.UploadDate)
-                    .Skip(10 * page)
                     .Take(10)
                     .ToListAsync();
 
@@ -144,10 +145,12 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<List<ArtistTrackUpload>>> GetLikedSongsAsync(string memberId, int page)
+        public async Task<ServiceResponse<List<ArtistTrackUpload>>> GetLikedSongsAsync(string memberId, DateTime? lastUploadDate)
         {
             try
             {
+                var date = lastUploadDate.HasValue ? lastUploadDate.Value : DateTime.Now;
+
                 var tracks = await _dbContext.SongLike
                     .Include(x => x.ArtistTrackUpload)
                     .ThenInclude(x => x.Artist)
@@ -157,10 +160,9 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.ArtistTrackUpload)
                     .ThenInclude(x => x.Genres)
                     .ThenInclude(x => x.Genre)
-                    .Where(x => x.MemberId == memberId)
+                    .Where(x => x.MemberId == memberId && x.ArtistTrackUpload.UploadDate < date)
                     .OrderByDescending(x => x.SongLikeId)
                     .Select(x => x.ArtistTrackUpload)
-                    .Skip(10 * page)
                     .Take(10)
                     .ToListAsync();
 

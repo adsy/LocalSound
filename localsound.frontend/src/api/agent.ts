@@ -231,10 +231,18 @@ const Tracks = {
     trackId: string,
     formData: FormData
   ) => requests.put(`track/member/${memberId}/track/${trackId}`, formData),
-  getTracks: (memberId: string, page: number, playlistType: PlaylistTypes) =>
-    requests.get<TrackListResponse>(
-      `track/member/${memberId}/playlist-type/${playlistType}?page=${page}`
-    ),
+  getTracks: (
+    memberId: string,
+    uploadDate: Date,
+    playlistType: PlaylistTypes
+  ) => {
+    var url = `track/member/${memberId}/playlist-type/${playlistType}`;
+
+    if (uploadDate) {
+      url += `?lastUploadDate=${uploadDate}`;
+    }
+    return requests.get<TrackListResponse>(url);
+  },
   getTrackDetails: (memberId: string, trackId: string) =>
     requests.get<ArtistTrackUploadModel>(
       `track/member/${memberId}/track/${trackId}`

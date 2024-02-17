@@ -189,7 +189,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<TrackListResponseDto>> GetTracksByPlaylistTypeAsync(Guid? userId, string memberId, int page, PlaylistTypeEnum playlistType)
+        public async Task<ServiceResponse<TrackListResponseDto>> GetTracksByPlaylistTypeAsync(Guid? userId, string memberId, DateTime? lastUploadDate, PlaylistTypeEnum playlistType)
         {
             try
             {
@@ -199,12 +199,12 @@ namespace localsound.backend.Infrastructure.Services
                 {
                     case PlaylistTypeEnum.Uploads:
                         {
-                            tracksResult = await _trackRepository.GetArtistTracksAsync(memberId, page);
+                            tracksResult = await _trackRepository.GetArtistTracksAsync(memberId, lastUploadDate);
                             break;
                         }
                     case PlaylistTypeEnum.Favourites:
                         {
-                            tracksResult = await _trackRepository.GetLikedSongsAsync(memberId, page);
+                            tracksResult = await _trackRepository.GetLikedSongsAsync(memberId, lastUploadDate);
                             break;
                         }
                     default:

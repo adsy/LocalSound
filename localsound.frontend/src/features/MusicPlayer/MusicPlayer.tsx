@@ -236,6 +236,7 @@ const MusicPlayer = () => {
               artistName: track.artistName,
               trackImage: track.trackImageUrl,
               duration: track.duration,
+              uploadDate: track.uploadDate,
             })
           );
         } else {
@@ -262,6 +263,7 @@ const MusicPlayer = () => {
           artistName: track.artistName,
           trackImage: track.trackImageUrl,
           duration: track.duration,
+          uploadDate: track.uploadDate,
         })
       );
     } else {
@@ -271,7 +273,7 @@ const MusicPlayer = () => {
             setLoadingMore(true);
             var result = await agent.Tracks.getTracks(
               player.listeningProfileMemberId!,
-              player.page,
+              player.currentSong!.uploadDate,
               player.playlistType!
             );
 
@@ -297,6 +299,7 @@ const MusicPlayer = () => {
                   artistName: track.artistName,
                   trackImage: track.trackImageUrl,
                   duration: track.duration,
+                  uploadDate: track.uploadDate,
                 })
               );
             } else {

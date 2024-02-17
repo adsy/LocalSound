@@ -161,13 +161,13 @@ namespace localsound.backend.api.Controllers
         [HttpGet]
         [Route("member/{memberId}/playlist-type/{playlistType}")]
         [AllowAnonymous]
-        public async Task<ActionResult> GetTracks([FromQuery] int page, string memberId, PlaylistTypeEnum playlistType)
+        public async Task<ActionResult> GetTracks([FromQuery] DateTime? lastUploadDate, string memberId, PlaylistTypeEnum playlistType)
         {
             var result = await Mediator.Send(new GetTracksQuery
             {
                 UserId = CurrentUser?.AppUserId,
                 MemberId = memberId,
-                Page = page,
+                LastUploadDate = lastUploadDate,
                 PlaylistType = playlistType
             });
 

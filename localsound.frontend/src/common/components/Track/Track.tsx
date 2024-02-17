@@ -136,6 +136,7 @@ const Track = ({
           trackImage: track.trackImageUrl,
           duration: track.duration,
           playlistType: playlistType,
+          uploadDate: track.uploadDate,
         })
       );
       if (

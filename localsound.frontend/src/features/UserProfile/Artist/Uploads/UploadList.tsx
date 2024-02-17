@@ -47,9 +47,12 @@ const UploadList = ({
     if (canLoadMore && currentTab === ProfileTabs.Uploads) {
       try {
         setLoading(true);
+
+        var lastUploadDate = tracks[tracks.length - 1]?.uploadDate;
+
         var result = await agent.Tracks.getTracks(
           profileDetails!.memberId,
-          page,
+          lastUploadDate,
           PlaylistTypes.Uploads
         );
         setTracks([...tracks, ...result.trackList]);
