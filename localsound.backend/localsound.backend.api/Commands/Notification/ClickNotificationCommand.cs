@@ -7,6 +7,6 @@ namespace localsound.backend.api.Commands.Notification
     {
         public Guid AppUserId { get; set; }
         public string MemberId { get; set; }
-        public Guid NotificationId { get; set; }
+        public int NotificationId { get; set; }
     }
 }

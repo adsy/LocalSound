@@ -7,7 +7,7 @@ namespace localsound.backend.api.Commands.Track
     {
         public Guid UserId { get; set; }
         public string MemberId { get; set; }
-        public Guid TrackId { get; set; }
+        public int TrackId { get; set; }
         public string ArtistMemberId { get; set; }
     }
 }

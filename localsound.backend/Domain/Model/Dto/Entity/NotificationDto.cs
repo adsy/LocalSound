@@ -2,7 +2,7 @@
 {
     public class NotificationDto
     {
-        public Guid NotificationId { get; set; }
+        public int NotificationId { get; set; }
         public string ReceivingMemberId { get; set; }
         public string CreatorMemberId { get; set; }
         public string NotificationMessage { get; set; }

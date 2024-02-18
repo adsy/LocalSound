@@ -8,13 +8,13 @@ namespace localsound.backend.Infrastructure.Interface.Services
 {
     public interface ITrackService
     {
-        Task<ServiceResponse> DeleteArtistTrackAsync(Guid userId, string memberId, Guid trackId);
+        Task<ServiceResponse> DeleteArtistTrackAsync(Guid userId, string memberId, int trackId);
         Task<ServiceResponse<TrackUploadSASDto>> GenerateTrackUploadSASDtoAsync(Guid userId, string memberId);
-        Task<ServiceResponse<ArtistTrackUploadDto>> GetArtistTrackAsync(string memberId, Guid trackId);
-        Task<ServiceResponse<TrackListResponseDto>> GetTracksByPlaylistTypeAsync(Guid? userId, string memberId, DateTime? lastUploadDate, PlaylistTypeEnum playlistType);
-        Task<ServiceResponse> LikeArtistTrackAsync(Guid trackId, string artistMemberId, Guid userId, string memberId);
-        Task<ServiceResponse> UnikeArtistTrackAsync(Guid trackId, string artistMemberId, Guid userId, string memberId);
-        Task<ServiceResponse> UpdateTrackSupportingDetailsAsync(Guid userId, string memberId, Guid trackId, TrackUpdateDto trackData);
-        Task<ServiceResponse> UploadTrackSupportingDetailsAsync(Guid userId, string memberId, Guid trackId, TrackUploadDto trackData);
+        Task<ServiceResponse<ArtistTrackUploadDto>> GetArtistTrackAsync(string memberId, int trackId);
+        Task<ServiceResponse<TrackListResponseDto>> GetTracksByPlaylistTypeAsync(Guid? userId, string memberId, int? lastTrackId, PlaylistTypeEnum playlistType);
+        Task<ServiceResponse> LikeArtistTrackAsync(int trackId, string artistMemberId, Guid userId, string memberId);
+        Task<ServiceResponse> UnikeArtistTrackAsync(int trackId, string artistMemberId, Guid userId, string memberId);
+        Task<ServiceResponse> UpdateTrackSupportingDetailsAsync(Guid userId, string memberId, int trackId, TrackUpdateDto trackData);
+        Task<ServiceResponse<int>> UploadTrackSupportingDetailsAsync(Guid userId, string memberId, TrackUploadDto trackData);
     }
 }

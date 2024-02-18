@@ -11,13 +11,13 @@ namespace localsound.backend.api.Controllers
     {
         [HttpGet]
         [Route("member/{memberId}/get-more-notifications")]
-        public async Task<ActionResult> GetMoreNotifications([FromQuery] int page, string memberId, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetMoreNotifications([FromQuery] int lastNotificationId, string memberId, CancellationToken cancellationToken)
         {
             var result = await Mediator.Send(new GetMoreNotificationsQuery
             {
                 AppUserId = CurrentUser.AppUserId,
                 MemberId = memberId,
-                Page = page
+                LastNotificationId = lastNotificationId
             }, cancellationToken);
 
             if (!result.IsSuccessStatusCode)
@@ -30,7 +30,7 @@ namespace localsound.backend.api.Controllers
 
         [HttpPut]
         [Route("member/{memberId}/notification/{notificationId}/click-notification")]
-        public async Task<ActionResult> ClickNotification(string memberId, Guid notificationId)
+        public async Task<ActionResult> ClickNotification(string memberId, int notificationId)
         {
             var result = await Mediator.Send(new ClickNotificationCommand
             {

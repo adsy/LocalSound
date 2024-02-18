@@ -7,7 +7,7 @@
         public Uri ContainerUri { get; set; }
         public string ContainerName { get; set; }
         public string UploadLocation { get; set; }
-        public Guid TrackId { get; set; }
+        public int trackId { get; set; }
         public Uri SasUri { get; set; }
         public string SasToken { get; set; }
         public string SasPermission { get; set; }

@@ -38,7 +38,7 @@ namespace localsound.backend.Infrastructure.Services
             _searchHelper = searchHelper;
         }
 
-        public async Task<ServiceResponse> DeleteArtistTrackAsync(Guid userId, string memberId, Guid trackId)
+        public async Task<ServiceResponse> DeleteArtistTrackAsync(Guid userId, string memberId, int trackId)
         {
             try
             {
@@ -141,7 +141,6 @@ namespace localsound.backend.Infrastructure.Services
                     AccountName = container.AccountName,
                     AccountUrl = $"{container.Uri.Scheme}://{container.Uri.Host}",
                     ContainerName = userId.ToString(),
-                    TrackId = trackId,
                     UploadLocation = $"uploads/{trackId}",
                     SasUri = sasUri,
                     SasToken = sasUri.Query.TrimStart('?'),
@@ -164,7 +163,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<ArtistTrackUploadDto>> GetArtistTrackAsync(string memberId, Guid trackId)
+        public async Task<ServiceResponse<ArtistTrackUploadDto>> GetArtistTrackAsync(string memberId, int trackId)
         {
             try
             {
@@ -189,7 +188,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<TrackListResponseDto>> GetTracksByPlaylistTypeAsync(Guid? userId, string memberId, DateTime? lastUploadDate, PlaylistTypeEnum playlistType)
+        public async Task<ServiceResponse<TrackListResponseDto>> GetTracksByPlaylistTypeAsync(Guid? userId, string memberId, int? lastTrackId, PlaylistTypeEnum playlistType)
         {
             try
             {
@@ -199,12 +198,12 @@ namespace localsound.backend.Infrastructure.Services
                 {
                     case PlaylistTypeEnum.Uploads:
                         {
-                            tracksResult = await _trackRepository.GetArtistTracksAsync(memberId, lastUploadDate);
+                            tracksResult = await _trackRepository.GetArtistTracksAsync(memberId, lastTrackId);
                             break;
                         }
                     case PlaylistTypeEnum.Favourites:
                         {
-                            tracksResult = await _trackRepository.GetLikedSongsAsync(memberId, lastUploadDate);
+                            tracksResult = await _trackRepository.GetLikedSongsAsync(memberId, lastTrackId);
                             break;
                         }
                     default:
@@ -241,7 +240,7 @@ namespace localsound.backend.Infrastructure.Services
                             songIds.ReturnData = songIds.ReturnData.OrderBy(x => x).ToList();
                             foreach (var song in trackList)
                             {
-                                song.SongLiked = _searchHelper.GuidBinarySearch(songIds.ReturnData, song.ArtistTrackUploadId) != -1 ? true : false;
+                                song.SongLiked = _searchHelper.IntBinarySearch(songIds.ReturnData, song.ArtistTrackUploadId) != -1 ? true : false;
                             }
                         }
                     }
@@ -268,7 +267,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse> LikeArtistTrackAsync(Guid trackId, string artistMemberId, Guid userId, string memberId)
+        public async Task<ServiceResponse> LikeArtistTrackAsync(int trackId, string artistMemberId, Guid userId, string memberId)
         {
             try
             {
@@ -306,7 +305,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse> UnikeArtistTrackAsync(Guid trackId, string artistMemberId, Guid userId, string memberId)
+        public async Task<ServiceResponse> UnikeArtistTrackAsync(int trackId, string artistMemberId, Guid userId, string memberId)
         {
             try
             {
@@ -344,7 +343,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse> UpdateTrackSupportingDetailsAsync(Guid userId, string memberId, Guid trackId, TrackUpdateDto trackData)
+        public async Task<ServiceResponse> UpdateTrackSupportingDetailsAsync(Guid userId, string memberId, int trackId, TrackUpdateDto trackData)
         {
             try
             {
@@ -371,7 +370,7 @@ namespace localsound.backend.Infrastructure.Services
                 if (trackData.TrackImage != null)
                 {
                     var imageId = Guid.NewGuid();
-                    var imageFilePath = $"[{userId}]/uploads/{trackId}/image/{imageId}{trackData.TrackImageExt}";
+                    var imageFilePath = $"{track.ReturnData.TrackData.FileLocation}/image/{imageId}{trackData.TrackImageExt}";
 
                     uploadResponse = await _blobRepository.UploadBlobAsync(imageFilePath, trackData.TrackImage);
 
@@ -429,7 +428,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse> UploadTrackSupportingDetailsAsync(Guid userId, string memberId, Guid trackId, TrackUploadDto trackUploadDto)
+        public async Task<ServiceResponse<int>> UploadTrackSupportingDetailsAsync(Guid userId, string memberId, TrackUploadDto trackUploadDto)
         {
             try
             {
@@ -437,18 +436,15 @@ namespace localsound.backend.Infrastructure.Services
 
                 if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
                 {
-                    return new ServiceResponse<TrackUploadSASDto>(HttpStatusCode.InternalServerError);
+                    return new ServiceResponse<int>(HttpStatusCode.InternalServerError);
                 }
-
                 
                 var track = new ArtistTrackUpload
                 {
                     AppUserId = userId,
-                    ArtistTrackUploadId = trackId,
                     ArtistMemberId = memberId,
                     Genres = trackUploadDto.Genres.Select(x => new ArtistTrackGenre
                     {
-                        ArtistTrackUploadId = trackId,
                         GenreId = x.GenreId
                     }).ToList(),
                     TrackName = trackUploadDto.TrackName,
@@ -460,7 +456,6 @@ namespace localsound.backend.Infrastructure.Services
                         FileExtensionType = trackUploadDto.TrackFileExt
                     },
                     TrackUrl = trackUploadDto.TrackUrl,
-                    WaveformUrl = trackUploadDto.WaveformUrl,
                     Duration = double.TryParse(trackUploadDto.Duration, out var duration) ? duration : 0,
                     UploadDate = DateTime.Now.ToLocalTime(),
                     FileSizeInBytes = int.Parse(trackUploadDto.FileSize),
@@ -470,13 +465,13 @@ namespace localsound.backend.Infrastructure.Services
                 if (trackUploadDto.TrackImage != null)
                 {
                     var imageId = Guid.NewGuid();
-                    var imageFilePath = $"[{userId}]/uploads/{trackId}/image/{imageId}{trackUploadDto.TrackImageExt}";
+                    var imageFilePath = $"{track.TrackData.FileLocation}/image/{imageId}{trackUploadDto.TrackImageExt}";
 
                     var result = await _blobRepository.UploadBlobAsync(imageFilePath, trackUploadDto.TrackImage);
 
                     if (!result.IsSuccessStatusCode || result.ReturnData is null)
                     {
-                        return new ServiceResponse(HttpStatusCode.InternalServerError);
+                        return new ServiceResponse<int>(HttpStatusCode.InternalServerError);
                     }
 
                     track.TrackImage = new FileContent
@@ -493,17 +488,20 @@ namespace localsound.backend.Infrastructure.Services
 
                 if (!addTrackResult.IsSuccessStatusCode)
                 {
-                    return new ServiceResponse(HttpStatusCode.InternalServerError);
+                    return new ServiceResponse<int>(HttpStatusCode.InternalServerError);
                 }
 
-                return new ServiceResponse(HttpStatusCode.OK);
+                return new ServiceResponse<int>(HttpStatusCode.OK)
+                {
+                    ReturnData = addTrackResult.ReturnData
+                };
             }
             catch(Exception e)
             {
                 var message = $"{nameof(TrackService)} - {nameof(UploadTrackSupportingDetailsAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse(HttpStatusCode.InternalServerError)
+                return new ServiceResponse<int>(HttpStatusCode.InternalServerError)
                 {
                     ServiceResponseMessage = "An error occured uploading your track, please try again..."
                 };

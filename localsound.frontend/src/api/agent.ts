@@ -221,11 +221,8 @@ const EventType = {
 const Tracks = {
   getTrackData: (memberId: string) =>
     requests.get<TrackUploadSASModel>(`track/member/${memberId}/upload-token`),
-  uploadTrackSupportingData: (
-    memberId: string,
-    trackId: string,
-    formData: FormData
-  ) => requests.post(`track/member/${memberId}/track/${trackId}`, formData),
+  uploadTrackSupportingData: (memberId: string, formData: FormData) =>
+    requests.post<number>(`track/member/${memberId}/upload-track`, formData),
   editTrackSupportingDetails: (
     memberId: string,
     trackId: string,
@@ -243,7 +240,7 @@ const Tracks = {
     }
     return requests.get<TrackListResponse>(url);
   },
-  getTrackDetails: (memberId: string, trackId: string) =>
+  getTrackDetails: (memberId: string, trackId: number) =>
     requests.get<ArtistTrackUploadModel>(
       `track/member/${memberId}/track/${trackId}`
     ),

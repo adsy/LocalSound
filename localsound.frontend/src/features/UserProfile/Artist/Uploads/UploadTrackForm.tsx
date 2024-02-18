@@ -160,15 +160,11 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                       formData.append("trackFileExt", `.${trackExt}`);
                       formData.append(
                         "fileLocation",
-                        uploadData!.uploadLocation + `.${trackExt}`
+                        uploadData!.uploadLocation
                       );
                       formData.append(
                         "trackUrl",
                         `${uploadData?.accountUrl}/${uploadData?.containerName}/${uploadData?.uploadLocation}.${trackExt}`
-                      );
-                      formData.append(
-                        "waveformUrl",
-                        `${uploadData?.accountUrl}/${uploadData?.containerName}/${uploadData?.uploadLocation}.json`
                       );
 
                       selectedGenres.forEach((genre: GenreModel, index) => {
@@ -187,16 +183,16 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                       formData.append("fileSize", `${file.size}`);
 
                       // Upload track
-                      await agent.Tracks.uploadTrackSupportingData(
-                        userDetails.memberId,
-                        uploadData!.trackId,
-                        formData
-                      );
+                      var trackId =
+                        await agent.Tracks.uploadTrackSupportingData(
+                          userDetails.memberId,
+                          formData
+                        );
 
                       // Get the uploaded track details so its updated in the upload list
                       var uploadedTrack = await agent.Tracks.getTrackDetails(
                         userDetails.memberId,
-                        uploadData!.trackId
+                        trackId
                       );
 
                       setTracks([uploadedTrack, ...tracks]);

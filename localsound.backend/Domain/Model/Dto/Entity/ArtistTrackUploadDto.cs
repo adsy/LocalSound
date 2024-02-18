@@ -2,7 +2,7 @@
 {
     public class ArtistTrackUploadDto
     {
-        public Guid ArtistTrackUploadId { get; set; }
+        public int ArtistTrackUploadId { get; set; }
         public string TrackName { get; set; }
         public string TrackDescription { get; set; }
         public string TrackImageUrl { get; set; }
@@ -11,7 +11,6 @@
         public string ArtistName { get; set; }
         public string ArtistMemberId { get; set; }
         public string TrackUrl { get; set; }
-        public string WaveformUrl { get; set; }
         public double Duration { get; set; }
         public DateTime UploadDate { get; set; }
 

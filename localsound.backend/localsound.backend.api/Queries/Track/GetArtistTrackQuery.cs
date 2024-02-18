@@ -7,6 +7,6 @@ namespace localsound.backend.api.Queries.Track
     public class GetArtistTrackQuery : IRequest<ServiceResponse<ArtistTrackUploadDto>>
     {
         public string MemberId { get; set; }
-        public Guid TrackId { get; set; }
+        public int TrackId { get; set; }
     }
 }

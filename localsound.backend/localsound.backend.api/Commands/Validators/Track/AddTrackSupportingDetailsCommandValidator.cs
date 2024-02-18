@@ -15,10 +15,6 @@ namespace localsound.backend.api.Commands.Validators.Track
                 .NotEmpty()
                 .WithMessage("Member ID cannot be blank/null/empty");
 
-            RuleFor(m => m.TrackId)
-                .NotEmpty()
-                .WithMessage("Track ID cannot be null");
-
             RuleFor(m => m.TrackData)
                 .NotEmpty()
                 .WithMessage("Track data DTO cannot be null");

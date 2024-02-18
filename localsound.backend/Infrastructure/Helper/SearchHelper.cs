@@ -4,7 +4,7 @@ namespace localsound.backend.Infrastructure.Helper
 {
     public class SearchHelper : ISearchHelper
     {
-        public int GuidBinarySearch(List<Guid> arr, Guid target)
+        public int IntBinarySearch(List<int> arr, int target)
         {
             int left = 0;
             int right = arr.Count - 1;

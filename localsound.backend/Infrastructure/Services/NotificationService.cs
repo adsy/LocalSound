@@ -25,7 +25,7 @@ namespace localsound.backend.Infrastructure.Services
             _accountRepository = accountRepository;
         }
 
-        public async Task<ServiceResponse> ClickNotification(Guid userId, string memberId, Guid notificationId)
+        public async Task<ServiceResponse> ClickNotification(Guid userId, string memberId, int notificationId)
         {
             try
             {
@@ -127,7 +127,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<NotificationListResponseDto>> GetMoreUserNotifications(Guid userId, string memberId, int page)
+        public async Task<ServiceResponse<NotificationListResponseDto>> GetMoreUserNotifications(Guid userId, string memberId, int lastNotificationId)
         {
             try
             {
@@ -141,7 +141,7 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var notifications = await _notificationRepository.GetUserNotificationsAsync(userId, page);
+                var notifications = await _notificationRepository.GetUserNotificationsAsync(userId, lastNotificationId);
 
                 if (!notifications.IsSuccessStatusCode || notifications.ReturnData is null)
                 {

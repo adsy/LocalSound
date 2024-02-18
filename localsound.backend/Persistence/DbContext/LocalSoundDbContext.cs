@@ -131,6 +131,7 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<ArtistTrackUpload>(x =>
             {
                 x.HasKey(x => x.ArtistTrackUploadId).IsClustered(false);
+                x.Property(x => x.ArtistTrackUploadId).ValueGeneratedOnAdd();
                 x.HasIndex(x => x.ArtistMemberId).IsClustered(true);
                 x.HasMany(x => x.Genres);
                 x.HasOne(x => x.TrackData).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
@@ -220,6 +221,7 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<Notification>(x =>
             {
                 x.HasKey(x => x.NotificationId).IsClustered(false);
+                x.Property(x => x.NotificationId).ValueGeneratedOnAdd();
                 x.HasIndex(x => x.NotificationReceiverId).IsUnique(false).IsClustered(true);
                 x.HasOne(x => x.NotificationReceiver).WithMany(x => x.ReceivedNotifications).OnDelete(DeleteBehavior.NoAction);
                 x.HasOne(x => x.NotificationCreator).WithMany(x => x.SentNotifications).OnDelete(DeleteBehavior.NoAction);

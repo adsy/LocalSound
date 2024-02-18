@@ -15,7 +15,7 @@ namespace localsound.CoreUpdates.Persistence
         public DbSet<ArtistPackagePhoto> ArtistPackagePhoto { get; set; }
         public DbSet<AccountImage> AccountImage { get; set; }
         public DbSet<FileContent> FileContent { get; set; }
-
+        n
         protected override void OnModelCreating(ModelBuilder builder)
         {
 

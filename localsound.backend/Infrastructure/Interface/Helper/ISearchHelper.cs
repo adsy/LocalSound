@@ -2,6 +2,6 @@
 {
     public interface ISearchHelper
     {
-        int GuidBinarySearch(List<Guid> arr, Guid target);
+        int IntBinarySearch(List<int> arr, int target);
     }
 }

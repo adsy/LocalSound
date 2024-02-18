@@ -9,7 +9,7 @@ using MediatR;
 namespace localsound.backend.api.Handlers.Track
 {
     public class TrackHandler : IRequestHandler<GetUploadTrackDataQuery, ServiceResponse<TrackUploadSASDto>>,
-        IRequestHandler<AddTrackSupportingDetailsCommand, ServiceResponse>,
+        IRequestHandler<AddTrackSupportingDetailsCommand, ServiceResponse<int>>,
         IRequestHandler<GetTracksQuery, ServiceResponse<TrackListResponseDto>>,
         IRequestHandler<GetArtistTrackQuery, ServiceResponse<ArtistTrackUploadDto>>,
         IRequestHandler<UpdateTrackSupportingDetailsCommand, ServiceResponse>,
@@ -29,9 +29,9 @@ namespace localsound.backend.api.Handlers.Track
             return await _trackService.GenerateTrackUploadSASDtoAsync(request.AppUserId, request.MemberId);
         }
 
-        public async Task<ServiceResponse> Handle(AddTrackSupportingDetailsCommand request, CancellationToken cancellationToken)
+        public async Task<ServiceResponse<int>> Handle(AddTrackSupportingDetailsCommand request, CancellationToken cancellationToken)
         {
-            return await _trackService.UploadTrackSupportingDetailsAsync(request.UserId, request.MemberId, request.TrackId, request.TrackData);
+            return await _trackService.UploadTrackSupportingDetailsAsync(request.UserId, request.MemberId, request.TrackData);
         }
 
         public async Task<ServiceResponse<ArtistTrackUploadDto>> Handle(GetArtistTrackQuery request, CancellationToken cancellationToken)
@@ -61,7 +61,7 @@ namespace localsound.backend.api.Handlers.Track
 
         public async Task<ServiceResponse<TrackListResponseDto>> Handle(GetTracksQuery request, CancellationToken cancellationToken)
         {
-            return await _trackService.GetTracksByPlaylistTypeAsync(request.UserId, request.MemberId, request.LastUploadDate, request.PlaylistType);
+            return await _trackService.GetTracksByPlaylistTypeAsync(request.UserId, request.MemberId, request.LastTrackId, request.PlaylistType);
         }
     }
 }

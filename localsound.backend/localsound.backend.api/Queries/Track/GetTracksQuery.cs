@@ -9,7 +9,7 @@ namespace localsound.backend.api.Queries.Track
     {
         public Guid? UserId { get; set; }
         public string MemberId { get; set; }
-        public DateTime? LastUploadDate { get; set; }
+        public int? LastTrackId { get; set; }
         public PlaylistTypeEnum PlaylistType { get; set; }
     }
 }

@@ -4,7 +4,7 @@ namespace localsound.backend.Domain.Model.Entity
 {
     public class Notification
     {
-        public Guid NotificationId { get; set; }
+        public int NotificationId { get; set; }
         [ForeignKey("NotificationReceiver")]
         public Guid NotificationReceiverId { get; set; }
         [ForeignKey("NotificationCreator")]

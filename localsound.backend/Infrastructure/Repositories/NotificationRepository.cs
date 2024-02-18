@@ -19,7 +19,7 @@ namespace localsound.backend.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public async Task<ServiceResponse> ClickNotificationAsync(Guid userId, Guid notificationId)
+        public async Task<ServiceResponse> ClickNotificationAsync(Guid userId, int notificationId)
         {
             try
             {
@@ -51,7 +51,6 @@ namespace localsound.backend.Infrastructure.Repositories
             {
                 var notification = await _dbContext.Notification.AddAsync(new Notification
                 {
-                    NotificationId = Guid.NewGuid(),
                     NotificationCreatorId = creatorUserId,
                     NotificationReceiverId = receiverUserId,
                     NotificationMessage = message,
@@ -95,7 +94,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<Notification>> GetUserNotificationAsync(Guid notificationId)
+        public async Task<ServiceResponse<Notification>> GetUserNotificationAsync(int notificationId)
         {
             try
             {
@@ -121,17 +120,17 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<List<Notification>>> GetUserNotificationsAsync(Guid userId, int page)
+        public async Task<ServiceResponse<List<Notification>>> GetUserNotificationsAsync(Guid userId, int lastNotificationId)
         {
             try
             {
+
                 var notifications = await _dbContext.Notification
                     .Include(x => x.NotificationReceiver)
                     .Include(x => x.NotificationCreator)
                     .ThenInclude(x => x.Images)
-                    .Where(x => x.NotificationReceiverId == userId)
+                    .Where(x => x.NotificationReceiverId == userId && x.NotificationId > lastNotificationId)
                     .OrderByDescending(x => x.CreatedOn)
-                    .Skip(10*page)
                     .Take(10)
                     .ToListAsync();
 

@@ -41,14 +41,13 @@ namespace localsound.backend.api.Controllers
         }
 
         [HttpPost]
-        [Route("member/{memberId}/track/{trackId}")]
-        public async Task<ActionResult> UploadTrackSupportingDetails([FromForm] TrackUploadDto data, string memberId, Guid trackId)
+        [Route("member/{memberId}/upload-track")]
+        public async Task<ActionResult> UploadTrackSupportingDetails([FromForm] TrackUploadDto data, string memberId)
         {
             var result = await Mediator.Send(new AddTrackSupportingDetailsCommand
             {
                 UserId = CurrentUser.AppUserId,
                 MemberId = memberId,
-                TrackId = trackId,
                 TrackData = data
             });
 
@@ -57,12 +56,12 @@ namespace localsound.backend.api.Controllers
                 return StatusCode((int)result.StatusCode, result.ServiceResponseMessage);
             }
 
-            return Ok();
+            return Ok(result.ReturnData);
         }
 
         [HttpPut]
         [Route("member/{memberId}/track/{trackId}")]
-        public async Task<ActionResult> UpdateTrackSupportingDetails([FromForm] TrackUpdateDto data, string memberId, Guid trackId)
+        public async Task<ActionResult> UpdateTrackSupportingDetails([FromForm] TrackUpdateDto data, string memberId, int trackId)
         {
             var result = await Mediator.Send(new UpdateTrackSupportingDetailsCommand
             {
@@ -83,7 +82,7 @@ namespace localsound.backend.api.Controllers
         [HttpGet]
         [Route("member/{memberId}/track/{trackId}")]
         [AllowAnonymous]
-        public async Task<ActionResult> GetArtistTrack(string memberId, Guid trackId)
+        public async Task<ActionResult> GetArtistTrack(string memberId, int trackId)
         {
             var result = await Mediator.Send(new GetArtistTrackQuery
             {
@@ -101,7 +100,7 @@ namespace localsound.backend.api.Controllers
 
         [HttpDelete]
         [Route("member/{memberId}/track/{trackId}")]
-        public async Task<ActionResult> DeleteArtistTrack(string memberId, Guid trackId)
+        public async Task<ActionResult> DeleteArtistTrack(string memberId, int trackId)
         {
             var result = await Mediator.Send(new DeleteArtistTrackCommand
             {
@@ -120,7 +119,7 @@ namespace localsound.backend.api.Controllers
 
         [HttpPut]
         [Route("member/{memberId}/artist/{artistId}/track/{trackId}/track-likes")]
-        public async Task<ActionResult> LikeArtistTrack(string memberId, string artistId, Guid trackId)
+        public async Task<ActionResult> LikeArtistTrack(string memberId, string artistId, int trackId)
         {
             var result = await Mediator.Send(new LikeArtistTrackCommand
             {
@@ -140,7 +139,7 @@ namespace localsound.backend.api.Controllers
 
         [HttpDelete]
         [Route("member/{memberId}/artist/{artistId}/track/{trackId}/track-likes")]
-        public async Task<ActionResult> UnlikeArtistTrack(string memberId, string artistId, Guid trackId)
+        public async Task<ActionResult> UnlikeArtistTrack(string memberId, string artistId, int trackId)
         {
             var result = await Mediator.Send(new UnlikeArtistTrackCommand
             {
@@ -161,13 +160,13 @@ namespace localsound.backend.api.Controllers
         [HttpGet]
         [Route("member/{memberId}/playlist-type/{playlistType}")]
         [AllowAnonymous]
-        public async Task<ActionResult> GetTracks([FromQuery] DateTime? lastUploadDate, string memberId, PlaylistTypeEnum playlistType)
+        public async Task<ActionResult> GetTracks([FromQuery] int? lastTrackId, string memberId, PlaylistTypeEnum playlistType)
         {
             var result = await Mediator.Send(new GetTracksQuery
             {
                 UserId = CurrentUser?.AppUserId,
                 MemberId = memberId,
-                LastUploadDate = lastUploadDate,
+                LastTrackId = lastTrackId,
                 PlaylistType = playlistType
             });
 

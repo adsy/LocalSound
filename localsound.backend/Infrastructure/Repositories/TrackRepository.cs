@@ -22,22 +22,25 @@ namespace localsound.backend.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public async Task<ServiceResponse> AddArtistTrackUploadAsync(ArtistTrackUpload track)
+        public async Task<ServiceResponse<int>> AddArtistTrackUploadAsync(ArtistTrackUpload track)
         {
             try
             {
-                await _dbContext.ArtistTrackUpload.AddAsync(track);
+                var trackEntity = await _dbContext.ArtistTrackUpload.AddAsync(track);
 
                 await _dbContext.SaveChangesAsync();
 
-                return new ServiceResponse(HttpStatusCode.OK);
+                return new ServiceResponse<int>(HttpStatusCode.OK)
+                {
+                    ReturnData = trackEntity.Entity.ArtistTrackUploadId
+                };
             }
             catch(Exception e)
             {
                 var message = $"{nameof(TrackRepository)} - {nameof(AddArtistTrackUploadAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse(HttpStatusCode.InternalServerError);
+                return new ServiceResponse<int>(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -69,7 +72,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<ArtistTrackUpload>> GetArtistTrackAsync(string memberId, Guid trackId)
+        public async Task<ServiceResponse<ArtistTrackUpload>> GetArtistTrackAsync(string memberId, int trackId)
         {
             try
             {
@@ -107,7 +110,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<List<ArtistTrackUpload>>> GetArtistTracksAsync(string memberId, DateTime? lastUploadDate)
+        public async Task<ServiceResponse<List<ArtistTrackUpload>>> GetArtistTracksAsync(string memberId, int? lastTrackId)
         {
             try
             {
@@ -118,7 +121,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     return new ServiceResponse<List<ArtistTrackUpload>>(HttpStatusCode.NotFound);
                 }
 
-                var date = lastUploadDate.HasValue ? lastUploadDate.Value : DateTime.Now;
+                lastTrackId = lastTrackId.HasValue ? lastTrackId.Value : 0;
 
                 var tracks = await _dbContext.ArtistTrackUpload
                     .Include(x => x.Artist)
@@ -126,7 +129,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.TrackData)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
-                    .Where(x => x.AppUserId == artist.AppUserId && x.UploadDate <  date)
+                    .Where(x => x.AppUserId == artist.AppUserId && x.ArtistTrackUploadId >  lastTrackId)
                     .OrderByDescending(x => x.UploadDate)
                     .Take(10)
                     .ToListAsync();
@@ -145,11 +148,11 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<List<ArtistTrackUpload>>> GetLikedSongsAsync(string memberId, DateTime? lastUploadDate)
+        public async Task<ServiceResponse<List<ArtistTrackUpload>>> GetLikedSongsAsync(string memberId, int? lastTrackId)
         {
             try
             {
-                var date = lastUploadDate.HasValue ? lastUploadDate.Value : DateTime.Now;
+                lastTrackId = lastTrackId.HasValue ? lastTrackId.Value : 0;
 
                 var tracks = await _dbContext.SongLike
                     .Include(x => x.ArtistTrackUpload)
@@ -160,7 +163,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.ArtistTrackUpload)
                     .ThenInclude(x => x.Genres)
                     .ThenInclude(x => x.Genre)
-                    .Where(x => x.MemberId == memberId && x.ArtistTrackUpload.UploadDate < date)
+                    .Where(x => x.MemberId == memberId && x.ArtistTrackUpload.ArtistTrackUploadId > lastTrackId)
                     .OrderByDescending(x => x.SongLikeId)
                     .Select(x => x.ArtistTrackUpload)
                     .Take(10)
@@ -180,13 +183,13 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<List<Guid>>> GetLikedSongsIdsAsync(string memberId)
+        public async Task<ServiceResponse<List<int>>> GetLikedSongsIdsAsync(string memberId)
         {
             try
             {
                 var songLikes = await _dbContext.SongLike.Where(x => x.MemberId == memberId).Select(x => x.ArtistTrackId).ToListAsync();
 
-                return new ServiceResponse<List<Guid>>(HttpStatusCode.OK)
+                return new ServiceResponse<List<int>>(HttpStatusCode.OK)
                 {
                     ReturnData = songLikes
                 };
@@ -196,11 +199,11 @@ namespace localsound.backend.Infrastructure.Repositories
                 var message = $"{nameof(TrackRepository)} - {nameof(GetLikedSongsIdsAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<List<Guid>>(HttpStatusCode.InternalServerError);
+                return new ServiceResponse<List<int>>(HttpStatusCode.InternalServerError);
             }
         }
 
-        public async Task<ServiceResponse> LikeArtistTrackAsync(string memberId, string artistMemberId, Guid trackId)
+        public async Task<ServiceResponse> LikeArtistTrackAsync(string memberId, string artistMemberId, int trackId)
         {
             try
             {
@@ -243,7 +246,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> UnlikeArtistTrackAsync(string memberId, string artistMemberId, Guid trackId)
+        public async Task<ServiceResponse> UnlikeArtistTrackAsync(string memberId, string artistMemberId, int trackId)
         {
             try
             {
@@ -287,7 +290,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> UpdateArtistTrackUploadAsync(Account account, Guid trackId, string trackName, string trackDescription, List<GenreDto> genres, string? trackImageExt, FileContent? newTrackImage, string newTrackImageUrl)
+        public async Task<ServiceResponse> UpdateArtistTrackUploadAsync(Account account, int trackId, string trackName, string trackDescription, List<GenreDto> genres, string? trackImageExt, FileContent? newTrackImage, string newTrackImageUrl)
         {
             try
             {
@@ -305,7 +308,6 @@ namespace localsound.backend.Infrastructure.Repositories
                 track.TrackDescription = trackDescription;
                 track.Genres = genres.Select(x => new ArtistTrackGenre
                 {
-                    ArtistTrackUploadId = trackId,
                     GenreId = x.GenreId
                 }).ToList();
 
