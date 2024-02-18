@@ -20,7 +20,7 @@ const MusicPlayer = () => {
   const player = useSelector((state: State) => state.player);
   const [time, setTime] = useState<any>(null);
   const [totalTime, setTotalTime] = useState<string | null>(null);
-  const [currentTrack, setCurrentTrack] = useState<string | null>(null);
+  const [currentTrack, setCurrentTrack] = useState<number | null>(null);
   const waveformRef = useRef<HTMLMediaElement>(null);
   const seekerRef = useRef<HTMLInputElement>(null);
   const volumeRef = useRef<HTMLInputElement>(null);

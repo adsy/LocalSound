@@ -225,7 +225,7 @@ const Tracks = {
     requests.post<number>(`track/member/${memberId}/upload-track`, formData),
   editTrackSupportingDetails: (
     memberId: string,
-    trackId: string,
+    trackId: number,
     formData: FormData
   ) => requests.put(`track/member/${memberId}/track/${trackId}`, formData),
   getTracks: (
@@ -244,14 +244,14 @@ const Tracks = {
     requests.get<ArtistTrackUploadModel>(
       `track/member/${memberId}/track/${trackId}`
     ),
-  deleteTrack: (memberId: string, trackId: string) =>
+  deleteTrack: (memberId: string, trackId: number) =>
     requests.delete(`track/member/${memberId}/track/${trackId}`),
-  likeSong: (memberId: string, artistMemberId: string, trackId: string) =>
+  likeSong: (memberId: string, artistMemberId: string, trackId: number) =>
     requests.put(
       `track/member/${memberId}/artist/${artistMemberId}/track/${trackId}/track-likes`,
       {}
     ),
-  unlikeSong: (memberId: string, artistMemberId: string, trackId: string) =>
+  unlikeSong: (memberId: string, artistMemberId: string, trackId: number) =>
     requests.delete(
       `track/member/${memberId}/artist/${artistMemberId}/track/${trackId}/track-likes`,
       {}
@@ -306,7 +306,7 @@ const Notifications = {
     requests.get<NotificationListResponseModel>(
       `notifications/member/${memberId}/get-more-notifications?page=${page}`
     ),
-  clickNotification: (memberId: string, notificationId: string) =>
+  clickNotification: (memberId: string, notificationId: number) =>
     requests.put(
       `notifications/member/${memberId}/notification/${notificationId}/click-notification`,
       {}

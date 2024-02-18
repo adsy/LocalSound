@@ -1,5 +1,5 @@
 export interface CurrentSongState {
-  trackId: string | null;
+  trackId: number | null;
   playing: boolean;
   trackUrl: string | null;
   trackName: string | null;

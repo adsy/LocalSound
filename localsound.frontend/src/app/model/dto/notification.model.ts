@@ -1,5 +1,5 @@
 export interface NotificationModel {
-  notificationId: string;
+  notificationId: number;
   receiverMemberId: string;
   creatorMemberId: string;
   notificationMessage: string;

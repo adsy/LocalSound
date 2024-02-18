@@ -13,7 +13,7 @@ namespace localsound.backend.api.Queries.Validators.Notifications
             RuleFor(m => m.MemberId)
                 .NotEmpty();
 
-            RuleFor(m => m.Page)
+            RuleFor(m => m.LastNotificationId)
                 .NotEmpty();
         }
     }

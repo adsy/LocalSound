@@ -1,7 +1,7 @@
 import { GenreModel } from "./genre.model";
 
 export interface ArtistTrackUploadModel {
-  artistTrackUploadId: string;
+  artistTrackUploadId: number;
   trackName: string;
   trackDescription: string;
   genres: GenreModel[];
