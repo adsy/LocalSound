@@ -40,12 +40,12 @@ const Favourites = ({
       try {
         setLoading(true);
 
-        var lastUploadDate = favourites[favourites.length - 1]?.uploadDate;
+        var songLikeId = favourites[favourites.length - 1]?.songLikeId;
 
         var result = await agent.Tracks.getTracks(
           profileDetails!.memberId,
-          lastUploadDate,
-          PlaylistTypes.Favourites
+          PlaylistTypes.Favourites,
+          songLikeId
         );
         setFavourites([...favourites, ...result.trackList]);
         setCanLoadMore(result.canLoadMore);

@@ -6,7 +6,6 @@ export interface ArtistTrackUploadModel {
   trackDescription: string;
   genres: GenreModel[];
   trackImageUrl: string;
-  trackDataLocation: string;
   trackUrl: string;
   waveformUrl: string;
   duration: number;
@@ -16,4 +15,5 @@ export interface ArtistTrackUploadModel {
   artistMemberId: string;
   songLiked: boolean;
   likeCount: number;
+  songLikeId?: number;
 }

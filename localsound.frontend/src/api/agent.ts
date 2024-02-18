@@ -230,13 +230,13 @@ const Tracks = {
   ) => requests.put(`track/member/${memberId}/track/${trackId}`, formData),
   getTracks: (
     memberId: string,
-    uploadDate: Date,
-    playlistType: PlaylistTypes
+    playlistType: PlaylistTypes,
+    trackId?: number
   ) => {
     var url = `track/member/${memberId}/playlist-type/${playlistType}`;
 
-    if (uploadDate) {
-      url += `?lastUploadDate=${uploadDate}`;
+    if (trackId) {
+      url += `?lastTrackId=${trackId}`;
     }
     return requests.get<TrackListResponse>(url);
   },

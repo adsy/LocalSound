@@ -14,6 +14,7 @@ import agent from "../../api/agent";
 import InPageLoadingComponent from "../../app/layout/InPageLoadingComponent";
 import { useHistory } from "react-router-dom";
 import PlaceholderImg from "../../assets/placeholder.png";
+import { PlaylistTypes } from "../../app/model/enums/playlistTypes";
 
 const MusicPlayer = () => {
   const history = useHistory();
@@ -229,6 +230,7 @@ const MusicPlayer = () => {
               trackImage: track.trackImageUrl,
               duration: track.duration,
               uploadDate: track.uploadDate,
+              songLikeId: track.songLikeId,
             })
           );
         } else {
@@ -256,6 +258,7 @@ const MusicPlayer = () => {
           trackImage: track.trackImageUrl,
           duration: track.duration,
           uploadDate: track.uploadDate,
+          songLikeId: track.songLikeId,
         })
       );
     } else {
@@ -263,10 +266,15 @@ const MusicPlayer = () => {
         if (!loadingMore) {
           try {
             setLoadingMore(true);
+            var id =
+              player.playlistType === PlaylistTypes.Uploads
+                ? player.currentSong?.trackId
+                : player.currentSong?.songLikeId;
+
             var result = await agent.Tracks.getTracks(
               player.listeningProfileMemberId!,
-              player.currentSong!.uploadDate,
-              player.playlistType!
+              player.playlistType!,
+              id!
             );
 
             if (result.trackList.length > 0) {
@@ -292,6 +300,7 @@ const MusicPlayer = () => {
                   trackImage: track.trackImageUrl,
                   duration: track.duration,
                   uploadDate: track.uploadDate,
+                  songLikeId: track.songLikeId,
                 })
               );
             } else {

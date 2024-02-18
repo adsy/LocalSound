@@ -26,6 +26,7 @@ export const playerSlice = createSlice({
         currentSongArtistProfile: payload.currentSongArtistProfile,
         duration: payload.duration,
         uploadDate: payload.uploadDate,
+        songLikeId: payload.songLikeId,
       };
       if (payload.playlistType) {
         state.playlistType = payload.playlistType;

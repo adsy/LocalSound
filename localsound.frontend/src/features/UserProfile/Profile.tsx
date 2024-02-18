@@ -30,16 +30,16 @@ const UserProfileSummary = () => {
   const getProfile = async () => {
     var profileUrl = history.location.pathname.slice(1);
 
-    if (!loading && profileUrl !== profile?.profileUrl) {
-      dispatch(handleSetProfile(null));
-      setLoading(true);
-      if (userDetail?.profileUrl !== profileUrl) {
+    if (!loading) {
+      if (profileUrl !== userDetail?.profileUrl) {
+        dispatch(handleSetProfile(null));
+        setLoading(true);
         if (profileUrl?.length > 0) {
           var result = await agent.Account.getProfile(profileUrl);
           dispatch(handleSetProfile(result));
           setViewingOwnProfile(false);
         }
-      } else if (userDetail) {
+      } else {
         dispatch(handleSetProfile(userDetail));
         setViewingOwnProfile(true);
       }

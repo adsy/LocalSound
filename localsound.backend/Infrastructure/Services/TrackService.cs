@@ -192,7 +192,7 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
-                ServiceResponse<List<ArtistTrackUpload>> tracksResult = null;
+                ServiceResponse<List<ArtistTrackUploadDto>> tracksResult = null;
 
                 switch (playlistType)
                 {
@@ -209,7 +209,7 @@ namespace localsound.backend.Infrastructure.Services
                     default:
                         {
                             // Invalid playlist type
-                            tracksResult = new ServiceResponse<List<ArtistTrackUpload>>(HttpStatusCode.InternalServerError);
+                            tracksResult = new ServiceResponse<List<ArtistTrackUploadDto>>(HttpStatusCode.InternalServerError);
                             break;
                         }
                 }
@@ -219,13 +219,6 @@ namespace localsound.backend.Infrastructure.Services
                 {
                     return new ServiceResponse<TrackListResponseDto>(tracksResult.StatusCode);
                 }
-
-                foreach(var track in tracksResult.ReturnData)
-                {
-                    track.TrackImageUrl = !string.IsNullOrWhiteSpace(track.TrackImageUrl) ? track.TrackImageUrl : track.Artist.Images.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage)?.AccountImageUrl;
-                }
-
-                var trackList = _mapper.Map<List<ArtistTrackUploadDto>>(tracksResult.ReturnData);
 
                 if (userId is not null)
                 {
@@ -238,7 +231,7 @@ namespace localsound.backend.Infrastructure.Services
                         if (songIds.IsSuccessStatusCode && songIds.ReturnData is not null && songIds.ReturnData.Any())
                         {
                             songIds.ReturnData = songIds.ReturnData.OrderBy(x => x).ToList();
-                            foreach (var song in trackList)
+                            foreach (var song in tracksResult.ReturnData)
                             {
                                 song.SongLiked = _searchHelper.IntBinarySearch(songIds.ReturnData, song.ArtistTrackUploadId) != -1 ? true : false;
                             }
@@ -250,8 +243,8 @@ namespace localsound.backend.Infrastructure.Services
                 {
                     ReturnData = new TrackListResponseDto
                     {
-                        TrackList = trackList,
-                        CanLoadMore = trackList.Count == 10
+                        TrackList = tracksResult.ReturnData,
+                        CanLoadMore = tracksResult.ReturnData.Count == 10
                     }
                 };
             }

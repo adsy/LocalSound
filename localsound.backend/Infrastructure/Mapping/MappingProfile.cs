@@ -57,20 +57,6 @@ namespace localsound.backend.Infrastructure.Mapping
                 .ForMember(dest => dest.AccountImageTypeId, source => source.MapFrom(x => x.AccountImageTypeId))
                 .ForMember(dest => dest.AccountImageUrl, source => source.MapFrom(x => x.AccountImageUrl));
 
-            CreateMap<ArtistTrackUpload, ArtistTrackUploadDto>()
-                .ForMember(dest => dest.ArtistTrackUploadId, source => source.MapFrom(x => x.ArtistTrackUploadId))
-                .ForMember(dest => dest.TrackName, source => source.MapFrom(x => x.TrackName))
-                .ForMember(dest => dest.TrackDescription, source => source.MapFrom(x => x.TrackDescription))
-                .ForMember(dest => dest.TrackImageUrl, source => source.MapFrom(x => x.TrackImageUrl))
-                .ForMember(dest => dest.TrackDataLocation, source => source.MapFrom(x => x.TrackData.FileLocation))
-                .ForMember(dest => dest.TrackUrl, source => source.MapFrom(x => x.TrackUrl))
-                .ForMember(dest => dest.Duration, source => source.MapFrom(x => x.Duration))
-                .ForMember(dest => dest.UploadDate, source => source.MapFrom(x => x.UploadDate))
-                .ForMember(dest => dest.ArtistName, source => source.MapFrom(x => x.Artist.Name))
-                .ForMember(dest => dest.ArtistMemberId, source => source.MapFrom(x => x.Artist.MemberId))
-                .ForMember(dest => dest.LikeCount, source => source.MapFrom(x => x.LikeCount))
-                .ForMember(dest => dest.ArtistProfile, source => source.MapFrom(x => x.Artist.ProfileUrl));
-
             CreateMap<ArtistTrackGenre, GenreDto>()
                 .ForMember(dest => dest.GenreId, source => source.MapFrom(x => x.Genre.GenreId))
                 .ForMember(dest => dest.GenreName, source => source.MapFrom(x => x.Genre.GenreName));

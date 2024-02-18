@@ -48,12 +48,12 @@ const UploadList = ({
       try {
         setLoading(true);
 
-        var lastUploadDate = tracks[tracks.length - 1]?.uploadDate;
+        var trackId = tracks[tracks.length - 1]?.artistTrackUploadId;
 
         var result = await agent.Tracks.getTracks(
           profileDetails!.memberId,
-          lastUploadDate,
-          PlaylistTypes.Uploads
+          PlaylistTypes.Uploads,
+          trackId
         );
         setTracks([...tracks, ...result.trackList]);
         setCanLoadMore(result.canLoadMore);

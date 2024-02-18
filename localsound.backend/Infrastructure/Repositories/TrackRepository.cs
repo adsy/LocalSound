@@ -110,7 +110,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<List<ArtistTrackUpload>>> GetArtistTracksAsync(string memberId, int? lastTrackId)
+        public async Task<ServiceResponse<List<ArtistTrackUploadDto>>> GetArtistTracksAsync(string memberId, int? lastTrackId)
         {
             try
             {
@@ -118,7 +118,7 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 if (artist is null)
                 {
-                    return new ServiceResponse<List<ArtistTrackUpload>>(HttpStatusCode.NotFound);
+                    return new ServiceResponse<List<ArtistTrackUploadDto>>(HttpStatusCode.NotFound);
                 }
 
                 lastTrackId = lastTrackId.HasValue ? lastTrackId.Value : 0;
@@ -129,12 +129,31 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.TrackData)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
-                    .Where(x => x.AppUserId == artist.AppUserId && x.ArtistTrackUploadId >  lastTrackId)
-                    .OrderByDescending(x => x.UploadDate)
+                    .Where(x => x.AppUserId == artist.AppUserId && x.ArtistTrackUploadId <  lastTrackId)
+                    .OrderByDescending(x => x.ArtistTrackUploadId)
+                    .Select(x => new ArtistTrackUploadDto
+                    {
+                        ArtistTrackUploadId = x.ArtistTrackUploadId,
+                        TrackName = x.TrackName,
+                        TrackDescription = x.TrackDescription,
+                        TrackImageUrl = !string.IsNullOrWhiteSpace(x.TrackImageUrl) ? x.TrackImageUrl : x.Artist.Images.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage) != null ? x.Artist.Images.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage).AccountImageUrl : "",
+                        ArtistProfile = x.Artist.ProfileUrl,
+                        ArtistName = x.Artist.Name,
+                        ArtistMemberId = x.Artist.MemberId,
+                        TrackUrl = x.TrackUrl,
+                        Duration = x.Duration,
+                        UploadDate = x.UploadDate,
+                        LikeCount = x.LikeCount,
+                        Genres = x.Genres.Select(genre => new GenreDto
+                        {
+                            GenreId = genre.GenreId,
+                            GenreName = genre.Genre.GenreName
+                        }).ToList()
+                    })
                     .Take(10)
                     .ToListAsync();
 
-                return new ServiceResponse<List<ArtistTrackUpload>>(HttpStatusCode.OK)
+                return new ServiceResponse<List<ArtistTrackUploadDto>>(HttpStatusCode.OK)
                 {
                     ReturnData = tracks
                 };
@@ -144,11 +163,11 @@ namespace localsound.backend.Infrastructure.Repositories
                 var message = $"{nameof(TrackRepository)} - {nameof(GetArtistTracksAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<List<ArtistTrackUpload>>(HttpStatusCode.InternalServerError);
+                return new ServiceResponse<List<ArtistTrackUploadDto>>(HttpStatusCode.InternalServerError);
             }
         }
 
-        public async Task<ServiceResponse<List<ArtistTrackUpload>>> GetLikedSongsAsync(string memberId, int? lastTrackId)
+        public async Task<ServiceResponse<List<ArtistTrackUploadDto>>> GetLikedSongsAsync(string memberId, int? lastTrackId)
         {
             try
             {
@@ -163,13 +182,32 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.ArtistTrackUpload)
                     .ThenInclude(x => x.Genres)
                     .ThenInclude(x => x.Genre)
-                    .Where(x => x.MemberId == memberId && x.ArtistTrackUpload.ArtistTrackUploadId > lastTrackId)
+                    .Where(x => x.MemberId == memberId && x.SongLikeId < lastTrackId)
                     .OrderByDescending(x => x.SongLikeId)
-                    .Select(x => x.ArtistTrackUpload)
+                    .Select(x => new ArtistTrackUploadDto
+                    {
+                        ArtistTrackUploadId = x.ArtistTrackUpload.ArtistTrackUploadId,
+                        TrackName = x.ArtistTrackUpload.TrackName,
+                        TrackDescription = x.ArtistTrackUpload.TrackDescription,
+                        TrackImageUrl = !string.IsNullOrWhiteSpace(x.ArtistTrackUpload.TrackImageUrl) ? x.ArtistTrackUpload.TrackImageUrl : x.ArtistTrackUpload.Artist.Images.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage) != null ? x.ArtistTrackUpload.Artist.Images.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage).AccountImageUrl : "",
+                        ArtistProfile = x.ArtistTrackUpload.Artist.ProfileUrl,
+                        ArtistName = x.ArtistTrackUpload.Artist.Name,
+                        ArtistMemberId = x.ArtistTrackUpload.Artist.MemberId,
+                        TrackUrl = x.ArtistTrackUpload.TrackUrl,
+                        Duration = x.ArtistTrackUpload.Duration,
+                        UploadDate = x.ArtistTrackUpload.UploadDate,
+                        LikeCount = x.ArtistTrackUpload.LikeCount,
+                        SongLikeId = x.SongLikeId,
+                        Genres = x.ArtistTrackUpload.Genres.Select(genre => new GenreDto
+                        {
+                            GenreId = genre.GenreId,
+                            GenreName = genre.Genre.GenreName
+                        }).ToList()
+                    })
                     .Take(10)
                     .ToListAsync();
 
-                return new ServiceResponse<List<ArtistTrackUpload>>(HttpStatusCode.OK)
+                return new ServiceResponse<List<ArtistTrackUploadDto>>(HttpStatusCode.OK)
                 {
                     ReturnData = tracks
                 };
@@ -179,7 +217,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 var message = $"{nameof(TrackRepository)} - {nameof(GetLikedSongsAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<List<ArtistTrackUpload>>(HttpStatusCode.InternalServerError);
+                return new ServiceResponse<List<ArtistTrackUploadDto>>(HttpStatusCode.InternalServerError);
             }
         }
 

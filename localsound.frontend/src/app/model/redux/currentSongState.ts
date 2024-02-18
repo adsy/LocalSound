@@ -8,4 +8,5 @@ export interface CurrentSongState {
   currentSongArtistProfile: string | null;
   duration: number | null;
   uploadDate: Date;
+  songLikeId?: number | null;
 }

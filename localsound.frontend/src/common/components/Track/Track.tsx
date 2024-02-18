@@ -134,6 +134,7 @@ const Track = ({
           duration: track.duration,
           playlistType: playlistType,
           uploadDate: track.uploadDate,
+          songLikeId: track.songLikeId,
         })
       );
       if (
