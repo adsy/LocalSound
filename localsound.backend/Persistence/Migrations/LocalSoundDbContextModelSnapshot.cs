@@ -371,9 +371,11 @@ namespace localsound.backend.Persistence.Migrations
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistBooking", b =>
                 {
-                    b.Property<Guid>("BookingId")
+                    b.Property<int>("BookingId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookingId"));
 
                     b.Property<Guid>("ArtistId")
                         .HasColumnType("uniqueidentifier");
@@ -539,9 +541,11 @@ namespace localsound.backend.Persistence.Migrations
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistPackagePhoto", b =>
                 {
-                    b.Property<Guid>("ArtistPackagePhotoId")
+                    b.Property<int>("ArtistPackagePhotoId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArtistPackagePhotoId"));
 
                     b.Property<Guid>("ArtistPackageId")
                         .HasColumnType("uniqueidentifier");
@@ -571,8 +575,8 @@ namespace localsound.backend.Persistence.Migrations
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackGenre", b =>
                 {
-                    b.Property<Guid>("ArtistTrackUploadId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ArtistTrackUploadId")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("GenreId")
                         .HasColumnType("uniqueidentifier");
@@ -586,9 +590,11 @@ namespace localsound.backend.Persistence.Migrations
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackUpload", b =>
                 {
-                    b.Property<Guid>("ArtistTrackUploadId")
+                    b.Property<int>("ArtistTrackUploadId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArtistTrackUploadId"));
 
                     b.Property<Guid>("AppUserId")
                         .HasColumnType("uniqueidentifier");
@@ -631,12 +637,7 @@ namespace localsound.backend.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UploadDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnOrder(0);
-
-                    b.Property<string>("WaveformUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ArtistTrackUploadId");
 
@@ -707,9 +708,11 @@ namespace localsound.backend.Persistence.Migrations
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.Notification", b =>
                 {
-                    b.Property<Guid>("NotificationId")
+                    b.Property<int>("NotificationId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationId"));
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -751,8 +754,8 @@ namespace localsound.backend.Persistence.Migrations
                         .HasColumnType("int")
                         .HasDefaultValueSql("NEXT VALUE FOR SongLikeId");
 
-                    b.Property<Guid>("ArtistTrackId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ArtistTrackId")
+                        .HasColumnType("int");
 
                     b.Property<string>("MemberId")
                         .IsRequired()

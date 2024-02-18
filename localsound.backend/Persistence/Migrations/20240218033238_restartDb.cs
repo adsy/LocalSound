@@ -413,7 +413,8 @@ namespace localsound.backend.Persistence.Migrations
                 name: "ArtistTrackUpload",
                 columns: table => new
                 {
-                    ArtistTrackUploadId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ArtistTrackUploadId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     AppUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ArtistMemberId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TrackDataId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -422,7 +423,6 @@ namespace localsound.backend.Persistence.Migrations
                     TrackDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TrackImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TrackUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    WaveformUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Duration = table.Column<double>(type: "float", nullable: false),
                     UploadDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FileSizeInBytes = table.Column<int>(type: "int", nullable: false),
@@ -455,7 +455,8 @@ namespace localsound.backend.Persistence.Migrations
                 name: "Notification",
                 columns: table => new
                 {
-                    NotificationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    NotificationId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     NotificationReceiverId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     NotificationCreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     NotificationMessage = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -483,7 +484,8 @@ namespace localsound.backend.Persistence.Migrations
                 name: "ArtistBooking",
                 columns: table => new
                 {
-                    BookingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BookingId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ArtistId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BookerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -545,7 +547,8 @@ namespace localsound.backend.Persistence.Migrations
                 name: "ArtistPackagePhoto",
                 columns: table => new
                 {
-                    ArtistPackagePhotoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ArtistPackagePhotoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ArtistPackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FileContentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PhotoUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -573,7 +576,7 @@ namespace localsound.backend.Persistence.Migrations
                 name: "ArtistTrackGenre",
                 columns: table => new
                 {
-                    ArtistTrackUploadId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ArtistTrackUploadId = table.Column<int>(type: "int", nullable: false),
                     GenreId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -598,9 +601,8 @@ namespace localsound.backend.Persistence.Migrations
                 columns: table => new
                 {
                     SongLikeId = table.Column<int>(type: "int", nullable: false, defaultValueSql: "NEXT VALUE FOR SongLikeId"),
-                    ArtistTrackId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MemberId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AccountMemberId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    ArtistTrackId = table.Column<int>(type: "int", nullable: false),
+                    MemberId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -609,10 +611,11 @@ namespace localsound.backend.Persistence.Migrations
                     table.UniqueConstraint("AK_SongLike_ArtistTrackId_MemberId", x => new { x.ArtistTrackId, x.MemberId })
                         .Annotation("SqlServer:Clustered", false);
                     table.ForeignKey(
-                        name: "FK_SongLike_Account_AccountMemberId",
-                        column: x => x.AccountMemberId,
+                        name: "FK_SongLike_Account_MemberId",
+                        column: x => x.MemberId,
                         principalTable: "Account",
-                        principalColumn: "MemberId");
+                        principalColumn: "MemberId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_SongLike_ArtistTrackUpload_ArtistTrackId",
                         column: x => x.ArtistTrackId,
@@ -790,11 +793,6 @@ namespace localsound.backend.Persistence.Migrations
                 table: "Notification",
                 column: "NotificationReceiverId")
                 .Annotation("SqlServer:Clustered", true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SongLike_AccountMemberId",
-                table: "SongLike",
-                column: "AccountMemberId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SongLike_ArtistTrackId",
