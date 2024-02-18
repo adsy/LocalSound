@@ -33,7 +33,6 @@ const UploadList = ({
   setTracks,
   viewingOwnProfile,
 }: Props) => {
-  const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [trackError, setTrackError] = useState<string | null>();
   const [canLoadMore, setCanLoadMore] = useState(true);
@@ -65,7 +64,6 @@ const UploadList = ({
           dispatch(
             handleSetTrackList({
               trackList: [...tracks, ...result.trackList],
-              page: page + 1,
               canLoadMore: result.canLoadMore,
               listeningProfileMemberId: profileDetails.memberId,
             })
@@ -75,7 +73,6 @@ const UploadList = ({
         setTrackError(err);
       }
       setLoading(false);
-      setPage(page + 1);
     }
   };
 
@@ -90,7 +87,6 @@ const UploadList = ({
       // we load the profiles track list
       if (
         currentTab === ProfileTabs.Uploads &&
-        page == 0 &&
         (profileDetails.memberId !== playerState.listeningProfileMemberId ||
           playerState.playlistType === PlaylistTypes.Favourites)
       ) {
@@ -100,12 +96,10 @@ const UploadList = ({
       // we load the profiles track list
       else if (
         currentTab === ProfileTabs.Uploads &&
-        page == 0 &&
         profileDetails.memberId === playerState.listeningProfileMemberId
       ) {
         setTracks(playerState.trackList);
         setCanLoadMore(playerState.canLoadMore);
-        setPage(playerState.page);
       }
     })();
 
@@ -130,7 +124,6 @@ const UploadList = ({
     ) {
       setTracks(playerState.trackList);
       setCanLoadMore(playerState.canLoadMore);
-      setPage(playerState.page);
     }
   }, [playerState.trackList]);
 
@@ -198,7 +191,6 @@ const UploadList = ({
               tracks={tracks}
               setTracks={setTracks}
               canLoadMore={canLoadMore}
-              page={page}
               playlistType={PlaylistTypes.Uploads}
               listeningProfileMemberId={profileDetails.memberId}
               viewingOwnProfile={viewingOwnProfile}

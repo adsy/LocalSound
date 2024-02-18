@@ -76,20 +76,15 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.Account.FirstOrDefaultAsync(x => x.MemberId == memberId && x.CustomerType == CustomerTypeEnum.Artist);
-
-                if (artist is null)
-                {
-                    return new ServiceResponse<ArtistTrackUpload>(HttpStatusCode.NotFound);
-                }
-
                 var track = await _dbContext.ArtistTrackUpload
+                    .Include(x => x.Artist)
+                    .ThenInclude(x => x.Images)
                     .Include(x => x.TrackData)
                     .Include(x => x.TrackImage)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
                     .Include(x => x.SongLikes)
-                    .FirstOrDefaultAsync(x => x.AppUserId == artist.AppUserId && x.ArtistTrackUploadId == trackId);
+                    .FirstOrDefaultAsync(x => x.ArtistMemberId == memberId && x.ArtistTrackUploadId == trackId);
 
                 if (track is null)
                 {
@@ -114,22 +109,22 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var artist = await _dbContext.Account.FirstOrDefaultAsync(x => x.MemberId == memberId && x.CustomerType == CustomerTypeEnum.Artist);
+                var tracksQuery = _dbContext.ArtistTrackUpload.AsQueryable();
 
-                if (artist is null)
+                if (lastTrackId.HasValue) {
+                    tracksQuery = tracksQuery.Where(x => x.ArtistMemberId == memberId && x.ArtistTrackUploadId < lastTrackId);
+                }
+                else
                 {
-                    return new ServiceResponse<List<ArtistTrackUploadDto>>(HttpStatusCode.NotFound);
+                    tracksQuery = tracksQuery.Where(x => x.ArtistMemberId == memberId);
                 }
 
-                lastTrackId = lastTrackId.HasValue ? lastTrackId.Value : 0;
-
-                var tracks = await _dbContext.ArtistTrackUpload
+                var tracks = await tracksQuery
                     .Include(x => x.Artist)
                     .ThenInclude(x => x.Images)
                     .Include(x => x.TrackData)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
-                    .Where(x => x.AppUserId == artist.AppUserId && x.ArtistTrackUploadId <  lastTrackId)
                     .OrderByDescending(x => x.ArtistTrackUploadId)
                     .Select(x => new ArtistTrackUploadDto
                     {
@@ -150,8 +145,7 @@ namespace localsound.backend.Infrastructure.Repositories
                             GenreName = genre.Genre.GenreName
                         }).ToList()
                     })
-                    .Take(10)
-                    .ToListAsync();
+                    .Take(10).ToListAsync();
 
                 return new ServiceResponse<List<ArtistTrackUploadDto>>(HttpStatusCode.OK)
                 {
@@ -171,9 +165,18 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                lastTrackId = lastTrackId.HasValue ? lastTrackId.Value : 0;
+                var tracksQuery = _dbContext.SongLike.AsQueryable();
 
-                var tracks = await _dbContext.SongLike
+                if (lastTrackId.HasValue)
+                {
+                    tracksQuery = tracksQuery.Where(x => x.MemberId == memberId && x.SongLikeId < lastTrackId);
+                }
+                else
+                {
+                    tracksQuery = tracksQuery.Where(x => x.MemberId == memberId);
+                }
+
+                var tracks = await tracksQuery
                     .Include(x => x.ArtistTrackUpload)
                     .ThenInclude(x => x.Artist)
                     .ThenInclude(x => x.Images)
@@ -182,7 +185,6 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.ArtistTrackUpload)
                     .ThenInclude(x => x.Genres)
                     .ThenInclude(x => x.Genre)
-                    .Where(x => x.MemberId == memberId && x.SongLikeId < lastTrackId)
                     .OrderByDescending(x => x.SongLikeId)
                     .Select(x => new ArtistTrackUploadDto
                     {

@@ -169,7 +169,33 @@ namespace localsound.backend.Infrastructure.Services
             {
                 var track = await _trackRepository.GetArtistTrackAsync(memberId, trackId);
 
-                var returnData = _mapper.Map<ArtistTrackUploadDto>(track.ReturnData);
+                if (!track.IsSuccessStatusCode || track.ReturnData is null)
+                {
+                    return new ServiceResponse<ArtistTrackUploadDto>(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured retrieving track details, please try again..."
+                    };
+                }
+
+                var returnData = new ArtistTrackUploadDto
+                {
+                    ArtistTrackUploadId = track.ReturnData.ArtistTrackUploadId,
+                    TrackName = track.ReturnData.TrackName,
+                    TrackDescription = track.ReturnData.TrackDescription,
+                    TrackImageUrl = !string.IsNullOrWhiteSpace(track.ReturnData.TrackImageUrl) ? track.ReturnData.TrackImageUrl : track.ReturnData.Artist.Images.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage)?.AccountImageUrl,
+                    ArtistProfile = track.ReturnData.Artist.ProfileUrl,
+                    ArtistName = track.ReturnData.Artist.Name,
+                    ArtistMemberId = track.ReturnData.Artist.MemberId,
+                    TrackUrl = track.ReturnData.TrackUrl,
+                    Duration = track.ReturnData.Duration,
+                    UploadDate = track.ReturnData.UploadDate,
+                    LikeCount = track.ReturnData.LikeCount,
+                    Genres = track.ReturnData.Genres.Select(genre => new GenreDto
+                    {
+                        GenreId = genre.GenreId,
+                        GenreName = genre.Genre.GenreName
+                    }).ToList()
+                };
 
                 return new ServiceResponse<ArtistTrackUploadDto>(HttpStatusCode.OK)
                 { 

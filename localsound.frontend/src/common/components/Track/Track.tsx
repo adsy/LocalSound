@@ -34,7 +34,6 @@ interface Props {
   tracks: ArtistTrackUploadModel[];
   setTracks: (tracks: ArtistTrackUploadModel[]) => void;
   canLoadMore: boolean;
-  page: number;
   artistName: string;
   artistMemberId: string;
   playlistType: PlaylistTypes;
@@ -47,7 +46,6 @@ const Track = ({
   tracks,
   setTracks,
   canLoadMore,
-  page,
   artistName,
   artistMemberId,
   playlistType,
@@ -145,7 +143,6 @@ const Track = ({
           handleSetTrackList({
             trackList: tracks,
             canLoadMore: canLoadMore,
-            page: page,
             listeningProfileMemberId: listeningProfileMemberId,
           })
         );

@@ -27,7 +27,6 @@ const Favourites = ({
   profileDetails,
   viewingOwnProfile,
 }: Props) => {
-  const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const [favourites, setFavourites] = useState<ArtistTrackUploadModel[]>([]);
   const [canLoadMore, setCanLoadMore] = useState(true);
@@ -57,7 +56,6 @@ const Favourites = ({
           dispatch(
             handleSetTrackList({
               trackList: [...favourites, ...result.trackList],
-              page: page + 1,
               canLoadMore: result.canLoadMore,
               listeningProfileMemberId: profileDetails.memberId,
             })
@@ -67,7 +65,6 @@ const Favourites = ({
         setFavouritesError(err);
       }
       setLoading(false);
-      setPage(page + 1);
     }
   };
 
@@ -80,7 +77,6 @@ const Favourites = ({
     (async () => {
       if (
         currentTab === ProfileTabs.LikedSongs &&
-        page == 0 &&
         (profileDetails.memberId !== playerState.listeningProfileMemberId ||
           playerState.playlistType === PlaylistTypes.Uploads)
       ) {
@@ -98,7 +94,6 @@ const Favourites = ({
     ) {
       setFavourites(playerState.trackList);
       setCanLoadMore(playerState.canLoadMore);
-      setPage(playerState.page);
     }
   }, [playerState.trackList]);
 
@@ -144,7 +139,6 @@ const Favourites = ({
               tracks={favourites}
               setTracks={setFavourites}
               canLoadMore={canLoadMore}
-              page={page}
               playlistType={PlaylistTypes.Favourites}
               listeningProfileMemberId={profileDetails.memberId}
               viewingOwnProfile={viewingOwnProfile}
