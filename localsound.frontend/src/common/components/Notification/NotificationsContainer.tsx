@@ -12,7 +12,6 @@ import agent from "../../../api/agent";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { toast } from "react-toastify";
 
 const NotificationsContainer = () => {
   const notificationData = useSelector((state: State) => state.notifications);

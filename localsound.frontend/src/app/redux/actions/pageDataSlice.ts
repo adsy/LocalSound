@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PageDataState } from "../../model/redux/pageDataState";
 import { AccountImageTypes } from "../../model/enums/accountImageTypes";
-import { BookingOverviewState } from "../../model/redux/pageDataState.Bookings";
 
 const initialState: PageDataState = {
   profileData: null,

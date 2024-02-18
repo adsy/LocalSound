@@ -90,7 +90,7 @@ const AddressInput = (props: Props) => {
                 })}
                 {...customProps}
                 disabled={disabled}
-                onBlur={(e) => {
+                onBlur={() => {
                   setFieldTouched("address", true);
                 }}
               />

@@ -271,7 +271,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> MarkPhotosForDeletion(Guid packageId, List<Guid> deletedIds)
+        public async Task<ServiceResponse> MarkPhotosForDeletion(Guid packageId, List<int> deletedIds)
         {
             try
             {

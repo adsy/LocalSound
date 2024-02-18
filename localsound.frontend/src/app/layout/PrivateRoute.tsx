@@ -6,6 +6,7 @@ import {
   RouteProps,
 } from "react-router-dom";
 import { State } from "../model/redux/state";
+import { CustomerTypes } from "../model/enums/customerTypes";
 
 interface Props extends RouteProps {
   component:

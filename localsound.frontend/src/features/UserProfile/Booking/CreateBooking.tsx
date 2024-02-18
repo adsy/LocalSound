@@ -77,7 +77,7 @@ const CreateBooking = ({ artistPackage, profileDetails }: Props) => {
                 eventType: partyId,
                 bookingDate: new Date(),
               }}
-              onSubmit={async (values, { setStatus }) => {
+              onSubmit={async (values) => {
                 setSubmitting(true);
                 try {
                   const length = new Number(values.bookingLength);
@@ -113,7 +113,6 @@ const CreateBooking = ({ artistPackage, profileDetails }: Props) => {
                 handleSubmit,
                 isSubmitting,
                 isValid,
-                status,
                 setFieldValue,
                 setFieldTouched,
                 submitForm,
@@ -213,7 +212,7 @@ const CreateBooking = ({ artistPackage, profileDetails }: Props) => {
                         <Button
                           className={`white-button w-100 align-self-center`}
                           disabled={
-                            disabled || !values.bookingLength || !values.address
+                            disabled || !values.bookingLength || addressError
                           }
                           onClick={() => submitForm()}
                         >

@@ -252,7 +252,7 @@ const ViewMoreBooking = ({ bookingType, setViewMore }: Props) => {
     dispatch(
       handleToggleModal({
         size: "small",
-        body: <BookingItemModal booking={booking} bookingType={bookingType} />,
+        body: <BookingItemModal booking={booking} />,
         open: true,
       })
     );

@@ -28,11 +28,11 @@ import { PlaylistTypes } from "../app/model/enums/playlistTypes";
 
 const axiosApiInstance = axios.create();
 
-const sleep = (delay: number) => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, delay);
-  });
-};
+// const sleep = (delay: number) => {
+//   return new Promise((resolve) => {
+//     setTimeout(resolve, delay);
+//   });
+// };
 
 interface AdaptAxiosRequestConfig extends AxiosRequestConfig {
   headers: AxiosRequestHeaders;
@@ -91,10 +91,10 @@ axiosApiInstance.interceptors.response.use(
               isRefreshing = false;
               onRefreshed();
             })
-            .catch(async (err) => await Authentication.signOut());
+            .catch(async () => await Authentication.signOut());
         }
 
-        const retryOrigReq = new Promise((resolve, reject) => {
+        const retryOrigReq = new Promise((resolve) => {
           subscribeTokenRefresh(async () => {
             resolve(requests.retry(config));
           });
@@ -111,7 +111,7 @@ axiosApiInstance.interceptors.response.use(
           }, 5000);
         }
 
-        const retryOrigReq = new Promise((resolve, reject) => {
+        const retryOrigReq = new Promise((resolve) => {
           subscribeWaitingPeriodRefresh(async () => {
             resolve(requests.retry(config));
           });
@@ -292,12 +292,12 @@ const Bookings = {
     requests.get<BookingListResponse>(
       `bookings/member/${memberId}/get-completed-bookings?lastBookingId=${lastBookingId}`
     ),
-  acceptBooking: (memberId: string, bookingId: string) =>
+  acceptBooking: (memberId: string, bookingId: number) =>
     requests.put(
       `bookings/member/${memberId}/booking/${bookingId}/accept-booking`,
       {}
     ),
-  cancelBooking: (memberId: string, bookingId: string) =>
+  cancelBooking: (memberId: string, bookingId: number) =>
     requests.put(
       `bookings/member/${memberId}/booking/${bookingId}/cancel-booking`,
       {}

@@ -6,7 +6,6 @@ import { UserModel } from "../../../../app/model/dto/user.model";
 import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
 import ErrorBanner from "../../../../common/banner/ErrorBanner";
 import agent from "../../../../api/agent";
-import { handleSetUserDetails } from "../../../../app/redux/actions/userSlice";
 import { handleUpdateAllowAddPackage } from "../../../../app/redux/actions/pageDataSlice";
 
 interface Props {

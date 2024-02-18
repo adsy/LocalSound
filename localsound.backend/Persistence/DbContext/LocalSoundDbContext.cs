@@ -193,9 +193,9 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<ArtistPackagePhoto>(x =>
             {
                 x.HasKey(x => x.ArtistPackagePhotoId).IsClustered(false);
+                x.Property(x => x.ArtistPackagePhotoId).ValueGeneratedOnAdd();
                 x.HasIndex(x => x.ArtistPackageId).IsClustered(true);
             });
-
             
             builder.Entity<AccountImageType>().HasKey(x => x.AccountImageTypeId);
 

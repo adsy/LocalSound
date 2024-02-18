@@ -49,7 +49,7 @@ const UserProfileSummary = () => {
   useLayoutEffect(() => {
     (async () => {
       await getProfile()
-        .catch((err) => {
+        .catch(() => {
           setNoMatch(true);
         })
         .finally(() => {

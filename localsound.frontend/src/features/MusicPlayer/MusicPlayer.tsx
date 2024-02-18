@@ -1,10 +1,4 @@
-import {
-  SyntheticEvent,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../app/model/redux/state";
 import { Icon, Image } from "semantic-ui-react";
@@ -35,9 +29,7 @@ const MusicPlayer = () => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [mediaElementSource, setMediaElementSource] =
     useState<MediaElementAudioSourceNode>();
-  const [audioContext, setAudioContext] = useState<AudioContext>(
-    new window.AudioContext()
-  );
+  const [audioContext] = useState<AudioContext>(new window.AudioContext());
   const dispatch = useDispatch();
 
   var singleton = SingletonFactory.getInstance();
@@ -144,7 +136,7 @@ const MusicPlayer = () => {
     setTotalTime(`${totalHours}:${totalMinutesStr}:${secondsString}`);
   };
 
-  const updateTime = (event: SyntheticEvent<HTMLAudioElement, Event>) => {
+  const updateTime = () => {
     if (waveformRef.current && seekerRef.current) {
       var time =
         waveformRef.current?.currentTime && waveformRef.current.currentTime > 0
@@ -357,7 +349,7 @@ const MusicPlayer = () => {
               id="music"
               preload="all"
               ref={waveformRef}
-              onTimeUpdate={(e) => updateTime(e)}
+              onTimeUpdate={() => updateTime()}
             ></audio>
             <div className="pr-3 d-flex flex-row align-items-center">
               {loadingMore ? (

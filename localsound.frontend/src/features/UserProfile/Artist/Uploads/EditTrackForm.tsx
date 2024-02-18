@@ -2,7 +2,7 @@ import { Formik } from "formik";
 import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-upload.model";
 import { UserModel } from "../../../../app/model/dto/user.model";
 import { useState } from "react";
-import { Button, Form, ProgressBar } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import TextInput from "../../../../common/form/TextInput";
 import SearchGenreTypes from "../../../../common/components/Search/SearchGenreTypes";
 import { Image } from "semantic-ui-react";
@@ -16,10 +16,7 @@ import { AccountImageTypes } from "../../../../app/model/enums/accountImageTypes
 import PlaceholderImg from "../../../../assets/placeholder.png";
 import { useDispatch } from "react-redux";
 import { handleResetModal } from "../../../../app/redux/actions/modalSlice";
-import {
-  handleTrackUpdated,
-  handleTrackUploaded,
-} from "../../../../app/redux/actions/pageOperationSlice";
+import { handleTrackUpdated } from "../../../../app/redux/actions/pageOperationSlice";
 import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
 
 interface Props {
@@ -107,7 +104,7 @@ const EditTrackForm = ({
               trackName: trackDetails.trackName,
               trackDescription: trackDetails.trackDescription,
             }}
-            onSubmit={async (values, { setStatus }) => {
+            onSubmit={async (values) => {
               dispatch(handleTrackUpdated(false));
               try {
                 var trackImageExt = ".jpg";
@@ -162,14 +159,7 @@ const EditTrackForm = ({
               }
             }}
           >
-            {({
-              values,
-              handleSubmit,
-              isSubmitting,
-              isValid,
-              status,
-              submitForm,
-            }) => {
+            {({ values, handleSubmit, isSubmitting, isValid, submitForm }) => {
               const disabled =
                 !isValid || isSubmitting || formValuesUntouched(values);
               return (

@@ -5,7 +5,7 @@ namespace localsound.CoreUpdates.Persistence.Entity
 {
     public class ArtistBooking
     {
-        public Guid BookingId { get; set; }
+        public int BookingId { get; set; }
         [ForeignKey("Artist")]
         public Guid ArtistId { get; set; }
         [ForeignKey("Booker")]

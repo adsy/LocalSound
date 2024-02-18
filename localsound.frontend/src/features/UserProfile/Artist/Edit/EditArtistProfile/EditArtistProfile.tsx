@@ -24,6 +24,9 @@ const EditArtistProfile = ({ userDetails }: Props) => {
   const [equipment, setEquipment] = useState<EquipmentModel[]>([]);
   const [eventTypes, setEventTypes] = useState<EventTypeModel[]>([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [profileUpdateError, setProfileUpdateError] = useState<string | null>(
+    null
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -59,8 +62,8 @@ const EditArtistProfile = ({ userDetails }: Props) => {
       <div className="w-100 fade-in">
         <Formik
           initialValues={{}}
-          onSubmit={async (values, { setStatus }) => {
-            setStatus(null);
+          onSubmit={async () => {
+            setProfileUpdateError(null);
             if (showSuccessMessage) {
               setShowSuccessMessage(false);
             }
@@ -85,15 +88,12 @@ const EditArtistProfile = ({ userDetails }: Props) => {
               );
 
               setShowSuccessMessage(true);
-            } catch (err) {
-              setStatus({
-                error:
-                  "There was an error updating your details, please try again..",
-              });
+            } catch (err: any) {
+              setProfileUpdateError(err);
             }
           }}
         >
-          {({ handleSubmit, isSubmitting, isValid, status, submitForm }) => {
+          {({ handleSubmit, isSubmitting, isValid, submitForm }) => {
             const disabled = !isValid || isSubmitting || formValuesUntouched();
             return (
               <Form
@@ -136,9 +136,9 @@ const EditArtistProfile = ({ userDetails }: Props) => {
                     />
                   </div>
                 </div>
-                {status?.error ? (
+                {profileUpdateError ? (
                   <ErrorBanner className="fade-in mb-0 mx-3">
-                    {status.error}
+                    {profileUpdateError}
                   </ErrorBanner>
                 ) : null}
                 {showSuccessMessage ? (

@@ -11,6 +11,6 @@ export interface ArtistPackageModel {
 }
 
 export interface ArtistPackagePhotoModel {
-  artistPackagePhotoId: string;
+  artistPackagePhotoId: number;
   artistPackagePhotoUrl: string;
 }

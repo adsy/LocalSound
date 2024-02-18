@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
 import { BookingTypes } from "../../../app/model/enums/BookingTypes";
 import ViewMoreBooking from "./ViewMoreBooking";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { State } from "../../../app/model/redux/state";
 import BookingViewContainer from "./BookingViewContainer";
-import { handleResetBookingOverviewData } from "../../../app/redux/actions/pageDataSlice";
 
 const BookingsOverview = () => {
   const [showViewMore, setShowMore] = useState(false);
   const [viewMore, setViewMore] = useState<BookingTypes | null>(null);
   const appLoading = useSelector((state: State) => state.app.appLoading);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (viewMore !== null) {

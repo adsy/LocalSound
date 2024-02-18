@@ -153,7 +153,7 @@ const ArtistPackageDisplay = ({
               <div className="images-container d-flex flex-row justify-content-center fade-in">
                 {!imgsLoaded ? (
                   <InPageLoadingComponent />
-                ) : artistPackage.photos ? (
+                ) : photos ? (
                   artistPackage.photos.map((photo, index) => (
                     <ImageComponent
                       key={index}

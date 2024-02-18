@@ -6,11 +6,10 @@ import { State } from "../../app/model/redux/state";
 
 interface Props {
   analyzerData: any;
-  trackId: string;
 }
 
 // Component to render the waveform
-const WaveForm = ({ analyzerData, trackId }: Props) => {
+const WaveForm = ({ analyzerData }: Props) => {
   // Ref for the canvas element
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const player = useSelector((state: State) => state.player);
@@ -46,11 +45,11 @@ const WaveForm = ({ analyzerData, trackId }: Props) => {
       barHeight = (dataArray[i] / 255) * HEIGHT;
 
       // Generate random RGB values for each bar.
-      const maximum = 20;
-      const minimum = -20;
-      var r = 0 + Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
-      var g = 0 + Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
-      var b = 0 + Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+      // const maximum = 20;
+      // const minimum = -20;
+      // var r = 0 + Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+      // var g = 0 + Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+      // var b = 0 + Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
 
       // Set the canvas fill style to the random RGB values..
       // canvasCtx.fillStyle = "rgb(109,105,250)";

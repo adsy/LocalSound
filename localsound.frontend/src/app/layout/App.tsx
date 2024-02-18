@@ -52,7 +52,7 @@ const App = () => {
     }, [cb]);
   };
 
-  useUnload((e: any) => {
+  useUnload(() => {
     // disconnect from signalR when page is closed
     signalHub.disconnectConnection();
     dispatch(handleResetNotificationState());

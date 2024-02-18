@@ -27,7 +27,6 @@ const TextInput = (props: Props) => {
     fieldClassName,
     onBlur,
     onChange,
-    hideLabel,
   } = props;
   const fieldProps = {
     placeholder,

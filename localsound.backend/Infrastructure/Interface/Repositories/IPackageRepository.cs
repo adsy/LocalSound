@@ -12,6 +12,6 @@ namespace localsound.backend.Infrastructure.Interface.Repositories
         Task<ServiceResponse> DeleteArtistPackagePhotoAsync(ArtistPackagePhoto photo);
         Task<ServiceResponse> UpdateArtistPackageEquipmentAsync(Guid appUserId, Guid PackageId, List<ArtistPackageEquipment> equipment);
         Task<ServiceResponse> UpdateArtistPackageAsync(Guid packageId, string name, string description, string price, List<ArtistPackagePhoto> newPhotos);
-        Task<ServiceResponse> MarkPhotosForDeletion(Guid packageId, List<Guid> deletedIds);
+        Task<ServiceResponse> MarkPhotosForDeletion(Guid packageId, List<int> deletedIds);
     }
 }

@@ -1,6 +1,6 @@
 import { Formik } from "formik";
 import { Button } from "react-bootstrap";
-import { Form, Header } from "semantic-ui-react";
+import { Form } from "semantic-ui-react";
 import nonArtistRegisterValidation from "../../../validation/NonArtistRegisterValidation";
 import { useState } from "react";
 import NonArtistRegisterForm from "./NonArtistRegisterForm";

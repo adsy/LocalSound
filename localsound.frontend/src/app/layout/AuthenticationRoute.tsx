@@ -1,11 +1,4 @@
-import { useSelector } from "react-redux";
-import {
-  Redirect,
-  Route,
-  RouteComponentProps,
-  RouteProps,
-} from "react-router-dom";
-import { State } from "../model/redux/state";
+import { Route, RouteComponentProps, RouteProps } from "react-router-dom";
 
 interface Props extends RouteProps {
   component:

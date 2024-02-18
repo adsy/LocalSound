@@ -1,4 +1,3 @@
-import { userInfo } from "os";
 import { BookingModel } from "../../../app/model/dto/booking.model";
 import { UserModel } from "../../../app/model/dto/user.model";
 import { BookingTypes } from "../../../app/model/enums/BookingTypes";

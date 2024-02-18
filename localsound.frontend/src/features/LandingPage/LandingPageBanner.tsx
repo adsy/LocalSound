@@ -1,4 +1,3 @@
-import { Button, Row } from "react-bootstrap";
 import logo from "../../assets/updated-logo4.png";
 
 const LandingPageBanner = () => {

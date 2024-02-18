@@ -23,6 +23,7 @@ const ArtistOnboarding = () => {
   const [equipment, setEquipment] = useState<EquipmentModel[]>([]);
   const [eventTypes, setEventTypes] = useState<EventTypeModel[]>([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [onboardingError, setOnboardingError] = useState<string | null>(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -66,8 +67,8 @@ const ArtistOnboarding = () => {
           initialValues={{
             about: userDetails.aboutSection ? userDetails.aboutSection : "",
           }}
-          onSubmit={async (values, { setStatus }) => {
-            setStatus(null);
+          onSubmit={async (values) => {
+            setOnboardingError(null);
             if (showSuccessMessage) {
               setShowSuccessMessage(false);
             }
@@ -93,22 +94,12 @@ const ArtistOnboarding = () => {
               );
 
               setShowSuccessMessage(true);
-            } catch (err) {
-              setStatus({
-                error:
-                  "There was an error saving your details, please try again..",
-              });
+            } catch (err: any) {
+              setOnboardingError(err);
             }
           }}
         >
-          {({
-            handleSubmit,
-            isSubmitting,
-            isValid,
-            status,
-            submitForm,
-            values,
-          }) => {
+          {({ handleSubmit, isSubmitting, isValid, submitForm, values }) => {
             const disabled =
               !isValid || isSubmitting || formValuesUntouched(values);
             return (
@@ -163,9 +154,9 @@ const ArtistOnboarding = () => {
                     />
                   </div>
                 </div>
-                {status?.error ? (
+                {onboardingError ? (
                   <ErrorBanner className="fade-in mb-0 mx-3">
-                    {status.error}
+                    {onboardingError}
                   </ErrorBanner>
                 ) : null}
                 {showSuccessMessage ? (

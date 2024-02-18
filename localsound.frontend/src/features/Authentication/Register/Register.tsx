@@ -5,7 +5,6 @@ import ArtistRegister from "./ArtistRegister";
 import NonArtistRegister from "./NonArtistRegister";
 import { useDispatch } from "react-redux";
 import { handleToggleModal } from "../../../app/redux/actions/modalSlice";
-import { handleSetUserDetails } from "../../../app/redux/actions/userSlice";
 import agent from "../../../api/agent";
 import { RegistrationModel } from "../../../app/model/dto/user-registration.model";
 import ConfirmEmailPopUp from "../ConfirmEmail/ConfirmEmailPopUp";
@@ -34,7 +33,7 @@ const Register = () => {
     setStatus: (value: any) => void
   ) => {
     try {
-      var result = await agent.Authentication.register({
+      await agent.Authentication.register({
         customerType: customerType,
         registrationDto: values,
       });

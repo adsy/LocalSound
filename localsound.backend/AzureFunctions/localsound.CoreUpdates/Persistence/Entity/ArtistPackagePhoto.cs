@@ -5,7 +5,7 @@ namespace localsound.CoreUpdates.Persistence.Entity
 {
     public class ArtistPackagePhoto
     {
-        public Guid ArtistPackagePhotoId { get; set; }
+        public int ArtistPackagePhotoId { get; set; }
         [ForeignKey("ArtistPackage")]
         public Guid ArtistPackageId { get; set; }
         [ForeignKey("FileContent")]

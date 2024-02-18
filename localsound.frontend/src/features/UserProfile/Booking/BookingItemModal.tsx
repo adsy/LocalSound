@@ -1,14 +1,12 @@
 import { BookingModel } from "../../../app/model/dto/booking.model";
-import { BookingTypes } from "../../../app/model/enums/BookingTypes";
 import Label from "../../../common/components/Label/Label";
 import { formatDate } from "../../../common/helper";
 
 interface Props {
   booking: BookingModel;
-  bookingType: BookingTypes;
 }
 
-const BookingItemModal = ({ booking, bookingType }: Props) => {
+const BookingItemModal = ({ booking }: Props) => {
   return (
     <div id="modal-popup">
       <div className="d-flex flex-row mb-4">

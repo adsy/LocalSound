@@ -8,7 +8,6 @@ import agent from "../../../api/agent";
 import { useDispatch, useSelector } from "react-redux";
 import { handleUpdateUserProfilePhoto } from "../../../app/redux/actions/userSlice";
 import { handleUpdateProfilePhoto } from "../../../app/redux/actions/pageDataSlice";
-import { handleResetModal } from "../../../app/redux/actions/modalSlice";
 import ErrorBanner from "../../banner/ErrorBanner";
 import { State } from "../../../app/model/redux/state";
 

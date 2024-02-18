@@ -27,7 +27,6 @@ import ErrorBanner from "../../banner/ErrorBanner";
 import { PlaylistTypes } from "../../../app/model/enums/playlistTypes";
 import signalHub from "../../../api/signalR";
 import { CustomerTypes } from "../../../app/model/enums/customerTypes";
-import ThreeDAnalyzer from "../../../features/MusicPlayer/3dAnalyzer";
 import PlaceHolderImg from "../../../assets/placeholder.png";
 
 interface Props {
@@ -58,9 +57,7 @@ const Track = ({
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const player = useSelector((state: State) => state.player);
   const loggedInUser = useSelector((state: State) => state.user.userDetails);
-  const [singleton, setSingleton] = useState<SingletonClass>(
-    SingletonFactory.getInstance()
-  );
+  const [singleton] = useState<SingletonClass>(SingletonFactory.getInstance());
   const [analyzerData, setAnalyzerData] = useState<any>(null);
   const [trackImageLoaded, setTrackImageLoaded] = useState(false);
   const [trackImage, setTrackImage] = useState<string | null>(null);
@@ -318,10 +315,7 @@ const Track = ({
               {track.artistTrackUploadId === player.currentSong?.trackId &&
               analyzerData ? (
                 <>
-                  <WaveForm
-                    trackId={track.artistTrackUploadId}
-                    analyzerData={analyzerData}
-                  />
+                  <WaveForm analyzerData={analyzerData} />
                   {/* <ThreeDAnalyzer /> */}
                 </>
               ) : null}

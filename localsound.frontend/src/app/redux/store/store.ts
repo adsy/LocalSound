@@ -15,7 +15,6 @@ import UserReducer, { handleResetUserState } from "../actions/userSlice";
 import PageOperationReducer from "../actions/pageOperationSlice";
 import PageDataReducer from "../actions/pageDataSlice";
 import NotificationReducer, {
-  handleHideNotificationContainer,
   handleSaveNotification,
   handleSaveNotifications,
   handleSaveUnreadNotificationCount,

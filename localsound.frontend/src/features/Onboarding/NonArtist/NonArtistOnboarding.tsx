@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../app/model/redux/state";
-import { EquipmentModel } from "../../../app/model/dto/equipment.model";
 import { GenreModel } from "../../../app/model/dto/genre.model";
-import { EventTypeModel } from "../../../app/model/dto/eventType.model";
 import { Form, Formik } from "formik";
 import { handleSaveProfileData } from "../../../app/redux/actions/userSlice";
 import SearchGenreTypes from "../../../common/components/Search/SearchGenreTypes";
@@ -13,12 +11,12 @@ import { Button } from "react-bootstrap";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";
 import agent from "../../../api/agent";
 import UpdateProfilePhoto from "../../../common/components/Photo/UpdateProfilePhoto";
-import TextArea from "../../../common/form/TextArea";
 
 const NonArtistOnboarding = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails)!;
   const [selectedGenres, setSelectedGenres] = useState<GenreModel[]>([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [onboardingError, setOnboardingError] = useState<string | null>(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -46,8 +44,8 @@ const NonArtistOnboarding = () => {
       <div className="w-100 fade-in mt-3">
         <Formik
           initialValues={{}}
-          onSubmit={async (values, { setStatus }) => {
-            setStatus(null);
+          onSubmit={async () => {
+            setOnboardingError(null);
             if (showSuccessMessage) {
               setShowSuccessMessage(false);
             }
@@ -70,22 +68,12 @@ const NonArtistOnboarding = () => {
               );
 
               setShowSuccessMessage(true);
-            } catch (err) {
-              setStatus({
-                error:
-                  "There was an error saving your details, please try again..",
-              });
+            } catch (err: any) {
+              setOnboardingError(err);
             }
           }}
         >
-          {({
-            handleSubmit,
-            isSubmitting,
-            isValid,
-            status,
-            submitForm,
-            values,
-          }) => {
+          {({ handleSubmit, isSubmitting, isValid, submitForm, values }) => {
             const disabled =
               !isValid || isSubmitting || formValuesUntouched(values);
             return (
@@ -110,9 +98,9 @@ const NonArtistOnboarding = () => {
                     </div>
                   </div>
                 </div>
-                {status?.error ? (
+                {onboardingError ? (
                   <ErrorBanner className="fade-in mb-0 mx-3">
-                    {status.error}
+                    {onboardingError}
                   </ErrorBanner>
                 ) : null}
                 {showSuccessMessage ? (

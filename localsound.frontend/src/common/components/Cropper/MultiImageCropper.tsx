@@ -2,7 +2,6 @@ import { createRef, useState } from "react";
 import { Button } from "react-bootstrap";
 import Cropper, { ReactCropperElement } from "react-cropper";
 import { Icon, Image } from "semantic-ui-react";
-import { v4 as uuidv4 } from "uuid";
 
 interface Props {
   maxImages?: number;
@@ -28,7 +27,6 @@ const MultiImageCropper = ({ maxImages = 3, images, setImages }: Props) => {
 
       var fileUpload = {
         image: file,
-        photoId: uuidv4(),
       } as PhotoUploadModel;
 
       setImages([...images, fileUpload]);

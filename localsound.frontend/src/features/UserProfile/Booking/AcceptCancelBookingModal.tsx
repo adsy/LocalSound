@@ -7,7 +7,6 @@ import ErrorBanner from "../../../common/banner/ErrorBanner";
 import { State } from "../../../app/model/redux/state";
 import agent from "../../../api/agent";
 import signalHub from "../../../api/signalR";
-import { useHistory } from "react-router-dom";
 import {
   handleSetCancelledBookings,
   handleSetPendingBookings,
@@ -25,7 +24,6 @@ const AcceptCancelBookingModal = ({ isAccepting, booking }: Props) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
-  const history = useHistory();
 
   const closeModal = () => {
     dispatch(handleResetModal());

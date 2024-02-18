@@ -72,44 +72,36 @@ namespace localsound.backend.Infrastructure.Services
                     PackagePhotos = new List<ArtistPackagePhoto>()
                 };
 
-                var photoIds = JsonConvert.DeserializeObject<List<Guid>>(packageDto.PhotoIds);
-                var photos = new List<PhotoUploadDto>();
-
-                for(int i = 0; i < packageDto.Photos?.Count; i++)
+                if (packageDto.Photos != null && packageDto.Photos.Any())
                 {
-                    photos.Add(new PhotoUploadDto
+                    foreach (var photo in packageDto.Photos)
                     {
-                        PhotoId = photoIds[i],
-                        Image = packageDto.Photos[i]
-                    });
-                }
+                        var packagePhoto = new ArtistPackagePhoto();
+                        var fileContentId = new Guid();
+                        var ext = ".png";
+                        var fileLocation = $"[{appUserId}]/packages/{packageId}/photos/{fileContentId}{ext}";
+                        var photoUploadResult = await _blobRepository.UploadBlobAsync(fileLocation, photo);
 
-                foreach (var photo in photos)
-                {
-                    var packagePhoto = new ArtistPackagePhoto();
-                    var ext = ".png";
-                    var fileLocation = $"[{appUserId}]/packages/{packageId}/photos/{photo.PhotoId}{ext}";
-                    var photoUploadResult = await _blobRepository.UploadBlobAsync(fileLocation, photo.Image);
-
-                    if (!photoUploadResult.IsSuccessStatusCode || photoUploadResult.ReturnData is null)
-                    {
-                        return new ServiceResponse(HttpStatusCode.InternalServerError)
+                        if (!photoUploadResult.IsSuccessStatusCode || photoUploadResult.ReturnData is null)
                         {
-                            ServiceResponseMessage = "An error occured creating your package, please try again..."
+                            return new ServiceResponse(HttpStatusCode.InternalServerError)
+                            {
+                                ServiceResponseMessage = "An error occured creating your package, please try again..."
+                            };
+                        }
+
+                        packagePhoto.PhotoUrl = photoUploadResult.ReturnData;
+                        packagePhoto.FileContent = new FileContent
+                        {
+                            FileLocation = fileLocation,
+                            FileContentId = fileContentId,
+                            FileExtensionType = ext
                         };
+
+                        artistPackage.PackagePhotos.Add(packagePhoto);
                     }
 
-                    packagePhoto.PhotoUrl = photoUploadResult.ReturnData;
-                    packagePhoto.FileContent = new FileContent
-                    {
-                        FileLocation = fileLocation,
-                        FileContentId = photo.PhotoId,
-                        FileExtensionType = ext
-                    };
-
-                    artistPackage.PackagePhotos.Add(packagePhoto);
                 }
-
 
                 var result = await _packageRepository.CreateArtistPackageAsync(artistPackage);
 
@@ -224,7 +216,6 @@ namespace localsound.backend.Infrastructure.Services
                     }).ToList(),
                     Photos = x.PackagePhotos.Select(photos => new ArtistPackagePhotoDto
                     {
-                        ArtistPackagePhotoId = photos.ArtistPackagePhotoId,
                         ArtistPackagePhotoUrl = photos.PhotoUrl
                     }).ToList()
                 }).ToList();
@@ -291,7 +282,7 @@ namespace localsound.backend.Infrastructure.Services
                 // deleted images
                 if (!string.IsNullOrWhiteSpace(packageDto.DeletedPhotoIds))
                 {
-                    var deletedIds = JsonConvert.DeserializeObject<List<Guid>>(packageDto.DeletedPhotoIds);
+                    var deletedIds = JsonConvert.DeserializeObject<List<int>>(packageDto.DeletedPhotoIds);
                     if (deletedIds != null && deletedIds.Any())
                     {
                         var deletePhotosResult = await _packageRepository.MarkPhotosForDeletion(packageId, deletedIds);
@@ -323,26 +314,16 @@ namespace localsound.backend.Infrastructure.Services
 
                 // new images
                 var newPhotos = new List<ArtistPackagePhoto>();
-                if (!string.IsNullOrWhiteSpace(packageDto.PhotoIds))
+
+                if (packageDto.Photos != null && packageDto.Photos.Any())
                 {
-                    var photoIds = JsonConvert.DeserializeObject<List<Guid>>(packageDto.PhotoIds);
-                    var photos = new List<PhotoUploadDto>();
-
-                    for (int i = 0; i < packageDto.Photos?.Count; i++)
-                    {
-                        photos.Add(new PhotoUploadDto
-                        {
-                            PhotoId = photoIds[i],
-                            Image = packageDto.Photos[i]
-                        });
-                    }
-
-                    foreach (var photo in photos)
+                    foreach (var photo in packageDto.Photos)
                     {
                         var packagePhoto = new ArtistPackagePhoto();
+                        var fileContentId = new Guid();
                         var ext = ".png";
-                        var fileLocation = $"[{appUserId}]/packages/{packageId}/photos/{photo.PhotoId}{ext}";
-                        var photoUploadResult = await _blobRepository.UploadBlobAsync(fileLocation, photo.Image);
+                        var fileLocation = $"[{appUserId}]/packages/{packageId}/photos/{fileContentId}{ext}";
+                        var photoUploadResult = await _blobRepository.UploadBlobAsync(fileLocation, photo);
 
                         if (!photoUploadResult.IsSuccessStatusCode || photoUploadResult.ReturnData is null)
                         {
@@ -353,11 +334,11 @@ namespace localsound.backend.Infrastructure.Services
                         }
 
                         packagePhoto.PhotoUrl = photoUploadResult.ReturnData;
-                        packagePhoto.FileContentId = photo.PhotoId;
+                        packagePhoto.FileContentId = fileContentId;
                         packagePhoto.FileContent = new FileContent
                         {
                             FileLocation = fileLocation,
-                            FileContentId = photo.PhotoId,
+                            FileContentId = fileContentId,
                             FileExtensionType = ext
                         };
                         newPhotos.Add(packagePhoto);

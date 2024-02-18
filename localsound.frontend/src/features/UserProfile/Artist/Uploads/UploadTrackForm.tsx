@@ -3,14 +3,9 @@ import { UserModel } from "../../../../app/model/dto/user.model";
 import agent from "../../../../api/agent";
 import { Button, Form, ProgressBar } from "react-bootstrap";
 import { TrackUploadSASModel } from "../../../../app/model/dto/track-upload-sas.model";
-import {
-  BlockBlobUploadOptions,
-  BlobClient,
-  BlobHTTPHeaders,
-} from "@azure/storage-blob";
+import { BlockBlobUploadOptions, BlobClient } from "@azure/storage-blob";
 import ErrorBanner from "../../../../common/banner/ErrorBanner";
 import { Formik } from "formik";
-import SuccessBanner from "../../../../common/banner/SuccessBanner";
 import UploadTrackSelection from "./UploadTrackSelection";
 import TextInput from "../../../../common/form/TextInput";
 import TextArea from "../../../../common/form/TextArea";
@@ -24,10 +19,7 @@ import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-u
 import { AccountImageTypes } from "../../../../app/model/enums/accountImageTypes";
 import { useDispatch } from "react-redux";
 import { handleResetModal } from "../../../../app/redux/actions/modalSlice";
-import {
-  handleTrackUpdated,
-  handleTrackUploaded,
-} from "../../../../app/redux/actions/pageOperationSlice";
+import { handleTrackUploaded } from "../../../../app/redux/actions/pageOperationSlice";
 
 interface Props {
   userDetails: UserModel;
@@ -141,7 +133,7 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                   trackName: "",
                   trackDescription: "",
                 }}
-                onSubmit={async (values, { setStatus }) => {
+                onSubmit={async (values) => {
                   dispatch(handleTrackUploaded(false));
                   try {
                     if (file) {
@@ -223,7 +215,6 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                   handleSubmit,
                   isSubmitting,
                   isValid,
-                  status,
                   submitForm,
                 }) => {
                   const disabled = !isValid || isSubmitting;
@@ -321,6 +312,11 @@ const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {
                           </div>
                         </div>
                       </div>
+                      {uploadTrackError ? (
+                        <div className="px-3 mt-3">
+                          <ErrorBanner>{uploadTrackError}</ErrorBanner>
+                        </div>
+                      ) : null}
                       <div className="px-3 mt-3">
                         {!isSubmitting ? (
                           <Button

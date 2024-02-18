@@ -1,6 +1,6 @@
-import { Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import logo from "../../assets/updated-logo4.png";
-import { Header, Icon } from "semantic-ui-react";
+import { Header } from "semantic-ui-react";
 
 const ProfileNotFound = () => {
   return (

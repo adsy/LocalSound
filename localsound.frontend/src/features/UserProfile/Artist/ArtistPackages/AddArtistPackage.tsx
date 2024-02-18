@@ -13,7 +13,6 @@ import agent from "../../../../api/agent";
 import { handleResetModal } from "../../../../app/redux/actions/modalSlice";
 import ErrorBanner from "../../../../common/banner/ErrorBanner";
 import { ArtistPackageModel } from "../../../../app/model/dto/artist-package.model";
-import { handleSetUserDetails } from "../../../../app/redux/actions/userSlice";
 import { handleUpdateAllowAddPackage } from "../../../../app/redux/actions/pageDataSlice";
 
 interface Props {
@@ -41,7 +40,7 @@ const AddArtistPackage = ({ userDetails, setPackages }: Props) => {
               packageDescription: "",
               packagePrice: "",
             }}
-            onSubmit={async (values, { setStatus }) => {
+            onSubmit={async (values) => {
               setSubmitting(true);
               try {
                 var formData = new FormData();
@@ -81,14 +80,7 @@ const AddArtistPackage = ({ userDetails, setPackages }: Props) => {
               setSubmitting(false);
             }}
           >
-            {({
-              values,
-              handleSubmit,
-              isSubmitting,
-              isValid,
-              status,
-              submitForm,
-            }) => {
+            {({ values, handleSubmit, isSubmitting, isValid, submitForm }) => {
               const disabled = !isValid || isSubmitting;
               return (
                 <Form

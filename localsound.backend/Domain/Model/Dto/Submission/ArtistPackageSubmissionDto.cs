@@ -8,7 +8,6 @@ namespace localsound.backend.Domain.Model.Dto.Submission
         public string PackageDescription { get; set; }
         public string PackagePrice { get; set; }
         public List<IFormFile>? Photos { get; set; }
-        public string? PhotoIds { get; set; }
         public string? DeletedPhotoIds { get; set; }
         public string PackageEquipment { get; set; }
     }

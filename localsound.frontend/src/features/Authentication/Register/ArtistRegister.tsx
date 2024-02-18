@@ -1,8 +1,7 @@
 import { Formik } from "formik";
 import { Button } from "react-bootstrap";
-import { Form, Header } from "semantic-ui-react";
+import { Form } from "semantic-ui-react";
 import { useState } from "react";
-import NonArtistRegisterForm from "./NonArtistRegisterForm";
 import { RegistrationModel } from "../../../app/model/dto/user-registration.model";
 import artistRegisterValidation from "../../../validation/ArtistRegisterValidation";
 import InPageLoadingComponent from "../../../app/layout/InPageLoadingComponent";

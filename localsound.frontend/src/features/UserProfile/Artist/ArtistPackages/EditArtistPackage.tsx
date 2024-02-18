@@ -40,7 +40,6 @@ const EditArtistPackage = ({
             (response) => response.blob()
           );
           return {
-            photoId: photo.artistPackagePhotoId,
             image: photoBlob,
           } as PhotoUploadModel;
         })
@@ -71,12 +70,13 @@ const EditArtistPackage = ({
                   packageDescription: artistPackage.artistPackageDescription,
                   packagePrice: artistPackage.artistPackagePrice,
                 }}
-                onSubmit={async (values, { setStatus }) => {
+                onSubmit={async (values) => {
+                  setSubmitting(true);
                   try {
                     var formData = new FormData();
 
                     // get deleted photo ids
-                    var deletedIds = [] as string[];
+                    var deletedIds = [] as number[];
                     artistPackage.photos.forEach((photo) => {
                       var existingPhoto = images.find(
                         (x) => x.photoId == photo.artistPackagePhotoId
@@ -91,18 +91,15 @@ const EditArtistPackage = ({
                       JSON.stringify(deletedIds)
                     );
 
-                    var newIds = [] as string[];
                     images.forEach((photo) => {
                       var existingPhoto = artistPackage.photos.find(
                         (x) => x.artistPackagePhotoId == photo.photoId
                       );
                       if (!existingPhoto) {
                         formData.append("Photos", photo.image);
-                        newIds.push(photo.photoId);
                       }
                     });
 
-                    formData.append("PhotoIds", JSON.stringify(newIds));
                     formData.append("PackageName", values.packageName);
                     formData.append(
                       "PackageDescription",
@@ -137,7 +134,6 @@ const EditArtistPackage = ({
                   handleSubmit,
                   isSubmitting,
                   isValid,
-                  status,
                   submitForm,
                 }) => {
                   const disabled = !isValid || isSubmitting;
@@ -226,7 +222,8 @@ const EditArtistPackage = ({
                               !values.packageName ||
                               !values.packageDescription ||
                               !values.packagePrice ||
-                              equipment.length === 0
+                              equipment.length === 0 ||
+                              submitting
                             }
                             onClick={() => submitForm()}
                           >

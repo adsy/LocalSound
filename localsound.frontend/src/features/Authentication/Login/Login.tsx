@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "react-bootstrap";
-import { CustomerTypes } from "../../../app/model/enums/customerTypes";
 import { Formik } from "formik";
-import { Divider, Form } from "semantic-ui-react";
+import { Form } from "semantic-ui-react";
 import TextInput from "../../../common/form/TextInput";
 import { UserLoginModel } from "../../../app/model/dto/user-login.model";
 import agent from "../../../api/agent";

@@ -1,7 +1,6 @@
 import spinner from "../../assets/Equalizer.svg";
 
 interface Props {
-  inverted?: boolean;
   content?: string;
   height?: number;
   width?: number;
@@ -10,7 +9,6 @@ interface Props {
 }
 
 const InPageLoadingComponent = ({
-  inverted = true,
   content,
   height = 50,
   width = 50,
