@@ -19,7 +19,7 @@ const SelectInput = (props: Props) => {
         clearable
         options={props.options}
         value={field.value || null}
-        onChange={(event, data) => helpers.setValue(data.value)}
+        onChange={(_event, data) => helpers.setValue(data.value)}
         onBlur={() => helpers.setTouched(true)}
         placeholder={props.placeholder}
         disabled={props.disabled}

@@ -38,7 +38,7 @@ const DateInput = ({
     type,
     className,
   };
-  const [field, meta] = useField(fieldProps);
+  const [_field, meta] = useField(fieldProps);
 
   return (
     <Form.Field error={meta.touched && !!meta.error} className={fieldClassName}>
