@@ -54,21 +54,10 @@ const UploadList = ({
           PlaylistTypes.Uploads,
           trackId
         );
-        setTracks([...tracks, ...result.trackList]);
-        setCanLoadMore(result.canLoadMore);
 
-        if (
-          profileDetails.memberId === playerState.listeningProfileMemberId &&
-          playerState.playlistType !== PlaylistTypes.Favourites
-        ) {
-          dispatch(
-            handleSetTrackList({
-              trackList: [...tracks, ...result.trackList],
-              canLoadMore: result.canLoadMore,
-              listeningProfileMemberId: profileDetails.memberId,
-            })
-          );
-        }
+        setTracks([...tracks, ...result.trackList]);
+
+        setCanLoadMore(result.canLoadMore);
       } catch (err: any) {
         setTrackError(err);
       }
@@ -78,32 +67,19 @@ const UploadList = ({
 
   useFixMissingScroll({
     hasMoreItems: canLoadMore,
-    fetchMoreItems: getMoreTracks,
+    fetchMoreItems: () => getMoreTracks(),
   });
 
   useLayoutEffect(() => {
     (async () => {
-      // If we loading uploads page for first time, and the current playerState is not listening to profile OR its listening to a favourites play
-      // we load the profiles track list
-      if (
-        currentTab === ProfileTabs.Uploads &&
-        (profileDetails.memberId !== playerState.listeningProfileMemberId ||
-          playerState.playlistType === PlaylistTypes.Favourites)
-      ) {
+      if (currentTab === ProfileTabs.Uploads) {
         await getMoreTracks();
-      }
-      // If we loading uploads page for first time, and the current playerState is not listening to profile OR its listening to a favourites play
-      // we load the profiles track list
-      else if (
-        currentTab === ProfileTabs.Uploads &&
-        profileDetails.memberId === playerState.listeningProfileMemberId
-      ) {
-        setTracks(playerState.trackList);
-        setCanLoadMore(playerState.canLoadMore);
       }
     })();
 
     return () => {
+      setTracks([]);
+      setCanLoadMore(true);
       if (
         uploadState.trackUploaded ||
         uploadState.trackUpdated ||
@@ -115,17 +91,7 @@ const UploadList = ({
     };
   }, [currentTab]);
 
-  useEffect(() => {
-    if (
-      currentTab === ProfileTabs.Uploads &&
-      playerState.trackList.length > 0 &&
-      profileDetails.memberId === playerState.listeningProfileMemberId &&
-      playerState.playlistType === PlaylistTypes.Uploads
-    ) {
-      setTracks(playerState.trackList);
-      setCanLoadMore(playerState.canLoadMore);
-    }
-  }, [playerState.trackList]);
+  if (currentTab !== ProfileTabs.Uploads) return;
 
   return (
     <div id="upload-list">
@@ -178,7 +144,7 @@ const UploadList = ({
       ) : null}
       <InfiniteScroll
         dataLength={tracks.length}
-        next={() => getMoreTracks()}
+        next={async () => await getMoreTracks()}
         hasMore={canLoadMore}
         loader={<></>}
       >

@@ -46,21 +46,10 @@ const Favourites = ({
           PlaylistTypes.Favourites,
           songLikeId
         );
-        setFavourites([...favourites, ...result.trackList]);
-        setCanLoadMore(result.canLoadMore);
 
-        if (
-          profileDetails.memberId === playerState.listeningProfileMemberId &&
-          playerState.playlistType !== PlaylistTypes.Uploads
-        ) {
-          dispatch(
-            handleSetTrackList({
-              trackList: [...favourites, ...result.trackList],
-              canLoadMore: result.canLoadMore,
-              listeningProfileMemberId: profileDetails.memberId,
-            })
-          );
-        }
+        setFavourites([...favourites, ...result.trackList]);
+
+        setCanLoadMore(result.canLoadMore);
       } catch (err: any) {
         setFavouritesError(err);
       }
@@ -70,32 +59,23 @@ const Favourites = ({
 
   useFixMissingScroll({
     hasMoreItems: canLoadMore,
-    fetchMoreItems: getMoreFavourites,
+    fetchMoreItems: () => getMoreFavourites(),
   });
 
   useLayoutEffect(() => {
     (async () => {
-      if (
-        currentTab === ProfileTabs.LikedSongs &&
-        (profileDetails.memberId !== playerState.listeningProfileMemberId ||
-          playerState.playlistType === PlaylistTypes.Uploads)
-      ) {
+      if (currentTab === ProfileTabs.LikedSongs) {
         await getMoreFavourites();
       }
     })();
+
+    return () => {
+      setFavourites([]);
+      setCanLoadMore(true);
+    };
   }, [currentTab]);
 
-  useEffect(() => {
-    if (
-      currentTab === ProfileTabs.LikedSongs &&
-      playerState.trackList.length > 0 &&
-      profileDetails.memberId === playerState.listeningProfileMemberId &&
-      playerState.playlistType === PlaylistTypes.Favourites
-    ) {
-      setFavourites(playerState.trackList);
-      setCanLoadMore(playerState.canLoadMore);
-    }
-  }, [playerState.trackList]);
+  if (currentTab !== ProfileTabs.LikedSongs) return;
 
   return (
     <div id="upload-list">
@@ -126,7 +106,7 @@ const Favourites = ({
       ) : null}
       <InfiniteScroll
         dataLength={favourites.length} //This is important field to render the next data
-        next={() => getMoreFavourites()}
+        next={async () => await getMoreFavourites()}
         hasMore={canLoadMore}
         loader={<></>}
       >
