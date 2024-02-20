@@ -8,6 +8,6 @@ namespace localsound.backend.api.Queries.Notifications
     {
         public Guid AppUserId { get; set; }
         public string MemberId { get; set; }
-        public int LastNotificationId { get; set; }
+        public int? LastNotificationId { get; set; }
     }
 }

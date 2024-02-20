@@ -11,7 +11,7 @@ namespace localsound.backend.api.Controllers
     {
         [HttpGet]
         [Route("member/{memberId}/get-more-notifications")]
-        public async Task<ActionResult> GetMoreNotifications([FromQuery] int lastNotificationId, string memberId, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetMoreNotifications([FromQuery] int? lastNotificationId, string memberId, CancellationToken cancellationToken)
         {
             var result = await Mediator.Send(new GetMoreNotificationsQuery
             {

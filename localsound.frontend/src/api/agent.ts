@@ -274,21 +274,30 @@ const Bookings = {
     requests.post(`bookings/member/${memberId}/create-booking`, bookingData),
   getNonCompletedBookings: (
     memberId: string,
-    lastBookingId: number,
-    bookingConfirmed: boolean | null
+    bookingConfirmed: boolean | null,
+    lastBookingId?: number
   ) => {
-    let url = `bookings/member/${memberId}/get-bookings?lastBookingId=${lastBookingId}`;
+    let url = `bookings/member/${memberId}/get-bookings`;
 
     if (bookingConfirmed !== null) {
-      url += "&bookingConfirmed=" + bookingConfirmed;
+      url += "?bookingConfirmed=" + bookingConfirmed;
+    }
+
+    if (lastBookingId) {
+      url += `&lastBookingId=${lastBookingId}`;
     }
 
     return requests.get<BookingListResponse>(url);
   },
-  getCompletedBookings: (memberId: string, lastBookingId: number) =>
-    requests.get<BookingListResponse>(
-      `bookings/member/${memberId}/get-completed-bookings?lastBookingId=${lastBookingId}`
-    ),
+  getCompletedBookings: (memberId: string, lastBookingId?: number) => {
+    let url = `bookings/member/${memberId}/get-completed-bookings`;
+
+    if (lastBookingId) {
+      url += `?lastBookingId=${lastBookingId}`;
+    }
+
+    requests.get<BookingListResponse>(url);
+  },
   acceptBooking: (memberId: string, bookingId: number) =>
     requests.put(
       `bookings/member/${memberId}/booking/${bookingId}/accept-booking`,
@@ -302,10 +311,15 @@ const Bookings = {
 };
 
 const Notifications = {
-  getMoreNotifications: (memberId: string, page: number) =>
-    requests.get<NotificationListResponseModel>(
-      `notifications/member/${memberId}/get-more-notifications?page=${page}`
-    ),
+  getMoreNotifications: (memberId: string, lastNotificationId?: number) => {
+    var url = `notifications/member/${memberId}/get-more-notifications`;
+
+    if (lastNotificationId) {
+      url += `?lastNotificationId=${lastNotificationId}`;
+    }
+
+    return requests.get<NotificationListResponseModel>(url);
+  },
   clickNotification: (memberId: string, notificationId: number) =>
     requests.put(
       `notifications/member/${memberId}/notification/${notificationId}/click-notification`,

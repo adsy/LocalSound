@@ -16,7 +16,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 const NotificationsContainer = () => {
   const notificationData = useSelector((state: State) => state.notifications);
   const userData = useSelector((state: State) => state.user.userDetails);
-  const [page, setPage] = useState(0);
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -42,15 +41,19 @@ const NotificationsContainer = () => {
 
   const getMoreNotifications = async () => {
     try {
+      var lastNotificationId =
+        notificationData.notificationList[
+          notificationData.notificationList.length - 1
+        ].notificationId;
+
       var notificationResponse = await agent.Notifications.getMoreNotifications(
         userData?.memberId!,
-        page + 1
+        lastNotificationId
       );
       dispatch(handleSaveNotifications(notificationResponse));
     } catch (err: any) {
       // Do nothing on error here
     }
-    setPage(page + 1);
   };
 
   return (

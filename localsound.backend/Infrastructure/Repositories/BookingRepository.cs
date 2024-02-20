@@ -152,26 +152,46 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 if (account.CustomerType == CustomerTypeEnum.Artist)
                 {
-                    bookings = await _dbContext.ArtistBooking
+                    var bookingsQuery = _dbContext.ArtistBooking.AsQueryable();
+
+                    if (lastBookingId.HasValue)
+                    {
+                        bookingsQuery = bookingsQuery.Where(x => x.ArtistId == appUserId && x.BookingConfirmed == true && x.BookingCompleted && x.BookingId < lastBookingId);
+                    }
+                    else
+                    {
+                        bookingsQuery = bookingsQuery.Where(x => x.ArtistId == appUserId && x.BookingConfirmed == true && x.BookingCompleted);
+                    }
+
+                    bookings = await bookingsQuery
                         .Include(x => x.Artist)
                         .Include(x => x.Booker)
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
-                        .Where(x => x.ArtistId == appUserId && x.BookingConfirmed == true  && x.BookingCompleted && x.BookingId > lastBookingId)
                         .OrderByDescending(x => x.BookingDate)
                         .Take(10)
                         .ToListAsync();
                 }
                 else
                 {
-                    bookings = await _dbContext.ArtistBooking
+                    var bookingsQuery = _dbContext.ArtistBooking.AsQueryable();
+
+                    if (lastBookingId.HasValue)
+                    {
+                        bookingsQuery = bookingsQuery.Where(x => x.BookerId == appUserId && x.BookingConfirmed == true && x.BookingCompleted && x.BookingCompleted && x.BookingId < lastBookingId);
+                    }
+                    else
+                    {
+                        bookingsQuery = bookingsQuery.Where(x => x.BookerId == appUserId && x.BookingConfirmed == true && x.BookingCompleted && x.BookingId > lastBookingId);
+                    }
+
+                    bookings = await bookingsQuery
                         .Include(x => x.Artist)
                         .Include(x => x.Booker)
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
-                        .Where(x => x.BookerId == appUserId && x.BookingConfirmed == true && x.BookingCompleted && x.BookingCompleted && x.BookingId > lastBookingId)
                         .OrderByDescending(x => x.BookingDate)
                         .Take(10)
                         .ToListAsync();
@@ -213,26 +233,46 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 if (account.CustomerType == CustomerTypeEnum.Artist)
                 {
-                    bookings = await _dbContext.ArtistBooking
+                    var bookingsQuery = _dbContext.ArtistBooking.AsQueryable();
+
+                    if (lastBookingId.HasValue)
+                    {
+                        bookingsQuery = bookingsQuery.Where(x => x.ArtistId == appUserId && x.BookingConfirmed == bookingConfirmed && !x.BookingCompleted && x.BookingId < lastBookingId);
+                    }
+                    else
+                    {
+                        bookingsQuery = bookingsQuery.Where(x => x.ArtistId == appUserId && x.BookingConfirmed == bookingConfirmed && !x.BookingCompleted);
+                    }
+
+                    bookings = await bookingsQuery
                         .Include(x => x.Artist)
                         .Include(x => x.Booker)
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
-                        .Where(x => x.ArtistId == appUserId && x.BookingConfirmed == bookingConfirmed && !x.BookingCompleted && x.BookingId > lastBookingId)
                         .OrderByDescending(x => x.BookingDate)
                         .Take(10)
                         .ToListAsync();
                 }
                 else
                 {
-                    bookings = await _dbContext.ArtistBooking
+                    var bookingsQuery = _dbContext.ArtistBooking.AsQueryable();
+
+                    if (lastBookingId.HasValue)
+                    {
+                        bookingsQuery = bookingsQuery.Where(x => x.BookerId == appUserId && x.BookingConfirmed == bookingConfirmed && !x.BookingCompleted && x.BookingId < lastBookingId);
+                    }
+                    else
+                    {
+                        bookingsQuery = bookingsQuery.Where(x => x.BookerId == appUserId && x.BookingConfirmed == bookingConfirmed && !x.BookingCompleted);
+                    }
+
+                    bookings = await bookingsQuery
                         .Include(x => x.Artist)
                         .Include(x => x.Booker)
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
-                        .Where(x => x.BookerId == appUserId && x.BookingConfirmed == bookingConfirmed && !x.BookingCompleted && x.BookingId > lastBookingId)
                         .OrderByDescending(x => x.BookingDate)
                         .Take(10)
                         .ToListAsync();

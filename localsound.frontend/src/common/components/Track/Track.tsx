@@ -200,8 +200,15 @@ const Track = ({
             track.artistTrackUploadId
           );
 
-          trackClone.songLiked = false;
-          trackClone.likeCount--;
+          if (playlistType === PlaylistTypes.Favourites && viewingOwnProfile) {
+            clone.splice(trackIndex, 1);
+            setTracks(clone);
+          } else {
+            trackClone.songLiked = false;
+            trackClone.likeCount--;
+            clone[trackIndex] = trackClone;
+            setTracks(clone);
+          }
         } else {
           await agent.Tracks.likeSong(
             loggedInUser?.memberId,
@@ -221,10 +228,10 @@ const Track = ({
             } just liked your track ${track.trackName}.`,
             redirectUrl: "",
           });
-        }
 
-        clone[trackIndex] = trackClone;
-        setTracks(clone);
+          clone[trackIndex] = trackClone;
+          setTracks(clone);
+        }
       } catch (err: any) {
         console.log(err);
         setTrackLikeError(err);

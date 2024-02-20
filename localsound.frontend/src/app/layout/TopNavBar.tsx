@@ -236,15 +236,7 @@ const TopNavbar = () => {
                             onClick={async () => await handleSignout()}
                           >
                             <Button className="white-button d-flex flex-row justify-content-center mb-2 w-100 mx-5">
-                              <Icon
-                                name="log out"
-                                size="large"
-                                color="black"
-                                className="signout-icon"
-                              />
-                              <h4 className="pl-1 sidebar-text mt-0 mb-0 align-self-center">
-                                Logout
-                              </h4>
+                              <h4 className="">Logout</h4>
                             </Button>
                           </div>
                         ) : (

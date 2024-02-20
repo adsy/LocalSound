@@ -120,17 +120,26 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<List<Notification>>> GetUserNotificationsAsync(Guid userId, int lastNotificationId)
+        public async Task<ServiceResponse<List<Notification>>> GetUserNotificationsAsync(Guid userId, int? lastNotificationId)
         {
             try
             {
+                var notificationsQuery = _dbContext.Notification.AsQueryable();
 
-                var notifications = await _dbContext.Notification
+                if (lastNotificationId.HasValue)
+                {
+                    notificationsQuery = notificationsQuery.Where(x => x.NotificationReceiverId == userId && x.NotificationId < lastNotificationId);
+                }
+                else
+                {
+                    notificationsQuery = notificationsQuery.Where(x => x.NotificationReceiverId == userId);
+                }
+
+                var notifications = await notificationsQuery
                     .Include(x => x.NotificationReceiver)
                     .Include(x => x.NotificationCreator)
                     .ThenInclude(x => x.Images)
-                    .Where(x => x.NotificationReceiverId == userId && x.NotificationId > lastNotificationId)
-                    .OrderByDescending(x => x.CreatedOn)
+                    .OrderByDescending(x => x.NotificationId)
                     .Take(10)
                     .ToListAsync();
 
