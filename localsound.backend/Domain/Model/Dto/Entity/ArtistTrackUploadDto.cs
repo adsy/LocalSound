@@ -4,7 +4,7 @@ namespace localsound.backend.Domain.Model.Dto.Entity
 {
     public class ArtistTrackUploadDto
     {
-        public int ArtistTrackUploadId { get; set; }
+        public int ArtistTrackId { get; set; }
         public string TrackName { get; set; }
         public string TrackDescription { get; set; }
         public string TrackImageUrl { get; set; }

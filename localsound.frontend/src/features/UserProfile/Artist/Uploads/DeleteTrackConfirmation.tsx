@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-upload.model";
+import { ArtistTrackModel } from "../../../../app/model/dto/artist-track-upload.model";
 import { handleResetModal } from "../../../../app/redux/actions/modalSlice";
 import { useState } from "react";
 import agent from "../../../../api/agent";
@@ -9,9 +9,9 @@ import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponen
 import { handleTrackDeleted } from "../../../../app/redux/actions/pageOperationSlice";
 
 interface Props {
-  track: ArtistTrackUploadModel;
-  tracks: ArtistTrackUploadModel[];
-  setTracks: (tracks: ArtistTrackUploadModel[]) => void;
+  track: ArtistTrackModel;
+  tracks: ArtistTrackModel[];
+  setTracks: (tracks: ArtistTrackModel[]) => void;
   loggedInUser: UserModel;
 }
 
@@ -33,15 +33,15 @@ const DeleteTrackConfirmation = ({
     dispatch(handleTrackDeleted(false));
     setDeleteError(null);
     try {
-      if (loggedInUser?.memberId && track.artistTrackUploadId) {
+      if (loggedInUser?.memberId && track.artistTrackId) {
         setDeletingTrack(true);
         await agent.Tracks.deleteTrack(
           loggedInUser?.memberId,
-          track.artistTrackUploadId
+          track.artistTrackId
         );
 
         var tracksFiltered = tracks.filter(
-          (x) => x.artistTrackUploadId !== track.artistTrackUploadId
+          (x) => x.artistTrackId !== track.artistTrackId
         );
         setTracks(tracksFiltered);
         dispatch(handleTrackDeleted(true));

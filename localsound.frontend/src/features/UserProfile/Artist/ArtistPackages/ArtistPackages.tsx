@@ -29,11 +29,10 @@ const ArtistPackages = ({
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
     null
   );
-  const [packagesLoaded, setPackagesLoaded] = useState(false);
 
   useLayoutEffect(() => {
     (async () => {
-      if (currentTab === ProfileTabs.Packages && !packagesLoaded) {
+      if (currentTab === ProfileTabs.Packages) {
         try {
           setLoading(true);
           var result = await agent.Packages.getPackages(
@@ -44,7 +43,6 @@ const ArtistPackages = ({
           setLoadPackagesError(err);
         }
         setLoading(false);
-        setPackagesLoaded(true);
       }
     })();
 

@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { UserModel } from "../../../app/model/dto/user.model";
 import { ProfileTabs } from "../../../app/model/enums/ProfileTabTypes";
-import { ArtistTrackUploadModel } from "../../../app/model/dto/artist-track-upload.model";
+import { ArtistTrackModel } from "../../../app/model/dto/artist-track-upload.model";
 import ErrorBanner from "../../../common/banner/ErrorBanner";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../../app/model/redux/state";
@@ -28,7 +28,7 @@ const Favourites = ({
   viewingOwnProfile,
 }: Props) => {
   const [loading, setLoading] = useState(true);
-  const [favourites, setFavourites] = useState<ArtistTrackUploadModel[]>([]);
+  const [favourites, setFavourites] = useState<ArtistTrackModel[]>([]);
   const [canLoadMore, setCanLoadMore] = useState(true);
   const [favouritesError, setFavouritesError] = useState<string | null>(null);
   const playerState = useSelector((state: State) => state.player);

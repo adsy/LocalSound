@@ -1,6 +1,6 @@
-import { ArtistTrackUploadModel } from "./artist-track-upload.model";
+import { ArtistTrackModel } from "./artist-track-upload.model";
 
 export interface TrackListResponse {
-  trackList: ArtistTrackUploadModel[];
+  trackList: ArtistTrackModel[];
   canLoadMore: boolean;
 }

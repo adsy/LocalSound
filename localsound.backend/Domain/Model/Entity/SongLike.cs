@@ -9,7 +9,7 @@ namespace localsound.backend.Domain.Model.Entity
         public int ArtistTrackId { get; set; }
         public string MemberId { get; set; }
 
-        public virtual ArtistTrackUpload ArtistTrackUpload { get; set; }
+        public virtual ArtistTrack ArtistTrack { get; set; }
         public virtual Account Account { get; set; }
     }
 }

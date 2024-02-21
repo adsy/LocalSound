@@ -22,17 +22,17 @@ namespace localsound.backend.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public async Task<ServiceResponse<int>> AddArtistTrackUploadAsync(ArtistTrackUpload track)
+        public async Task<ServiceResponse<int>> AddArtistTrackUploadAsync(ArtistTrack track)
         {
             try
             {
-                var trackEntity = await _dbContext.ArtistTrackUpload.AddAsync(track);
+                var trackEntity = await _dbContext.ArtistTrack.AddAsync(track);
 
                 await _dbContext.SaveChangesAsync();
 
                 return new ServiceResponse<int>(HttpStatusCode.OK)
                 {
-                    ReturnData = trackEntity.Entity.ArtistTrackUploadId
+                    ReturnData = trackEntity.Entity.ArtistTrackId
                 };
             }
             catch(Exception e)
@@ -44,13 +44,20 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> DeleteTrackAsync(ArtistTrackUpload track)
+        public async Task<ServiceResponse> MarkTrackForDeletion(string memberId, int trackId)
         {
             try
             {
+                var track = await _dbContext.ArtistTrack.Include(x => x.SongLikes).FirstOrDefaultAsync(x => x.ArtistMemberId == memberId && x.ArtistTrackId == trackId);
+
+                if (track == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.InternalServerError);
+                }
+
                 _dbContext.SongLike.RemoveRange(track.SongLikes);
 
-                _dbContext.ArtistTrackUpload.Remove(track);
+                track.ToBeDeleted = true;
 
                 await _dbContext.SaveChangesAsync();
 
@@ -58,18 +65,18 @@ namespace localsound.backend.Infrastructure.Repositories
             }
             catch (Exception e)
             {
-                var message = $"{nameof(TrackRepository)} - {nameof(DeleteTrackAsync)} - {e.Message}";
+                var message = $"{nameof(TrackRepository)} - {nameof(MarkTrackForDeletion)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse(HttpStatusCode.InternalServerError);
             }
         }
 
-        public async Task<ServiceResponse<ArtistTrackUpload>> GetArtistTrackAsync(string memberId, int trackId)
+        public async Task<ServiceResponse<ArtistTrack>> GetArtistTrackAsync(string memberId, int trackId)
         {
             try
             {
-                var track = await _dbContext.ArtistTrackUpload
+                var track = await _dbContext.ArtistTrack
                     .Include(x => x.Artist)
                     .ThenInclude(x => x.Images)
                     .Include(x => x.TrackData)
@@ -77,14 +84,14 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
                     .Include(x => x.SongLikes)
-                    .FirstOrDefaultAsync(x => x.ArtistMemberId == memberId && x.ArtistTrackUploadId == trackId);
+                    .FirstOrDefaultAsync(x => x.ArtistMemberId == memberId && x.ArtistTrackId == trackId);
 
                 if (track is null)
                 {
-                    return new ServiceResponse<ArtistTrackUpload>(HttpStatusCode.NotFound);
+                    return new ServiceResponse<ArtistTrack>(HttpStatusCode.NotFound);
                 }
 
-                return new ServiceResponse<ArtistTrackUpload>(HttpStatusCode.OK)
+                return new ServiceResponse<ArtistTrack>(HttpStatusCode.OK)
                 {
                     ReturnData = track
                 };
@@ -94,7 +101,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 var message = $"{nameof(TrackRepository)} - {nameof(GetArtistTrackAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<ArtistTrackUpload>(HttpStatusCode.InternalServerError);
+                return new ServiceResponse<ArtistTrack>(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -102,29 +109,30 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var tracksQuery = _dbContext.ArtistTrackUpload.AsQueryable();
+                var tracksQuery = _dbContext.ArtistTrack.AsQueryable();
 
                 if (lastTrackId.HasValue) {
-                    tracksQuery = tracksQuery.Where(x => x.ArtistMemberId == memberId && x.ArtistTrackUploadId < lastTrackId);
+                    tracksQuery = tracksQuery.Where(x => x.ArtistMemberId == memberId && x.ArtistTrackId < lastTrackId && !x.ToBeDeleted);
                 }
                 else
                 {
-                    tracksQuery = tracksQuery.Where(x => x.ArtistMemberId == memberId);
+                    tracksQuery = tracksQuery.Where(x => x.ArtistMemberId == memberId && !x.ToBeDeleted);
                 }
 
                 var tracks = await tracksQuery
                     .Include(x => x.Artist)
                     .ThenInclude(x => x.Images)
                     .Include(x => x.TrackData)
+                    .Include(x => x.TrackImage)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
-                    .OrderByDescending(x => x.ArtistTrackUploadId)
+                    .OrderByDescending(x => x.ArtistTrackId)
                     .Select(x => new ArtistTrackUploadDto
                     {
-                        ArtistTrackUploadId = x.ArtistTrackUploadId,
+                        ArtistTrackId = x.ArtistTrackId,
                         TrackName = x.TrackName,
                         TrackDescription = x.TrackDescription,
-                        TrackImageUrl = !string.IsNullOrWhiteSpace(x.TrackImageUrl) ? x.TrackImageUrl : x.Artist.Images.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage) != null ? x.Artist.Images.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage).AccountImageUrl : "",
+                        TrackImageUrl = x.TrackImage != null && x.TrackImage.FirstOrDefault(x => !x.ToBeDeleted) != null ? x.TrackImage.FirstOrDefault(x => !x.ToBeDeleted).TrackImageUrl : x.Artist.Images != null && x.Artist.Images.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage) != null ? x.Artist.Images.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage).AccountImageUrl : "",
                         ArtistProfile = x.Artist.ProfileUrl,
                         ArtistName = x.Artist.Name,
                         ArtistMemberId = x.Artist.MemberId,
@@ -162,38 +170,40 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 if (lastTrackId.HasValue)
                 {
-                    tracksQuery = tracksQuery.Where(x => x.MemberId == memberId && x.SongLikeId < lastTrackId);
+                    tracksQuery = tracksQuery.Where(x => x.MemberId == memberId && x.SongLikeId < lastTrackId && !x.ArtistTrack.ToBeDeleted);
                 }
                 else
                 {
-                    tracksQuery = tracksQuery.Where(x => x.MemberId == memberId);
+                    tracksQuery = tracksQuery.Where(x => x.MemberId == memberId && !x.ArtistTrack.ToBeDeleted);
                 }
 
                 var tracks = await tracksQuery
-                    .Include(x => x.ArtistTrackUpload)
+                    .Include(x => x.ArtistTrack)
                     .ThenInclude(x => x.Artist)
                     .ThenInclude(x => x.Images)
-                    .Include(x => x.ArtistTrackUpload)
+                    .Include(x => x.ArtistTrack)
                     .ThenInclude(x => x.TrackData)
-                    .Include(x => x.ArtistTrackUpload)
+                    .Include(x => x.ArtistTrack)
+                    .ThenInclude(x => x.TrackImage)
+                    .Include(x => x.ArtistTrack)
                     .ThenInclude(x => x.Genres)
                     .ThenInclude(x => x.Genre)
                     .OrderByDescending(x => x.SongLikeId)
                     .Select(x => new ArtistTrackUploadDto
                     {
-                        ArtistTrackUploadId = x.ArtistTrackUpload.ArtistTrackUploadId,
-                        TrackName = x.ArtistTrackUpload.TrackName,
-                        TrackDescription = x.ArtistTrackUpload.TrackDescription,
-                        TrackImageUrl = !string.IsNullOrWhiteSpace(x.ArtistTrackUpload.TrackImageUrl) ? x.ArtistTrackUpload.TrackImageUrl : x.ArtistTrackUpload.Artist.Images.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage) != null ? x.ArtistTrackUpload.Artist.Images.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage).AccountImageUrl : "",
-                        ArtistProfile = x.ArtistTrackUpload.Artist.ProfileUrl,
-                        ArtistName = x.ArtistTrackUpload.Artist.Name,
-                        ArtistMemberId = x.ArtistTrackUpload.Artist.MemberId,
-                        TrackUrl = x.ArtistTrackUpload.TrackUrl,
-                        Duration = x.ArtistTrackUpload.Duration,
-                        UploadDate = x.ArtistTrackUpload.UploadDate,
-                        LikeCount = x.ArtistTrackUpload.LikeCount,
+                        ArtistTrackId = x.ArtistTrack.ArtistTrackId,
+                        TrackName = x.ArtistTrack.TrackName,
+                        TrackDescription = x.ArtistTrack.TrackDescription,
+                        TrackImageUrl = x.ArtistTrack.TrackImage != null && x.ArtistTrack.TrackImage.FirstOrDefault(x => !x.ToBeDeleted) != null ? x.ArtistTrack.TrackImage.FirstOrDefault(x => !x.ToBeDeleted).TrackImageUrl : x.ArtistTrack.Artist.Images != null && x.ArtistTrack.Artist.Images.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage) != null ? x.ArtistTrack.Artist.Images.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage).AccountImageUrl : "",
+                        ArtistProfile = x.ArtistTrack.Artist.ProfileUrl,
+                        ArtistName = x.ArtistTrack.Artist.Name,
+                        ArtistMemberId = x.ArtistTrack.Artist.MemberId,
+                        TrackUrl = x.ArtistTrack.TrackUrl,
+                        Duration = x.ArtistTrack.Duration,
+                        UploadDate = x.ArtistTrack.UploadDate,
+                        LikeCount = x.ArtistTrack.LikeCount,
                         SongLikeId = x.SongLikeId,
-                        Genres = x.ArtistTrackUpload.Genres.Select(genre => new GenreDto
+                        Genres = x.ArtistTrack.Genres.Select(genre => new GenreDto
                         {
                             GenreId = genre.GenreId,
                             GenreName = genre.Genre.GenreName
@@ -248,7 +258,7 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 await _dbContext.SaveChangesAsync();
 
-                var track = await _dbContext.ArtistTrackUpload.FirstOrDefaultAsync(x => x.ArtistTrackUploadId == trackId && x.ArtistMemberId == artistMemberId);
+                var track = await _dbContext.ArtistTrack.FirstOrDefaultAsync(x => x.ArtistTrackId == trackId && x.ArtistMemberId == artistMemberId);
                 if (track != null)
                 {
                     bool saveFailed = false;
@@ -283,7 +293,7 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var songLike = await _dbContext.SongLike.Include(x => x.ArtistTrackUpload).FirstOrDefaultAsync(x => x.MemberId == memberId && x.SongLikeId == songLikeId);
+                var songLike = await _dbContext.SongLike.Include(x => x.ArtistTrack).FirstOrDefaultAsync(x => x.MemberId == memberId && x.SongLikeId == songLikeId);
 
                 if (songLike is null)
                     return new ServiceResponse(HttpStatusCode.InternalServerError);
@@ -292,12 +302,12 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 await _dbContext.SaveChangesAsync();
 
-                if (songLike.ArtistTrackUpload != null)
+                if (songLike.ArtistTrack != null)
                 {
                     bool saveFailed = false;
                     do
                     {
-                        songLike.ArtistTrackUpload.LikeCount--;
+                        songLike.ArtistTrack.LikeCount--;
 
                         try
                         {
@@ -326,10 +336,10 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var track = await _dbContext.ArtistTrackUpload
+                var track = await _dbContext.ArtistTrack
                     .Include(x => x.Genres)
                     .Include(x => x.TrackImage)
-                    .FirstOrDefaultAsync(x => x.AppUserId == account.AppUserId && x.ArtistTrackUploadId == trackId);
+                    .FirstOrDefaultAsync(x => x.AppUserId == account.AppUserId && x.ArtistTrackId == trackId);
 
                 if (track is null)
                 {
@@ -343,18 +353,18 @@ namespace localsound.backend.Infrastructure.Repositories
                     GenreId = x.GenreId
                 }).ToList();
 
-                if (newTrackImage != null)
-                {
-                    await _dbContext.ArtistTrackImageFileContent.AddAsync(newTrackImage);
+                //if (newTrackImage != null)
+                //{
+                //    await _dbContext.ArtistTrackImageFileContent.AddAsync(newTrackImage);
 
-                    if (track.TrackImage != null)
-                    {
-                        _dbContext.ArtistTrackImageFileContent.Remove(track.TrackImage);
-                    }
+                //    if (track.TrackImage != null)
+                //    {
+                //        _dbContext.ArtistTrackImageFileContent.Remove(track.TrackImage);
+                //    }
 
-                    track.TrackImage = newTrackImage;
-                    track.TrackImageUrl = newTrackImageUrl;
-                }
+                //    track.TrackImage = newTrackImage;
+                //    track.TrackImageUrl = newTrackImageUrl;
+                //}
 
                 await _dbContext.SaveChangesAsync();
 

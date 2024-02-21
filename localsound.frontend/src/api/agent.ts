@@ -14,7 +14,7 @@ import { AccountImageModel } from "../app/model/dto/account-image.model";
 import { UpdateArtistProfileDetailsModel } from "../app/model/dto/update-artist-profile.model";
 import { EventTypeModel } from "../app/model/dto/eventType.model";
 import { TrackUploadSASModel } from "../app/model/dto/track-upload-sas.model";
-import { ArtistTrackUploadModel } from "../app/model/dto/artist-track-upload.model";
+import { ArtistTrackModel } from "../app/model/dto/artist-track-upload.model";
 import { TrackListResponse } from "../app/model/dto/track-list-response.model";
 import { FollowerListResponse } from "../app/model/dto/follower-list-response.model";
 import { ArtistPackageModel } from "../app/model/dto/artist-package.model";
@@ -242,9 +242,7 @@ const Tracks = {
     return requests.get<TrackListResponse>(url);
   },
   getTrackDetails: (memberId: string, trackId: number) =>
-    requests.get<ArtistTrackUploadModel>(
-      `track/member/${memberId}/track/${trackId}`
-    ),
+    requests.get<ArtistTrackModel>(`track/member/${memberId}/track/${trackId}`),
   deleteTrack: (memberId: string, trackId: number) =>
     requests.delete(`track/member/${memberId}/track/${trackId}`),
   likeSong: (memberId: string, data: TrackLikeModel) =>

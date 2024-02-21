@@ -215,14 +215,14 @@ const MusicPlayer = () => {
         waveformRef.current.currentTime = 0;
       } else {
         var currentIndex = player.trackList.findIndex(
-          (x) => x.artistTrackUploadId == player.currentSong?.trackId
+          (x) => x.artistTrackId == player.currentSong?.trackId
         );
 
         if (currentIndex > 0) {
           var track = player.trackList[currentIndex - 1];
           dispatch(
             handleSetPlayerSong({
-              trackId: track.artistTrackUploadId,
+              trackId: track.artistTrackId,
               trackUrl: track.trackUrl,
               currentSongArtistProfile: track.artistProfile,
               trackName: track.trackName,
@@ -242,7 +242,7 @@ const MusicPlayer = () => {
 
   const getNextSong = async () => {
     var currentIndex = player.trackList.findIndex(
-      (x) => x.artistTrackUploadId == player.currentSong?.trackId
+      (x) => x.artistTrackId == player.currentSong?.trackId
     );
 
     if (currentIndex + 1 < player.trackList.length) {
@@ -250,7 +250,7 @@ const MusicPlayer = () => {
 
       dispatch(
         handleSetPlayerSong({
-          trackId: track.artistTrackUploadId,
+          trackId: track.artistTrackId,
           trackUrl: track.trackUrl,
           currentSongArtistProfile: track.artistProfile,
           trackName: track.trackName,
@@ -292,7 +292,7 @@ const MusicPlayer = () => {
 
               dispatch(
                 handleSetPlayerSong({
-                  trackId: track.artistTrackUploadId,
+                  trackId: track.artistTrackId,
                   trackUrl: track.trackUrl,
                   currentSongArtistProfile: track.artistProfile,
                   trackName: track.trackName,

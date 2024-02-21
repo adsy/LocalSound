@@ -15,7 +15,7 @@ import PlaceholderImg from "../../../../assets/placeholder.png";
 import { Image } from "semantic-ui-react";
 import ImageCropper from "../../../../common/components/Cropper/ImageCropper";
 import { CropTypes } from "../../../../app/model/enums/cropTypes";
-import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-upload.model";
+import { ArtistTrackModel } from "../../../../app/model/dto/artist-track-upload.model";
 import { AccountImageTypes } from "../../../../app/model/enums/accountImageTypes";
 import { useDispatch } from "react-redux";
 import { handleResetModal } from "../../../../app/redux/actions/modalSlice";
@@ -23,8 +23,8 @@ import { handleTrackUploaded } from "../../../../app/redux/actions/pageOperation
 
 interface Props {
   userDetails: UserModel;
-  tracks: ArtistTrackUploadModel[];
-  setTracks: (tracks: ArtistTrackUploadModel[]) => void;
+  tracks: ArtistTrackModel[];
+  setTracks: (tracks: ArtistTrackModel[]) => void;
 }
 
 const UploadTrackForm = ({ userDetails, tracks, setTracks }: Props) => {

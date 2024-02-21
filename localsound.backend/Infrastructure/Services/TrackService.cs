@@ -52,40 +52,15 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var track = await _trackRepository.GetArtistTrackAsync(memberId, trackId);
-
-                if (track is null || track.ReturnData is null)
-                {
-                    return new ServiceResponse(HttpStatusCode.NotFound)
-                    {
-                        ServiceResponseMessage = "An error occured deleting your track, please try again..."
-                    };
-                }
-
-                if (track.ReturnData.TrackImage != null)
-                {
-                    var imageDeleteResult = await _blobRepository.DeleteBlobAsync(track.ReturnData.TrackImage.FileLocation);
-
-                    if (imageDeleteResult is null || !imageDeleteResult.IsSuccessStatusCode)
-                    {
-                        // Push delete operation to a queue so it can be done at a different time
-                    }
-                }
-
-                var trackDeleteResult = await _blobRepository.DeleteBlobAsync(track.ReturnData.TrackData.FileLocation);
-
-                if (trackDeleteResult is null || !trackDeleteResult.IsSuccessStatusCode)
-                {
-                    // Push delete operation to a queue so it can be done at a different time
-                }
-
-                var dbDeleteResult = await _trackRepository.DeleteTrackAsync(track.ReturnData);
+                var dbDeleteResult = await _trackRepository.MarkTrackForDeletion(memberId, trackId);
 
                 if (dbDeleteResult is null || !dbDeleteResult.IsSuccessStatusCode)
                     return new ServiceResponse(HttpStatusCode.InternalServerError)
                     {
                         ServiceResponseMessage = "An error occured deleting your track, please try again..."
                     };
+
+                //TODO: Push service bus message
 
                 return new ServiceResponse(HttpStatusCode.OK);
             }
@@ -177,12 +152,24 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
+                var trackImageUrl = "";
+                var trackImage = track.ReturnData.TrackImage?.FirstOrDefault(x => !x.ToBeDeleted);
+
+                if (trackImage == null)
+                {
+                    trackImageUrl = track.ReturnData.Artist.Images?.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage && !x.ToBeDeleted).AccountImageUrl;
+                }
+                else
+                {
+                    trackImageUrl = trackImage.TrackImageUrl;
+                }
+
                 var returnData = new ArtistTrackUploadDto
                 {
-                    ArtistTrackUploadId = track.ReturnData.ArtistTrackUploadId,
+                    ArtistTrackId = track.ReturnData.ArtistTrackId,
                     TrackName = track.ReturnData.TrackName,
                     TrackDescription = track.ReturnData.TrackDescription,
-                    TrackImageUrl = !string.IsNullOrWhiteSpace(track.ReturnData.TrackImageUrl) ? track.ReturnData.TrackImageUrl : track.ReturnData.Artist.Images.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage)?.AccountImageUrl,
+                    TrackImageUrl = trackImageUrl,
                     ArtistProfile = track.ReturnData.Artist.ProfileUrl,
                     ArtistName = track.ReturnData.Artist.Name,
                     ArtistMemberId = track.ReturnData.Artist.MemberId,
@@ -259,7 +246,7 @@ namespace localsound.backend.Infrastructure.Services
                             songIds.ReturnData = songIds.ReturnData.OrderBy(x => x).ToList();
                             foreach (var song in tracksResult.ReturnData)
                             {
-                                song.SongLiked = _searchHelper.IntBinarySearch(songIds.ReturnData, song.ArtistTrackUploadId) != -1 ? true : false;
+                                song.SongLiked = _searchHelper.IntBinarySearch(songIds.ReturnData, song.ArtistTrackId) != -1 ? true : false;
                             }
                         }
                     }
@@ -404,9 +391,10 @@ namespace localsound.backend.Infrastructure.Services
                         };
                     }
 
-                    if (track.ReturnData?.TrackImage != null)
+                    var oldImage = track.ReturnData.TrackImage?.FirstOrDefault(x => !x.ToBeDeleted);
+                    if (oldImage != null)
                     {
-                        deleteResponse = await _blobRepository.DeleteBlobAsync(track.ReturnData.TrackImage.FileLocation);
+                        deleteResponse = await _blobRepository.DeleteBlobAsync(oldImage.ArtistTrackImageFileContent.FileLocation);
                     }
 
                     newTrackImageUrl = uploadResponse.ReturnData;
@@ -458,7 +446,7 @@ namespace localsound.backend.Infrastructure.Services
                     return new ServiceResponse<int>(HttpStatusCode.InternalServerError);
                 }
                 
-                var track = new ArtistTrackUpload
+                var track = new ArtistTrack
                 {
                     AppUserId = userId,
                     ArtistMemberId = memberId,
@@ -493,14 +481,19 @@ namespace localsound.backend.Infrastructure.Services
                         return new ServiceResponse<int>(HttpStatusCode.InternalServerError);
                     }
 
-                    track.TrackImage = new ArtistTrackImageFileContent
+                    track.TrackImage = new List<ArtistTrackImage>
                     {
-                        FileContentId = imageId,
-                        FileLocation = imageFilePath,
-                        FileExtensionType = trackUploadDto.TrackImageExt
+                        new ArtistTrackImage
+                        {
+                            TrackImageUrl = result.ReturnData,
+                            ArtistTrackImageFileContent = new ArtistTrackImageFileContent
+                            {
+                                FileContentId = imageId,
+                                FileLocation = imageFilePath,
+                                FileExtensionType = trackUploadDto.TrackImageExt
+                            }
+                        }
                     };
-
-                    track.TrackImageUrl = result.ReturnData;
                 }
 
                 var addTrackResult = await _trackRepository.AddArtistTrackUploadAsync(track);

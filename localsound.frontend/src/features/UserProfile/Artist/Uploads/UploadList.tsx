@@ -1,7 +1,7 @@
 import { UserModel } from "../../../../app/model/dto/user.model";
 import { useEffect, useLayoutEffect, useState } from "react";
 import agent from "../../../../api/agent";
-import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-upload.model";
+import { ArtistTrackModel } from "../../../../app/model/dto/artist-track-upload.model";
 import Track from "../../../../common/components/Track/Track";
 import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
 import { ProfileTabs } from "../../../../app/model/enums/ProfileTabTypes";
@@ -21,8 +21,8 @@ import { PlaylistTypes } from "../../../../app/model/enums/playlistTypes";
 interface Props {
   profileDetails: UserModel;
   currentTab: ProfileTabs;
-  tracks: ArtistTrackUploadModel[];
-  setTracks: (tracks: ArtistTrackUploadModel[]) => void;
+  tracks: ArtistTrackModel[];
+  setTracks: (tracks: ArtistTrackModel[]) => void;
   viewingOwnProfile: boolean;
 }
 
@@ -47,7 +47,7 @@ const UploadList = ({
       try {
         setLoading(true);
 
-        var trackId = tracks[tracks.length - 1]?.artistTrackUploadId;
+        var trackId = tracks[tracks.length - 1]?.artistTrackId;
 
         var result = await agent.Tracks.getTracks(
           profileDetails!.memberId,

@@ -39,7 +39,7 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<ArtistPackageImage> ArtistPackageImage { get; set; }
         public DbSet<ArtistPackageImageFileContent> ArtistPackageImageFileContent { get; set; }
         public DbSet<ArtistTrackGenre> ArtistTrackGenre { get; set; }
-        public DbSet<ArtistTrackUpload> ArtistTrackUpload { get; set; }
+        public DbSet<ArtistTrack> ArtistTrack { get; set; }
         public DbSet<ArtistTrackAudioFileContent> ArtistTrackAudioFileContent { get; set; }
         public DbSet<ArtistTrackImageFileContent> ArtistTrackImageFileContent { get; set; }
         public DbSet<EventType> EventType { get; set; }
@@ -126,33 +126,43 @@ namespace localsound.backend.Persistence.DbContext
 
             builder.Entity<ArtistTrackGenre>(x =>
             {
-                x.HasKey(x => new { x.ArtistTrackUploadId, x.GenreId });
+                x.HasKey(x => new { x.ArtistTrackId, x.GenreId });
                 x.HasOne(x => x.Genre);
-                x.HasOne(x => x.ArtistTrackUpload);
+                x.HasOne(x => x.ArtistTrack);
             });
 
-            builder.Entity<ArtistTrackUpload>(x =>
+            builder.Entity<ArtistTrack>(x =>
             {
-                x.HasKey(x => x.ArtistTrackUploadId).IsClustered(false);
-                x.Property(x => x.ArtistTrackUploadId).ValueGeneratedOnAdd();
+                x.HasKey(x => x.ArtistTrackId).IsClustered(false);
+                x.Property(x => x.ArtistTrackId).ValueGeneratedOnAdd();
                 x.HasIndex(x => x.ArtistMemberId).IsClustered(true);
                 x.HasMany(x => x.Genres);
-                x.HasOne(x => x.TrackData).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
-                x.HasOne(x => x.TrackImage).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
-                x.HasMany(x => x.SongLikes).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
+                x.HasOne(x => x.TrackData).WithOne(x => x.ArtistTrack).OnDelete(DeleteBehavior.Cascade);
+                x.HasMany(x => x.TrackImage).WithOne(x => x.ArtistTrack).OnDelete(DeleteBehavior.Cascade);
+                x.HasMany(x => x.SongLikes).WithOne(x => x.ArtistTrack).OnDelete(DeleteBehavior.Cascade);
                 x.Property(x => x.LikeCount).HasDefaultValue(0).IsConcurrencyToken();
+                x.Property(x => x.ToBeDeleted).HasDefaultValue(false);
+            });
+
+            builder.Entity<ArtistTrackImage>(x =>
+            {
+                x.HasKey(x => x.ArtistTrackImageId).IsClustered(false);
+                x.HasIndex(x => x.ArtistTrackId).IsUnique(false).IsClustered(true);
+                x.HasOne(x => x.ArtistTrack).WithMany(x => x.TrackImage);
+                x.HasOne(x => x.ArtistTrackImageFileContent).WithOne(x => x.ArtistTrackImage).OnDelete(DeleteBehavior.Cascade);
+                x.Property(x => x.ToBeDeleted).HasDefaultValue(false);
             });
 
             builder.Entity<ArtistTrackAudioFileContent>(x =>
             {
                 x.HasKey(x => x.FileContentId);
-                x.HasOne(x => x.ArtistTrackUpload).WithOne(x => x.TrackData);
+                x.HasOne(x => x.ArtistTrack).WithOne(x => x.TrackData);
             });
 
             builder.Entity<ArtistTrackImageFileContent>(x =>
             {
                 x.HasKey(x => x.FileContentId);
-                x.HasOne(x => x.ArtistTrackUpload).WithOne(x => x.TrackImage);
+                x.HasOne(x => x.ArtistTrackImage).WithOne(x => x.ArtistTrackImageFileContent);
             });
 
             builder.Entity<Genre>().HasKey(x => x.GenreId);
@@ -256,7 +266,7 @@ namespace localsound.backend.Persistence.DbContext
                 x.HasKey(x => x.SongLikeId).IsClustered(false);
                 x.HasAlternateKey(x => new { x.ArtistTrackId, x.MemberId }).IsClustered(false);
                 x.HasOne(x => x.Account).WithMany(x => x.LikedSongs).HasPrincipalKey(x => x.MemberId).HasForeignKey(x => x.MemberId);
-                x.HasOne(x => x.ArtistTrackUpload).WithMany(x => x.SongLikes).OnDelete(DeleteBehavior.NoAction);
+                x.HasOne(x => x.ArtistTrack).WithMany(x => x.SongLikes).OnDelete(DeleteBehavior.NoAction);
                 x.HasIndex(x => new { x.MemberId , x.SongLikeId }).IsUnique(false).IsClustered(true);
                 x.HasIndex(x => x.ArtistTrackId).IsUnique(false).IsClustered(false);
                 x.Property(x => x.SongLikeId).HasDefaultValueSql("NEXT VALUE FOR SongLikeId");

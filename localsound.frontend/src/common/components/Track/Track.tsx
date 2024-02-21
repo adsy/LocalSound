@@ -1,4 +1,4 @@
-import { ArtistTrackUploadModel } from "../../../app/model/dto/artist-track-upload.model";
+import { ArtistTrackModel } from "../../../app/model/dto/artist-track-upload.model";
 import TrackContainer from "./TrackContainer";
 import PlayButton from "./PlayButton";
 import Label from "../Label/Label";
@@ -30,9 +30,9 @@ import { CustomerTypes } from "../../../app/model/enums/customerTypes";
 import PlaceHolderImg from "../../../assets/placeholder.png";
 
 interface Props {
-  track: ArtistTrackUploadModel;
-  tracks: ArtistTrackUploadModel[];
-  setTracks: (tracks: ArtistTrackUploadModel[]) => void;
+  track: ArtistTrackModel;
+  tracks: ArtistTrackModel[];
+  setTracks: (tracks: ArtistTrackModel[]) => void;
   canLoadMore: boolean;
   artistName: string;
   artistMemberId: string;
@@ -77,7 +77,7 @@ const Track = ({
     } else {
       setTrackImage(PlaceHolderImg);
     }
-  }, [track.artistTrackUploadId, track.trackImageUrl]);
+  }, [track.artistTrackId, track.trackImageUrl]);
 
   const loadImage = (image: string) => {
     if (trackImageLoaded) setTrackImageLoaded(false);
@@ -91,7 +91,7 @@ const Track = ({
 
   useEffect(() => {
     if (
-      player.currentSong?.trackId === track.artistTrackUploadId &&
+      player.currentSong?.trackId === track.artistTrackId &&
       player.currentSong?.playing
     ) {
       if (!analyzerData) {
@@ -111,18 +111,18 @@ const Track = ({
   const playSong = () => {
     if (
       player.currentSong?.playing &&
-      player.currentSong?.trackId === track.artistTrackUploadId
+      player.currentSong?.trackId === track.artistTrackId
     ) {
       dispatch(handlePauseSong());
     } else if (
       !player.currentSong?.playing &&
-      player.currentSong?.trackId === track.artistTrackUploadId
+      player.currentSong?.trackId === track.artistTrackId
     ) {
       dispatch(handlePlaySong());
     } else {
       dispatch(
         handleSetPlayerSong({
-          trackId: track.artistTrackUploadId,
+          trackId: track.artistTrackId,
           trackUrl: track.trackUrl,
           currentSongArtistProfile: track.artistProfile,
           listeningMemberId: track.artistMemberId,
@@ -191,7 +191,7 @@ const Track = ({
         var trackClone = { ...track };
         var clone = [...tracks];
         var trackIndex = clone.findIndex(
-          (x) => x.artistTrackUploadId === track.artistTrackUploadId
+          (x) => x.artistTrackId === track.artistTrackId
         );
         if (track.songLiked && track.songLikeId) {
           await agent.Tracks.unlikeSong(
@@ -211,7 +211,7 @@ const Track = ({
         } else {
           var trackData = {
             artistId: track.artistMemberId,
-            trackId: track.artistTrackUploadId,
+            trackId: track.artistTrackId,
           };
           await agent.Tracks.likeSong(loggedInUser?.memberId, trackData);
 
@@ -254,7 +254,7 @@ const Track = ({
           size="small"
           src={trackImage}
           className={`track-image ${
-            track.artistTrackUploadId === player.currentSong?.trackId &&
+            track.artistTrackId === player.currentSong?.trackId &&
             player.currentSong.playing
               ? "playing"
               : ""
@@ -267,7 +267,7 @@ const Track = ({
                 <PlayButton
                   handlePlay={playSong}
                   playing={
-                    track.artistTrackUploadId === player.currentSong?.trackId &&
+                    track.artistTrackId === player.currentSong?.trackId &&
                     player.currentSong?.playing
                   }
                 />
@@ -316,7 +316,7 @@ const Track = ({
           </div>
           <div className="w-100 h-100 d-flex flex-column align-items-center">
             <div className="w-100 h-100 position-relative">
-              {track.artistTrackUploadId === player.currentSong?.trackId &&
+              {track.artistTrackId === player.currentSong?.trackId &&
               analyzerData ? (
                 <>
                   <WaveForm analyzerData={analyzerData} />

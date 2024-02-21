@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import { ArtistTrackUploadModel } from "../../../../app/model/dto/artist-track-upload.model";
+import { ArtistTrackModel } from "../../../../app/model/dto/artist-track-upload.model";
 import { UserModel } from "../../../../app/model/dto/user.model";
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
@@ -20,9 +20,9 @@ import { handleTrackUpdated } from "../../../../app/redux/actions/pageOperationS
 import InPageLoadingComponent from "../../../../app/layout/InPageLoadingComponent";
 
 interface Props {
-  trackDetails: ArtistTrackUploadModel;
-  tracks: ArtistTrackUploadModel[];
-  setTracks: (tracks: ArtistTrackUploadModel[]) => void;
+  trackDetails: ArtistTrackModel;
+  tracks: ArtistTrackModel[];
+  setTracks: (tracks: ArtistTrackModel[]) => void;
   userDetails: UserModel;
 }
 
@@ -133,19 +133,18 @@ const EditTrackForm = ({
                 // Update track
                 await agent.Tracks.editTrackSupportingDetails(
                   userDetails.memberId,
-                  trackDetails!.artistTrackUploadId,
+                  trackDetails!.artistTrackId,
                   formData
                 );
 
                 // Get the updated track details so its updated in the upload list
                 var updatedTrack = await agent.Tracks.getTrackDetails(
                   userDetails.memberId,
-                  trackDetails!.artistTrackUploadId
+                  trackDetails!.artistTrackId
                 );
 
                 var updatedTrackIndex = tracks.findIndex(
-                  (x) =>
-                    x.artistTrackUploadId === trackDetails.artistTrackUploadId
+                  (x) => x.artistTrackId === trackDetails.artistTrackId
                 );
 
                 var trackList = [...tracks];

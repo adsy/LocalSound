@@ -8,7 +8,7 @@ import { AccountImageTypes } from "../../app/model/enums/accountImageTypes";
 import { handleToggleModal } from "../../app/redux/actions/modalSlice";
 import EditArtist from "./Artist/Edit/EditArtist";
 import UploadTrackForm from "./Artist/Uploads/UploadTrackForm";
-import { ArtistTrackUploadModel } from "../../app/model/dto/artist-track-upload.model";
+import { ArtistTrackModel } from "../../app/model/dto/artist-track-upload.model";
 import AddArtistPackage from "./Artist/ArtistPackages/AddArtistPackage";
 import { ArtistPackageModel } from "../../app/model/dto/artist-package.model";
 import { handleUpdateProfileFollowCount } from "../../app/redux/actions/pageDataSlice";
@@ -28,8 +28,8 @@ interface Props {
   profileDetails: UserModel;
   viewingOwnProfile: boolean;
   setCurrentTab: (tab: ProfileTabs) => void;
-  tracks?: ArtistTrackUploadModel[];
-  setTracks?: (tracks: ArtistTrackUploadModel[]) => void;
+  tracks?: ArtistTrackModel[];
+  setTracks?: (tracks: ArtistTrackModel[]) => void;
   setPackages?: (packages: ArtistPackageModel[]) => void;
   setPhotoUpdateError: (error: string) => void;
 }

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import { UserModel } from "../../../app/model/dto/user.model";
 import UploadList from "./Uploads/UploadList";
-import { ArtistTrackUploadModel } from "../../../app/model/dto/artist-track-upload.model";
+import { ArtistTrackModel } from "../../../app/model/dto/artist-track-upload.model";
 import Followers from "../Followers/Followers";
 import { ProfileTabs } from "../../../app/model/enums/ProfileTabTypes";
 import Following from "../Followers/Following";
@@ -25,7 +25,7 @@ const ArtistProfile = ({
   viewingOwnProfile,
 }: Props) => {
   const [currentTab, setCurrentTab] = useState(ProfileTabs.ProfileDetails);
-  const [tracks, setTracks] = useState<ArtistTrackUploadModel[]>([]);
+  const [tracks, setTracks] = useState<ArtistTrackModel[]>([]);
   const [packages, setPackages] = useState<ArtistPackageModel[]>([]);
   const [photoUpdateError, setPhotoUpdateError] = useState<string | null>(null);
 

@@ -77,7 +77,7 @@ namespace localsound.backend.Infrastructure.Services
                     foreach (var photo in packageDto.Photos)
                     {
                         var packagePhoto = new ArtistPackageImage();
-                        var fileContentId = new Guid();
+                        var fileContentId = Guid.NewGuid();
                         var ext = ".png";
                         var fileLocation = $"[{appUserId}]/packages/{packageId}/photos/{fileContentId}{ext}";
                         var photoUploadResult = await _blobRepository.UploadBlobAsync(fileLocation, photo);
@@ -321,7 +321,7 @@ namespace localsound.backend.Infrastructure.Services
                     foreach (var photo in packageDto.Photos)
                     {
                         var packagePhoto = new ArtistPackageImage();
-                        var fileContentId = new Guid();
+                        var fileContentId = Guid.NewGuid();
                         var ext = ".png";
                         var fileLocation = $"[{appUserId}]/packages/{packageId}/photos/{fileContentId}{ext}";
                         var photoUploadResult = await _blobRepository.UploadBlobAsync(fileLocation, photo);
