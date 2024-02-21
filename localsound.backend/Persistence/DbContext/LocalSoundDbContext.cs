@@ -233,7 +233,7 @@ namespace localsound.backend.Persistence.DbContext
                 x.HasAlternateKey(x => new { x.ArtistTrackId, x.MemberId }).IsClustered(false);
                 x.HasOne(x => x.Account).WithMany(x => x.LikedSongs).HasPrincipalKey(x => x.MemberId).HasForeignKey(x => x.MemberId);
                 x.HasOne(x => x.ArtistTrackUpload).WithMany(x => x.SongLikes).OnDelete(DeleteBehavior.NoAction);
-                x.HasIndex(x => x.MemberId).IsUnique(false).IsClustered(true);
+                x.HasIndex(x => new { x.MemberId , x.SongLikeId }).IsUnique(false).IsClustered(true);
                 x.HasIndex(x => x.ArtistTrackId).IsUnique(false).IsClustered(false);
                 x.Property(x => x.SongLikeId).HasDefaultValueSql("NEXT VALUE FOR SongLikeId");
             });

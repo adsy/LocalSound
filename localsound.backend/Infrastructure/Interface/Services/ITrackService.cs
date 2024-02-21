@@ -13,7 +13,7 @@ namespace localsound.backend.Infrastructure.Interface.Services
         Task<ServiceResponse<ArtistTrackUploadDto>> GetArtistTrackAsync(string memberId, int trackId);
         Task<ServiceResponse<TrackListResponseDto>> GetTracksByPlaylistTypeAsync(Guid? userId, string memberId, int? lastTrackId, PlaylistTypeEnum playlistType);
         Task<ServiceResponse> LikeArtistTrackAsync(int trackId, string artistMemberId, Guid userId, string memberId);
-        Task<ServiceResponse> UnikeArtistTrackAsync(int trackId, string artistMemberId, Guid userId, string memberId);
+        Task<ServiceResponse> UnlikeArtistTrackAsync(Guid userId, string memberId, int songLikeId);
         Task<ServiceResponse> UpdateTrackSupportingDetailsAsync(Guid userId, string memberId, int trackId, TrackUpdateDto trackData);
         Task<ServiceResponse<int>> UploadTrackSupportingDetailsAsync(Guid userId, string memberId, TrackUploadDto trackData);
     }

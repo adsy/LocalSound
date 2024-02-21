@@ -25,6 +25,7 @@ import { toast } from "react-toastify";
 import { OnboardingDataModel } from "../app/model/dto/onboarding-data.model";
 import { MessageTypes } from "../app/model/enums/messageTypes";
 import { PlaylistTypes } from "../app/model/enums/playlistTypes";
+import { TrackLikeModel } from "../app/model/dto/track-like.model";
 
 const axiosApiInstance = axios.create();
 
@@ -246,16 +247,10 @@ const Tracks = {
     ),
   deleteTrack: (memberId: string, trackId: number) =>
     requests.delete(`track/member/${memberId}/track/${trackId}`),
-  likeSong: (memberId: string, artistMemberId: string, trackId: number) =>
-    requests.put(
-      `track/member/${memberId}/artist/${artistMemberId}/track/${trackId}/track-likes`,
-      {}
-    ),
-  unlikeSong: (memberId: string, artistMemberId: string, trackId: number) =>
-    requests.delete(
-      `track/member/${memberId}/artist/${artistMemberId}/track/${trackId}/track-likes`,
-      {}
-    ),
+  likeSong: (memberId: string, data: TrackLikeModel) =>
+    requests.put(`track/member/${memberId}/likes`, data, {}),
+  unlikeSong: (memberId: string, songLikeId: number) =>
+    requests.delete(`track/member/${memberId}/likes/${songLikeId}`, {}),
 };
 
 const Packages = {
@@ -279,12 +274,15 @@ const Bookings = {
   ) => {
     let url = `bookings/member/${memberId}/get-bookings`;
 
-    if (bookingConfirmed !== null) {
-      url += "?bookingConfirmed=" + bookingConfirmed;
-    }
+    if (bookingConfirmed !== null || lastBookingId) {
+      url += "?";
+      if (bookingConfirmed !== null) {
+        url += "bookingConfirmed=" + bookingConfirmed + "&";
+      }
 
-    if (lastBookingId) {
-      url += `&lastBookingId=${lastBookingId}`;
+      if (lastBookingId) {
+        url += `lastBookingId=${lastBookingId}`;
+      }
     }
 
     return requests.get<BookingListResponse>(url);
@@ -296,7 +294,7 @@ const Bookings = {
       url += `?lastBookingId=${lastBookingId}`;
     }
 
-    requests.get<BookingListResponse>(url);
+    return requests.get<BookingListResponse>(url);
   },
   acceptBooking: (memberId: string, bookingId: number) =>
     requests.put(

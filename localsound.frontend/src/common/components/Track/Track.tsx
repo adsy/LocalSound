@@ -193,11 +193,10 @@ const Track = ({
         var trackIndex = clone.findIndex(
           (x) => x.artistTrackUploadId === track.artistTrackUploadId
         );
-        if (track.songLiked) {
+        if (track.songLiked && track.songLikeId) {
           await agent.Tracks.unlikeSong(
             loggedInUser?.memberId,
-            track.artistMemberId,
-            track.artistTrackUploadId
+            track.songLikeId
           );
 
           if (playlistType === PlaylistTypes.Favourites && viewingOwnProfile) {
@@ -210,11 +209,11 @@ const Track = ({
             setTracks(clone);
           }
         } else {
-          await agent.Tracks.likeSong(
-            loggedInUser?.memberId,
-            track.artistMemberId,
-            track.artistTrackUploadId
-          );
+          var trackData = {
+            artistId: track.artistMemberId,
+            trackId: track.artistTrackUploadId,
+          };
+          await agent.Tracks.likeSong(loggedInUser?.memberId, trackData);
 
           trackClone.songLiked = true;
           trackClone.likeCount++;

@@ -169,7 +169,7 @@ namespace localsound.backend.Infrastructure.Repositories
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
-                        .OrderByDescending(x => x.BookingDate)
+                        .OrderByDescending(x => x.BookingId)
                         .Take(10)
                         .ToListAsync();
                 }
@@ -192,7 +192,7 @@ namespace localsound.backend.Infrastructure.Repositories
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
-                        .OrderByDescending(x => x.BookingDate)
+                        .OrderByDescending(x => x.BookingId)
                         .Take(10)
                         .ToListAsync();
                 }
@@ -229,8 +229,6 @@ namespace localsound.backend.Infrastructure.Repositories
                 }
 
                 List<ArtistBooking>? bookings = null;
-                lastBookingId = lastBookingId ?? 0;
-
                 if (account.CustomerType == CustomerTypeEnum.Artist)
                 {
                     var bookingsQuery = _dbContext.ArtistBooking.AsQueryable();
@@ -250,7 +248,7 @@ namespace localsound.backend.Infrastructure.Repositories
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
-                        .OrderByDescending(x => x.BookingDate)
+                        .OrderByDescending(x => x.BookingId)
                         .Take(10)
                         .ToListAsync();
                 }
@@ -273,7 +271,7 @@ namespace localsound.backend.Infrastructure.Repositories
                         .Include(x => x.Package)
                         .ThenInclude(x => x.Equipment)
                         .Include(x => x.EventType)
-                        .OrderByDescending(x => x.BookingDate)
+                        .OrderByDescending(x => x.BookingId)
                         .Take(10)
                         .ToListAsync();
                 }

@@ -1409,7 +1409,6 @@ h6 .purple-highlight:before {
   right: -5px;
   top: -10px;
   cursor: pointer;
-  color: #f1f1f1 !important;
   padding-left: 5px;
   padding-right: 3px;
 }
@@ -1419,7 +1418,6 @@ h6 .purple-highlight:before {
   right: 25px;
   top: -10px;
   cursor: pointer;
-  color: #f1f1f1 !important;
   padding-left: 5px;
   padding-right: 3px;
 }
@@ -1429,7 +1427,6 @@ h6 .purple-highlight:before {
   left: -10px;
   top: -10px;
   cursor: pointer;
-  color: #f1f1f1 !important;
   padding-left: 5px;
   padding-right: 3px;
 }
@@ -1503,7 +1500,6 @@ h6 .purple-highlight:before {
   right: 5px;
   top: -5px;
   cursor: pointer;
-  color: #f1f1f1 !important;
   padding-left: 5px;
   padding-right: 3px;
 }

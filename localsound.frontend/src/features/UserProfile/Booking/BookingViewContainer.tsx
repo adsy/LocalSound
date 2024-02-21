@@ -41,8 +41,8 @@ const BookingViewContainer = ({ bookingType, setViewMore }: Props) => {
           case BookingTypes.upcoming: {
             var bookingResult = await agent.Bookings.getNonCompletedBookings(
               userDetails?.memberId!,
-              0,
-              true
+              true,
+              0
             );
             setCanLoadMore(bookingResult.canLoadMore);
             dispatch(handleSetUpcomingBookings([...bookingResult.bookings]));
@@ -51,8 +51,8 @@ const BookingViewContainer = ({ bookingType, setViewMore }: Props) => {
           case BookingTypes.pending: {
             var bookingResult = await agent.Bookings.getNonCompletedBookings(
               userDetails?.memberId!,
-              0,
-              null
+              null,
+              0
             );
             setCanLoadMore(bookingResult.canLoadMore);
             dispatch(handleSetPendingBookings([...bookingResult.bookings]));
@@ -61,8 +61,8 @@ const BookingViewContainer = ({ bookingType, setViewMore }: Props) => {
           case BookingTypes.cancelled: {
             var bookingResult = await agent.Bookings.getNonCompletedBookings(
               userDetails?.memberId!,
-              0,
-              false
+              false,
+              0
             );
             setCanLoadMore(bookingResult.canLoadMore);
             dispatch(handleSetCancelledBookings([...bookingResult.bookings]));

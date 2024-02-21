@@ -324,7 +324,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse> UnikeArtistTrackAsync(int trackId, string artistMemberId, Guid userId, string memberId)
+        public async Task<ServiceResponse> UnlikeArtistTrackAsync(Guid userId, string memberId, int songLikeId)
         {
             try
             {
@@ -338,7 +338,7 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var unlikeResult = await _trackRepository.UnlikeArtistTrackAsync(memberId, artistMemberId, trackId);
+                var unlikeResult = await _trackRepository.UnlikeArtistTrackAsync(memberId, songLikeId);
 
                 if (!unlikeResult.IsSuccessStatusCode)
                 {

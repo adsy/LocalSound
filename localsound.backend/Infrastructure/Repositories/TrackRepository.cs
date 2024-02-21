@@ -286,11 +286,11 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> UnlikeArtistTrackAsync(string memberId, string artistMemberId, int trackId)
+        public async Task<ServiceResponse> UnlikeArtistTrackAsync(string memberId, int songLikeId)
         {
             try
             {
-                var songLike = await _dbContext.SongLike.FirstOrDefaultAsync(x => x.ArtistTrackId == trackId && x.MemberId == memberId);
+                var songLike = await _dbContext.SongLike.Include(x => x.ArtistTrackUpload).FirstOrDefaultAsync(x => x.MemberId == memberId && x.SongLikeId == songLikeId);
 
                 if (songLike is null)
                     return new ServiceResponse(HttpStatusCode.InternalServerError);
@@ -299,13 +299,12 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 await _dbContext.SaveChangesAsync();
 
-                var trackLikeCount = await _dbContext.ArtistTrackUpload.FirstOrDefaultAsync(x => x.ArtistTrackUploadId == trackId && x.ArtistMemberId == artistMemberId);
-                if (trackLikeCount != null)
+                if (songLike.ArtistTrackUpload != null)
                 {
                     bool saveFailed = false;
                     do
                     {
-                        trackLikeCount.LikeCount--;
+                        songLike.ArtistTrackUpload.LikeCount--;
 
                         try
                         {

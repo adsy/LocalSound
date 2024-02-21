@@ -56,7 +56,7 @@ namespace localsound.backend.api.Handlers.Track
 
         public async Task<ServiceResponse> Handle(UnlikeArtistTrackCommand request, CancellationToken cancellationToken)
         {
-            return await _trackService.UnikeArtistTrackAsync(request.TrackId, request.ArtistMemberId, request.UserId, request.MemberId);
+            return await _trackService.UnlikeArtistTrackAsync(request.UserId, request.MemberId, request.SongLikeId);
         }
 
         public async Task<ServiceResponse<TrackListResponseDto>> Handle(GetTracksQuery request, CancellationToken cancellationToken)
