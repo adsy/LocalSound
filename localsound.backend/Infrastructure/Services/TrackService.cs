@@ -381,7 +381,7 @@ namespace localsound.backend.Infrastructure.Services
                 }
 
                 // Check if new image was added
-                FileContent? newTrackImage = null;
+                ArtistTrackImageFileContent? newTrackImage = null;
                 ServiceResponse<string>? uploadResponse = null;
                 ServiceResponse? deleteResponse = null;
                 string newTrackImageUrl = null;
@@ -410,7 +410,7 @@ namespace localsound.backend.Infrastructure.Services
                     }
 
                     newTrackImageUrl = uploadResponse.ReturnData;
-                    newTrackImage = new FileContent
+                    newTrackImage = new ArtistTrackImageFileContent
                     {
                         FileContentId = imageId,
                         FileLocation = imageFilePath,
@@ -468,7 +468,7 @@ namespace localsound.backend.Infrastructure.Services
                     }).ToList(),
                     TrackName = trackUploadDto.TrackName,
                     TrackDescription = trackUploadDto.TrackDescription,
-                    TrackData = new FileContent
+                    TrackData = new ArtistTrackAudioFileContent
                     {
                         FileContentId = Guid.NewGuid(),
                         FileLocation = $"[{userId}]/"+trackUploadDto.FileLocation,
@@ -493,7 +493,7 @@ namespace localsound.backend.Infrastructure.Services
                         return new ServiceResponse<int>(HttpStatusCode.InternalServerError);
                     }
 
-                    track.TrackImage = new FileContent
+                    track.TrackImage = new ArtistTrackImageFileContent
                     {
                         FileContentId = imageId,
                         FileLocation = imageFilePath,

@@ -10,13 +10,11 @@ namespace localsound.backend.Domain.Model.Entity
         public AccountImageTypeEnum AccountImageTypeId { get; set; }
         [ForeignKey(nameof(AppUser))]
         public Guid AppUserId { get; set; }
-        [ForeignKey(nameof(FileContent))]
-        public Guid FileContentId { get; set; }
         public string AccountImageUrl { get; set; }
         public bool ToBeDeleted { get; set; }
 
         public virtual AccountImageType AccountImageType { get; set; }
         public virtual Account AppUser { get; set; }
-        public virtual FileContent FileContent { get; set; }
+        public virtual AccountImageFileContent FileContent { get; set; }
     }
 }

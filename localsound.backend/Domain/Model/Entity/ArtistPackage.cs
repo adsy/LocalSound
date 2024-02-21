@@ -14,7 +14,7 @@ namespace localsound.backend.Domain.Model.Entity
 
         public virtual Account Artist { get; set; }
         public virtual ICollection<ArtistPackageEquipment> Equipment { get; set; }
-        public virtual ICollection<ArtistPackagePhoto> PackagePhotos { get; set; }
+        public virtual ICollection<ArtistPackageImage> PackagePhotos { get; set; }
         public virtual ICollection<ArtistBooking> RelatedBookings { get; set; }
 
         public ArtistPackage UpdateDetails(string name, string description, string price)
@@ -33,7 +33,7 @@ namespace localsound.backend.Domain.Model.Entity
             return this;
         }
 
-        public ArtistPackage UpdatePhotos (ICollection<ArtistPackagePhoto> photos)
+        public ArtistPackage UpdatePhotos (ICollection<ArtistPackageImage> photos)
         {
             foreach(var photo in photos)
             {
@@ -42,7 +42,7 @@ namespace localsound.backend.Domain.Model.Entity
             return this;
         }
 
-        public ArtistPackage RemovePhotos(ICollection<ArtistPackagePhoto> photos)
+        public ArtistPackage RemovePhotos(ICollection<ArtistPackageImage> photos)
         {
             foreach (var photo in photos)
             {

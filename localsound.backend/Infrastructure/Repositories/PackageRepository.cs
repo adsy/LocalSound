@@ -68,25 +68,6 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> DeleteArtistPackagePhotoAsync(ArtistPackagePhoto photo)
-        {
-            try
-            {
-                _dbContext.FileContent.Remove(photo.FileContent);
-                _dbContext.ArtistPackagePhoto.Remove(photo);
-                await _dbContext.SaveChangesAsync();
-
-                return new ServiceResponse(HttpStatusCode.OK);
-            }
-            catch(Exception e)
-            {
-                var message = $"{nameof(PackageRepository)} - {nameof(DeleteArtistPackagePhotoAsync)} - {e.Message}";
-                _logger.LogError(e, message);
-
-                return new ServiceResponse(HttpStatusCode.InternalServerError);
-            }
-        }
-
         public async Task<ServiceResponse<ArtistPackage>> GetArtistPackageAsync(Guid appUserId, Guid packageId)
         {
             try
@@ -94,7 +75,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 var package = await _dbContext.ArtistPackage
                     .Include(x => x.Equipment)
                     .Include(x => x.PackagePhotos)
-                    .ThenInclude(x => x.FileContent)
+                    .ThenInclude(x => x.ArtistPackageImageFileContent)
                     .Select(x => new ArtistPackage
                     {
                         ArtistPackageId = x.ArtistPackageId,
@@ -104,14 +85,13 @@ namespace localsound.backend.Infrastructure.Repositories
                         PackagePrice = x.PackagePrice,
                         IsAvailable = x.IsAvailable,
                         Equipment = x.Equipment,
-                        PackagePhotos = x.PackagePhotos.Where(x => !x.ToBeDeleted).Select(photo => new ArtistPackagePhoto
+                        PackagePhotos = x.PackagePhotos.Where(x => !x.ToBeDeleted).Select(photo => new ArtistPackageImage
                         {
-                            ArtistPackagePhotoId = photo.ArtistPackagePhotoId,
+                            ArtistPackageImageId = photo.ArtistPackageImageId,
                             ArtistPackageId = photo.ArtistPackageId,
-                            FileContentId = photo.FileContentId,
                             PhotoUrl = photo.PhotoUrl,
                             ToBeDeleted = photo.ToBeDeleted,
-                            FileContent = photo.FileContent
+                            ArtistPackageImageFileContent = photo.ArtistPackageImageFileContent
                         }).ToList()
                     })
                     .FirstOrDefaultAsync(x => x.ArtistPackageId == packageId && x.AppUserId == appUserId);
@@ -162,13 +142,13 @@ namespace localsound.backend.Infrastructure.Repositories
                         PackagePrice = x.PackagePrice,
                         IsAvailable = x.IsAvailable,
                         Equipment = x.Equipment,
-                        PackagePhotos = x.PackagePhotos.Where(x => !x.ToBeDeleted).Select(photo => new ArtistPackagePhoto
+                        PackagePhotos = x.PackagePhotos.Where(x => !x.ToBeDeleted).Select(photo => new ArtistPackageImage
                         {
-                            ArtistPackagePhotoId = photo.ArtistPackagePhotoId,
+                            ArtistPackageImageId = photo.ArtistPackageImageId,
                             ArtistPackageId = photo.ArtistPackageId,
-                            FileContentId = photo.FileContentId,
                             PhotoUrl = photo.PhotoUrl,
                             ToBeDeleted = photo.ToBeDeleted,
+                            ArtistPackageImageFileContent = photo.ArtistPackageImageFileContent
                         }).ToList()
                     })
                     .ToListAsync();
@@ -226,13 +206,13 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> UpdateArtistPackageAsync(Guid packageId, string name, string description, string price, List<ArtistPackagePhoto> newPhotos)
+        public async Task<ServiceResponse> UpdateArtistPackageAsync(Guid packageId, string name, string description, string price, List<ArtistPackageImage> newPhotos)
         {
             try
             {
                 var package = await _dbContext.ArtistPackage
                     .Include(x => x.PackagePhotos)
-                    .ThenInclude(x => x.FileContent)
+                    .ThenInclude(x => x.ArtistPackageImageFileContent)
                     .FirstOrDefaultAsync(x => x.ArtistPackageId == packageId);
 
                 if (package is null)
@@ -248,7 +228,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 {
                     foreach(var photo in newPhotos)
                     {
-                        await _dbContext.FileContent.AddAsync(photo.FileContent);
+                        await _dbContext.ArtistPackageImage.AddAsync(photo);
                     }
                 }
 
@@ -275,8 +255,8 @@ namespace localsound.backend.Infrastructure.Repositories
         {
             try
             {
-                var packagePhotos = await _dbContext.ArtistPackagePhoto
-                    .Where(x => x.ArtistPackageId == packageId && deletedIds.Contains(x.ArtistPackagePhotoId)).ToListAsync();
+                var packagePhotos = await _dbContext.ArtistPackageImage
+                    .Where(x => x.ArtistPackageId == packageId && deletedIds.Contains(x.ArtistPackageImageId)).ToListAsync();
 
                 foreach(var photo in packagePhotos)
                 {

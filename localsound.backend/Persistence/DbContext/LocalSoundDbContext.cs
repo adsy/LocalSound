@@ -22,7 +22,9 @@ namespace localsound.backend.Persistence.DbContext
             
         }
 
+        public DbSet<AccountGenre> AccountGenre { get; set; }
         public DbSet<AccountImage> AccountImage { get; set; }
+        public DbSet<AccountImageFileContent> AccountImageFileContent { get; set; }
         public DbSet<AccountImageType> AccountImageType { get; set; }
         public DbSet<AccountMessages> AccountMessages { get; set; }
         public DbSet<AppUser> AppUser { get; set; }
@@ -32,14 +34,15 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<ArtistEquipment> ArtistEquipment { get; set; }
         public DbSet<ArtistEventType> ArtistEventType { get; set; }
         public DbSet<ArtistFollower> ArtistFollower { get; set; }
-        public DbSet<AccountGenre> AccountGenre { get; set; }
         public DbSet<ArtistPackage> ArtistPackage { get; set; }
         public DbSet<ArtistPackageEquipment> ArtistPackageEquipment { get; set; }
-        public DbSet<ArtistPackagePhoto> ArtistPackagePhoto { get; set; }
+        public DbSet<ArtistPackageImage> ArtistPackageImage { get; set; }
+        public DbSet<ArtistPackageImageFileContent> ArtistPackageImageFileContent { get; set; }
         public DbSet<ArtistTrackGenre> ArtistTrackGenre { get; set; }
         public DbSet<ArtistTrackUpload> ArtistTrackUpload { get; set; }
+        public DbSet<ArtistTrackAudioFileContent> ArtistTrackAudioFileContent { get; set; }
+        public DbSet<ArtistTrackImageFileContent> ArtistTrackImageFileContent { get; set; }
         public DbSet<EventType> EventType { get; set; }
-        public DbSet<FileContent> FileContent { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<SongLike> SongLike { get; set; }
         public DbSet<Notification> Notification { get; set; }
@@ -135,8 +138,21 @@ namespace localsound.backend.Persistence.DbContext
                 x.HasIndex(x => x.ArtistMemberId).IsClustered(true);
                 x.HasMany(x => x.Genres);
                 x.HasOne(x => x.TrackData).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
+                x.HasOne(x => x.TrackImage).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
                 x.HasMany(x => x.SongLikes).WithOne(x => x.ArtistTrackUpload).OnDelete(DeleteBehavior.Cascade);
                 x.Property(x => x.LikeCount).HasDefaultValue(0).IsConcurrencyToken();
+            });
+
+            builder.Entity<ArtistTrackAudioFileContent>(x =>
+            {
+                x.HasKey(x => x.FileContentId);
+                x.HasOne(x => x.ArtistTrackUpload).WithOne(x => x.TrackData);
+            });
+
+            builder.Entity<ArtistTrackImageFileContent>(x =>
+            {
+                x.HasKey(x => x.FileContentId);
+                x.HasOne(x => x.ArtistTrackUpload).WithOne(x => x.TrackImage);
             });
 
             builder.Entity<Genre>().HasKey(x => x.GenreId);
@@ -190,24 +206,32 @@ namespace localsound.backend.Persistence.DbContext
                 x.HasIndex(x => x.ArtistPackageId).IsClustered(true);
             });
 
-            builder.Entity<ArtistPackagePhoto>(x =>
+            builder.Entity<ArtistPackageImage>(x =>
             {
-                x.HasKey(x => x.ArtistPackagePhotoId).IsClustered(false);
-                x.Property(x => x.ArtistPackagePhotoId).ValueGeneratedOnAdd();
+                x.HasKey(x => x.ArtistPackageImageId).IsClustered(false);
+                x.Property(x => x.ArtistPackageImageId).ValueGeneratedOnAdd();
                 x.HasIndex(x => x.ArtistPackageId).IsClustered(true);
+                x.HasOne(x => x.ArtistPackageImageFileContent).WithOne(x => x.ArtistPackageImage).OnDelete(DeleteBehavior.Cascade);
             });
-            
+
+            builder.Entity<ArtistPackageImageFileContent>(x =>
+            {
+                x.HasKey(x => x.FileContentId);
+                x.HasOne(x => x.ArtistPackageImage).WithOne(x => x.ArtistPackageImageFileContent);
+            });
+
             builder.Entity<AccountImageType>().HasKey(x => x.AccountImageTypeId);
 
             builder.Entity<AccountImage>(x =>
             {
                 x.HasKey(x => x.AccountImageId);
+                x.HasOne(x => x.FileContent).WithOne(x => x.Image).OnDelete(DeleteBehavior.Cascade);
             });
 
-            builder.Entity<FileContent>(x =>
+            builder.Entity<AccountImageFileContent>(x =>
             {
                 x.HasKey(x => x.FileContentId);
-                x.HasOne(x => x.Image).WithOne(x => x.FileContent).OnDelete(DeleteBehavior.Cascade);
+                x.HasOne(x => x.Image).WithOne(x => x.FileContent);
             });
 
             builder.Entity<ArtistFollower>(x =>

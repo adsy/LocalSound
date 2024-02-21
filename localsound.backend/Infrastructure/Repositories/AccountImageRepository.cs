@@ -59,11 +59,10 @@ namespace localsound.backend.Infrastructure.Repositories
                     .Include(x => x.FileContent)
                     .FirstOrDefaultAsync(x => x.AccountImageTypeId == imageType && x.AppUserId == appUserId);
 
-
                 var fileContentId = Guid.NewGuid();
 
                 // create new file content
-                var fileContent = new FileContent
+                var fileContent = new AccountImageFileContent
                 {
                     FileContentId = fileContentId,
                     FileExtensionType = fileExt,

@@ -8,10 +8,6 @@ namespace localsound.backend.Domain.Model.Entity
         [ForeignKey(nameof(Artist))]
         public Guid AppUserId { get; set; }
         public string ArtistMemberId { get; set; }
-        [ForeignKey("TrackData")]
-        public Guid TrackDataId { get; set; }
-        [ForeignKey("TrackImage")]
-        public Guid? TrackImageId { get; set; }
         public string TrackName { get; set; }
         public string TrackDescription { get; set; }
         public string? TrackImageUrl { get; set; }
@@ -23,8 +19,8 @@ namespace localsound.backend.Domain.Model.Entity
 
         public virtual Account Artist {get;set;}
         public virtual ICollection<ArtistTrackGenre>  Genres { get; set;}
-        public virtual FileContent TrackData { get;set;} 
-        public virtual FileContent? TrackImage { get;set; }
+        public virtual ArtistTrackAudioFileContent TrackData { get; set; }
+        public virtual ArtistTrackImageFileContent? TrackImage { get; set; }
 
         public virtual List<SongLike> SongLikes { get; set; }
     }

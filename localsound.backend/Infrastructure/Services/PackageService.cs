@@ -69,14 +69,14 @@ namespace localsound.backend.Infrastructure.Services
                     PackagePrice = packageDto.PackagePrice,
                     Equipment = artistPackageEquipment,
                     IsAvailable = true,
-                    PackagePhotos = new List<ArtistPackagePhoto>()
+                    PackagePhotos = new List<ArtistPackageImage>()
                 };
 
                 if (packageDto.Photos != null && packageDto.Photos.Any())
                 {
                     foreach (var photo in packageDto.Photos)
                     {
-                        var packagePhoto = new ArtistPackagePhoto();
+                        var packagePhoto = new ArtistPackageImage();
                         var fileContentId = new Guid();
                         var ext = ".png";
                         var fileLocation = $"[{appUserId}]/packages/{packageId}/photos/{fileContentId}{ext}";
@@ -91,7 +91,7 @@ namespace localsound.backend.Infrastructure.Services
                         }
 
                         packagePhoto.PhotoUrl = photoUploadResult.ReturnData;
-                        packagePhoto.FileContent = new FileContent
+                        packagePhoto.ArtistPackageImageFileContent = new ArtistPackageImageFileContent
                         {
                             FileLocation = fileLocation,
                             FileContentId = fileContentId,
@@ -164,7 +164,7 @@ namespace localsound.backend.Infrastructure.Services
                     {
                         UserId = appUserId,
                         PackageId = packageId,
-                        PhotoLocations = packageResult.ReturnData.PackagePhotos.Select(x => x.FileContent.FileLocation).ToList()
+                        PhotoLocations = packageResult.ReturnData.PackagePhotos.Select(x => x.ArtistPackageImageFileContent.FileLocation).ToList()
                     }
                 });
 
@@ -214,9 +214,10 @@ namespace localsound.backend.Infrastructure.Services
                         EquipmentId = equipment.ArtistPackageEquipmentId,
                         EquipmentName = equipment.EquipmentName,
                     }).ToList(),
-                    Photos = x.PackagePhotos.Select(photos => new ArtistPackagePhotoDto
+                    Photos = x.PackagePhotos.Select(photo => new ArtistPackagePhotoDto
                     {
-                        ArtistPackagePhotoUrl = photos.PhotoUrl
+                        ArtistPackagePhotoUrl = photo.PhotoUrl,
+                        ArtistPackagePhotoId = photo.ArtistPackageImageId
                     }).ToList()
                 }).ToList();
 
@@ -278,7 +279,7 @@ namespace localsound.backend.Infrastructure.Services
                     };
                 }
 
-                var deletedPhotos = new List<ArtistPackagePhoto>();
+                var deletedPhotos = new List<ArtistPackageImage>();
                 // deleted images
                 if (!string.IsNullOrWhiteSpace(packageDto.DeletedPhotoIds))
                 {
@@ -300,7 +301,7 @@ namespace localsound.backend.Infrastructure.Services
                             {
                                 UserId = appUserId, 
                                 PackageId = packageId,
-                                PhotoLocations = packageResult.ReturnData.PackagePhotos.Where(x => deletedIds.Contains(x.ArtistPackagePhotoId)).Select(x => x.FileContent.FileLocation).ToList()
+                                PhotoLocations = packageResult.ReturnData.PackagePhotos.Where(x => deletedIds.Contains(x.ArtistPackageImageId)).Select(x => x.ArtistPackageImageFileContent.FileLocation).ToList()
                             }
                         });
 
@@ -313,13 +314,13 @@ namespace localsound.backend.Infrastructure.Services
                 }
 
                 // new images
-                var newPhotos = new List<ArtistPackagePhoto>();
+                var newPhotos = new List<ArtistPackageImage>();
 
                 if (packageDto.Photos != null && packageDto.Photos.Any())
                 {
                     foreach (var photo in packageDto.Photos)
                     {
-                        var packagePhoto = new ArtistPackagePhoto();
+                        var packagePhoto = new ArtistPackageImage();
                         var fileContentId = new Guid();
                         var ext = ".png";
                         var fileLocation = $"[{appUserId}]/packages/{packageId}/photos/{fileContentId}{ext}";
@@ -334,8 +335,7 @@ namespace localsound.backend.Infrastructure.Services
                         }
 
                         packagePhoto.PhotoUrl = photoUploadResult.ReturnData;
-                        packagePhoto.FileContentId = fileContentId;
-                        packagePhoto.FileContent = new FileContent
+                        packagePhoto.ArtistPackageImageFileContent = new ArtistPackageImageFileContent
                         {
                             FileLocation = fileLocation,
                             FileContentId = fileContentId,

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using localsound.backend.Persistence.DbContext;
 
@@ -11,9 +12,11 @@ using localsound.backend.Persistence.DbContext;
 namespace localsound.backend.Persistence.Migrations
 {
     [DbContext(typeof(LocalSoundDbContext))]
-    partial class LocalSoundDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240221092444_splitFileContentTableToReduceCycles2")]
+    partial class splitFileContentTableToReduceCycles2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -584,7 +587,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("ArtistPackageId"));
 
-                    b.ToTable("ArtistPackageImage");
+                    b.ToTable("ArtistPackagePhoto");
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistPackageImageFileContent", b =>
@@ -631,9 +634,6 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.HasKey("FileContentId");
 
-                    b.HasIndex("ArtistTrackUploadId")
-                        .IsUnique();
-
                     b.ToTable("ArtistTrackAudioFileContent");
                 });
 
@@ -671,9 +671,6 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.HasKey("FileContentId");
 
-                    b.HasIndex("ArtistTrackUploadId")
-                        .IsUnique();
-
                     b.ToTable("ArtistTrackImageFileContent");
                 });
 
@@ -704,9 +701,15 @@ namespace localsound.backend.Persistence.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(0);
 
+                    b.Property<Guid>("TrackDataId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("TrackDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("TrackImageId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TrackImageUrl")
                         .HasColumnType("nvarchar(max)");
@@ -731,6 +734,13 @@ namespace localsound.backend.Persistence.Migrations
                     b.HasIndex("ArtistMemberId");
 
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("ArtistMemberId"));
+
+                    b.HasIndex("TrackDataId")
+                        .IsUnique();
+
+                    b.HasIndex("TrackImageId");
+
+                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("TrackImageId"), false);
 
                     b.ToTable("ArtistTrackUpload");
                 });
@@ -1089,17 +1099,6 @@ namespace localsound.backend.Persistence.Migrations
                     b.Navigation("ArtistPackageImage");
                 });
 
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackAudioFileContent", b =>
-                {
-                    b.HasOne("localsound.backend.Domain.Model.Entity.ArtistTrackUpload", "ArtistTrackUpload")
-                        .WithOne("TrackData")
-                        .HasForeignKey("localsound.backend.Domain.Model.Entity.ArtistTrackAudioFileContent", "ArtistTrackUploadId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ArtistTrackUpload");
-                });
-
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackGenre", b =>
                 {
                     b.HasOne("localsound.backend.Domain.Model.Entity.ArtistTrackUpload", "ArtistTrackUpload")
@@ -1119,17 +1118,6 @@ namespace localsound.backend.Persistence.Migrations
                     b.Navigation("Genre");
                 });
 
-            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackImageFileContent", b =>
-                {
-                    b.HasOne("localsound.backend.Domain.Model.Entity.ArtistTrackUpload", "ArtistTrackUpload")
-                        .WithOne("TrackImage")
-                        .HasForeignKey("localsound.backend.Domain.Model.Entity.ArtistTrackImageFileContent", "ArtistTrackUploadId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ArtistTrackUpload");
-                });
-
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackUpload", b =>
                 {
                     b.HasOne("localsound.backend.Domain.Model.Entity.Account", "Artist")
@@ -1138,7 +1126,22 @@ namespace localsound.backend.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("localsound.backend.Domain.Model.Entity.ArtistTrackAudioFileContent", "TrackData")
+                        .WithOne("ArtistTrackUpload")
+                        .HasForeignKey("localsound.backend.Domain.Model.Entity.ArtistTrackUpload", "TrackDataId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("localsound.backend.Domain.Model.Entity.ArtistTrackImageFileContent", "TrackImage")
+                        .WithOne("ArtistTrackUpload")
+                        .HasForeignKey("localsound.backend.Domain.Model.Entity.ArtistTrackUpload", "TrackImageId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.Navigation("Artist");
+
+                    b.Navigation("TrackData");
+
+                    b.Navigation("TrackImage");
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.Notification", b =>
@@ -1237,16 +1240,23 @@ namespace localsound.backend.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackAudioFileContent", b =>
+                {
+                    b.Navigation("ArtistTrackUpload")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackImageFileContent", b =>
+                {
+                    b.Navigation("ArtistTrackUpload")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackUpload", b =>
                 {
                     b.Navigation("Genres");
 
                     b.Navigation("SongLikes");
-
-                    b.Navigation("TrackData")
-                        .IsRequired();
-
-                    b.Navigation("TrackImage");
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.EventType", b =>

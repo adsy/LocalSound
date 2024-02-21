@@ -50,13 +50,6 @@ namespace localsound.backend.Infrastructure.Repositories
             {
                 _dbContext.SongLike.RemoveRange(track.SongLikes);
 
-                _dbContext.FileContent.Remove(track.TrackData);
-
-                if (track.TrackImage != null)
-                {
-                    _dbContext.FileContent.Remove(track.TrackImage);
-                }
-
                 _dbContext.ArtistTrackUpload.Remove(track);
 
                 await _dbContext.SaveChangesAsync();
@@ -329,7 +322,7 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> UpdateArtistTrackUploadAsync(Account account, int trackId, string trackName, string trackDescription, List<GenreDto> genres, string? trackImageExt, FileContent? newTrackImage, string newTrackImageUrl)
+        public async Task<ServiceResponse> UpdateArtistTrackUploadAsync(Account account, int trackId, string trackName, string trackDescription, List<GenreDto> genres, string? trackImageExt, ArtistTrackImageFileContent? newTrackImage, string newTrackImageUrl)
         {
             try
             {
@@ -352,11 +345,11 @@ namespace localsound.backend.Infrastructure.Repositories
 
                 if (newTrackImage != null)
                 {
-                    await _dbContext.FileContent.AddAsync(newTrackImage);
+                    await _dbContext.ArtistTrackImageFileContent.AddAsync(newTrackImage);
 
                     if (track.TrackImage != null)
                     {
-                        _dbContext.FileContent.Remove(track.TrackImage);
+                        _dbContext.ArtistTrackImageFileContent.Remove(track.TrackImage);
                     }
 
                     track.TrackImage = newTrackImage;

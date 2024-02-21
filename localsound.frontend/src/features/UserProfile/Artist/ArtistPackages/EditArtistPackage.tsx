@@ -41,6 +41,7 @@ const EditArtistPackage = ({
           );
           return {
             image: photoBlob,
+            photoId: photo.artistPackagePhotoId,
           } as PhotoUploadModel;
         })
       );

@@ -2,7 +2,7 @@
 {
     public class ArtistPackagePhotoDto
     {
-        public Guid ArtistPackagePhotoId { get; set; }
+        public int ArtistPackagePhotoId { get; set; }
         public string ArtistPackagePhotoUrl { get; set; }
     }
 }
