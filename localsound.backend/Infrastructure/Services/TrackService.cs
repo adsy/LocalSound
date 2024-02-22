@@ -12,6 +12,9 @@ using localsound.backend.Domain.ModelAdaptor;
 using localsound.backend.Infrastructure.Interface.Helper;
 using localsound.backend.Infrastructure.Interface.Repositories;
 using localsound.backend.Infrastructure.Interface.Services;
+using LocalSound.Shared.Package.ServiceBus.Dto;
+using LocalSound.Shared.Package.ServiceBus.Dto.Enum;
+using LocalSound.Shared.Package.ServiceBus.Dto.QueueMessage;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
@@ -26,8 +29,10 @@ namespace localsound.backend.Infrastructure.Services
         private readonly ILogger<TrackService> _logger;
         private readonly IMapper _mapper;
         private readonly ISearchHelper _searchHelper;
+        private readonly IServiceBusRepository _serviceBusRepository;
+        private readonly IDbTransactionRepository _dbTransactionRepository;
 
-        public TrackService(IBlobRepository blobRepository, IAccountRepository accountRepository, ITrackRepository trackRepository, BlobStorageSettingsAdaptor blobStorageSettings, ILogger<TrackService> logger, IMapper mapper, ISearchHelper searchHelper)
+        public TrackService(IBlobRepository blobRepository, IAccountRepository accountRepository, ITrackRepository trackRepository, BlobStorageSettingsAdaptor blobStorageSettings, ILogger<TrackService> logger, IMapper mapper, ISearchHelper searchHelper, IServiceBusRepository serviceBusRepository, IDbTransactionRepository dbTransactionRepository)
         {
             _blobRepository = blobRepository;
             _accountRepository = accountRepository;
@@ -36,12 +41,16 @@ namespace localsound.backend.Infrastructure.Services
             _logger = logger;
             _mapper = mapper;
             _searchHelper = searchHelper;
+            _serviceBusRepository = serviceBusRepository;
+            _dbTransactionRepository = dbTransactionRepository;
         }
 
         public async Task<ServiceResponse> DeleteArtistTrackAsync(Guid userId, string memberId, int trackId)
         {
             try
             {
+                await _dbTransactionRepository.BeginTransactionAsync();
+
                 var appUser = await _accountRepository.GetAccountFromDbAsync(userId, memberId);
 
                 if (!appUser.IsSuccessStatusCode || appUser.ReturnData is null)
@@ -60,7 +69,23 @@ namespace localsound.backend.Infrastructure.Services
                         ServiceResponseMessage = "An error occured deleting your track, please try again..."
                     };
 
-                //TODO: Push service bus message
+                var serviceBusResult = await _serviceBusRepository.SendDeleteQueueEntry(new ServiceBusMessageDto<DeleteArtistTrackDto>
+                {
+                    Command = DeleteEntityTypeEnum.DeleteArtistTrack,
+                    Data = new DeleteArtistTrackDto
+                    {
+                        ArtistTrackId = trackId,
+                        ArtistMemberId = memberId
+                    }
+                });
+
+                if (!serviceBusResult.IsSuccessStatusCode)
+                    return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    {
+                        ServiceResponseMessage = "An error occured deleting your track, please try again..."
+                    };
+
+                await _dbTransactionRepository.CommitTransactionAsync();
 
                 return new ServiceResponse(HttpStatusCode.OK);
             }
@@ -157,7 +182,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 if (trackImage == null)
                 {
-                    trackImageUrl = track.ReturnData.Artist.Images?.FirstOrDefault(x => x.AccountImageTypeId == AccountImageTypeEnum.ProfileImage && !x.ToBeDeleted).AccountImageUrl;
+                    trackImageUrl = track.ReturnData.Artist.Images?.FirstOrDefault(x => x.AccountImageTypeId == Domain.Enum.AccountImageTypeEnum.ProfileImage && !x.ToBeDeleted).AccountImageUrl;
                 }
                 else
                 {
@@ -353,6 +378,8 @@ namespace localsound.backend.Infrastructure.Services
         {
             try
             {
+                await _dbTransactionRepository.BeginTransactionAsync();
+
                 var accountResult = await _accountRepository.GetAccountFromDbAsync(userId, memberId);
 
                 if (!accountResult.IsSuccessStatusCode || accountResult.ReturnData is null)
@@ -397,20 +424,21 @@ namespace localsound.backend.Infrastructure.Services
 
                     updateResult = await _trackRepository.UpdateArtistTrackUploadAsync(trackResult.ReturnData, trackData.TrackName, trackData.TrackDescription, trackData.Genres, newTrackImage);
 
-                    // TODO: Refactor this to push to service bus queue
-                    //var oldImage = trackResult.ReturnData.TrackImage?.FirstOrDefault(x => x.ToBeDeleted);
-                    //if (oldImage != null)
-                    //{
-                    //    var deleteResponse = await _blobRepository.DeleteBlobAsync(oldImage.ArtistTrackImageFileContent.FileLocation);
+                    var serviceBusResult = await _serviceBusRepository.SendDeleteQueueEntry(new ServiceBusMessageDto<DeleteArtistTrackDto>
+                    {
+                        Command = DeleteEntityTypeEnum.DeleteArtistTrackImage,
+                        Data = new DeleteArtistTrackDto
+                        {
+                            ArtistTrackId = trackId,
+                            ArtistMemberId = memberId
+                        }
+                    });
 
-                    //    if (deleteResponse != null && !deleteResponse.IsSuccessStatusCode)
-                    //    {
-                    //        return new ServiceResponse(HttpStatusCode.InternalServerError)
-                    //        {
-                    //            ServiceResponseMessage = "An error occured updating your track, please try again..."
-                    //        };
-                    //    }
-                    //}
+                    if (!serviceBusResult.IsSuccessStatusCode)
+                        return new ServiceResponse(HttpStatusCode.InternalServerError)
+                        {
+                            ServiceResponseMessage = "An error occured updating your track, please try again..."
+                        };
                 }
                 else
                 {
@@ -421,6 +449,8 @@ namespace localsound.backend.Infrastructure.Services
                 {
                     return new ServiceResponse(HttpStatusCode.InternalServerError);
                 }
+
+                await _dbTransactionRepository.CommitTransactionAsync();
 
                 return new ServiceResponse(HttpStatusCode.OK);
             }

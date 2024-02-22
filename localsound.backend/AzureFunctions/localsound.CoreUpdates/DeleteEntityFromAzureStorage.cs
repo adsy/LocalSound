@@ -14,11 +14,13 @@ namespace localsound.CoreUpdates
     {
         private readonly IAccountImageService _accountImageService;
         private readonly IPackageService _packageService;
+        private readonly ITrackService _trackService;
 
-        public DeleteEntityFromAzureStorage(IAccountImageService accountImageService, IPackageService packageService)
+        public DeleteEntityFromAzureStorage(IAccountImageService accountImageService, IPackageService packageService, ITrackService trackService)
         {
             _accountImageService = accountImageService;
             _packageService = packageService;
+            _trackService = trackService;
         }
 
         [FunctionName("DeleteEntityFromAzureStorage")]
@@ -34,7 +36,7 @@ namespace localsound.CoreUpdates
                 case (DeleteEntityTypeEnum.DeleteAccountImage):
                     {
                         DeleteAccountImageDto dto = JsonSerializer.Deserialize<DeleteAccountImageDto>(queueMessage.Data.ToString());
-                        var isDeleteOpSuccess = await _accountImageService.DeleteAccountImage(dto.UserId, dto.AccountImageId, dto.UploadLocation);
+                        var isDeleteOpSuccess = await _accountImageService.DeleteAccountImage(dto.UserId, dto.AccountImageId);
 
                         if (isDeleteOpSuccess)
                         {
@@ -49,7 +51,37 @@ namespace localsound.CoreUpdates
                 case (DeleteEntityTypeEnum.DeletePackagePhotos):
                     {
                         DeletePackagePhotosDto dto = JsonSerializer.Deserialize<DeletePackagePhotosDto>(queueMessage.Data.ToString());
-                        var isDeleteOpSuccess = await _packageService.DeletePackagePhotos(dto.UserId, dto.PackageId, dto.PhotoLocations);
+                        var isDeleteOpSuccess = await _packageService.DeletePackagePhotos(dto.UserId, dto.PackageId);
+
+                        if (isDeleteOpSuccess)
+                        {
+                            await messageActions.CompleteMessageAsync(message);
+                        }
+                        else
+                        {
+                            await messageActions.AbandonMessageAsync(message);
+                        }
+                        break;
+                    }
+                case (DeleteEntityTypeEnum.DeleteArtistTrack):
+                    {
+                        DeleteArtistTrackDto dto = JsonSerializer.Deserialize<DeleteArtistTrackDto>(queueMessage.Data.ToString());
+                        var isDeleteOpSuccess = await _trackService.DeleteArtistTrack(dto.ArtistTrackId, dto.ArtistMemberId);
+
+                        if (isDeleteOpSuccess)
+                        {
+                            await messageActions.CompleteMessageAsync(message);
+                        }
+                        else
+                        {
+                            await messageActions.AbandonMessageAsync(message);
+                        }
+                        break;
+                    }
+                case (DeleteEntityTypeEnum.DeleteArtistTrackImage):
+                    {
+                        DeleteArtistTrackDto dto = JsonSerializer.Deserialize<DeleteArtistTrackDto>(queueMessage.Data.ToString());
+                        var isDeleteOpSuccess = await _trackService.DeleteArtistTrackImage(dto.ArtistTrackId, dto.ArtistMemberId);
 
                         if (isDeleteOpSuccess)
                         {

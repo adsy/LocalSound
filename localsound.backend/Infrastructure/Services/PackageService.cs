@@ -164,7 +164,6 @@ namespace localsound.backend.Infrastructure.Services
                     {
                         UserId = appUserId,
                         PackageId = packageId,
-                        PhotoLocations = packageResult.ReturnData.PackagePhotos.Select(x => x.ArtistPackageImageFileContent.FileLocation).ToList()
                     }
                 });
 
@@ -301,7 +300,6 @@ namespace localsound.backend.Infrastructure.Services
                             {
                                 UserId = appUserId, 
                                 PackageId = packageId,
-                                PhotoLocations = packageResult.ReturnData.PackagePhotos.Where(x => deletedIds.Contains(x.ArtistPackageImageId)).Select(x => x.ArtistPackageImageFileContent.FileLocation).ToList()
                             }
                         });
 

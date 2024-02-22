@@ -3,16 +3,15 @@ using System;
 
 namespace localsound.CoreUpdates.Persistence.Entity
 {
-    public class ArtistPackagePhoto
+    public class ArtistPackageImage
     {
-        public int ArtistPackagePhotoId { get; set; }
+        public int ArtistPackageImageId { get; set; }
         [ForeignKey("ArtistPackage")]
         public Guid ArtistPackageId { get; set; }
-        [ForeignKey("FileContent")]
-        public Guid FileContentId { get; set; }
         public string PhotoUrl { get; set; }
         public bool ToBeDeleted { get; set; }
 
-        public virtual FileContent FileContent { get; set; }
+        public virtual ArtistPackage ArtistPackage { get; set; }
+        public virtual ArtistPackageImageFileContent ArtistPackageImageFileContent { get; set; }
     }
 }

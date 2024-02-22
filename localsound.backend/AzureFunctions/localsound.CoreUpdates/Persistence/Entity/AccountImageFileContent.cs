@@ -1,14 +1,16 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace localsound.CoreUpdates.Persistence.Entity
 {
-    public class FileContent
+    public class AccountImageFileContent
     {
         public Guid FileContentId { get; set; }
+        [ForeignKey("Account")]
+        public int AccountImageId { get; set; }
         public string FileLocation { get; set; }
         public string FileExtensionType { get; set; }
 
         public virtual AccountImage Image { get; set; }
-        public virtual ArtistPackagePhoto ArtistPackagePhoto { get; set; }
     }
 }

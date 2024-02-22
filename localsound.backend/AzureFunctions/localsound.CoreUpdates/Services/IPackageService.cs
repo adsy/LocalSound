@@ -6,6 +6,6 @@ namespace localsound.CoreUpdates.Services
 {
     public interface IPackageService
     {
-        Task<bool> DeletePackagePhotos(Guid userId, Guid packageId, List<string> photoLocations);
+        Task<bool> DeletePackagePhotos(Guid userId, Guid packageId);
     }
 }

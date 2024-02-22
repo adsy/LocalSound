@@ -49,8 +49,7 @@ namespace localsound.backend.Infrastructure.Services
                     Data = new DeleteAccountImageDto
                     {
                         UserId = appUserId,
-                        AccountImageId = imageResult.ReturnData.AccountImageId,
-                        UploadLocation = imageResult.ReturnData.FileContent.FileLocation+imageResult.ReturnData.FileContent.FileExtensionType
+                        AccountImageId = imageResult.ReturnData.AccountImageId
                     }
                 };
 

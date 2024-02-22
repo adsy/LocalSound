@@ -15,12 +15,17 @@ namespace localsound.CoreUpdates.Services
             _dbOperationRepository = dbOperationRepository;
         }
 
-        public async Task<bool> DeleteAccountImage(Guid userId, int accountImageId, string fileUrl)
+        public async Task<bool> DeleteAccountImage(Guid userId, int accountImageId)
         {
-            var azureDeleteOp = await _blobRepository.DeleteEntityFromStorage(fileUrl);
+            var accountImageLocation = await _dbOperationRepository.GetAccountImageLocation(userId, accountImageId);
 
-            if (!azureDeleteOp)
-                return azureDeleteOp;
+            if (accountImageLocation != null)
+            {
+                var azureDeleteOp = await _blobRepository.DeleteEntityFromStorage(accountImageLocation);
+
+                if (!azureDeleteOp)
+                    return azureDeleteOp;
+            }
 
             var dbDeleteResult =  await _dbOperationRepository.DeleteAccountImageAsync(userId, accountImageId);
 

@@ -1,6 +1,6 @@
 ﻿using localsound.CoreUpdates.Repository;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace localsound.CoreUpdates.Services
@@ -16,14 +16,19 @@ namespace localsound.CoreUpdates.Services
             _blobRepository = blobRepository;
         }
 
-        public async Task<bool> DeletePackagePhotos(Guid userId, Guid packageId, List<string> photoLocations)
+        public async Task<bool> DeletePackagePhotos(Guid userId, Guid packageId)
         {
-            foreach(var photo in photoLocations)
-            {
-                var result = await _blobRepository.DeleteEntityFromStorage(photo);
+            var packagePhotoUrls = await _dbOperationRepository.GetPackagePhotoLocations(userId, packageId);
 
-                if (!result)
-                    return false;
+            if (packagePhotoUrls != null && packagePhotoUrls.Any())
+            {
+                foreach (var photo in packagePhotoUrls)
+                {
+                    var result = await _blobRepository.DeleteEntityFromStorage(photo);
+
+                    if (!result)
+                        return false;
+                }
             }
 
             var dbDeleteResult = await _dbOperationRepository.DeletePackagePhotosAsync(userId, packageId);

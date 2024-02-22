@@ -2,7 +2,7 @@
 {
     public class DeleteArtistTrackDto
     {
-        public int ArtistMemberId { get; set; }
+        public string ArtistMemberId { get; set; }
         public int ArtistTrackId { get; set; }
     }
 }

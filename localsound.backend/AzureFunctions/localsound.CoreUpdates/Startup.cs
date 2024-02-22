@@ -20,6 +20,7 @@ namespace localsound.CoreUpdates
 
             builder.Services.AddTransient<IAccountImageService, AccountImageService>();
             builder.Services.AddTransient<IPackageService, PackageService>();
+            builder.Services.AddTransient<ITrackService, TrackService>();
             builder.Services.AddTransient<IBlobRepository, BlobRepository>();
             builder.Services.AddTransient<IDbOperationRepository, DbOperationRepository>();
 
