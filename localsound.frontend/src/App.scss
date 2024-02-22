@@ -1200,6 +1200,10 @@ $end: 10;
     border: 1px solid $black200 !important;
   }
 
+  .black-badge {
+    margin-left: 0.25rem;
+  }
+
   .bin-button {
     .small {
       padding-left: 2px;
@@ -1774,6 +1778,7 @@ $end: 10;
 
   .profile-banner {
     border-radius: 15px;
+    height: 30rem;
   }
 
   .profile-banner:hover {
@@ -2068,6 +2073,10 @@ $end: 10;
   }
 
   #user-profile {
+    .profile-banner {
+      height: 25rem;
+    }
+
     .left-col {
       border-right: unset !important;
     }
@@ -2091,12 +2100,21 @@ $end: 10;
   }
 
   #track {
+    .black-badge {
+      display: none;
+    }
     .track-image.playing {
       width: 80px !important;
       height: 80px !important;
     }
     .track-name {
       font-size: 14px !important;
+    }
+  }
+
+  #user-profile {
+    .profile-banner {
+      height: 20rem;
     }
   }
 }

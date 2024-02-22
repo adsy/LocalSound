@@ -109,7 +109,6 @@ const ProfileBanner = ({
         backgroundAttachment: "inherit",
         backgroundPosition: "center center",
         backgroundRepeat: "no-repeat",
-        height: "30rem",
         backgroundImage: `url(${coverImage?.accountImageUrl!})`,
       };
     }
@@ -118,7 +117,6 @@ const ProfileBanner = ({
       backgroundAttachment: "inherit",
       backgroundPosition: "center center",
       backgroundRepeat: "no-repeat",
-      height: "30rem",
       backgroundImage: "linear-gradient(20deg, #232323, #001514, #232323)",
     };
   };

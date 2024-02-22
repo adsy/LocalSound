@@ -1289,6 +1289,9 @@ h6 .purple-highlight:before {
   background-color: #f1f1f1 !important;
   border: 1px solid #001514 !important;
 }
+#track .black-badge {
+  margin-left: 0.25rem;
+}
 #track .bin-button .small {
   padding-left: 2px;
 }
@@ -1922,6 +1925,7 @@ h6 .purple-highlight:before {
 }
 #user-profile .profile-banner {
   border-radius: 15px;
+  height: 30rem;
 }
 #user-profile .profile-banner:hover .edit-cover-button {
   display: inline;
@@ -2173,6 +2177,9 @@ h6 .purple-highlight:before {
   .profile-photo.banner-photo {
     display: block !important;
   }
+  #user-profile .profile-banner {
+    height: 25rem;
+  }
   #user-profile .left-col {
     border-right: unset !important;
   }
@@ -2188,12 +2195,18 @@ h6 .purple-highlight:before {
   .ui.container {
     width: unset !important;
   }
+  #track .black-badge {
+    display: none;
+  }
   #track .track-image.playing {
     width: 80px !important;
     height: 80px !important;
   }
   #track .track-name {
     font-size: 14px !important;
+  }
+  #user-profile .profile-banner {
+    height: 20rem;
   }
 }
 @media only screen and (max-width: 469px) {
