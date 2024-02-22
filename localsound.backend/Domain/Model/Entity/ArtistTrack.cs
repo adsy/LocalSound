@@ -20,8 +20,32 @@ namespace localsound.backend.Domain.Model.Entity
         public virtual Account Artist {get;set;}
         public virtual ICollection<ArtistTrackGenre>  Genres { get; set;}
         public virtual ArtistTrackAudioFileContent TrackData { get; set; }
-        public virtual ICollection<ArtistTrackImage>? TrackImage { get; set; }
+        public virtual ICollection<ArtistTrackImage> TrackImage { get; set; }
 
         public virtual List<SongLike> SongLikes { get; set; }
+
+        public ArtistTrack UpdateDetails(string name, string description)
+        {
+            TrackName = name;
+            TrackDescription = description;
+            return this;
+        }
+
+        public ArtistTrack UpdateGenres(ICollection<ArtistTrackGenre> genres)
+        {
+            Genres = genres;
+            return this;
+        }
+
+        public ArtistTrack UpdateExistingImageToDeleted()
+        {
+            var existingImage = TrackImage?.FirstOrDefault(x => !x.ToBeDeleted);
+            if (TrackImage != null && existingImage != null)
+            {
+                existingImage.ToBeDeleted = true;
+            }
+
+            return this;
+        }
     }
 }

@@ -3,6 +3,8 @@
     public enum DeleteEntityTypeEnum
     {
         DeleteAccountImage,
-        DeletePackagePhotos
+        DeletePackagePhotos,
+        DeleteArtistTrack,
+        DeleteArtistTrackImage
     }
 }

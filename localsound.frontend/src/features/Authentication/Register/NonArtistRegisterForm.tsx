@@ -36,26 +36,10 @@ const NonArtistRegisterForm = (props: Props) => {
     setFieldTouched("phoneNumber", true);
     let value = e.target.value;
 
-    if (values.phoneNumber.length > value.length) {
-      value = value.trim();
-      setFieldValue("phoneNumber", value);
-    } else {
-      if (new RegExp("\\D").test(value[value.length - 1])) {
-        return;
-      }
-
-      if (value.length > 12) {
-        setFieldValue("phoneNumber", value.slice(0, 12));
-      } else if (values.phoneNumber.length < value.length) {
-        if (value.length === 4 || value.length === 5) {
-          value = value.slice(0, 4) + " " + value.slice(4);
-        }
-
-        if (value.length === 9 || value.length === 10) {
-          value = value.slice(0, 8) + " " + value.slice(8);
-        }
-        setFieldValue("phoneNumber", value);
-      }
+    value = value.trim();
+    setFieldValue("phoneNumber", value);
+    if (value.length > 10) {
+      setFieldValue("phoneNumber", value.slice(0, 12));
     }
   };
 

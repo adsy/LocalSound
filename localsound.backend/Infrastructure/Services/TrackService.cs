@@ -360,30 +360,22 @@ namespace localsound.backend.Infrastructure.Services
                     return new ServiceResponse(HttpStatusCode.InternalServerError);
                 }
 
-                var track = await _trackRepository.GetArtistTrackAsync(memberId, trackId);
+                var trackResult = await _trackRepository.GetArtistTrackAsync(memberId, trackId);
 
-                if (track is null || track.ReturnData is null)
+                if (trackResult is null || trackResult.ReturnData is null)
                 {
                     return new ServiceResponse(HttpStatusCode.NotFound);
                 }
 
-                // Check if new image was added
-                ArtistTrackImageFileContent? newTrackImage = null;
-                ServiceResponse<string>? uploadResponse = null;
-                ServiceResponse? deleteResponse = null;
-                string newTrackImageUrl = null;
-                // If it was then upload to azure and get details
+                ServiceResponse? updateResult = null;
                 if (trackData.TrackImage != null)
                 {
                     var imageId = Guid.NewGuid();
-                    var imageFilePath = $"{track.ReturnData.TrackData.FileLocation}/image/{imageId}{trackData.TrackImageExt}";
+                    var imageFilePath = $"{trackResult.ReturnData.TrackData.FileLocation}/image/{imageId}{trackData.TrackImageExt}";
 
-                    uploadResponse = await _blobRepository.UploadBlobAsync(imageFilePath, trackData.TrackImage);
+                    var uploadResponse = await _blobRepository.UploadBlobAsync(imageFilePath, trackData.TrackImage);
 
-                    if (uploadResponse != null && 
-                        (!uploadResponse.IsSuccessStatusCode || 
-                        uploadResponse.ReturnData is null || 
-                        string.IsNullOrWhiteSpace(uploadResponse.ReturnData)))
+                    if (!uploadResponse.IsSuccessStatusCode || string.IsNullOrWhiteSpace(uploadResponse.ReturnData))
                     {
                         return new ServiceResponse(HttpStatusCode.InternalServerError)
                         {
@@ -391,30 +383,39 @@ namespace localsound.backend.Infrastructure.Services
                         };
                     }
 
-                    var oldImage = track.ReturnData.TrackImage?.FirstOrDefault(x => !x.ToBeDeleted);
-                    if (oldImage != null)
+                    var newTrackImage = new ArtistTrackImage
                     {
-                        deleteResponse = await _blobRepository.DeleteBlobAsync(oldImage.ArtistTrackImageFileContent.FileLocation);
-                    }
-
-                    newTrackImageUrl = uploadResponse.ReturnData;
-                    newTrackImage = new ArtistTrackImageFileContent
-                    {
-                        FileContentId = imageId,
-                        FileLocation = imageFilePath,
-                        FileExtensionType = trackData.TrackImageExt != null ? trackData.TrackImageExt : ".jpg",
+                        ArtistTrack = trackResult.ReturnData,
+                        TrackImageUrl = uploadResponse.ReturnData,
+                        ArtistTrackImageFileContent = new ArtistTrackImageFileContent
+                        {
+                            FileContentId = imageId,
+                            FileLocation = imageFilePath,
+                            FileExtensionType = trackData.TrackImageExt != null ? trackData.TrackImageExt : ".jpg",
+                        }
                     };
-                }
 
-                if (deleteResponse != null && !deleteResponse.IsSuccessStatusCode)
+                    updateResult = await _trackRepository.UpdateArtistTrackUploadAsync(trackResult.ReturnData, trackData.TrackName, trackData.TrackDescription, trackData.Genres, newTrackImage);
+
+                    // TODO: Refactor this to push to service bus queue
+                    //var oldImage = trackResult.ReturnData.TrackImage?.FirstOrDefault(x => x.ToBeDeleted);
+                    //if (oldImage != null)
+                    //{
+                    //    var deleteResponse = await _blobRepository.DeleteBlobAsync(oldImage.ArtistTrackImageFileContent.FileLocation);
+
+                    //    if (deleteResponse != null && !deleteResponse.IsSuccessStatusCode)
+                    //    {
+                    //        return new ServiceResponse(HttpStatusCode.InternalServerError)
+                    //        {
+                    //            ServiceResponseMessage = "An error occured updating your track, please try again..."
+                    //        };
+                    //    }
+                    //}
+                }
+                else
                 {
-                    return new ServiceResponse(HttpStatusCode.InternalServerError)
-                    {
-                        ServiceResponseMessage = "An error occured updating your track, please try again..."
-                    };
+                    updateResult = await _trackRepository.UpdateArtistTrackUploadAsync(trackResult.ReturnData, trackData.TrackName, trackData.TrackDescription, trackData.Genres, null);
                 }
-
-                var updateResult = await _trackRepository.UpdateArtistTrackUploadAsync(accountResult.ReturnData, trackId, trackData.TrackName, trackData.TrackDescription, trackData.Genres, trackData.TrackImageExt, newTrackImage, newTrackImageUrl);
 
                 if (updateResult is null || updateResult.StatusCode != HttpStatusCode.OK) 
                 {

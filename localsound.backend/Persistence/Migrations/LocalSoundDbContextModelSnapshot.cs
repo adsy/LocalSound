@@ -196,7 +196,7 @@ namespace localsound.backend.Persistence.Migrations
                     b.HasIndex("ProfileUrl")
                         .IsUnique();
 
-                    b.ToTable("Account");
+                    b.ToTable("Account", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AccountGenre", b =>
@@ -211,7 +211,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("AccountGenre");
+                    b.ToTable("AccountGenre", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AccountImage", b =>
@@ -241,7 +241,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("AccountImage");
+                    b.ToTable("AccountImage", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AccountImageFileContent", b =>
@@ -266,7 +266,7 @@ namespace localsound.backend.Persistence.Migrations
                     b.HasIndex("AccountImageId")
                         .IsUnique();
 
-                    b.ToTable("AccountImageFileContent");
+                    b.ToTable("AccountImageFileContent", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AccountImageType", b =>
@@ -280,7 +280,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.HasKey("AccountImageTypeId");
 
-                    b.ToTable("AccountImageType");
+                    b.ToTable("AccountImageType", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AccountMessages", b =>
@@ -295,7 +295,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.HasKey("AppUserId");
 
-                    b.ToTable("AccountMessages");
+                    b.ToTable("AccountMessages", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.AppUser", b =>
@@ -444,7 +444,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.HasIndex("PackageId");
 
-                    b.ToTable("ArtistBooking");
+                    b.ToTable("ArtistBooking", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistEquipment", b =>
@@ -467,7 +467,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("AppUserId"));
 
-                    b.ToTable("ArtistEquipment");
+                    b.ToTable("ArtistEquipment", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistEventType", b =>
@@ -482,7 +482,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.HasIndex("EventTypeId");
 
-                    b.ToTable("ArtistEventType");
+                    b.ToTable("ArtistEventType", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistFollower", b =>
@@ -497,7 +497,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.HasIndex("FollowerId");
 
-                    b.ToTable("ArtistFollower");
+                    b.ToTable("ArtistFollower", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistPackage", b =>
@@ -532,7 +532,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("AppUserId"));
 
-                    b.ToTable("ArtistPackage");
+                    b.ToTable("ArtistPackage", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistPackageEquipment", b =>
@@ -555,7 +555,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("ArtistPackageId"));
 
-                    b.ToTable("ArtistPackageEquipment");
+                    b.ToTable("ArtistPackageEquipment", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistPackageImage", b =>
@@ -584,7 +584,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("ArtistPackageId"));
 
-                    b.ToTable("ArtistPackageImage");
+                    b.ToTable("ArtistPackageImage", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistPackageImageFileContent", b =>
@@ -609,7 +609,7 @@ namespace localsound.backend.Persistence.Migrations
                     b.HasIndex("AristPackagePhotoId")
                         .IsUnique();
 
-                    b.ToTable("ArtistPackageImageFileContent");
+                    b.ToTable("ArtistPackageImageFileContent", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrack", b =>
@@ -669,7 +669,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("ArtistMemberId"));
 
-                    b.ToTable("ArtistTrack");
+                    b.ToTable("ArtistTrack", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackAudioFileContent", b =>
@@ -694,7 +694,7 @@ namespace localsound.backend.Persistence.Migrations
                     b.HasIndex("ArtistTrackId")
                         .IsUnique();
 
-                    b.ToTable("ArtistTrackAudioFileContent");
+                    b.ToTable("ArtistTrackAudioFileContent", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackGenre", b =>
@@ -709,7 +709,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("ArtistTrackGenre");
+                    b.ToTable("ArtistTrackGenre", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackImage", b =>
@@ -739,7 +739,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("ArtistTrackId"));
 
-                    b.ToTable("ArtistTrackImage");
+                    b.ToTable("ArtistTrackImage", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.ArtistTrackImageFileContent", b =>
@@ -764,7 +764,7 @@ namespace localsound.backend.Persistence.Migrations
                     b.HasIndex("ArtistTrackImageId")
                         .IsUnique();
 
-                    b.ToTable("ArtistTrackImageFileContent");
+                    b.ToTable("ArtistTrackImageFileContent", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.EventType", b =>
@@ -779,7 +779,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.HasKey("EventTypeId");
 
-                    b.ToTable("EventType");
+                    b.ToTable("EventType", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.Genre", b =>
@@ -794,7 +794,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     b.HasKey("GenreId");
 
-                    b.ToTable("Genres");
+                    b.ToTable("Genres", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.Notification", b =>
@@ -835,7 +835,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("NotificationReceiverId"));
 
-                    b.ToTable("Notification");
+                    b.ToTable("Notification", (string)null);
                 });
 
             modelBuilder.Entity("localsound.backend.Domain.Model.Entity.SongLike", b =>
@@ -868,7 +868,7 @@ namespace localsound.backend.Persistence.Migrations
 
                     SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("MemberId", "SongLikeId"));
 
-                    b.ToTable("SongLike");
+                    b.ToTable("SongLike", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

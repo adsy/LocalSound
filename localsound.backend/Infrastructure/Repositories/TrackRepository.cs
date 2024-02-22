@@ -1,5 +1,4 @@
-﻿using Azure;
-using localsound.backend.Domain.Enum;
+﻿using localsound.backend.Domain.Enum;
 using localsound.backend.Domain.Model;
 using localsound.backend.Domain.Model.Dto.Entity;
 using localsound.backend.Domain.Model.Entity;
@@ -81,6 +80,7 @@ namespace localsound.backend.Infrastructure.Repositories
                     .ThenInclude(x => x.Images)
                     .Include(x => x.TrackData)
                     .Include(x => x.TrackImage)
+                    .ThenInclude(x => x.ArtistTrackImageFileContent)
                     .Include(x => x.Genres)
                     .ThenInclude(x => x.Genre)
                     .Include(x => x.SongLikes)
@@ -332,39 +332,20 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse> UpdateArtistTrackUploadAsync(Account account, int trackId, string trackName, string trackDescription, List<GenreDto> genres, string? trackImageExt, ArtistTrackImageFileContent? newTrackImage, string newTrackImageUrl)
+        public async Task<ServiceResponse> UpdateArtistTrackUploadAsync(ArtistTrack track, string trackName, string trackDescription, List<GenreDto> genres, ArtistTrackImage? newTrackImage)
         {
             try
             {
-                var track = await _dbContext.ArtistTrack
-                    .Include(x => x.Genres)
-                    .Include(x => x.TrackImage)
-                    .FirstOrDefaultAsync(x => x.AppUserId == account.AppUserId && x.ArtistTrackId == trackId);
-
-                if (track is null)
-                {
-                    return new ServiceResponse(HttpStatusCode.NotFound);
-                }
-
-                track.TrackName = trackName;
-                track.TrackDescription = trackDescription;
-                track.Genres = genres.Select(x => new ArtistTrackGenre
+                track.UpdateDetails(trackName, trackDescription).UpdateGenres(genres.Select(x => new ArtistTrackGenre
                 {
                     GenreId = x.GenreId
-                }).ToList();
+                }).ToList());
 
-                //if (newTrackImage != null)
-                //{
-                //    await _dbContext.ArtistTrackImageFileContent.AddAsync(newTrackImage);
-
-                //    if (track.TrackImage != null)
-                //    {
-                //        _dbContext.ArtistTrackImageFileContent.Remove(track.TrackImage);
-                //    }
-
-                //    track.TrackImage = newTrackImage;
-                //    track.TrackImageUrl = newTrackImageUrl;
-                //}
+                if (newTrackImage != null)
+                {
+                    track.UpdateExistingImageToDeleted();
+                    await _dbContext.ArtistTrackImage.AddAsync(newTrackImage);
+                }
 
                 await _dbContext.SaveChangesAsync();
 

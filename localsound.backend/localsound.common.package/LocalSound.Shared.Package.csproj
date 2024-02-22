@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<id>LocalSound.Shared.Package</id>
-	<version>1.0.5</version>
+	<version>1.0.6</version>
 	<title>LocalSound.Shared.Package</title>
 	<authors>adsyb</authors>
 	<Company>localsound</Company>

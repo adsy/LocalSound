@@ -40,6 +40,7 @@ namespace localsound.backend.Persistence.DbContext
         public DbSet<ArtistPackageImageFileContent> ArtistPackageImageFileContent { get; set; }
         public DbSet<ArtistTrackGenre> ArtistTrackGenre { get; set; }
         public DbSet<ArtistTrack> ArtistTrack { get; set; }
+        public DbSet<ArtistTrackImage> ArtistTrackImage { get; set; }
         public DbSet<ArtistTrackAudioFileContent> ArtistTrackAudioFileContent { get; set; }
         public DbSet<ArtistTrackImageFileContent> ArtistTrackImageFileContent { get; set; }
         public DbSet<EventType> EventType { get; set; }
@@ -147,6 +148,7 @@ namespace localsound.backend.Persistence.DbContext
             builder.Entity<ArtistTrackImage>(x =>
             {
                 x.HasKey(x => x.ArtistTrackImageId).IsClustered(false);
+                x.Property(x => x.ArtistTrackImageId).ValueGeneratedOnAdd();
                 x.HasIndex(x => x.ArtistTrackId).IsUnique(false).IsClustered(true);
                 x.HasOne(x => x.ArtistTrack).WithMany(x => x.TrackImage);
                 x.HasOne(x => x.ArtistTrackImageFileContent).WithOne(x => x.ArtistTrackImage).OnDelete(DeleteBehavior.Cascade);

@@ -51,9 +51,9 @@ const artistRegisterValidation = Yup.object({
     .test({
       name: "numberFormat",
       message:
-        "Your mobile number must be in the the following format e.g. 0400 000 000.",
+        "Your mobile number must be in the the following format e.g. 0400000000.",
       test: (value) =>
-        new RegExp("(04[0-9]{2} [0-9]{3} [0-9]{3})").test(value!) ||
+        new RegExp("(04[0-9]{2}[0-9]{3}[0-9]{3})").test(value!) ||
         value === undefined ||
         (value !== undefined && value.trim().length === 0),
     }),
