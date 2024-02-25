@@ -28,7 +28,7 @@ const ProfileSummary = ({
         </div>
 
         <div className="d-flex flex-column pb-2 genre-desktop">
-          <div className="about-text">
+          <div className="about-text d-flex flex-wrap-reverse">
             {userDetails.genres.map((genre, index) => (
               <span key={index}>
                 <Label label={genre.genreName} id={genre.genreId} />

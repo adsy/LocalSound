@@ -101,7 +101,7 @@ namespace localsound.backend.Infrastructure.Services
             }
         }
 
-        public async Task<ServiceResponse<TrackUploadSASDto>> GenerateTrackUploadSASDtoAsync(Guid userId, string memberId)
+        public async Task<ServiceResponse<TrackUploadSASDto>> GenerateTrackUploadSasDtoAsync(Guid userId, string memberId)
         {
             try
             {
@@ -153,7 +153,7 @@ namespace localsound.backend.Infrastructure.Services
             }
             catch(Exception e)
             {
-                var message = $"{nameof(TrackService)} - {nameof(GenerateTrackUploadSASDtoAsync)} - {e.Message}";
+                var message = $"{nameof(TrackService)} - {nameof(GenerateTrackUploadSasDtoAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
                 return new ServiceResponse<TrackUploadSASDto>(HttpStatusCode.InternalServerError)

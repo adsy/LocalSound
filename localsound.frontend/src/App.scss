@@ -708,7 +708,7 @@ $end: 10;
   background-color: $purple100 !important;
   border: 2px solid $black200;
   h4 {
-    color: $white100;
+    // color: $white100;
   }
 }
 
@@ -1727,6 +1727,19 @@ $end: 10;
   flex-wrap: wrap;
   padding-bottom: 70px;
 
+  .dropdown-toggle {
+    font-size: 30px;
+    background: unset;
+    border: 2px solid #ccd0d4;
+    color: black;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    height: 22px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+  }
+
   /** CROPPER **/
   #cropper {
     z-index: 2;
@@ -2115,6 +2128,10 @@ $end: 10;
   #user-profile {
     .profile-banner {
       height: 20rem;
+    }
+
+    .nav.nav-tabs {
+      display: none;
     }
   }
 }

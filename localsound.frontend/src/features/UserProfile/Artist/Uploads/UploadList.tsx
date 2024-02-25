@@ -15,7 +15,6 @@ import ErrorBanner from "../../../../common/banner/ErrorBanner";
 import InfoBanner from "../../../../common/banner/InfoBanner";
 import useFixMissingScroll from "../../../../common/hooks/UseLoadMoreWithoutScroll";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { handleSetTrackList } from "../../../../app/redux/actions/playerSlice";
 import { PlaylistTypes } from "../../../../app/model/enums/playlistTypes";
 
 interface Props {
@@ -91,7 +90,7 @@ const UploadList = ({
     };
   }, [currentTab]);
 
-  if (currentTab !== ProfileTabs.Uploads) return;
+  if (currentTab !== ProfileTabs.Uploads) return <div></div>;
 
   return (
     <div id="upload-list">

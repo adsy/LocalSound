@@ -9,7 +9,7 @@ namespace localsound.backend.Infrastructure.Interface.Services
     public interface ITrackService
     {
         Task<ServiceResponse> DeleteArtistTrackAsync(Guid userId, string memberId, int trackId);
-        Task<ServiceResponse<TrackUploadSASDto>> GenerateTrackUploadSASDtoAsync(Guid userId, string memberId);
+        Task<ServiceResponse<TrackUploadSASDto>> GenerateTrackUploadSasDtoAsync(Guid userId, string memberId);
         Task<ServiceResponse<ArtistTrackUploadDto>> GetArtistTrackAsync(string memberId, int trackId);
         Task<ServiceResponse<TrackListResponseDto>> GetTracksByPlaylistTypeAsync(Guid? userId, string memberId, int? lastTrackId, PlaylistTypeEnum playlistType);
         Task<ServiceResponse> LikeArtistTrackAsync(int trackId, string artistMemberId, Guid userId, string memberId);

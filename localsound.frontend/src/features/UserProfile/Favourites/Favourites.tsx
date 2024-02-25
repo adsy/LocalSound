@@ -75,7 +75,7 @@ const Favourites = ({
     };
   }, [currentTab]);
 
-  if (currentTab !== ProfileTabs.LikedSongs) return;
+  if (currentTab !== ProfileTabs.LikedSongs) return <div></div>;
 
   return (
     <div id="upload-list">

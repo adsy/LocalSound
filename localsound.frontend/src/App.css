@@ -817,11 +817,6 @@ h6 .purple-highlight:before {
   background-color: #6d69fa !important;
   border: 2px solid #001514;
 }
-.white-button:hover h4,
-.white-button:active h4 {
-  color: #f1f1f1;
-}
-
 .white-button:disabled {
   border: 2px solid #e2e8f0;
 }
@@ -1879,6 +1874,18 @@ h6 .purple-highlight:before {
   padding-bottom: 70px;
   /** CROPPER **/
 }
+#user-profile .dropdown-toggle {
+  font-size: 30px;
+  background: unset;
+  border: 2px solid #ccd0d4;
+  color: black;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  height: 22px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
 #user-profile #cropper {
   z-index: 2;
   position: absolute;
@@ -2207,6 +2214,9 @@ h6 .purple-highlight:before {
   }
   #user-profile .profile-banner {
     height: 20rem;
+  }
+  #user-profile .nav.nav-tabs {
+    display: none;
   }
 }
 @media only screen and (max-width: 469px) {

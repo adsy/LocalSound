@@ -26,7 +26,7 @@ namespace localsound.backend.api.Handlers.Track
 
         public async Task<ServiceResponse<TrackUploadSASDto>> Handle(GetUploadTrackDataQuery request, CancellationToken cancellationToken)
         {
-            return await _trackService.GenerateTrackUploadSASDtoAsync(request.AppUserId, request.MemberId);
+            return await _trackService.GenerateTrackUploadSasDtoAsync(request.AppUserId, request.MemberId);
         }
 
         public async Task<ServiceResponse<int>> Handle(AddTrackSupportingDetailsCommand request, CancellationToken cancellationToken)

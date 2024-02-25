@@ -329,7 +329,7 @@ const Track = ({
       </div>
 
       <div className="d-flex flex-row justify-content-end fade-in">
-        <div className="track-genre-list">
+        <div className="track-genre-list d-flex flex-wrap-reverse justify-content-end">
           {track.genres.map((genre, index) => (
             <Label key={index} id={genre.genreId} label={genre.genreName} />
           ))}
