@@ -9,23 +9,18 @@ import useFixMissingScroll from "../../../common/hooks/UseLoadMoreWithoutScroll"
 
 interface Props {
   profileDetails: UserModel;
-  currentTab: ProfileTabs;
   viewingOwnProfile: boolean;
 }
 
-const Followers = ({
-  profileDetails,
-  currentTab,
-  viewingOwnProfile,
-}: Props) => {
+const Followers = ({ profileDetails, viewingOwnProfile }: Props) => {
   const [followers, setFollowers] = useState<UserSummaryModel[]>([]);
   const [page, setPage] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [canLoadMore, setCanLoadMore] = useState(true);
   const [loadError, setLoadError] = useState<string | null>();
 
   const getMoreFollowers = async () => {
-    if (currentTab === ProfileTabs.Followers && canLoadMore) {
+    if (canLoadMore) {
       try {
         setLoading(true);
 
@@ -48,29 +43,6 @@ const Followers = ({
     hasMoreItems: canLoadMore,
     fetchMoreItems: getMoreFollowers,
   });
-
-  useLayoutEffect(() => {
-    setLoadError(null);
-    (async () => {
-      if (currentTab === ProfileTabs.Followers && canLoadMore) {
-        try {
-          setLoading(true);
-
-          var result = await agent.Account.getProfileFollowers(
-            profileDetails.memberId,
-            page
-          );
-
-          setFollowers([...followers, ...result.followers]);
-          setCanLoadMore(result.canLoadMore);
-        } catch (err: any) {
-          setLoadError(err);
-        }
-        setLoading(false);
-        setPage(page + 1);
-      }
-    })();
-  }, [currentTab]);
 
   return (
     <>

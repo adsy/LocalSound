@@ -39,7 +39,7 @@ const NonArtistRegisterForm = (props: Props) => {
     value = value.trim();
     setFieldValue("phoneNumber", value);
     if (value.length > 10) {
-      setFieldValue("phoneNumber", value.slice(0, 12));
+      setFieldValue("phoneNumber", value.slice(0, 10));
     }
   };
 

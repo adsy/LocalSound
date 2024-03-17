@@ -226,13 +226,13 @@ namespace localsound.backend.Infrastructure.Repositories
             }
         }
 
-        public async Task<ServiceResponse<List<int>>> GetLikedSongsIdsAsync(string memberId)
+        public async Task<ServiceResponse<List<SongLike>>> GetLikedSongsIdsAsync(string memberId)
         {
             try
             {
-                var songLikes = await _dbContext.SongLike.Where(x => x.MemberId == memberId).Select(x => x.ArtistTrackId).ToListAsync();
+                var songLikes = await _dbContext.SongLike.Where(x => x.MemberId == memberId).ToListAsync();
 
-                return new ServiceResponse<List<int>>(HttpStatusCode.OK)
+                return new ServiceResponse<List<SongLike>>(HttpStatusCode.OK)
                 {
                     ReturnData = songLikes
                 };
@@ -242,7 +242,7 @@ namespace localsound.backend.Infrastructure.Repositories
                 var message = $"{nameof(TrackRepository)} - {nameof(GetLikedSongsIdsAsync)} - {e.Message}";
                 _logger.LogError(e, message);
 
-                return new ServiceResponse<List<int>>(HttpStatusCode.InternalServerError);
+                return new ServiceResponse<List<SongLike>>(HttpStatusCode.InternalServerError);
             }
         }
 

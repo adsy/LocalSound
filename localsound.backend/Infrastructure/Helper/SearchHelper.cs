@@ -1,10 +1,11 @@
-﻿using localsound.backend.Infrastructure.Interface.Helper;
+﻿using localsound.backend.Domain.Model.Entity;
+using localsound.backend.Infrastructure.Interface.Helper;
 
 namespace localsound.backend.Infrastructure.Helper
 {
     public class SearchHelper : ISearchHelper
     {
-        public int IntBinarySearch(List<int> arr, int target)
+        public int SongLikeBinarySearch(List<SongLike> arr, int target)
         {
             int left = 0;
             int right = arr.Count - 1;
@@ -13,10 +14,10 @@ namespace localsound.backend.Infrastructure.Helper
             {
                 int mid = left + (right - left) / 2;
 
-                int comparisonResult = target.CompareTo(arr[mid]);
+                int comparisonResult = target.CompareTo(arr[mid].ArtistTrackId);
 
                 if (comparisonResult == 0)
-                    return mid;
+                    return arr[mid].SongLikeId;
 
                 if (comparisonResult > 0)
                     left = mid + 1;

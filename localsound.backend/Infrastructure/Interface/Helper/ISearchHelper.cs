@@ -1,7 +1,9 @@
-﻿namespace localsound.backend.Infrastructure.Interface.Helper
+﻿using localsound.backend.Domain.Model.Entity;
+
+namespace localsound.backend.Infrastructure.Interface.Helper
 {
     public interface ISearchHelper
     {
-        int IntBinarySearch(List<int> arr, int target);
+        int SongLikeBinarySearch(List<SongLike> arr, int target);
     }
 }

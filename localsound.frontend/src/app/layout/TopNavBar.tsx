@@ -2,7 +2,7 @@ import Navbar from "react-bootstrap/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../model/redux/state";
 import logo from "../../assets/updated-logo4.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Nav, Offcanvas } from "react-bootstrap";
 import { Divider, Icon, Image } from "semantic-ui-react";
 import { NavLink, useHistory } from "react-router-dom";
@@ -26,10 +26,34 @@ const TopNavbar = () => {
   const userDetails = useSelector((state: State) => state.user.userDetails);
   const notificationData = useSelector((state: State) => state.notifications);
   const [signingOut, setSigningOut] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [show, setShow] = useState(false);
+  const [showTopNavbar, setShowTopNavbar] = useState(true);
+
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const [show, setShow] = useState(false);
+  const controlNavbar = () => {
+    if (window.scrollY > lastScrollY) {
+      // if scroll down hide the navbar
+      setShowTopNavbar(false);
+    } else {
+      // if scroll up show the navbar
+      setShowTopNavbar(true);
+    }
+
+    // remember current page location to use in the next move
+    setLastScrollY(window.scrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", controlNavbar);
+
+    // cleanup function
+    return () => {
+      window.removeEventListener("scroll", controlNavbar);
+    };
+  }, [lastScrollY]);
 
   const resetAppState = () => {
     signalHub.disconnectConnection();
@@ -73,7 +97,7 @@ const TopNavbar = () => {
 
   return (
     <>
-      <div id="navbar" className="w-100">
+      <div id="navbar" className={`w-100 ${!showTopNavbar ? "hide" : ""}`}>
         <Navbar
           collapseOnSelect
           key={null}

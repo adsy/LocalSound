@@ -182,7 +182,7 @@ namespace localsound.backend.Infrastructure.Services
 
                 if (trackImage == null)
                 {
-                    trackImageUrl = track.ReturnData.Artist.Images?.FirstOrDefault(x => x.AccountImageTypeId == Domain.Enum.AccountImageTypeEnum.ProfileImage && !x.ToBeDeleted).AccountImageUrl;
+                    trackImageUrl = track.ReturnData.Artist.Images?.FirstOrDefault(x => x.AccountImageTypeId == Domain.Enum.AccountImageTypeEnum.ProfileImage && !x.ToBeDeleted)?.AccountImageUrl;
                 }
                 else
                 {
@@ -268,10 +268,20 @@ namespace localsound.backend.Infrastructure.Services
 
                         if (songIds.IsSuccessStatusCode && songIds.ReturnData is not null && songIds.ReturnData.Any())
                         {
-                            songIds.ReturnData = songIds.ReturnData.OrderBy(x => x).ToList();
+                            songIds.ReturnData = songIds.ReturnData.OrderBy(x => x.ArtistTrackId).ToList();
                             foreach (var song in tracksResult.ReturnData)
                             {
-                                song.SongLiked = _searchHelper.IntBinarySearch(songIds.ReturnData, song.ArtistTrackId) != -1 ? true : false;
+                                var songLikeId = _searchHelper.SongLikeBinarySearch(songIds.ReturnData, song.ArtistTrackId);
+
+                                if (songLikeId == -1)
+                                {
+                                    song.SongLiked = false;
+                                }
+                                else
+                                {
+                                    song.SongLiked = true;
+                                    song.SongLikeId = songLikeId;
+                                }
                             }
                         }
                     }

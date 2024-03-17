@@ -532,12 +532,17 @@ $end: 10;
   background-repeat: no-repeat !important;
   position: fixed;
   top: 0;
+  transition: top 0.3s ease-in-out;
   z-index: 2;
   padding-right: 10px;
   padding-left: 10px;
   height: 71px;
   width: 100%;
   display: flex;
+
+  &.hide {
+    top: -100px;
+  }
 
   .ui.ui-container {
     padding: 0;
@@ -1471,7 +1476,6 @@ $end: 10;
   .banner-holder {
     border: 1px solid #e2e8f0;
     border-radius: 15px;
-    margin-top: 20px;
   }
 
   .ui.medium.image {
